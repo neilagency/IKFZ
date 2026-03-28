@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import useSWR, { mutate as globalMutate } from "swr";
+import dynamic from "next/dynamic";
 import {
   FileText, BookOpen, Search, LogOut, LayoutDashboard,
   Plus, Pencil, Trash2, Save, X, Eye, Settings, Globe,
@@ -9,9 +10,12 @@ import {
   TrendingUp, DollarSign, ChevronLeft, ChevronRight,
   Download, Filter, RefreshCw, Zap, Shield, Wallet, Clock,
   ExternalLink, Image as ImageIcon, AlertCircle, FileQuestion,
+  Tag, Calendar,
 } from "lucide-react";
-import { MediaLibraryTab, ImageField } from "@/components/admin/MediaLibrary";
+import { MediaLibraryTab, ImageField, MediaPicker } from "@/components/admin/MediaLibrary";
 import { ToastProvider, useToast } from "@/components/admin/Toast";
+
+const TiptapEditor = dynamic(() => import("@/components/admin/TiptapEditor"), { ssr: false });
 
 const API = "/api/admin";
 
@@ -1221,6 +1225,31 @@ function SettingsTab({ token }: { token: string }) {
 }
 
 // ═══════════════════════════════════════════════════════════
+// BLOG — Types
+// ═══════════════════════════════════════════════════════════
+interface BlogPostData {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  excerpt: string;
+  status: string;
+  author: string | null;
+  featuredImage: string | null;
+  featuredImageId: string | null;
+  category: string | null;
+  tags: string | null;
+  publishedAt: string | null;
+  scheduledAt: string | null;
+  metaTitle: string | null;
+  metaDescription: string | null;
+  focusKeyword: string | null;
+  canonical: string | null;
+  ogTitle: string | null;
+  ogDescription: string | null;
+}
+
+// ═══════════════════════════════════════════════════════════
 // BLOG TAB — Full Blog Management with SWR + Pagination
 // ═══════════════════════════════════════════════════════════
 function BlogTab({ token }: { token: string }) {
@@ -1228,45 +1257,27 @@ function BlogTab({ token }: { token: string }) {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [page, setPage] = useState(1);
-  const [editing, setEditing] = useState<PostData | null | undefined>(undefined);
-  const [categories, setCategories] = useState<{ id: string; name: string; slug: string }[]>([]);
+  const [editing, setEditing] = useState<BlogPostData | null | undefined>(undefined);
   const debouncedSearch = useDebounce(search, 300);
 
   const params = new URLSearchParams({ page: String(page), limit: "20" });
   if (statusFilter !== "all") params.set("status", statusFilter);
   if (debouncedSearch) params.set("search", debouncedSearch);
-  const swrKey = `${API}/posts?${params}`;
+  const swrKey = `${API}/blog?${params}`;
 
   const { data, error, isLoading, mutate } = useSWR(swrKey, fetcher, { revalidateOnFocus: false, keepPreviousData: true });
 
-  const posts: PostData[] = data?.posts || [];
-  const total = data?.total || 0;
-  const totalPages = data?.totalPages || 1;
+  const posts: BlogPostData[] = data?.posts || [];
+  const total = data?.pagination?.total || 0;
+  const totalPages = data?.pagination?.pages || 1;
 
   useEffect(() => { setPage(1); }, [debouncedSearch, statusFilter]);
 
-  // Load categories from first page of posts (for editor)
-  useEffect(() => {
-    fetch(`${API}/posts?limit=100`, { credentials: "include" })
-      .then(r => { if (!r.ok) throw new Error(); return r.json(); })
-      .then(d => {
-        const cats = new Map<string, { id: string; name: string; slug: string }>();
-        (d.posts || []).forEach((p: any) =>
-          p.categories?.forEach((c: any) => {
-            if (c.category) cats.set(c.category.id, c.category);
-          })
-        );
-        setCategories(Array.from(cats.values()));
-      })
-      .catch(() => {});
-  }, []);
-
-  // Count by status from current data (approximate from total when filtered)
   const statusCounts = useMemo(() => {
-    const counts = { all: total, published: 0, draft: 0, scheduled: 0 };
+    const counts: Record<string, number> = { all: total, publish: 0, draft: 0, scheduled: 0 };
     if (statusFilter === "all") {
       posts.forEach(p => {
-        if (p.status === "published") counts.published++;
+        if (p.status === "publish") counts.publish++;
         else if (p.status === "draft") counts.draft++;
         else if (p.status === "scheduled") counts.scheduled++;
       });
@@ -1277,14 +1288,14 @@ function BlogTab({ token }: { token: string }) {
   async function handleDelete(id: string) {
     if (!confirm("Diesen Beitrag wirklich löschen?")) return;
     try {
-      await fetch(`${API}/posts?id=${id}`, { method: "DELETE", credentials: "include" });
+      await fetch(`${API}/blog/${id}`, { method: "DELETE", credentials: "include" });
       toast("Beitrag gelöscht");
       mutate();
     } catch { toast("Fehler beim Löschen", "error"); }
   }
 
   if (editing !== undefined) {
-    return <BlogEditor post={editing} token={token} categories={categories} onSave={() => { setEditing(undefined); mutate(); }} onCancel={() => setEditing(undefined)} />;
+    return <BlogEditor post={editing} token={token} onSave={() => { setEditing(undefined); mutate(); }} onCancel={() => setEditing(undefined)} />;
   }
 
   return (
@@ -1305,9 +1316,9 @@ function BlogTab({ token }: { token: string }) {
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Beiträge suchen..." className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none" />
         </div>
         <div className="flex gap-1.5">
-          {(["all", "published", "draft", "scheduled"] as const).map(s => (
+          {(["all", "publish", "draft", "scheduled"] as const).map(s => (
             <button key={s} onClick={() => setStatusFilter(s)} className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors ${statusFilter === s ? "bg-primary/10 text-primary border border-primary/20" : "bg-dark-900/60 text-white/40 border border-white/[0.06] hover:text-white"}`}>
-              {s === "all" ? "Alle" : s === "published" ? "Veröffentlicht" : s === "draft" ? "Entwurf" : "Geplant"}
+              {s === "all" ? "Alle" : s === "publish" ? "Veröffentlicht" : s === "draft" ? "Entwurf" : "Geplant"}
             </button>
           ))}
         </div>
@@ -1329,10 +1340,9 @@ function BlogTab({ token }: { token: string }) {
                     <BookOpen className="w-5 h-5 text-white/20" />
                   </div>
                 )}
-
                 <div className="flex-1 min-w-0">
                   <h3 className="text-white font-medium truncate">{post.title}</h3>
-                  <div className="flex items-center gap-3 mt-1">
+                  <div className="flex items-center gap-3 mt-1 flex-wrap">
                     <span className="text-white/30 text-xs">/{post.slug}/</span>
                     {post.publishedAt && <span className="text-white/30 text-xs">{formatDate(post.publishedAt)}</span>}
                     {post.status === "scheduled" && post.scheduledAt && (
@@ -1341,15 +1351,12 @@ function BlogTab({ token }: { token: string }) {
                         Geplant: {new Date(post.scheduledAt).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" })} {new Date(post.scheduledAt).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
                       </span>
                     )}
-                    {post.categories?.map(c => (
-                      <span key={c.category.id} className="text-primary/70 text-xs">{c.category.name}</span>
-                    ))}
+                    {post.category && <span className="text-primary/70 text-xs">{post.category}</span>}
                   </div>
                 </div>
-
                 <div className="flex items-center gap-2">
                   <Badge status={post.status} />
-                  <a href={`/blog/${post.slug}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg hover:bg-white/5 text-white/30 hover:text-white transition-colors"><Eye className="w-4 h-4" /></a>
+                  <a href={`/${post.slug}/`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg hover:bg-white/5 text-white/30 hover:text-white transition-colors"><Eye className="w-4 h-4" /></a>
                   <button onClick={() => setEditing(post)} className="p-2 rounded-lg hover:bg-white/5 text-white/30 hover:text-white transition-colors"><Pencil className="w-4 h-4" /></button>
                   <button onClick={() => handleDelete(post.id)} className="p-2 rounded-lg hover:bg-red-500/10 text-white/30 hover:text-red-400 transition-colors"><Trash2 className="w-4 h-4" /></button>
                 </div>
@@ -1364,18 +1371,16 @@ function BlogTab({ token }: { token: string }) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// BLOG EDITOR — Create/Edit with Scheduling & SEO
+// BLOG EDITOR — Create/Edit with Tiptap, Scheduling & SEO
 // ═══════════════════════════════════════════════════════════
 function BlogEditor({
   post,
   token,
-  categories,
   onSave,
   onCancel,
 }: {
-  post: PostData | null;
+  post: BlogPostData | null;
   token: string;
-  categories: { id: string; name: string; slug: string }[];
   onSave: () => void;
   onCancel: () => void;
 }) {
@@ -1386,23 +1391,24 @@ function BlogEditor({
   const [slug, setSlug] = useState(post?.slug || "");
   const [content, setContent] = useState(post?.content || "");
   const [excerpt, setExcerpt] = useState(post?.excerpt || "");
-  const [author, setAuthor] = useState(post?.author || "");
+  const [category, setCategory] = useState(post?.category || "");
+  const [tags, setTags] = useState(post?.tags || "");
   const [featuredImage, setFeaturedImage] = useState(post?.featuredImage || "");
+  const [useRichEditor, setUseRichEditor] = useState(true);
 
   const [publishMode, setPublishMode] = useState<"draft" | "publish" | "schedule">(
-    post?.status === "scheduled" ? "schedule" : post?.status === "published" ? "publish" : "draft"
+    post?.status === "scheduled" ? "schedule" : post?.status === "publish" ? "publish" : "draft"
   );
   const [scheduleDate, setScheduleDate] = useState(
     post?.scheduledAt ? new Date(post.scheduledAt).toISOString().slice(0, 16) : ""
   );
 
-  const [activeTab, setActiveTab] = useState<"content" | "seo">("content");
-  const [metaTitle, setMetaTitle] = useState(post?.seo?.metaTitle || "");
-  const [metaDesc, setMetaDesc] = useState(post?.seo?.metaDescription || "");
-  const [ogTitle, setOgTitle] = useState(post?.seo?.ogTitle || "");
-  const [ogDesc, setOgDesc] = useState(post?.seo?.ogDescription || "");
-  const [ogImage, setOgImage] = useState(post?.seo?.ogImage || "");
-  const [canonical, setCanonical] = useState(post?.seo?.canonicalUrl || "");
+  const [metaTitle, setMetaTitle] = useState(post?.metaTitle || "");
+  const [metaDesc, setMetaDesc] = useState(post?.metaDescription || "");
+  const [focusKeyword, setFocusKeyword] = useState(post?.focusKeyword || "");
+  const [canonical, setCanonical] = useState(post?.canonical || "");
+  const [ogTitle, setOgTitle] = useState(post?.ogTitle || "");
+  const [ogDesc, setOgDesc] = useState(post?.ogDescription || "");
 
   const [slugManual, setSlugManual] = useState(!!post?.slug);
   const [saving, setSaving] = useState(false);
@@ -1423,7 +1429,7 @@ function BlogEditor({
 
   function handleSlugChange(s: string) {
     setSlugManual(true);
-    setSlug(s);
+    setSlug(s.replace(/[^a-z0-9-]/g, ""));
   }
 
   async function handleSave() {
@@ -1435,39 +1441,37 @@ function BlogEditor({
 
     setSaving(true); setError("");
 
-    const status = publishMode === "publish" ? "published" : publishMode === "schedule" ? "scheduled" : "draft";
-    const wordCount = content.replace(/<[^>]*>/g, "").split(/\s+/).filter(Boolean).length;
-    const readingTime = Math.max(1, Math.ceil(wordCount / 200));
-
-    const body: any = {
-      title, slug: finalSlug, content, excerpt, status, author: author || null,
-      featuredImage: featuredImage || null, readingTime,
-      seo: {
-        metaTitle: metaTitle || title,
-        metaDescription: metaDesc || excerpt || "",
-        canonicalUrl: canonical || `https://ikfzdigitalzulassung.de/blog/${finalSlug}/`,
-        ogTitle: ogTitle || null,
-        ogDescription: ogDesc || null,
-        ogImage: ogImage || featuredImage || null,
-      },
+    const status = publishMode === "publish" ? "publish" : publishMode === "schedule" ? "scheduled" : "draft";
+    const body: Record<string, unknown> = {
+      title, slug: finalSlug, content, excerpt, status,
+      category: category || null,
+      tags: tags || null,
+      featuredImage: featuredImage || null,
+      metaTitle: metaTitle || null,
+      metaDescription: metaDesc || null,
+      focusKeyword: focusKeyword || null,
+      canonical: canonical || null,
+      ogTitle: ogTitle || null,
+      ogDescription: ogDesc || null,
     };
 
     if (status === "scheduled") body.scheduledAt = scheduleDate;
     if (post?.id) body.id = post.id;
 
     try {
-      const res = await fetch(`${API}/posts`, {
+      const url = post?.id ? `${API}/blog/${post.id}` : `${API}/blog`;
+      const res = await fetch(url, {
         method: post?.id ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify(body),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Fehler beim Speichern");
+      const resData = await res.json();
+      if (!res.ok) throw new Error(resData.error || "Fehler beim Speichern");
       toast("Beitrag erfolgreich gespeichert");
-      onSave();
-    } catch (err: any) {
-      setError(err.message);
+      setTimeout(() => onSave(), 800);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Fehler beim Speichern");
     } finally {
       setSaving(false);
     }
@@ -1490,118 +1494,142 @@ function BlogEditor({
 
       {error && <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">{error}</div>}
 
-      <div className="flex gap-2">
-        <button onClick={() => setActiveTab("content")} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === "content" ? "bg-primary text-white" : "bg-dark-800 text-white/60 hover:text-white"}`}>Inhalt</button>
-        <button onClick={() => setActiveTab("seo")} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === "seo" ? "bg-primary text-white" : "bg-dark-800 text-white/60 hover:text-white"}`}>SEO</button>
-      </div>
-
-      {activeTab === "content" ? (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-4">
-            <div>
-              <label className="block text-xs text-white/40 mb-1.5">Titel</label>
-              <input value={title} onChange={e => handleTitleChange(e.target.value)} placeholder="Beitragstitel..." className="w-full px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white text-lg font-semibold focus:border-primary focus:outline-none" />
-            </div>
-            <div>
-              <label className="block text-xs text-white/40 mb-1.5">Slug</label>
-              <input value={slug} onChange={e => handleSlugChange(e.target.value)} placeholder="beitrag-slug" className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white/60 text-sm focus:border-primary focus:outline-none" />
-            </div>
-            <div>
-              <label className="block text-xs text-white/40 mb-1.5">Inhalt (HTML)</label>
-              <textarea value={content} onChange={e => setContent(e.target.value)} rows={20} placeholder="Schreibe deinen Beitrag..." className="w-full px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white text-sm font-mono leading-relaxed focus:border-primary focus:outline-none resize-y" />
-            </div>
-            <div>
-              <label className="block text-xs text-white/40 mb-1.5">Auszug / Zusammenfassung</label>
-              <textarea value={excerpt} onChange={e => setExcerpt(e.target.value)} rows={3} placeholder="Kurze Zusammenfassung des Beitrags..." className="w-full px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none resize-y" />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* ── Left: Content + SEO ── */}
+        <div className="lg:col-span-2 space-y-5">
+          {/* Title */}
+          <div>
+            <label className="block text-xs text-white/40 mb-1.5">Titel *</label>
+            <input value={title} onChange={e => handleTitleChange(e.target.value)} placeholder="Beitragstitel..." className="w-full px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white text-lg font-semibold focus:border-primary focus:outline-none" />
+          </div>
+          {/* Slug */}
+          <div>
+            <label className="block text-xs text-white/40 mb-1.5">Slug (URL)</label>
+            <div className="flex items-center">
+              <span className="px-3 py-2.5 rounded-l-xl bg-dark-800 border border-r-0 border-white/10 text-white/30 text-xs select-none whitespace-nowrap">ikfzdigitalzulassung.de/</span>
+              <input value={slug} onChange={e => handleSlugChange(e.target.value)} placeholder="beitrag-slug" className="flex-1 px-4 py-2.5 rounded-r-xl bg-dark-950 border border-white/10 text-white/70 text-sm focus:border-primary focus:outline-none" />
             </div>
           </div>
-
-          <div className="space-y-4">
-            <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-4">
-              <h3 className="text-white font-semibold text-sm flex items-center gap-2"><Zap className="w-4 h-4 text-primary" /> Veröffentlichung</h3>
-              <div className="space-y-2">
-                {(["draft", "publish", "schedule"] as const).map(mode => (
-                  <label key={mode} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${publishMode === mode ? "border-primary/30 bg-primary/[0.05]" : "border-white/[0.06]"}`}>
-                    <input type="radio" name="publishMode" checked={publishMode === mode} onChange={() => setPublishMode(mode)} className="accent-primary" />
-                    <div>
-                      <span className="text-white text-sm font-medium">{mode === "draft" ? "Entwurf" : mode === "publish" ? "Sofort veröffentlichen" : "Zeitgesteuert"}</span>
-                      <p className="text-white/30 text-xs">{mode === "draft" ? "Nicht veröffentlicht" : mode === "publish" ? "Wird sofort live" : "Automatisch veröffentlichen"}</p>
-                    </div>
-                  </label>
-                ))}
+          {/* Content Editor */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="text-xs text-white/40">Inhalt</label>
+              <button type="button" onClick={() => setUseRichEditor(v => !v)} className="text-xs text-primary/70 hover:text-primary transition-colors">
+                {useRichEditor ? "HTML-Ansicht" : "Editor-Ansicht"}
+              </button>
+            </div>
+            {useRichEditor ? (
+              <div className="rounded-xl border border-white/10 overflow-hidden">
+                <TiptapEditor content={content} onChange={setContent} placeholder="Schreibe deinen Beitrag..." />
               </div>
-              {publishMode === "schedule" && (
-                <div className="pt-2">
-                  <label className="block text-xs text-white/40 mb-1.5">Datum & Uhrzeit</label>
-                  <input type="datetime-local" value={scheduleDate} onChange={e => setScheduleDate(e.target.value)} min={new Date().toISOString().slice(0, 16)} className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none [color-scheme:dark]" />
-                  {scheduleDate && (
-                    <p className="text-xs text-yellow-400/70 mt-2 flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      Wird am {new Date(scheduleDate).toLocaleDateString("de-DE", { weekday: "long", day: "2-digit", month: "long", year: "numeric" })} um {new Date(scheduleDate).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })} Uhr veröffentlicht
-                    </p>
-                  )}
-                </div>
-              )}
-            </div>
-
-            <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-3">
-              <h3 className="text-white font-semibold text-sm">Beitragsbild</h3>
-              <ImageField label="" value={featuredImage} onChange={setFeaturedImage} token={token} />
-            </div>
-
-            <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-3">
-              <h3 className="text-white font-semibold text-sm">Autor</h3>
-              <input value={author} onChange={e => setAuthor(e.target.value)} placeholder="Autorname..." className="w-full px-3 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none" />
-            </div>
-
-            {!isNew && post && (
-              <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-2">
-                <h3 className="text-white font-semibold text-sm mb-3">Info</h3>
-                {post.publishedAt && <div className="flex justify-between text-xs"><span className="text-white/30">Veröffentlicht</span><span className="text-white/60">{formatDate(post.publishedAt)}</span></div>}
-                <div className="flex justify-between text-xs"><span className="text-white/30">Status</span><Badge status={post.status} /></div>
-                <div className="flex justify-between text-xs"><span className="text-white/30">Lesezeit</span><span className="text-white/60">{post.readingTime || "—"} Min.</span></div>
-              </div>
+            ) : (
+              <textarea value={content} onChange={e => setContent(e.target.value)} rows={20} className="w-full px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white text-sm font-mono leading-relaxed focus:border-primary focus:outline-none resize-y" />
             )}
           </div>
-        </div>
-      ) : (
-        <div className="max-w-3xl space-y-4">
-          <div className="grid md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs text-white/40 mb-1.5">Meta Title <span className="text-white/20">({metaTitle.length}/60)</span></label>
-              <input value={metaTitle} onChange={e => setMetaTitle(e.target.value)} placeholder={title || "Meta Title"} className="w-full px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none" />
+          {/* Excerpt */}
+          <div>
+            <label className="block text-xs text-white/40 mb-1.5">Auszug / Zusammenfassung</label>
+            <textarea value={excerpt} onChange={e => setExcerpt(e.target.value)} rows={3} placeholder="Kurze Zusammenfassung für SEO und Karten..." className="w-full px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none resize-y" />
+          </div>
+          {/* SEO Section */}
+          <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-4">
+            <h3 className="text-white font-semibold text-sm flex items-center gap-2"><Globe className="w-4 h-4 text-primary" /> SEO</h3>
+            <div className="p-4 rounded-xl bg-dark-950 border border-white/10">
+              <p className="text-xs text-white/30 mb-2 font-medium uppercase tracking-wider">Google-Vorschau</p>
+              <p className="text-blue-400 text-base hover:underline cursor-default truncate">{metaTitle || title || "Titel"}</p>
+              <p className="text-green-400 text-xs mt-0.5">ikfzdigitalzulassung.de/{slug || "slug"}/</p>
+              <p className="text-white/50 text-sm mt-1 line-clamp-2">{metaDesc || excerpt || "Beschreibung..."}</p>
+            </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs text-white/40 mb-1.5">Meta Title <span className="text-white/20">({metaTitle.length}/60)</span></label>
+                <input value={metaTitle} onChange={e => setMetaTitle(e.target.value)} maxLength={70} placeholder={title || "Meta Title"} className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none" />
+              </div>
+              <div>
+                <label className="block text-xs text-white/40 mb-1.5">Focus-Keyword</label>
+                <input value={focusKeyword} onChange={e => setFocusKeyword(e.target.value)} placeholder="Haupt-Keyword..." className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none" />
+              </div>
             </div>
             <div>
-              <label className="block text-xs text-white/40 mb-1.5">OG Title</label>
-              <input value={ogTitle} onChange={e => setOgTitle(e.target.value)} placeholder={metaTitle || title || "OG Title"} className="w-full px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none" />
-            </div>
-          </div>
-          <div>
-            <label className="block text-xs text-white/40 mb-1.5">Meta Description <span className="text-white/20">({metaDesc.length}/160)</span></label>
-            <textarea value={metaDesc} onChange={e => setMetaDesc(e.target.value)} rows={3} placeholder="Beschreibung für Suchmaschinen..." className="w-full px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none" />
-          </div>
-          <div>
-            <label className="block text-xs text-white/40 mb-1.5">OG Description</label>
-            <textarea value={ogDesc} onChange={e => setOgDesc(e.target.value)} rows={2} placeholder={metaDesc || "OG Description"} className="w-full px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none" />
-          </div>
-          <div className="grid md:grid-cols-2 gap-4">
-            <div>
-              <ImageField label="OG Image" value={ogImage} onChange={setOgImage} token={token} />
+              <label className="block text-xs text-white/40 mb-1.5">Meta Description <span className="text-white/20">({metaDesc.length}/160)</span></label>
+              <textarea value={metaDesc} onChange={e => setMetaDesc(e.target.value)} rows={2} maxLength={170} placeholder="Beschreibung für Suchmaschinen..." className="w-full px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none resize-none" />
             </div>
             <div>
               <label className="block text-xs text-white/40 mb-1.5">Canonical URL</label>
-              <input value={canonical} onChange={e => setCanonical(e.target.value)} placeholder={`https://ikfzdigitalzulassung.de/blog/${slug}/`} className="w-full px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white/60 text-sm focus:border-primary focus:outline-none" />
+              <input value={canonical} onChange={e => setCanonical(e.target.value)} placeholder={`https://ikfzdigitalzulassung.de/${slug || "beitrag-slug"}/`} className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white/60 text-sm focus:border-primary focus:outline-none" />
+            </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs text-white/40 mb-1.5">OG Title</label>
+                <input value={ogTitle} onChange={e => setOgTitle(e.target.value)} placeholder={metaTitle || title || "OG Title"} className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none" />
+              </div>
+              <div>
+                <label className="block text-xs text-white/40 mb-1.5">OG Description</label>
+                <input value={ogDesc} onChange={e => setOgDesc(e.target.value)} placeholder={metaDesc || "OG Description"} className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none" />
+              </div>
             </div>
           </div>
-
-          <div className="p-5 rounded-2xl bg-dark-950 border border-white/10">
-            <p className="text-xs text-white/30 mb-3 font-medium uppercase tracking-wider">Google-Vorschau</p>
-            <p className="text-blue-400 text-lg hover:underline cursor-default">{metaTitle || title || "Titel"}</p>
-            <p className="text-green-400 text-sm mt-0.5">ikfzdigitalzulassung.de/blog/{slug || "slug"}/</p>
-            <p className="text-white/50 text-sm mt-1 line-clamp-2">{metaDesc || excerpt || "Beschreibung..."}</p>
-          </div>
         </div>
-      )}
+
+        {/* ── Right: Sidebar ── */}
+        <div className="space-y-4">
+          {/* Publish Mode */}
+          <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-3">
+            <h3 className="text-white font-semibold text-sm flex items-center gap-2"><Zap className="w-4 h-4 text-primary" /> Veröffentlichung</h3>
+            <div className="space-y-2">
+              {(["draft", "publish", "schedule"] as const).map(mode => (
+                <label key={mode} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${publishMode === mode ? "border-primary/30 bg-primary/[0.05]" : "border-white/[0.06]"}`}>
+                  <input type="radio" name="publishMode" checked={publishMode === mode} onChange={() => setPublishMode(mode)} className="accent-primary" />
+                  <div>
+                    <span className="text-white text-sm font-medium">{mode === "draft" ? "Entwurf" : mode === "publish" ? "Sofort veröffentlichen" : "Zeitgesteuert"}</span>
+                    <p className="text-white/30 text-xs">{mode === "draft" ? "Nicht veröffentlicht" : mode === "publish" ? "Wird sofort live" : "Automatisch veröffentlichen"}</p>
+                  </div>
+                </label>
+              ))}
+            </div>
+            {publishMode === "schedule" && (
+              <div>
+                <label className="block text-xs text-white/40 mb-1.5">Datum & Uhrzeit</label>
+                <input type="datetime-local" value={scheduleDate} onChange={e => setScheduleDate(e.target.value)} min={new Date().toISOString().slice(0, 16)} className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none [color-scheme:dark]" />
+                {scheduleDate && (
+                  <p className="text-xs text-yellow-400/70 mt-2 flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    {new Date(scheduleDate).toLocaleDateString("de-DE", { weekday: "long", day: "2-digit", month: "long", year: "numeric" })} · {new Date(scheduleDate).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })} Uhr
+                  </p>
+                )}
+              </div>
+            )}
+            <button onClick={handleSave} disabled={saving} className="w-full py-2.5 rounded-xl bg-primary text-white font-medium text-sm hover:bg-primary/90 disabled:opacity-50 transition-colors flex items-center justify-center gap-2">
+              <Save className="w-4 h-4" /> {saving ? "Speichern..." : "Speichern"}
+            </button>
+          </div>
+          {/* Category & Tags */}
+          <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-3">
+            <h3 className="text-white font-semibold text-sm flex items-center gap-2"><Tag className="w-4 h-4 text-primary" /> Kategorie & Tags</h3>
+            <div>
+              <label className="block text-xs text-white/40 mb-1.5">Kategorie</label>
+              <input value={category} onChange={e => setCategory(e.target.value)} placeholder="z. B. Fahrzeugzulassung" className="w-full px-3 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none" />
+            </div>
+            <div>
+              <label className="block text-xs text-white/40 mb-1.5">Tags <span className="text-white/20">(kommagetrennt)</span></label>
+              <input value={tags} onChange={e => setTags(e.target.value)} placeholder="kfz, zulassung, ummeldung" className="w-full px-3 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none" />
+            </div>
+          </div>
+          {/* Featured Image */}
+          <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-3">
+            <h3 className="text-white font-semibold text-sm flex items-center gap-2"><ImageIcon className="w-4 h-4 text-primary" /> Beitragsbild</h3>
+            <ImageField label="" value={featuredImage} onChange={setFeaturedImage} token={token} />
+          </div>
+          {/* Post Info */}
+          {!isNew && post && (
+            <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-2">
+              <h3 className="text-white font-semibold text-sm mb-3">Info</h3>
+              {post.publishedAt && <div className="flex justify-between text-xs"><span className="text-white/30">Veröffentlicht</span><span className="text-white/60">{formatDate(post.publishedAt)}</span></div>}
+              <div className="flex justify-between text-xs"><span className="text-white/30">Status</span><Badge status={post.status} /></div>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

@@ -9,10 +9,10 @@ export async function GET(req: NextRequest) {
   const category = sp.get('category') || undefined;
   const search = sp.get('search') || undefined;
 
-  const where: any = { status: 'published' };
+  const where: any = { status: 'publish' };
 
   if (category) {
-    where.categories = { some: { category: { slug: category } } };
+    where.category = { contains: category };
   }
 
   if (search) {
@@ -23,44 +23,20 @@ export async function GET(req: NextRequest) {
   }
 
   const [posts, total] = await Promise.all([
-    prisma.post.findMany({
+    prisma.blogPost.findMany({
       where,
       orderBy: { publishedAt: 'desc' },
       skip: (page - 1) * limit,
       take: limit,
-      include: {
-        categories: { include: { category: true } },
-        seo: { select: { metaTitle: true, metaDescription: true, ogImage: true } },
+      select: {
+        id: true, slug: true, title: true, excerpt: true,
+        featuredImage: true, author: true, publishedAt: true, category: true, tags: true,
       },
     }),
-    prisma.post.count({ where }),
+    prisma.blogPost.count({ where }),
   ]);
 
   const totalPages = Math.ceil(total / limit);
 
-  return NextResponse.json({
-    posts: posts.map((p) => ({
-      id: p.id,
-      slug: p.slug,
-      title: p.title,
-      excerpt: p.excerpt,
-      featuredImage: p.featuredImage,
-      author: p.author,
-      readingTime: p.readingTime,
-      publishedAt: p.publishedAt,
-      categories: p.categories.map((c) => ({
-        id: c.category.id,
-        name: c.category.name,
-        slug: c.category.slug,
-      })),
-    })),
-    pagination: {
-      page,
-      limit,
-      total,
-      totalPages,
-      hasNext: page < totalPages,
-      hasPrev: page > 1,
-    },
-  });
+  return NextResponse.json({ posts, pagination: { page, limit, total, totalPages, hasNext: page < totalPages, hasPrev: page > 1 } });
 }

@@ -17,15 +17,13 @@ export async function GET(req: NextRequest) {
       { metaTitle: { contains: search } },
       { page: { title: { contains: search } } },
       { page: { slug: { contains: search } } },
-      { post: { title: { contains: search } } },
-      { post: { slug: { contains: search } } },
     ],
   } : {};
 
   const [seo, total] = await Promise.all([
     prisma.sEO.findMany({
       where,
-      include: { page: { select: { title: true, slug: true } }, post: { select: { title: true, slug: true } } },
+      include: { page: { select: { title: true, slug: true } } },
       orderBy: { id: 'desc' },
       skip: (page - 1) * limit,
       take: limit,

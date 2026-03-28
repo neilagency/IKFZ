@@ -45,67 +45,73 @@ model Page {
   seo           SEO?
 }
 
-// Blog Posts
-model Post {
-  id            String       @id @default(cuid())
-  wpId          Int?         @unique
-  slug          String       @unique
-  title         String
-  content       String
-  excerpt       String?
-  status        String       @default("published")
-  featuredImage String?
-  author        String?
-  readingTime   Int?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  publishedAt   DateTime?
-  scheduledAt   DateTime?
-  seo           SEO?
-  categories    PostCategory[]
-  tags          PostTag[]
+// Blog Posts (flat model — category/tags as strings)
+model BlogPost {
+  id              String    @id @default(cuid())
+  wpPostId        Int?      @unique
+  slug            String    @unique
+  title           String
+  content         String
+  excerpt         String    @default("")
+  featuredImage   String    @default("")
+  featuredImageId String    @default("")
+  status          String    @default("draft")
+  author          String    @default("Admin")
+  metaTitle       String    @default("")
+  metaDescription String    @default("")
+  focusKeyword    String    @default("")
+  canonical       String    @default("")
+  robots          String    @default("index, follow")
+  ogTitle         String    @default("")
+  ogDescription   String    @default("")
+  ogImage         String    @default("")
+  category        String    @default("")
+  tags            String    @default("")
+  views           Int       @default(0)
+  scheduledAt     DateTime?
+  publishedAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([slug])
+  @@index([status])
+  @@index([publishedAt])
+  @@index([status, scheduledAt])
 }
 
 // Categories
 model Category {
-  id          String         @id @default(cuid())
-  name        String         @unique
-  slug        String         @unique
-  description String?
-  posts       PostCategory[]
-}
+  id          String   @id @default(cuid())
+  wpCatId     Int?     @unique
+  name        String   @unique
+  slug        String   @unique
+  description String   @default("")
+  count       Int      @default(0)
+  parent      Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-model PostCategory {
-  postId     String
-  categoryId String
-  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-
-  @@id([postId, categoryId])
+  @@index([slug])
 }
 
 // Tags
 model Tag {
-  id    String    @id @default(cuid())
-  name  String    @unique
-  slug  String    @unique
-  posts PostTag[]
-}
+  id          String   @id @default(cuid())
+  wpTagId     Int?     @unique
+  name        String   @unique
+  slug        String   @unique
+  description String   @default("")
+  count       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-model PostTag {
-  postId String
-  tagId  String
-  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
-
-  @@id([postId, tagId])
+  @@index([slug])
 }
 
 // SEO Metadata
 model SEO {
   id              String  @id @default(cuid())
   pageId          String? @unique
-  postId          String? @unique
   productId       String? @unique
   metaTitle       String?
   metaDescription String?
@@ -122,7 +128,6 @@ model SEO {
   schemaJson      String?
   focusKeyword    String?
   page            Page?   @relation(fields: [pageId], references: [id], onDelete: Cascade)
-  post            Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
   product         Product?
 }
 
@@ -138,13 +143,28 @@ model Redirect {
 
 // Media (uploads)
 model Media {
-  id        String   @id @default(cuid())
-  url       String
-  filename  String
-  mimeType  String
-  size      Int
-  alt       String?
-  createdAt DateTime @default(now())
+  id            String   @id @default(cuid())
+  wpMediaId     Int?     @unique
+  fileName      String   @default("")
+  originalName  String   @default("")
+  title         String   @default("")
+  altText       String   @default("")
+  sourceUrl     String   @default("")
+  localPath     String   @default("")
+  thumbnailUrl  String   @default("")
+  mediumUrl     String   @default("")
+  largeUrl      String   @default("")
+  webpUrl       String   @default("")
+  avifUrl       String   @default("")
+  mimeType      String   @default("")
+  width         Int      @default(0)
+  height        Int      @default(0)
+  fileSize      Int      @default(0)
+  folder        String   @default("")
+  usedIn        String   @default("[]")
+  useCount      Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 // Site Settings

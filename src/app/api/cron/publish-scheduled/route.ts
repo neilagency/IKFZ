@@ -1,23 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
-// POST /api/cron/publish-scheduled
-// Publishes all scheduled posts whose scheduledAt <= now
-// Can be called by external cron service or internal scheduler
-export async function POST(req: NextRequest) {
-  // Verify cron secret to prevent unauthorized triggers
-  const authHeader = req.headers.get('authorization');
-  const cronSecret = process.env.CRON_SECRET || 'ikfz-cron-secret-2024';
+export const dynamic = 'force-dynamic';
 
-  if (authHeader !== `Bearer ${cronSecret}`) {
-    return NextResponse.json({ error: 'Nicht autorisiert' }, { status: 401 });
+export async function GET(req: NextRequest) {
+  const authHeader = req.headers.get('Authorization');
+  const cronSecret = process.env.CRON_SECRET;
+  if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
     const now = new Date();
 
-    // Find all posts that are scheduled and due
-    const scheduledPosts = await prisma.post.findMany({
+    const scheduledPosts = await prisma.blogPost.findMany({
       where: {
         status: 'scheduled',
         scheduledAt: { lte: now },
@@ -25,43 +22,36 @@ export async function POST(req: NextRequest) {
     });
 
     if (scheduledPosts.length === 0) {
-      return NextResponse.json({ published: 0, message: 'Keine geplanten Beiträge fällig' });
+      return NextResponse.json({ published: 0, posts: [] });
     }
 
-    // Publish each post
-    const results = [];
+    await prisma.$transaction(
+      scheduledPosts.map((post) =>
+        prisma.blogPost.update({
+          where: { id: post.id },
+          data: { status: 'publish', publishedAt: now, scheduledAt: null },
+        })
+      )
+    );
+
     for (const post of scheduledPosts) {
-      await prisma.post.update({
-        where: { id: post.id },
-        data: {
-          status: 'published',
-          publishedAt: post.scheduledAt || now,
-          scheduledAt: null,
-        },
-      });
-      results.push({ id: post.id, slug: post.slug, title: post.title });
+      revalidatePath(`/${post.slug}`);
     }
-
-    console.log(`[CRON] Published ${results.length} scheduled posts:`, results.map(r => r.slug));
+    revalidatePath('/insiderwissen');
+    revalidatePath('/sitemap.xml');
+    revalidateTag('blog');
+    revalidateTag('blog-posts');
 
     return NextResponse.json({
-      published: results.length,
-      posts: results,
+      published: scheduledPosts.length,
+      posts: scheduledPosts.map(({ id, slug, title }) => ({ id, slug, title })),
     });
   } catch (error) {
-    console.error('[CRON] Publish scheduled error:', error);
     return NextResponse.json({ error: 'Server-Fehler' }, { status: 500 });
   }
 }
 
-// GET endpoint for health check
-export async function GET() {
-  const count = await prisma.post.count({
-    where: { status: 'scheduled' },
-  });
-
-  return NextResponse.json({
-    status: 'ok',
-    scheduledCount: count,
-  });
+// POST kept for backwards-compat — delegates to GET logic
+export async function POST(req: NextRequest) {
+  return GET(req);
 }

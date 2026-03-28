@@ -1,29 +1,37 @@
 import type { Metadata } from 'next';
-import { notFound, redirect, permanentRedirect } from 'next/navigation';
-import prisma from '@/lib/db';
+import { notFound } from 'next/navigation';
+import prisma, { buildSEOMetadata, getPostBySlug, stripHtml, getActiveProducts } from '@/lib/db';
 import { getPageSEO } from '@/lib/seo';
+import { sanitizeHtml, sanitizeForSchema } from '@/lib/sanitize';
 import WPContentRenderer from '@/components/WPContentRenderer';
 import ScrollReveal from '@/components/ScrollReveal';
 import Link from 'next/link';
+import Image from 'next/image';
 import Script from 'next/script';
-import { ArrowRight, MapPin, Shield, FileCheck, Clock, Phone, Calendar, User } from 'lucide-react';
+import { ArrowRight, MapPin, Shield, FileCheck, Clock, Phone, Calendar, User, ChevronRight, MessageCircle, Share2 } from 'lucide-react';
 import { siteConfig } from '@/lib/config';
 
-const STATIC_SLUGS = new Set([
+const SITE_URL = 'https://ikfzdigitalzulassung.de';
+
+const RESERVED_SLUGS = new Set([
+  'insiderwissen', 'rechnung', 'admin', 'product', 'api',
   'starseite-2', 'startseite', 'impressum', 'datenschutzerklarung',
   'agb', 'faq', 'kfz-services', 'kfz-service', 'kfz-online-service', 'evb',
   'antragsuebersicht', 'warenkorb', 'mein-konto', 'kasse',
   'auto-verkaufen', 'kfz-versicherung-berechnen',
   'motorrad-online-anmelden', 'auto-online-anmelden', 'kfz-online-abmelden',
-  'kfz-zulassung-in-deiner-stadt',
+  'kfz-zulassung-in-deiner-stadt', 'bestellung-erfolgreich', 'zahlung-fehlgeschlagen',
 ]);
+
+export const revalidate = 60;
+export const dynamicParams = true;
 
 export async function generateStaticParams() {
   const pages = await prisma.page.findMany({
     where: { status: 'published' },
     select: { slug: true },
   });
-  return pages.filter(p => !STATIC_SLUGS.has(p.slug)).map(p => ({ slug: p.slug }));
+  return pages.filter(p => !RESERVED_SLUGS.has(p.slug)).map(p => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -32,11 +40,15 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
+
+  // Check pages first
   const page = await prisma.page.findUnique({ where: { slug } });
   if (page) return getPageSEO(slug);
-  // Check if it's a blog post and redirect
-  const post = await prisma.post.findUnique({ where: { slug } });
-  if (post) return { title: post.title };
+
+  // Check blog posts
+  const post = await getPostBySlug(slug);
+  if (post) return buildSEOMetadata(post);
+
   return { title: 'Seite nicht gefunden' };
 }
 
@@ -71,10 +83,11 @@ export default async function DynamicPage({ params }: { params: Promise<{ slug: 
     return (<>{schemaJson && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaJson }} />}<GenericPage title={page.title} content={page.content} featuredImage={page.featuredImage} /></>);
   }
 
-  const post = await prisma.post.findUnique({ where: { slug }, include: { seo: true, categories: { include: { category: true } } } });
-  if (post) {
-    // Redirect blog posts to /blog/{slug} for URL consolidation (permanent 308)
-    permanentRedirect(`/blog/${slug}`);
+  // Check for blog post
+  const post = await getPostBySlug(slug);
+  if (post && post.status === 'publish') {
+    const products = await getActiveProducts();
+    return <BlogPostView post={post} products={products} />;
   }
 
   notFound();
@@ -291,5 +304,263 @@ function InsuranceCalculator({ slug }: { slug: string }) {
         <Script src={scriptSrc} strategy="afterInteractive" />
       </div>
     </ScrollReveal>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════
+// BLOG POST VIEW
+// ═══════════════════════════════════════════════════════════
+function BlogPostView({ post, products }: { post: any; products: any[] }) {
+  const wordCount = stripHtml(post.content).split(/\s+/).filter(Boolean).length;
+  const readingTime = Math.ceil(wordCount / 200);
+
+  // Inject heading IDs and extract TOC
+  const headingRegex = /<h([23])[^>]*>(.*?)<\/h[23]>/gi;
+  const headings: { level: number; text: string; id: string }[] = [];
+  let processedContent = post.content;
+  const matches = [...post.content.matchAll(headingRegex)];
+
+  for (const match of matches) {
+    const level = parseInt(match[1]);
+    const text = sanitizeForSchema(match[2]);
+    const id = text
+      .toLowerCase()
+      .replace(/[äÄ]/g, 'ae').replace(/[öÖ]/g, 'oe').replace(/[üÜ]/g, 'ue').replace(/ß/g, 'ss')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+    headings.push({ level, text, id });
+    processedContent = processedContent.replace(
+      match[0],
+      `<h${level} id="${id}">${match[2]}</h${level}>`
+    );
+  }
+
+  const sanitizedContent = sanitizeHtml(processedContent);
+  const dateStr = post.publishedAt
+    ? new Date(post.publishedAt).toLocaleDateString('de-DE', { year: 'numeric', month: 'long', day: 'numeric' })
+    : '';
+
+  const abmeldungProduct = products.find(p => p.serviceType === 'abmeldung');
+  const anmeldungProduct = products.find(p => p.serviceType === 'anmeldung');
+  const abmeldungPrice = abmeldungProduct ? `${abmeldungProduct.price.toFixed(2).replace('.', ',')} €` : '19,70 €';
+  const anmeldungPrice = anmeldungProduct ? `ab ${abmeldungProduct.price.toFixed(2).replace('.', ',')} €` : 'ab 99,70 €';
+
+  const postUrl = `${SITE_URL}/${post.slug}/`;
+  const whatsappShareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(post.title + ' ' + postUrl)}`;
+  const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`;
+
+  // JSON-LD
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    datePublished: post.publishedAt ? new Date(post.publishedAt).toISOString() : undefined,
+    dateModified: new Date(post.updatedAt).toISOString(),
+    author: { '@type': 'Organization', name: 'Online Auto Abmelden' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Online Auto Abmelden',
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.webp` },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': postUrl },
+    ...(post.featuredImage ? { image: post.featuredImage } : {}),
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Start', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Insiderwissen', item: `${SITE_URL}/insiderwissen/` },
+      { '@type': 'ListItem', position: 3, name: post.title },
+    ],
+  };
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-dark via-primary-900 to-dark">
+        <div className="pt-32 pb-16 md:pt-40 md:pb-20 relative">
+          <div className="absolute top-0 left-1/3 w-[500px] h-[500px] bg-primary/15 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute bottom-0 right-1/3 w-[400px] h-[400px] bg-accent/10 rounded-full blur-[100px] pointer-events-none" />
+          <div className="container-main relative z-10">
+            {/* Breadcrumb */}
+            <nav className="flex items-center gap-2 text-sm text-white/40 mb-6">
+              <Link href="/" className="hover:text-primary transition-colors">Start</Link>
+              <ChevronRight className="w-3.5 h-3.5" />
+              <Link href="/insiderwissen/" className="hover:text-primary transition-colors">Insiderwissen</Link>
+              <ChevronRight className="w-3.5 h-3.5" />
+              <span className="text-white/60 truncate max-w-xs">{post.title}</span>
+            </nav>
+
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-6 leading-tight max-w-4xl">
+              {post.title}
+            </h1>
+
+            <div className="flex items-center gap-4 text-white/40 text-sm mb-8">
+              {dateStr && (
+                <span className="flex items-center gap-1.5">
+                  <Calendar className="w-4 h-4" /> {dateStr}
+                </span>
+              )}
+              <span className="flex items-center gap-1.5">
+                <Clock className="w-4 h-4" /> {readingTime} Min. Lesezeit
+              </span>
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              <Link href="/product/fahrzeugabmeldung/" className="btn-primary">
+                Fahrzeug Abmelden – {abmeldungPrice}
+              </Link>
+              <a href={siteConfig.links.whatsapp} target="_blank" rel="noopener noreferrer" className="btn-outline-white">
+                <MessageCircle className="w-5 h-5" /> WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Content Area — Two Column */}
+      <section className="py-12 md:py-20 bg-dark">
+        <div className="container-main">
+          <div className="flex flex-col lg:flex-row gap-10">
+            {/* Main Content */}
+            <div className="flex-1 min-w-0">
+              {/* Featured Image */}
+              {post.featuredImage && (
+                <div className="aspect-[2/1] relative rounded-2xl overflow-hidden mb-10 border border-white/[0.06]">
+                  <Image
+                    src={post.featuredImage}
+                    alt={post.title}
+                    fill
+                    priority
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 66vw"
+                  />
+                </div>
+              )}
+
+              {/* Blog Content */}
+              <div
+                className="prose prose-lg prose-invert max-w-none
+                  prose-headings:text-white prose-headings:font-bold
+                  prose-p:text-white/70 prose-p:leading-relaxed
+                  prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+                  prose-strong:text-white
+                  prose-blockquote:border-primary prose-blockquote:text-white/60
+                  prose-code:text-primary prose-code:bg-dark-900 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
+                  prose-img:rounded-xl prose-img:border prose-img:border-white/[0.06]
+                  prose-li:text-white/70"
+                dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+              />
+
+              {/* Share */}
+              <div className="flex items-center gap-4 mt-12 pt-8 border-t border-white/[0.06]">
+                <span className="text-white/40 text-sm font-medium">Teilen:</span>
+                <a
+                  href={whatsappShareUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-green-600/10 text-green-400 hover:bg-green-600/20 text-sm transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4" /> WhatsApp
+                </a>
+                <a
+                  href={facebookShareUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600/10 text-blue-400 hover:bg-blue-600/20 text-sm transition-colors"
+                >
+                  <Share2 className="w-4 h-4" /> Facebook
+                </a>
+              </div>
+
+              {/* Big CTA */}
+              <div className="mt-12 p-8 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20">
+                <h2 className="text-2xl font-bold text-white mb-3">Jetzt Fahrzeug online abmelden oder anmelden</h2>
+                <p className="text-white/50 mb-6">Sparen Sie sich den Weg zur Zulassungsstelle. Erledigen Sie alles bequem von zu Hause.</p>
+                <div className="flex flex-wrap gap-3">
+                  <Link href="/product/fahrzeugabmeldung/" className="btn-primary">
+                    Abmelden – {abmeldungPrice}
+                  </Link>
+                  <Link href="/product/auto-online-anmelden/" className="px-6 py-3 rounded-xl border border-primary/30 text-primary font-medium hover:bg-primary/10 transition-colors">
+                    Anmelden – {anmeldungPrice}
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Sidebar */}
+            <aside className="lg:w-80 xl:w-[340px] flex-shrink-0">
+              <div className="sticky top-24 space-y-6">
+                {/* CTA Card */}
+                <div className="p-6 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20">
+                  <h3 className="text-white font-bold mb-4">Unsere Services</h3>
+                  <div className="space-y-3">
+                    <Link href="/product/fahrzeugabmeldung/" className="block px-4 py-3 rounded-xl bg-primary text-white text-center font-medium hover:bg-primary/90 transition-colors text-sm">
+                      Abmelden – {abmeldungPrice}
+                    </Link>
+                    <Link href="/product/auto-online-anmelden/" className="block px-4 py-3 rounded-xl border border-primary/30 text-primary text-center font-medium hover:bg-primary/10 transition-colors text-sm">
+                      Anmelden – {anmeldungPrice}
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Table of Contents */}
+                {headings.length > 2 && (
+                  <div className="p-6 rounded-2xl bg-dark-900/60 border border-white/[0.06]">
+                    <h3 className="text-white font-bold text-sm mb-4">Inhaltsverzeichnis</h3>
+                    <nav className="space-y-2 max-h-80 overflow-y-auto">
+                      {headings.map((h) => (
+                        <a
+                          key={h.id}
+                          href={`#${h.id}`}
+                          className={`block text-sm text-white/40 hover:text-primary transition-colors ${
+                            h.level === 3 ? 'pl-4' : ''
+                          }`}
+                        >
+                          {h.text}
+                        </a>
+                      ))}
+                    </nav>
+                  </div>
+                )}
+
+                {/* Help Card */}
+                <div className="p-6 rounded-2xl bg-dark-900/60 border border-white/[0.06]">
+                  <h3 className="text-white font-bold text-sm mb-4">Brauchen Sie Hilfe?</h3>
+                  <div className="space-y-3">
+                    <a href={`tel:${siteConfig.company.phone}`} className="flex items-center gap-3 text-white/50 hover:text-primary text-sm transition-colors">
+                      <Phone className="w-4 h-4 text-primary" /> {siteConfig.company.phone}
+                    </a>
+                    <a href={siteConfig.links.whatsapp} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-white/50 hover:text-primary text-sm transition-colors">
+                      <MessageCircle className="w-4 h-4 text-green-400" /> WhatsApp Support
+                    </a>
+                  </div>
+                </div>
+
+                {/* Trust Badges */}
+                <div className="p-6 rounded-2xl bg-dark-900/60 border border-white/[0.06]">
+                  <div className="space-y-3">
+                    {[
+                      { icon: Shield, text: 'KBA-registriert' },
+                      { icon: Clock, text: '24/7 verfügbar' },
+                      { icon: FileCheck, text: 'Sofort-Bestätigung' },
+                    ].map(({ icon: Icon, text }) => (
+                      <div key={text} className="flex items-center gap-3 text-sm text-white/50">
+                        <Icon className="w-4 h-4 text-primary" /> {text}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

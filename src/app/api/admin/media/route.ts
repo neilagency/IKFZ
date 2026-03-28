@@ -47,7 +47,13 @@ export async function GET(req: NextRequest) {
   ]);
 
   return NextResponse.json({
-    media,
+    media: media.map(m => ({
+      ...m,
+      // backwards-compat aliases
+      url: m.sourceUrl || m.localPath || '',
+      filename: m.fileName || m.originalName || '',
+      size: m.fileSize || 0,
+    })),
     total,
     page,
     totalPages: Math.ceil(total / limit),
@@ -100,14 +106,16 @@ export async function POST(req: NextRequest) {
       // Store in database
       const media = await prisma.media.create({
         data: {
-          url: `/uploads/${safeFilename}`,
-          filename: file.name,
+          sourceUrl: `/uploads/${safeFilename}`,
+          fileName: safeFilename,
+          originalName: file.name,
           mimeType: file.type,
-          size: file.size,
+          fileSize: file.size,
         },
       });
 
-      uploaded.push(media);
+      // Return with 'url' field for backwards compatibility
+      uploaded.push({ ...media, url: media.sourceUrl, filename: media.fileName, size: media.fileSize });
     }
 
     return NextResponse.json({ media: uploaded }, { status: 201 });
@@ -134,7 +142,7 @@ export async function DELETE(req: NextRequest) {
     }
 
     // Delete physical file
-    const filePath = path.join(process.cwd(), 'public', media.url);
+    const filePath = path.join(process.cwd(), 'public', media.sourceUrl);
     try {
       await unlink(filePath);
     } catch {

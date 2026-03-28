@@ -47,47 +47,34 @@ export async function getPageSEO(slug: string): Promise<Metadata> {
 }
 
 export async function getPostSEO(slug: string): Promise<Metadata> {
-  const post = await prisma.post.findUnique({
-    where: { slug },
-    include: { seo: true },
-  });
+  const post = await prisma.blogPost.findUnique({ where: { slug } });
 
-  if (!post?.seo) {
-    return {
-      title: post?.title || 'Blog | iKFZ Digital Zulassung',
-      description: post?.excerpt || undefined,
-      alternates: {
-        canonical: `${SITE_URL}/blog/${slug}/`,
-      },
-    };
+  if (!post) {
+    return { title: 'Blog | iKFZ Digital Zulassung', alternates: { canonical: `${SITE_URL}/${slug}/` } };
   }
 
-  const seo = post.seo;
   return {
-    title: seo.metaTitle || post.title,
-    description: seo.metaDescription || post.excerpt || undefined,
-    alternates: {
-      canonical: seo.canonicalUrl || `${SITE_URL}/blog/${post.slug}/`,
-    },
+    title: post.metaTitle || post.title,
+    description: post.metaDescription || post.excerpt || undefined,
+    alternates: { canonical: post.canonical || `${SITE_URL}/${post.slug}/` },
     openGraph: {
-      title: seo.ogTitle || seo.metaTitle || post.title,
-      description: seo.ogDescription || seo.metaDescription || undefined,
-      url: seo.canonicalUrl || `${SITE_URL}/blog/${post.slug}/`,
+      title: post.ogTitle || post.metaTitle || post.title,
+      description: post.ogDescription || post.metaDescription || undefined,
+      url: post.canonical || `${SITE_URL}/${post.slug}/`,
       siteName: 'ikfzdigitalzulassung.de',
       locale: 'de_DE',
       type: 'article',
-      images: seo.ogImage ? [{ url: seo.ogImage }] : [{ url: DEFAULT_OG_IMAGE }],
+      images: post.ogImage ? [{ url: post.ogImage }] : [{ url: DEFAULT_OG_IMAGE }],
       publishedTime: post.publishedAt?.toISOString(),
       modifiedTime: post.updatedAt?.toISOString(),
       authors: post.author ? [post.author] : undefined,
     },
     twitter: {
-      card: (seo.twitterCard as 'summary_large_image' | 'summary') || 'summary_large_image',
-      title: seo.twitterTitle || seo.metaTitle || post.title,
-      description: seo.twitterDesc || seo.metaDescription || undefined,
-      images: seo.twitterImage ? [seo.twitterImage] : seo.ogImage ? [seo.ogImage] : undefined,
+      card: 'summary_large_image',
+      title: post.ogTitle || post.metaTitle || post.title,
+      description: post.ogDescription || post.metaDescription || undefined,
+      images: post.ogImage ? [post.ogImage] : undefined,
     },
-    robots: seo.robots || undefined,
   };
 }
 
@@ -99,10 +86,7 @@ export async function getSchemaJsonLd(slug: string, type: 'page' | 'post' = 'pag
     });
     return page?.seo?.schemaJson || null;
   } else {
-    const post = await prisma.post.findUnique({
-      where: { slug },
-      include: { seo: true },
-    });
-    return post?.seo?.schemaJson || null;
+    // BlogPost has inline SEO, no schemaJson field
+    return null;
   }
 }

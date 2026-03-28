@@ -120,8 +120,8 @@ const faqCategories = [
 
 export default async function AutoVerkaufenPage() {
   // Fetch 3 recent blog posts
-  const recentPosts = await prisma.post.findMany({
-    where: { status: 'published', publishedAt: { lte: new Date() } },
+  const recentPosts = await prisma.blogPost.findMany({
+    where: { status: 'publish', publishedAt: { lte: new Date() } },
     orderBy: { publishedAt: 'desc' },
     take: 3,
     select: { slug: true, title: true, excerpt: true, featuredImage: true, publishedAt: true },

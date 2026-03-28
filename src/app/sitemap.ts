@@ -11,9 +11,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     orderBy: { updatedAt: 'desc' },
   });
 
-  // Fetch all published posts from DB
-  const posts = await prisma.post.findMany({
-    where: { status: 'published' },
+  // Fetch all published blog posts from DB
+  const posts = await prisma.blogPost.findMany({
+    where: { status: 'publish' },
     select: { slug: true, updatedAt: true },
     orderBy: { updatedAt: 'desc' },
   });
@@ -68,9 +68,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       };
     });
 
-  // Blog post routes from DB (with trailing slash)
+  // Blog post routes — URLs are /{slug}/ (catch-all)
   const postRoutes: MetadataRoute.Sitemap = posts.map(post => ({
-    url: `${SITE_URL}/blog/${post.slug}/`,
+    url: `${SITE_URL}/${post.slug}/`,
     lastModified: post.updatedAt,
     changeFrequency: 'weekly' as const,
     priority: 0.7,
@@ -78,10 +78,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Blog listing page
   const blogRoute: MetadataRoute.Sitemap = [{
-    url: `${SITE_URL}/blog/`,
+    url: `${SITE_URL}/insiderwissen/`,
     lastModified: new Date(),
     changeFrequency: 'daily',
-    priority: 0.8,
+    priority: 0.9,
   }];
 
   return [...staticRoutes, ...pageRoutes, ...blogRoute, ...postRoutes];

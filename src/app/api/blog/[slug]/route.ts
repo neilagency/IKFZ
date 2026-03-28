@@ -8,49 +8,28 @@ export async function GET(
 ) {
   const { slug } = await params;
 
-  const post = await prisma.post.findUnique({
+  const post = await prisma.blogPost.findUnique({
     where: { slug },
-    include: {
-      seo: true,
-      categories: { include: { category: true } },
-      tags: { include: { tag: true } },
-    },
   });
 
-  if (!post || post.status !== 'published') {
+  if (!post || post.status !== 'publish') {
     return NextResponse.json({ error: 'Beitrag nicht gefunden' }, { status: 404 });
   }
 
   return NextResponse.json({
     post: {
-      id: post.id,
-      slug: post.slug,
-      title: post.title,
-      content: post.content,
-      excerpt: post.excerpt,
-      featuredImage: post.featuredImage,
-      author: post.author,
-      readingTime: post.readingTime,
+      id: post.id, slug: post.slug, title: post.title,
+      content: post.content, excerpt: post.excerpt,
+      featuredImage: post.featuredImage, author: post.author,
+      category: post.category, tags: post.tags,
       publishedAt: post.publishedAt,
-      categories: post.categories.map((c) => ({
-        id: c.category.id,
-        name: c.category.name,
-        slug: c.category.slug,
-      })),
-      tags: post.tags.map((t) => ({
-        id: t.tag.id,
-        name: t.tag.name,
-        slug: t.tag.slug,
-      })),
-      seo: post.seo
-        ? {
-            metaTitle: post.seo.metaTitle,
-            metaDescription: post.seo.metaDescription,
-            ogImage: post.seo.ogImage,
-            ogTitle: post.seo.ogTitle,
-            ogDescription: post.seo.ogDescription,
-          }
-        : null,
+      seo: {
+        metaTitle: post.metaTitle,
+        metaDescription: post.metaDescription,
+        ogImage: post.ogImage,
+        ogTitle: post.ogTitle,
+        ogDescription: post.ogDescription,
+      },
     },
   });
 }

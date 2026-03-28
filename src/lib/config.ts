@@ -40,7 +40,7 @@ export const siteConfig = {
         { label: 'Auto verkaufen', href: '/auto-verkaufen/' },
       ],
     },
-    { label: 'Blog', href: '/blog/' },
+    { label: 'Insiderwissen', href: '/insiderwissen/' },
     { label: 'Fragen & Antworten', href: '/faq/' },
   ],
   footerLinks: {
@@ -54,7 +54,7 @@ export const siteConfig = {
       { label: 'Impressum', href: '/impressum' },
       { label: 'Datenschutzerklärung', href: '/datenschutzerklarung' },
       { label: 'Allgemeine Geschäftsbedingungen', href: '/agb' },
-      { label: 'Blog', href: '/blog/' },
+      { label: 'Insiderwissen', href: '/insiderwissen/' },
     ],
   },
   pricing: {

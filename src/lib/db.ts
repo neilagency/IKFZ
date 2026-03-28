@@ -142,3 +142,130 @@ export async function getOrderById(id: string) {
     include: { items: true, payment: true, invoice: true },
   });
 }
+
+// ── Blog Helper functions ──
+
+import { unstable_cache } from 'next/cache';
+
+export function stripHtml(html: string): string {
+  return html
+    .replace(/<[^>]*>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+export function formatDate(date: Date | string): string {
+  return new Date(date).toLocaleDateString('de-DE', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
+export const getAllPosts = unstable_cache(
+  async (page: number = 1, perPage: number = 9, categoryFilter?: string) => {
+    const where: any = { status: 'publish' };
+    if (categoryFilter) where.category = categoryFilter;
+
+    const [posts, total] = await Promise.all([
+      prisma.blogPost.findMany({
+        where,
+        orderBy: { publishedAt: 'desc' },
+        skip: (page - 1) * perPage,
+        take: perPage,
+      }),
+      prisma.blogPost.count({ where }),
+    ]);
+
+    return { posts, total, totalPages: Math.ceil(total / perPage) };
+  },
+  ['blog-posts'],
+  { revalidate: 300, tags: ['blog-posts'] }
+);
+
+export const getPostBySlug = unstable_cache(
+  async (slug: string) => {
+    return prisma.blogPost.findUnique({ where: { slug } });
+  },
+  ['blog-post'],
+  { revalidate: 60 }
+);
+
+export async function getAllPostSlugs() {
+  const posts = await prisma.blogPost.findMany({
+    where: { status: 'publish' },
+    select: { slug: true },
+  });
+  return posts.map(p => p.slug);
+}
+
+export const getCategories = unstable_cache(
+  async () => {
+    return prisma.category.findMany({
+      where: { count: { gt: 0 } },
+      orderBy: { count: 'desc' },
+    });
+  },
+  ['blog-categories'],
+  { revalidate: 300, tags: ['blog-categories'] }
+);
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://ikfzdigitalzulassung.de';
+
+export function buildSEOMetadata(item: {
+  title: string;
+  slug: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  excerpt?: string;
+  canonical?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  featuredImage?: string;
+  robots?: string;
+  publishedAt?: Date | string | null;
+  updatedAt?: Date | string | null;
+}, siteUrl: string = SITE_URL) {
+  const siteSuffix = ' | Online Auto Abmelden';
+  const rawTitle = item.metaTitle || item.title;
+  const title = rawTitle.length + siteSuffix.length > 70
+    ? rawTitle.slice(0, 70 - siteSuffix.length)
+    : rawTitle;
+  const description = item.metaDescription || item.excerpt || '';
+  const canonical = `${siteUrl}/${item.slug}/`;
+  const ogImage = item.ogImage || item.featuredImage || '';
+
+  const isProduction = process.env.NODE_ENV === 'production';
+  const robots = isProduction
+    ? (item.robots || 'index, follow')
+    : 'noindex, nofollow';
+
+  return {
+    title: `${title}${siteSuffix}`,
+    description,
+    alternates: { canonical },
+    robots,
+    openGraph: {
+      title: item.ogTitle || title,
+      description: item.ogDescription || description,
+      url: canonical,
+      type: 'article' as const,
+      ...(ogImage ? { images: [{ url: ogImage }] } : {}),
+      ...(item.publishedAt ? { publishedTime: new Date(item.publishedAt).toISOString() } : {}),
+      ...(item.updatedAt ? { modifiedTime: new Date(item.updatedAt).toISOString() } : {}),
+    },
+    twitter: {
+      card: 'summary_large_image' as const,
+      title: item.ogTitle || title,
+      description: item.ogDescription || description,
+      ...(ogImage ? { images: [ogImage] } : {}),
+    },
+  };
+}
