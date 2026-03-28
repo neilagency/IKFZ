@@ -433,15 +433,15 @@ function BlogPostView({ post, products }: { post: any; products: any[] }) {
         </div>
       </section>
 
-      {/* Content Area — Two Column */}
-      <section className="py-12 md:py-20 bg-dark">
+      {/* Content Area — Two Column (LIGHT) */}
+      <section className="py-12 md:py-20 bg-gray-50">
         <div className="container-main">
           <div className="flex flex-col lg:flex-row gap-10">
             {/* Main Content */}
             <div className="flex-1 min-w-0">
               {/* Featured Image */}
               {post.featuredImage && (
-                <div className="aspect-[2/1] relative rounded-2xl overflow-hidden mb-10 border border-white/[0.06]">
+                <div className="aspect-[2/1] relative rounded-2xl overflow-hidden mb-10 border border-dark-100 shadow-sm">
                   <Image
                     src={post.featuredImage}
                     alt={post.title}
@@ -455,26 +455,27 @@ function BlogPostView({ post, products }: { post: any; products: any[] }) {
 
               {/* Blog Content */}
               <div
-                className="prose prose-lg prose-invert max-w-2xl
-                  prose-headings:text-white prose-headings:font-bold
-                  prose-p:text-white/75 prose-p:leading-relaxed
+                className="prose prose-lg max-w-2xl
+                  prose-headings:text-dark-900 prose-headings:font-bold
+                  prose-p:text-dark-600 prose-p:leading-relaxed
                   prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-                  prose-strong:text-white
-                  prose-blockquote:border-primary prose-blockquote:text-white/60
-                  prose-code:text-primary prose-code:bg-white/5 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
-                  prose-img:rounded-xl prose-img:border prose-img:border-white/[0.06]
-                  prose-li:text-white/75"
+                  prose-strong:text-dark-900
+                  prose-blockquote:border-primary prose-blockquote:text-dark-500 prose-blockquote:bg-primary/5 prose-blockquote:rounded-r-xl
+                  prose-code:text-primary prose-code:bg-primary/5 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
+                  prose-img:rounded-xl prose-img:border prose-img:border-dark-100 prose-img:shadow-sm
+                  prose-li:text-dark-600
+                  prose-ul:marker:text-primary prose-ol:marker:text-primary"
                 dangerouslySetInnerHTML={{ __html: sanitizedContent }}
               />
 
               {/* Share */}
-              <div className="flex items-center gap-4 mt-12 pt-8 border-t border-white/[0.06]">
-                <span className="text-white/40 text-sm font-medium">Teilen:</span>
+              <div className="flex items-center gap-4 mt-12 pt-8 border-t border-dark-100">
+                <span className="text-dark-400 text-sm font-medium">Teilen:</span>
                 <a
                   href={whatsappShareUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-green-600/10 text-green-400 hover:bg-green-600/20 text-sm transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-green-50 text-green-700 border border-green-200 hover:bg-green-100 text-sm transition-colors"
                 >
                   <MessageCircle className="w-4 h-4" /> WhatsApp
                 </a>
@@ -482,16 +483,16 @@ function BlogPostView({ post, products }: { post: any; products: any[] }) {
                   href={facebookShareUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600/10 text-blue-400 hover:bg-blue-600/20 text-sm transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 text-sm transition-colors"
                 >
                   <Share2 className="w-4 h-4" /> Facebook
                 </a>
               </div>
 
               {/* Big CTA */}
-              <div className="mt-12 p-8 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20">
-                <h2 className="text-2xl font-bold text-white mb-3">Jetzt Fahrzeug online abmelden oder anmelden</h2>
-                <p className="text-white/50 mb-6">Sparen Sie sich den Weg zur Zulassungsstelle. Erledigen Sie alles bequem von zu Hause.</p>
+              <div className="mt-12 p-8 rounded-2xl bg-white border border-dark-100 shadow-sm">
+                <h2 className="text-2xl font-bold text-dark-900 mb-3">Jetzt Fahrzeug online abmelden oder anmelden</h2>
+                <p className="text-dark-500 mb-6">Sparen Sie sich den Weg zur Zulassungsstelle. Erledigen Sie alles bequem von zu Hause.</p>
                 <div className="flex flex-wrap gap-3">
                   <Link href="/product/fahrzeugabmeldung/" className="btn-primary">
                     Abmelden – {abmeldungPrice}
@@ -507,8 +508,8 @@ function BlogPostView({ post, products }: { post: any; products: any[] }) {
             <aside className="lg:w-80 xl:w-[340px] flex-shrink-0">
               <div className="sticky top-24 space-y-6">
                 {/* CTA Card */}
-                <div className="p-6 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20">
-                  <h3 className="text-white font-bold mb-4">Unsere Services</h3>
+                <div className="p-6 rounded-2xl bg-white border border-dark-100 shadow-sm">
+                  <h3 className="text-dark-900 font-bold mb-4">Unsere Services</h3>
                   <div className="space-y-3">
                     <Link href="/product/fahrzeugabmeldung/" className="block px-4 py-3 rounded-xl bg-primary text-white text-center font-medium hover:bg-primary/90 transition-colors text-sm">
                       Abmelden – {abmeldungPrice}
@@ -521,14 +522,14 @@ function BlogPostView({ post, products }: { post: any; products: any[] }) {
 
                 {/* Table of Contents */}
                 {headings.length > 2 && (
-                  <div className="p-6 rounded-2xl bg-dark-900/60 border border-white/[0.06]">
-                    <h3 className="text-white font-bold text-sm mb-4">Inhaltsverzeichnis</h3>
+                  <div className="p-6 rounded-2xl bg-white border border-dark-100 shadow-sm">
+                    <h3 className="text-dark-900 font-bold text-sm mb-4">Inhaltsverzeichnis</h3>
                     <nav className="space-y-2 max-h-80 overflow-y-auto">
                       {headings.map((h) => (
                         <a
                           key={h.id}
                           href={`#${h.id}`}
-                          className={`block text-sm text-white/40 hover:text-primary transition-colors ${
+                          className={`block text-sm text-dark-400 hover:text-primary transition-colors ${
                             h.level === 3 ? 'pl-4' : ''
                           }`}
                         >
@@ -540,27 +541,27 @@ function BlogPostView({ post, products }: { post: any; products: any[] }) {
                 )}
 
                 {/* Help Card */}
-                <div className="p-6 rounded-2xl bg-dark-900/60 border border-white/[0.06]">
-                  <h3 className="text-white font-bold text-sm mb-4">Brauchen Sie Hilfe?</h3>
+                <div className="p-6 rounded-2xl bg-white border border-dark-100 shadow-sm">
+                  <h3 className="text-dark-900 font-bold text-sm mb-4">Brauchen Sie Hilfe?</h3>
                   <div className="space-y-3">
-                    <a href={`tel:${siteConfig.company.phone}`} className="flex items-center gap-3 text-white/50 hover:text-primary text-sm transition-colors">
+                    <a href={`tel:${siteConfig.company.phone}`} className="flex items-center gap-3 text-dark-500 hover:text-primary text-sm transition-colors">
                       <Phone className="w-4 h-4 text-primary" /> {siteConfig.company.phone}
                     </a>
-                    <a href={siteConfig.links.whatsapp} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-white/50 hover:text-primary text-sm transition-colors">
-                      <MessageCircle className="w-4 h-4 text-green-400" /> WhatsApp Support
+                    <a href={siteConfig.links.whatsapp} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-dark-500 hover:text-primary text-sm transition-colors">
+                      <MessageCircle className="w-4 h-4 text-green-500" /> WhatsApp Support
                     </a>
                   </div>
                 </div>
 
                 {/* Trust Badges */}
-                <div className="p-6 rounded-2xl bg-dark-900/60 border border-white/[0.06]">
+                <div className="p-6 rounded-2xl bg-white border border-dark-100 shadow-sm">
                   <div className="space-y-3">
                     {[
                       { icon: Shield, text: 'KBA-registriert' },
                       { icon: Clock, text: '24/7 verfügbar' },
                       { icon: FileCheck, text: 'Sofort-Bestätigung' },
                     ].map(({ icon: Icon, text }) => (
-                      <div key={text} className="flex items-center gap-3 text-sm text-white/50">
+                      <div key={text} className="flex items-center gap-3 text-sm text-dark-500">
                         <Icon className="w-4 h-4 text-primary" /> {text}
                       </div>
                     ))}
