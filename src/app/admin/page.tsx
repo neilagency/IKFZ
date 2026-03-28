@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import useSWR, { mutate as globalMutate } from "swr";
 import {
   FileText, BookOpen, Search, LogOut, LayoutDashboard,
   Plus, Pencil, Trash2, Save, X, Eye, Settings, Globe,
   ShoppingCart, Users, CreditCard, Receipt, Package,
   TrendingUp, DollarSign, ChevronLeft, ChevronRight,
   Download, Filter, RefreshCw, Zap, Shield, Wallet, Clock,
-  ExternalLink, Image as ImageIcon,
+  ExternalLink, Image as ImageIcon, AlertCircle, FileQuestion,
 } from "lucide-react";
 import { MediaLibraryTab, ImageField } from "@/components/admin/MediaLibrary";
 import { ToastProvider, useToast } from "@/components/admin/Toast";
@@ -18,10 +19,11 @@ const API = "/api/admin";
 interface SEOData { id?: string; metaTitle?: string; metaDescription?: string; canonicalUrl?: string; ogTitle?: string; ogDescription?: string; ogImage?: string; robots?: string; schemaJson?: string; }
 interface PageData { id: string; title: string; slug: string; content: string; excerpt: string; status: string; pageType: string; featuredImage: string | null; seo: SEOData | null; }
 interface PostData { id: string; title: string; slug: string; content: string; excerpt: string; status: string; author: string | null; featuredImage: string | null; readingTime: number | null; publishedAt: string | null; scheduledAt: string | null; seo: SEOData | null; categories?: { category: { id: string; name: string; slug: string } }[]; }
+interface PaginationInfo { page: number; totalPages: number; total: number; limit: number; }
 
 type Tab = "dashboard" | "pages" | "posts" | "seo" | "products" | "orders" | "customers" | "payments" | "invoices" | "gateways" | "settings" | "media";
 
-// ─── Helper ─────────────────────────────────────────────────
+// ─── Helpers ────────────────────────────────────────────────
 function formatEuro(n: number) { return new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(n); }
 function formatDate(d: string | null) { if (!d) return "-"; return new Date(d).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" }); }
 
@@ -38,12 +40,132 @@ const statusColors: Record<string, string> = {
   publish: "bg-green-500/10 text-green-400 border-green-500/20",
   draft: "bg-gray-500/10 text-gray-400 border-gray-500/20",
   published: "bg-green-500/10 text-green-400 border-green-500/20",
+  scheduled: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
   instock: "bg-green-500/10 text-green-400 border-green-500/20",
   outofstock: "bg-red-500/10 text-red-400 border-red-500/20",
 };
 
 function Badge({ status }: { status: string }) {
   return <span className={`inline-flex px-2 py-0.5 rounded-md text-xs font-medium border ${statusColors[status] || "bg-gray-500/10 text-gray-400 border-gray-500/20"}`}>{status}</span>;
+}
+
+// ─── Debounce Hook ──────────────────────────────────────────
+function useDebounce<T>(value: T, delay: number): T {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() => {
+    const timer = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(timer);
+  }, [value, delay]);
+  return debounced;
+}
+
+// ─── SWR Fetcher ────────────────────────────────────────────
+function fetcher(url: string) {
+  return fetch(url, { credentials: "include" }).then(r => {
+    if (!r.ok) throw new Error(`${r.status}`);
+    return r.json();
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+// SKELETON LOADER
+// ═══════════════════════════════════════════════════════════
+function SkeletonRow() {
+  return (
+    <div className="flex items-center gap-4 p-4 rounded-xl bg-dark-900/40 border border-white/[0.03] animate-pulse">
+      <div className="w-12 h-12 rounded-lg bg-white/[0.05]" />
+      <div className="flex-1 space-y-2">
+        <div className="h-4 bg-white/[0.05] rounded w-1/3" />
+        <div className="h-3 bg-white/[0.04] rounded w-1/5" />
+      </div>
+      <div className="h-6 w-16 bg-white/[0.05] rounded" />
+    </div>
+  );
+}
+
+function SkeletonTable({ rows = 5 }: { rows?: number }) {
+  return <div className="space-y-2">{Array.from({ length: rows }).map((_, i) => <SkeletonRow key={i} />)}</div>;
+}
+
+// ═══════════════════════════════════════════════════════════
+// EMPTY STATE
+// ═══════════════════════════════════════════════════════════
+function EmptyState({ icon: Icon = FileQuestion, title = "Keine Einträge gefunden", description }: { icon?: any; title?: string; description?: string }) {
+  return (
+    <div className="text-center py-16">
+      <Icon className="w-10 h-10 text-white/10 mx-auto mb-3" />
+      <p className="text-white/30 text-sm">{title}</p>
+      {description && <p className="text-white/20 text-xs mt-1">{description}</p>}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════
+// ERROR STATE
+// ═══════════════════════════════════════════════════════════
+function ErrorState({ message = "Fehler beim Laden", onRetry }: { message?: string; onRetry?: () => void }) {
+  return (
+    <div className="text-center py-16">
+      <AlertCircle className="w-10 h-10 text-red-400/30 mx-auto mb-3" />
+      <p className="text-red-400/70 text-sm">{message}</p>
+      {onRetry && <button onClick={onRetry} className="mt-3 px-4 py-2 rounded-lg bg-red-500/10 text-red-400 text-sm hover:bg-red-500/20 transition-colors">Erneut versuchen</button>}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════
+// PAGINATION COMPONENT
+// ═══════════════════════════════════════════════════════════
+function Pagination({ page, totalPages, total, limit, onPageChange }: PaginationInfo & { onPageChange: (p: number) => void }) {
+  if (totalPages <= 1) return null;
+
+  const start = (page - 1) * limit + 1;
+  const end = Math.min(page * limit, total);
+
+  // Generate page numbers with ellipsis
+  const pages: (number | "...")[] = [];
+  if (totalPages <= 7) {
+    for (let i = 1; i <= totalPages; i++) pages.push(i);
+  } else {
+    pages.push(1);
+    if (page > 3) pages.push("...");
+    for (let i = Math.max(2, page - 1); i <= Math.min(totalPages - 1, page + 1); i++) pages.push(i);
+    if (page < totalPages - 2) pages.push("...");
+    pages.push(totalPages);
+  }
+
+  return (
+    <div className="flex items-center justify-between pt-4 border-t border-white/[0.04]">
+      <span className="text-white/40 text-sm">{start}–{end} von {total}</span>
+      <div className="flex items-center gap-1">
+        <button onClick={() => onPageChange(page - 1)} disabled={page === 1} className="p-2 rounded-lg hover:bg-white/5 text-white/40 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"><ChevronLeft className="w-4 h-4" /></button>
+        {pages.map((p, i) =>
+          p === "..." ? (
+            <span key={`e${i}`} className="px-2 text-white/20 text-sm">...</span>
+          ) : (
+            <button key={p} onClick={() => onPageChange(p)} className={`min-w-[32px] h-8 rounded-lg text-sm font-medium transition-colors ${page === p ? "bg-primary text-white" : "text-white/40 hover:bg-white/5 hover:text-white"}`}>{p}</button>
+          )
+        )}
+        <button onClick={() => onPageChange(page + 1)} disabled={page === totalPages} className="p-2 rounded-lg hover:bg-white/5 text-white/40 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"><ChevronRight className="w-4 h-4" /></button>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════
+// SEARCH BAR
+// ═══════════════════════════════════════════════════════════
+function SearchBar({ value, onChange, placeholder = "Suchen...", count, suffix }: { value: string; onChange: (v: string) => void; placeholder?: string; count?: number; suffix?: React.ReactNode }) {
+  return (
+    <div className="flex items-center gap-3 flex-wrap">
+      <div className="flex-1 relative min-w-[200px]">
+        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
+        <input value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none" />
+      </div>
+      {count !== undefined && <span className="text-white/40 text-sm whitespace-nowrap">{count} Einträge</span>}
+      {suffix}
+    </div>
+  );
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -111,7 +233,7 @@ function ContentEditor({ item, type, token, onSave, onCancel }: { item: PageData
       const body: any = { title, slug, content, status };
       if (item?.id) body.id = item.id;
       if (metaTitle || metaDesc) { body.seo = { metaTitle, metaDescription: metaDesc }; }
-      const res = await fetch(`${API}/${type}`, { method: item?.id ? "PUT" : "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify(body) });
+      const res = await fetch(`${API}/${type}`, { method: item?.id ? "PUT" : "POST", headers: { "Content-Type": "application/json" }, credentials: "include", body: JSON.stringify(body) });
       if (!res.ok) throw new Error("Save failed");
       toast("Erfolgreich gespeichert");
       onSave();
@@ -162,16 +284,10 @@ function ContentEditor({ item, type, token, onSave, onCancel }: { item: PageData
 // DASHBOARD TAB
 // ═══════════════════════════════════════════════════════════
 function DashboardTab({ token }: { token: string }) {
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const { data, error, mutate } = useSWR(`${API}/dashboard`, fetcher, { revalidateOnFocus: false, dedupingInterval: 60000 });
 
-  useEffect(() => {
-    fetch(`${API}/dashboard`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(setData).catch(() => {}).finally(() => setLoading(false));
-  }, [token]);
-
-  if (loading) return <div className="flex items-center justify-center py-20"><RefreshCw className="w-6 h-6 text-white/40 animate-spin" /></div>;
-  if (!data) return <p className="text-red-400">Fehler beim Laden</p>;
+  if (error) return <ErrorState onRetry={() => mutate()} />;
+  if (!data) return <SkeletonTable rows={4} />;
 
   const { stats, recentOrders, paymentMethods, monthlyRevenue, statusBreakdown } = data;
   const maxRevenue = Math.max(...monthlyRevenue.map((m: any) => m.revenue), 1);
@@ -269,78 +385,97 @@ function DashboardTab({ token }: { token: string }) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// CMS LIST TAB (Pages/Posts reuse)
+// CMS LIST TAB (Pages) — with SWR + Pagination
 // ═══════════════════════════════════════════════════════════
 function CMSListTab({ type, token }: { type: "pages" | "posts"; token: string }) {
-  const [items, setItems] = useState<any[]>([]);
+  const { toast } = useToast();
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
   const [editing, setEditing] = useState<any | null>(undefined);
-  const [loading, setLoading] = useState(true);
+  const debouncedSearch = useDebounce(search, 300);
 
-  const load = useCallback(() => {
-    setLoading(true);
-    fetch(`${API}/${type}?search=${search}`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(d => { setItems(Array.isArray(d) ? d : d[type] || []); }).catch(() => {}).finally(() => setLoading(false));
-  }, [type, search, token]);
+  const params = new URLSearchParams({ page: String(page), limit: "20" });
+  if (debouncedSearch) params.set("search", debouncedSearch);
+  const swrKey = `${API}/${type}?${params}`;
 
-  useEffect(() => { load(); }, [load]);
+  const { data, error, isLoading, mutate } = useSWR(swrKey, fetcher, { revalidateOnFocus: false, keepPreviousData: true });
+
+  const items = data?.[type] || [];
+  const total = data?.total || 0;
+  const totalPages = data?.totalPages || 1;
+
+  useEffect(() => { setPage(1); }, [debouncedSearch]);
 
   async function handleDelete(id: string) {
     if (!confirm("Wirklich löschen?")) return;
-    await fetch(`${API}/${type}?id=${id}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
-    load();
+    try {
+      await fetch(`${API}/${type}?id=${id}`, { method: "DELETE", credentials: "include" });
+      toast("Erfolgreich gelöscht");
+      mutate();
+    } catch { toast("Fehler beim Löschen", "error"); }
   }
 
   if (editing !== undefined) {
-    return <ContentEditor item={editing} type={type} token={token} onSave={() => { setEditing(undefined); load(); }} onCancel={() => setEditing(undefined)} />;
+    return <ContentEditor item={editing} type={type} token={token} onSave={() => { setEditing(undefined); mutate(); }} onCancel={() => setEditing(undefined)} />;
   }
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-4">
-        <div className="flex-1 relative"><Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-white/30" /><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Suchen..." className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none" /></div>
-        <button onClick={() => setEditing(null)} className="px-4 py-2.5 rounded-xl bg-primary text-white font-medium text-sm flex items-center gap-2"><Plus className="w-4 h-4" /> Neu</button>
-      </div>
-      {loading ? <div className="text-center py-10"><RefreshCw className="w-5 h-5 text-white/40 animate-spin mx-auto" /></div> : (
-        <div className="space-y-2">
-          {items.map((item: any) => (
-            <div key={item.id} className="flex items-center justify-between p-4 rounded-xl bg-dark-900/60 border border-white/[0.04] hover:border-white/10 transition-colors">
-              <div className="flex-1 min-w-0">
-                <h3 className="text-white font-medium truncate">{item.title}</h3>
-                <p className="text-white/40 text-xs mt-0.5">/{item.slug}/</p>
+      <SearchBar
+        value={search}
+        onChange={setSearch}
+        count={total}
+        suffix={<button onClick={() => setEditing(null)} className="px-4 py-2.5 rounded-xl bg-primary text-white font-medium text-sm flex items-center gap-2"><Plus className="w-4 h-4" /> Neu</button>}
+      />
+
+      {error ? <ErrorState onRetry={() => mutate()} /> : isLoading ? <SkeletonTable /> : items.length === 0 ? (
+        <EmptyState icon={FileText} title={debouncedSearch ? "Keine Ergebnisse" : "Keine Einträge"} description={debouncedSearch ? `Keine Ergebnisse für "${debouncedSearch}"` : undefined} />
+      ) : (
+        <>
+          <div className="space-y-2">
+            {items.map((item: any) => (
+              <div key={item.id} className="flex items-center justify-between p-4 rounded-xl bg-dark-900/60 border border-white/[0.04] hover:border-white/10 transition-colors">
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-white font-medium truncate">{item.title}</h3>
+                  <p className="text-white/40 text-xs mt-0.5">/{item.slug}/</p>
+                </div>
+                <div className="flex items-center gap-2 ml-4">
+                  <Badge status={item.status} />
+                  <button onClick={() => setEditing(item)} className="p-2 rounded-lg hover:bg-white/5 text-white/40 hover:text-white"><Pencil className="w-4 h-4" /></button>
+                  <button onClick={() => handleDelete(item.id)} className="p-2 rounded-lg hover:bg-red-500/10 text-white/40 hover:text-red-400"><Trash2 className="w-4 h-4" /></button>
+                </div>
               </div>
-              <div className="flex items-center gap-2 ml-4">
-                <Badge status={item.status} />
-                <button onClick={() => setEditing(item)} className="p-2 rounded-lg hover:bg-white/5 text-white/40 hover:text-white"><Pencil className="w-4 h-4" /></button>
-                <button onClick={() => handleDelete(item.id)} className="p-2 rounded-lg hover:bg-red-500/10 text-white/40 hover:text-red-400"><Trash2 className="w-4 h-4" /></button>
-              </div>
-            </div>
-          ))}
-          {items.length === 0 && <p className="text-white/30 text-center py-10">Keine Einträge gefunden</p>}
-        </div>
+            ))}
+          </div>
+          <Pagination page={page} totalPages={totalPages} total={total} limit={20} onPageChange={setPage} />
+        </>
       )}
     </div>
   );
 }
 
 // ═══════════════════════════════════════════════════════════
-// SEO TAB
+// SEO TAB — with SWR + Pagination
 // ═══════════════════════════════════════════════════════════
 function SEOTab({ token }: { token: string }) {
   const { toast } = useToast();
-  const [records, setRecords] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
   const [editing, setEditing] = useState<any>(null);
   const [saving, setSaving] = useState(false);
-  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 300);
 
-  const load = useCallback(() => {
-    setLoading(true);
-    fetch(`${API}/seo`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(d => setRecords(d.seo || [])).catch(() => {}).finally(() => setLoading(false));
-  }, [token]);
+  const params = new URLSearchParams({ page: String(page), limit: "20" });
+  if (debouncedSearch) params.set("search", debouncedSearch);
+  const swrKey = `${API}/seo?${params}`;
 
-  useEffect(() => { load(); }, [load]);
+  const { data, error, isLoading, mutate } = useSWR(swrKey, fetcher, { revalidateOnFocus: false, keepPreviousData: true });
+
+  const records = data?.seo || [];
+  const total = data?.total || 0;
+  const totalPages = data?.totalPages || 1;
+
+  useEffect(() => { setPage(1); }, [debouncedSearch]);
 
   const [metaTitle, setMetaTitle] = useState("");
   const [metaDesc, setMetaDesc] = useState("");
@@ -365,17 +500,11 @@ function SEOTab({ token }: { token: string }) {
     if (!editing) return;
     setSaving(true);
     try {
-      await fetch(`${API}/seo`, { method: "PUT", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify({ id: editing.id, metaTitle, metaDescription: metaDesc, canonicalUrl: canonical, robots, ogTitle, ogDescription: ogDesc, ogImage }) });
+      await fetch(`${API}/seo`, { method: "PUT", headers: { "Content-Type": "application/json" }, credentials: "include", body: JSON.stringify({ id: editing.id, metaTitle, metaDescription: metaDesc, canonicalUrl: canonical, robots, ogTitle, ogDescription: ogDesc, ogImage }) });
       toast("SEO erfolgreich aktualisiert");
-      setEditing(null); load();
+      setEditing(null); mutate();
     } catch { toast("Fehler beim Speichern", "error"); } finally { setSaving(false); }
   }
-
-  const filtered = records.filter(r => {
-    const title = (r.page?.title || r.post?.title || "").toLowerCase();
-    const slug = (r.page?.slug || r.post?.slug || "").toLowerCase();
-    return title.includes(search.toLowerCase()) || slug.includes(search.toLowerCase());
-  });
 
   if (editing) {
     const pageTitle = editing.page?.title || editing.post?.title || "Unbekannt";
@@ -407,7 +536,6 @@ function SEOTab({ token }: { token: string }) {
           </div>
         </div>
 
-        {/* Google SERP Preview */}
         <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06]">
           <p className="text-xs text-white/30 uppercase tracking-wider mb-3">Google-Vorschau</p>
           <p className="text-blue-400 text-lg hover:underline cursor-pointer">{metaTitle || pageTitle}</p>
@@ -420,53 +548,61 @@ function SEOTab({ token }: { token: string }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-4">
-        <div className="flex-1 relative"><Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-white/30" /><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Seiten oder Beiträge suchen..." className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none" /></div>
-        <span className="text-white/40 text-sm whitespace-nowrap">{filtered.length} Einträge</span>
-      </div>
-      {loading ? <div className="text-center py-10"><RefreshCw className="w-5 h-5 text-white/40 animate-spin mx-auto" /></div> : (
-        <div className="space-y-2">
-          {filtered.map((r: any) => {
-            const pageTitle = r.page?.title || r.post?.title || "—";
-            const pageSlug = r.page?.slug || r.post?.slug || "";
-            const type = r.page ? "Seite" : "Beitrag";
-            const hasIssues = !r.metaTitle || !r.metaDescription || (r.metaTitle && r.metaTitle.length > 60) || (r.metaDescription && r.metaDescription.length > 160);
-            return (
-              <div key={r.id} onClick={() => startEdit(r)} className="flex items-center justify-between p-4 rounded-xl bg-dark-900/60 border border-white/[0.04] hover:border-white/10 transition-colors cursor-pointer">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-white font-medium truncate">{pageTitle}</h3>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-white/30">{type}</span>
-                    {hasIssues && <span className="text-[10px] px-1.5 py-0.5 rounded bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">⚠ Issues</span>}
+      <SearchBar value={search} onChange={setSearch} placeholder="Seiten oder Beiträge suchen..." count={total} />
+
+      {error ? <ErrorState onRetry={() => mutate()} /> : isLoading ? <SkeletonTable /> : records.length === 0 ? (
+        <EmptyState icon={Globe} title={debouncedSearch ? "Keine Ergebnisse" : "Keine SEO-Einträge"} />
+      ) : (
+        <>
+          <div className="space-y-2">
+            {records.map((r: any) => {
+              const pageTitle = r.page?.title || r.post?.title || "—";
+              const pageSlug = r.page?.slug || r.post?.slug || "";
+              const type = r.page ? "Seite" : "Beitrag";
+              const hasIssues = !r.metaTitle || !r.metaDescription || (r.metaTitle && r.metaTitle.length > 60) || (r.metaDescription && r.metaDescription.length > 160);
+              return (
+                <div key={r.id} onClick={() => startEdit(r)} className="flex items-center justify-between p-4 rounded-xl bg-dark-900/60 border border-white/[0.04] hover:border-white/10 transition-colors cursor-pointer">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-white font-medium truncate">{pageTitle}</h3>
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-white/30">{type}</span>
+                      {hasIssues && <span className="text-[10px] px-1.5 py-0.5 rounded bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">⚠ Issues</span>}
+                    </div>
+                    <p className="text-white/40 text-xs mt-0.5">/{pageSlug}/ — {r.metaTitle ? `"${r.metaTitle.slice(0, 50)}..."` : "Kein Title"}</p>
                   </div>
-                  <p className="text-white/40 text-xs mt-0.5">/{pageSlug}/ — {r.metaTitle ? `"${r.metaTitle.slice(0, 50)}..."` : "Kein Title"}</p>
+                  <Pencil className="w-4 h-4 text-white/20 ml-4" />
                 </div>
-                <Pencil className="w-4 h-4 text-white/20 ml-4" />
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+          <Pagination page={page} totalPages={totalPages} total={total} limit={20} onPageChange={setPage} />
+        </>
       )}
     </div>
   );
 }
 
 // ═══════════════════════════════════════════════════════════
-// PRODUCTS TAB
+// PRODUCTS TAB — with SWR + Pagination
 // ═══════════════════════════════════════════════════════════
 function ProductsTab({ token }: { token: string }) {
   const { toast } = useToast();
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
   const [editing, setEditing] = useState<any>(undefined);
+  const debouncedSearch = useDebounce(search, 300);
 
-  const load = useCallback(() => {
-    setLoading(true);
-    fetch(`${API}/products`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(d => setProducts(Array.isArray(d) ? d : [])).catch(() => {}).finally(() => setLoading(false));
-  }, [token]);
+  const params = new URLSearchParams({ page: String(page), limit: "20" });
+  if (debouncedSearch) params.set("search", debouncedSearch);
+  const swrKey = `${API}/products?${params}`;
 
-  useEffect(() => { load(); }, [load]);
+  const { data, error, isLoading, mutate } = useSWR(swrKey, fetcher, { revalidateOnFocus: false, keepPreviousData: true });
+
+  const products = Array.isArray(data?.products) ? data.products : Array.isArray(data) ? data : [];
+  const total = data?.total || products.length;
+  const totalPages = data?.totalPages || 1;
+
+  useEffect(() => { setPage(1); }, [debouncedSearch]);
 
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
@@ -485,16 +621,19 @@ function ProductsTab({ token }: { token: string }) {
     try {
       const body: any = { name, slug: slug || name.toLowerCase().replace(/\s+/g, "-"), price, regularPrice: price, description: desc, status, stockStatus };
       if (editing?.id) body.id = editing.id;
-      await fetch(`${API}/products`, { method: editing?.id ? "PUT" : "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify(body) });
+      await fetch(`${API}/products`, { method: editing?.id ? "PUT" : "POST", headers: { "Content-Type": "application/json" }, credentials: "include", body: JSON.stringify(body) });
       toast("Produkt erfolgreich gespeichert");
-      setEditing(undefined); load();
+      setEditing(undefined); mutate();
     } catch { toast("Fehler beim Speichern", "error"); } finally { setSaving(false); }
   }
 
   async function handleDelete(id: string) {
     if (!confirm("Produkt löschen?")) return;
-    await fetch(`${API}/products?id=${id}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
-    load();
+    try {
+      await fetch(`${API}/products?id=${id}`, { method: "DELETE", credentials: "include" });
+      toast("Produkt gelöscht");
+      mutate();
+    } catch { toast("Fehler beim Löschen", "error"); }
   }
 
   if (editing !== undefined) {
@@ -525,61 +664,67 @@ function ProductsTab({ token }: { token: string }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-white">Produkte ({products.length})</h2>
-        <button onClick={() => startEdit(null)} className="px-4 py-2.5 rounded-xl bg-primary text-white font-medium text-sm flex items-center gap-2"><Plus className="w-4 h-4" /> Neu</button>
-      </div>
-      {loading ? <div className="text-center py-10"><RefreshCw className="w-5 h-5 text-white/40 animate-spin mx-auto" /></div> : (
-        <div className="space-y-2">
-          {products.map((p: any) => (
-            <div key={p.id} className="flex items-center justify-between p-4 rounded-xl bg-dark-900/60 border border-white/[0.04] hover:border-white/10 transition-colors">
-              <div className="flex items-center gap-4 flex-1">
-                {p.images?.[0] && <img src={p.images[0].src} alt="" className="w-12 h-12 rounded-lg object-cover border border-white/10" />}
-                <div className="min-w-0">
-                  <h3 className="text-white font-medium">{p.name}</h3>
-                  <p className="text-white/40 text-xs">SKU: {p.sku || "-"} | Bestellt: {p._count?.orderItems || 0}x</p>
+      <SearchBar
+        value={search}
+        onChange={setSearch}
+        placeholder="Produkte suchen..."
+        count={total}
+        suffix={<button onClick={() => startEdit(null)} className="px-4 py-2.5 rounded-xl bg-primary text-white font-medium text-sm flex items-center gap-2"><Plus className="w-4 h-4" /> Neu</button>}
+      />
+
+      {error ? <ErrorState onRetry={() => mutate()} /> : isLoading ? <SkeletonTable /> : products.length === 0 ? (
+        <EmptyState icon={Package} title={debouncedSearch ? "Keine Ergebnisse" : "Keine Produkte"} />
+      ) : (
+        <>
+          <div className="space-y-2">
+            {products.map((p: any) => (
+              <div key={p.id} className="flex items-center justify-between p-4 rounded-xl bg-dark-900/60 border border-white/[0.04] hover:border-white/10 transition-colors">
+                <div className="flex items-center gap-4 flex-1">
+                  {p.images?.[0] && <img src={p.images[0].src} alt="" className="w-12 h-12 rounded-lg object-cover border border-white/10" />}
+                  <div className="min-w-0">
+                    <h3 className="text-white font-medium">{p.name}</h3>
+                    <p className="text-white/40 text-xs">SKU: {p.sku || "-"} | Bestellt: {p._count?.orderItems || 0}x</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 ml-4">
+                  <span className="text-white font-semibold">{formatEuro(p.price)}</span>
+                  <Badge status={p.stockStatus} />
+                  <button onClick={() => startEdit(p)} className="p-2 rounded-lg hover:bg-white/5 text-white/40 hover:text-white"><Pencil className="w-4 h-4" /></button>
+                  <button onClick={() => handleDelete(p.id)} className="p-2 rounded-lg hover:bg-red-500/10 text-white/40 hover:text-red-400"><Trash2 className="w-4 h-4" /></button>
                 </div>
               </div>
-              <div className="flex items-center gap-3 ml-4">
-                <span className="text-white font-semibold">{formatEuro(p.price)}</span>
-                <Badge status={p.stockStatus} />
-                <button onClick={() => startEdit(p)} className="p-2 rounded-lg hover:bg-white/5 text-white/40 hover:text-white"><Pencil className="w-4 h-4" /></button>
-                <button onClick={() => handleDelete(p.id)} className="p-2 rounded-lg hover:bg-red-500/10 text-white/40 hover:text-red-400"><Trash2 className="w-4 h-4" /></button>
-              </div>
-            </div>
-          ))}
-          {products.length === 0 && <p className="text-white/30 text-center py-10">Keine Produkte</p>}
-        </div>
+            ))}
+          </div>
+          <Pagination page={page} totalPages={totalPages} total={total} limit={20} onPageChange={setPage} />
+        </>
       )}
     </div>
   );
 }
 
 // ═══════════════════════════════════════════════════════════
-// ORDERS TAB
+// ORDERS TAB — with SWR + Pagination
 // ═══════════════════════════════════════════════════════════
 function OrdersTab({ token }: { token: string }) {
-  const [data, setData] = useState<any>({ orders: [], total: 0 });
-  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [page, setPage] = useState(1);
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
+  const debouncedSearch = useDebounce(search, 300);
 
-  const load = useCallback(() => {
-    setLoading(true);
-    const params = new URLSearchParams({ page: String(page), limit: "20" });
-    if (search) params.set("search", search);
-    if (statusFilter) params.set("status", statusFilter);
-    fetch(`${API}/orders?${params}`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(setData).catch(() => {}).finally(() => setLoading(false));
-  }, [token, page, search, statusFilter]);
+  const params = new URLSearchParams({ page: String(page), limit: "20" });
+  if (debouncedSearch) params.set("search", debouncedSearch);
+  if (statusFilter) params.set("status", statusFilter);
+  const swrKey = `${API}/orders?${params}`;
 
-  useEffect(() => { load(); }, [load]);
+  const { data, error, isLoading, mutate } = useSWR(swrKey, fetcher, { revalidateOnFocus: false, keepPreviousData: true });
+
+  useEffect(() => { setPage(1); }, [debouncedSearch, statusFilter]);
 
   async function updateStatus(id: string, status: string) {
-    await fetch(`${API}/orders`, { method: "PUT", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify({ id, status }) });
-    load(); if (selectedOrder?.id === id) setSelectedOrder(null);
+    await fetch(`${API}/orders`, { method: "PUT", headers: { "Content-Type": "application/json" }, credentials: "include", body: JSON.stringify({ id, status }) });
+    mutate(); if (selectedOrder?.id === id) setSelectedOrder(null);
   }
 
   if (selectedOrder) {
@@ -640,17 +785,23 @@ function OrdersTab({ token }: { token: string }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-3 flex-wrap">
-        <div className="flex-1 relative min-w-[200px]"><Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-white/30" /><input value={search} onChange={e => { setSearch(e.target.value); setPage(1); }} placeholder="Suche nach Name, Email, Nummer..." className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none" /></div>
-        <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setPage(1); }} className="px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none">
-          <option value="">Alle Status</option>
-          {["completed", "processing", "on-hold", "pending", "cancelled", "refunded", "failed"].map(s => <option key={s} value={s}>{s}</option>)}
-        </select>
-      </div>
+      <SearchBar
+        value={search}
+        onChange={v => { setSearch(v); }}
+        placeholder="Suche nach Name, Email, Nummer..."
+        count={data?.total}
+        suffix={
+          <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); }} className="px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none">
+            <option value="">Alle Status</option>
+            {["completed", "processing", "on-hold", "pending", "cancelled", "refunded", "failed"].map(s => <option key={s} value={s}>{s}</option>)}
+          </select>
+        }
+      />
 
-      {loading ? <div className="text-center py-10"><RefreshCw className="w-5 h-5 text-white/40 animate-spin mx-auto" /></div> : (
+      {error ? <ErrorState onRetry={() => mutate()} /> : isLoading ? <SkeletonTable /> : (data?.orders || []).length === 0 ? (
+        <EmptyState icon={ShoppingCart} title="Keine Bestellungen" />
+      ) : (
         <>
-          <div className="text-sm text-white/40">{data.total} Bestellungen gesamt</div>
           <div className="space-y-2">
             {(data.orders || []).map((o: any) => (
               <div key={o.id} onClick={() => setSelectedOrder(o)} className="flex items-center justify-between p-4 rounded-xl bg-dark-900/60 border border-white/[0.04] hover:border-white/10 transition-colors cursor-pointer">
@@ -665,14 +816,7 @@ function OrdersTab({ token }: { token: string }) {
               </div>
             ))}
           </div>
-
-          {data.totalPages > 1 && (
-            <div className="flex items-center justify-center gap-2 pt-4">
-              <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="p-2 rounded-lg hover:bg-white/5 text-white/40 disabled:opacity-20"><ChevronLeft className="w-4 h-4" /></button>
-              <span className="text-white/50 text-sm">Seite {page} von {data.totalPages}</span>
-              <button onClick={() => setPage(p => Math.min(data.totalPages, p + 1))} disabled={page === data.totalPages} className="p-2 rounded-lg hover:bg-white/5 text-white/40 disabled:opacity-20"><ChevronRight className="w-4 h-4" /></button>
-            </div>
-          )}
+          <Pagination page={page} totalPages={data.totalPages || 1} total={data.total || 0} limit={20} onPageChange={setPage} />
         </>
       )}
     </div>
@@ -680,128 +824,112 @@ function OrdersTab({ token }: { token: string }) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// CUSTOMERS TAB
+// CUSTOMERS TAB — with SWR + Pagination
 // ═══════════════════════════════════════════════════════════
 function CustomersTab({ token }: { token: string }) {
-  const [data, setData] = useState<any>({ customers: [], total: 0 });
-  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const debouncedSearch = useDebounce(search, 300);
 
-  useEffect(() => {
-    setLoading(true);
-    const params = new URLSearchParams({ page: String(page), limit: "30" });
-    if (search) params.set("search", search);
-    fetch(`${API}/customers?${params}`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(setData).catch(() => {}).finally(() => setLoading(false));
-  }, [token, page, search]);
+  const params = new URLSearchParams({ page: String(page), limit: "30" });
+  if (debouncedSearch) params.set("search", debouncedSearch);
+  const swrKey = `${API}/customers?${params}`;
+
+  const { data, error, isLoading, mutate } = useSWR(swrKey, fetcher, { revalidateOnFocus: false, keepPreviousData: true });
+
+  useEffect(() => { setPage(1); }, [debouncedSearch]);
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-3">
-        <div className="flex-1 relative"><Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-white/30" /><input value={search} onChange={e => { setSearch(e.target.value); setPage(1); }} placeholder="Suche nach Name, Email, Firma..." className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none" /></div>
-      </div>
-      <div className="text-sm text-white/40">{data.total} Kunden gesamt</div>
-      {loading ? <div className="text-center py-10"><RefreshCw className="w-5 h-5 text-white/40 animate-spin mx-auto" /></div> : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead><tr className="text-white/40 text-xs uppercase"><th className="text-left py-2 px-3">Kunde</th><th className="text-left py-2 px-3">E-Mail</th><th className="text-left py-2 px-3">Ort</th><th className="text-center py-2 px-3">Bestellungen</th><th className="text-right py-2 px-3">Umsatz</th></tr></thead>
-            <tbody>
-              {(data.customers || []).map((c: any) => (
-                <tr key={c.id} className="border-t border-white/[0.04] hover:bg-white/[0.02]">
-                  <td className="py-3 px-3"><span className="text-white">{c.firstName} {c.lastName}</span>{c.company && <span className="text-white/40 text-xs block">{c.company}</span>}</td>
-                  <td className="py-3 px-3 text-white/60">{c.email}</td>
-                  <td className="py-3 px-3 text-white/50">{[c.billingPostcode, c.billingCity].filter(Boolean).join(" ")}</td>
-                  <td className="py-3 px-3 text-center text-white/70">{c.orderCount}</td>
-                  <td className="py-3 px-3 text-right text-white font-medium">{formatEuro(c.totalSpent)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-      {data.totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 pt-4">
-          <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="p-2 rounded-lg hover:bg-white/5 text-white/40 disabled:opacity-20"><ChevronLeft className="w-4 h-4" /></button>
-          <span className="text-white/50 text-sm">Seite {page} von {data.totalPages}</span>
-          <button onClick={() => setPage(p => Math.min(data.totalPages, p + 1))} disabled={page === data.totalPages} className="p-2 rounded-lg hover:bg-white/5 text-white/40 disabled:opacity-20"><ChevronRight className="w-4 h-4" /></button>
-        </div>
+      <SearchBar value={search} onChange={setSearch} placeholder="Suche nach Name, Email, Firma..." count={data?.total} />
+
+      {error ? <ErrorState onRetry={() => mutate()} /> : isLoading ? <SkeletonTable /> : (data?.customers || []).length === 0 ? (
+        <EmptyState icon={Users} title="Keine Kunden" />
+      ) : (
+        <>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead><tr className="text-white/40 text-xs uppercase"><th className="text-left py-2 px-3">Kunde</th><th className="text-left py-2 px-3">E-Mail</th><th className="text-left py-2 px-3">Ort</th><th className="text-center py-2 px-3">Bestellungen</th><th className="text-right py-2 px-3">Umsatz</th></tr></thead>
+              <tbody>
+                {(data.customers || []).map((c: any) => (
+                  <tr key={c.id} className="border-t border-white/[0.04] hover:bg-white/[0.02]">
+                    <td className="py-3 px-3"><span className="text-white">{c.firstName} {c.lastName}</span>{c.company && <span className="text-white/40 text-xs block">{c.company}</span>}</td>
+                    <td className="py-3 px-3 text-white/60">{c.email}</td>
+                    <td className="py-3 px-3 text-white/50">{[c.billingPostcode, c.billingCity].filter(Boolean).join(" ")}</td>
+                    <td className="py-3 px-3 text-center text-white/70">{c.orderCount}</td>
+                    <td className="py-3 px-3 text-right text-white font-medium">{formatEuro(c.totalSpent)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Pagination page={page} totalPages={data.totalPages || 1} total={data.total || 0} limit={30} onPageChange={setPage} />
+        </>
       )}
     </div>
   );
 }
 
 // ═══════════════════════════════════════════════════════════
-// PAYMENTS TAB
+// PAYMENTS TAB — with SWR + Pagination
 // ═══════════════════════════════════════════════════════════
 function PaymentsTab({ token }: { token: string }) {
-  const [data, setData] = useState<any>({ payments: [], total: 0 });
-  const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState("");
   const [page, setPage] = useState(1);
 
-  const load = useCallback(() => {
-    setLoading(true);
-    const params = new URLSearchParams({ page: String(page), limit: "30" });
-    if (statusFilter) params.set("status", statusFilter);
-    fetch(`${API}/payments?${params}`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(setData).catch(() => {}).finally(() => setLoading(false));
-  }, [token, page, statusFilter]);
+  const params = new URLSearchParams({ page: String(page), limit: "30" });
+  if (statusFilter) params.set("status", statusFilter);
+  const swrKey = `${API}/payments?${params}`;
 
-  useEffect(() => { load(); }, [load]);
+  const { data, error, isLoading, mutate } = useSWR(swrKey, fetcher, { revalidateOnFocus: false, keepPreviousData: true });
 
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
         <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setPage(1); }} className="px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm"><option value="">Alle Status</option><option value="completed">Bezahlt</option><option value="pending">Ausstehend</option><option value="failed">Fehlgeschlagen</option><option value="refunded">Erstattet</option></select>
-        <span className="text-white/40 text-sm">{data.total} Zahlungen</span>
+        <span className="text-white/40 text-sm">{data?.total || 0} Zahlungen</span>
       </div>
-      {loading ? <div className="text-center py-10"><RefreshCw className="w-5 h-5 text-white/40 animate-spin mx-auto" /></div> : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead><tr className="text-white/40 text-xs uppercase"><th className="text-left py-2 px-3">Bestellung</th><th className="text-left py-2 px-3">Kunde</th><th className="text-left py-2 px-3">Methode</th><th className="text-left py-2 px-3">Status</th><th className="text-right py-2 px-3">Betrag</th><th className="text-left py-2 px-3">Datum</th></tr></thead>
-            <tbody>
-              {(data.payments || []).map((p: any) => (
-                <tr key={p.id} className="border-t border-white/[0.04] hover:bg-white/[0.02]">
-                  <td className="py-3 px-3 text-white/70">#{p.order?.orderNumber}</td>
-                  <td className="py-3 px-3"><span className="text-white">{p.order?.billingFirstName} {p.order?.billingLastName}</span></td>
-                  <td className="py-3 px-3 text-white/60">{p.methodTitle || p.method}</td>
-                  <td className="py-3 px-3"><Badge status={p.status} /></td>
-                  <td className="py-3 px-3 text-right text-white font-medium">{formatEuro(p.amount)}</td>
-                  <td className="py-3 px-3 text-white/40">{formatDate(p.paidAt || p.createdAt)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-      {data.totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 pt-4">
-          <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="p-2 rounded-lg hover:bg-white/5 text-white/40 disabled:opacity-20"><ChevronLeft className="w-4 h-4" /></button>
-          <span className="text-white/50 text-sm">Seite {page} von {data.totalPages}</span>
-          <button onClick={() => setPage(p => Math.min(data.totalPages, p + 1))} disabled={page === data.totalPages} className="p-2 rounded-lg hover:bg-white/5 text-white/40 disabled:opacity-20"><ChevronRight className="w-4 h-4" /></button>
-        </div>
+
+      {error ? <ErrorState onRetry={() => mutate()} /> : isLoading ? <SkeletonTable /> : (data?.payments || []).length === 0 ? (
+        <EmptyState icon={CreditCard} title="Keine Zahlungen" />
+      ) : (
+        <>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead><tr className="text-white/40 text-xs uppercase"><th className="text-left py-2 px-3">Bestellung</th><th className="text-left py-2 px-3">Kunde</th><th className="text-left py-2 px-3">Methode</th><th className="text-left py-2 px-3">Status</th><th className="text-right py-2 px-3">Betrag</th><th className="text-left py-2 px-3">Datum</th></tr></thead>
+              <tbody>
+                {(data.payments || []).map((p: any) => (
+                  <tr key={p.id} className="border-t border-white/[0.04] hover:bg-white/[0.02]">
+                    <td className="py-3 px-3 text-white/70">#{p.order?.orderNumber}</td>
+                    <td className="py-3 px-3"><span className="text-white">{p.order?.billingFirstName} {p.order?.billingLastName}</span></td>
+                    <td className="py-3 px-3 text-white/60">{p.methodTitle || p.method}</td>
+                    <td className="py-3 px-3"><Badge status={p.status} /></td>
+                    <td className="py-3 px-3 text-right text-white font-medium">{formatEuro(p.amount)}</td>
+                    <td className="py-3 px-3 text-white/40">{formatDate(p.paidAt || p.createdAt)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Pagination page={page} totalPages={data.totalPages || 1} total={data.total || 0} limit={30} onPageChange={setPage} />
+        </>
       )}
     </div>
   );
 }
 
 // ═══════════════════════════════════════════════════════════
-// INVOICES TAB
+// INVOICES TAB — with SWR + Pagination
 // ═══════════════════════════════════════════════════════════
 function InvoicesTab({ token }: { token: string }) {
-  const [data, setData] = useState<any>({ invoices: [], total: 0 });
-  const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState("");
   const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    setLoading(true);
-    const params = new URLSearchParams({ page: String(page), limit: "30" });
-    if (statusFilter) params.set("status", statusFilter);
-    fetch(`${API}/invoices?${params}`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(setData).catch(() => {}).finally(() => setLoading(false));
-  }, [token, page, statusFilter]);
+  const params = new URLSearchParams({ page: String(page), limit: "30" });
+  if (statusFilter) params.set("status", statusFilter);
+  const swrKey = `${API}/invoices?${params}`;
+
+  const { data, error, isLoading, mutate } = useSWR(swrKey, fetcher, { revalidateOnFocus: false, keepPreviousData: true });
 
   function printInvoice(inv: any) {
     const w = window.open("", "_blank");
@@ -829,34 +957,33 @@ function InvoicesTab({ token }: { token: string }) {
     <div className="space-y-4">
       <div className="flex items-center gap-3">
         <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setPage(1); }} className="px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm"><option value="">Alle</option><option value="paid">Bezahlt</option><option value="issued">Offen</option></select>
-        <span className="text-white/40 text-sm">{data.total} Rechnungen</span>
+        <span className="text-white/40 text-sm">{data?.total || 0} Rechnungen</span>
       </div>
-      {loading ? <div className="text-center py-10"><RefreshCw className="w-5 h-5 text-white/40 animate-spin mx-auto" /></div> : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead><tr className="text-white/40 text-xs uppercase"><th className="text-left py-2 px-3">Nr.</th><th className="text-left py-2 px-3">Bestellung</th><th className="text-left py-2 px-3">Kunde</th><th className="text-left py-2 px-3">Status</th><th className="text-right py-2 px-3">Betrag</th><th className="text-left py-2 px-3">Datum</th><th className="py-2 px-3"></th></tr></thead>
-            <tbody>
-              {(data.invoices || []).map((inv: any) => (
-                <tr key={inv.id} className="border-t border-white/[0.04] hover:bg-white/[0.02]">
-                  <td className="py-3 px-3 text-white font-medium">{inv.invoiceNumber}</td>
-                  <td className="py-3 px-3 text-white/60">#{inv.order?.orderNumber}</td>
-                  <td className="py-3 px-3 text-white/70">{inv.billingName}</td>
-                  <td className="py-3 px-3"><Badge status={inv.status} /></td>
-                  <td className="py-3 px-3 text-right text-white font-medium">{formatEuro(inv.amount)}</td>
-                  <td className="py-3 px-3 text-white/40">{formatDate(inv.issuedAt)}</td>
-                  <td className="py-3 px-3"><button onClick={() => printInvoice(inv)} className="p-1.5 rounded-lg hover:bg-white/5 text-white/40 hover:text-white" title="Drucken"><Download className="w-4 h-4" /></button></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-      {data.totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 pt-4">
-          <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="p-2 rounded-lg hover:bg-white/5 text-white/40 disabled:opacity-20"><ChevronLeft className="w-4 h-4" /></button>
-          <span className="text-white/50 text-sm">Seite {page} von {data.totalPages}</span>
-          <button onClick={() => setPage(p => Math.min(data.totalPages, p + 1))} disabled={page === data.totalPages} className="p-2 rounded-lg hover:bg-white/5 text-white/40 disabled:opacity-20"><ChevronRight className="w-4 h-4" /></button>
-        </div>
+
+      {error ? <ErrorState onRetry={() => mutate()} /> : isLoading ? <SkeletonTable /> : (data?.invoices || []).length === 0 ? (
+        <EmptyState icon={Receipt} title="Keine Rechnungen" />
+      ) : (
+        <>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead><tr className="text-white/40 text-xs uppercase"><th className="text-left py-2 px-3">Nr.</th><th className="text-left py-2 px-3">Bestellung</th><th className="text-left py-2 px-3">Kunde</th><th className="text-left py-2 px-3">Status</th><th className="text-right py-2 px-3">Betrag</th><th className="text-left py-2 px-3">Datum</th><th className="py-2 px-3"></th></tr></thead>
+              <tbody>
+                {(data.invoices || []).map((inv: any) => (
+                  <tr key={inv.id} className="border-t border-white/[0.04] hover:bg-white/[0.02]">
+                    <td className="py-3 px-3 text-white font-medium">{inv.invoiceNumber}</td>
+                    <td className="py-3 px-3 text-white/60">#{inv.order?.orderNumber}</td>
+                    <td className="py-3 px-3 text-white/70">{inv.billingName}</td>
+                    <td className="py-3 px-3"><Badge status={inv.status} /></td>
+                    <td className="py-3 px-3 text-right text-white font-medium">{formatEuro(inv.amount)}</td>
+                    <td className="py-3 px-3 text-white/40">{formatDate(inv.issuedAt)}</td>
+                    <td className="py-3 px-3"><button onClick={() => printInvoice(inv)} className="p-1.5 rounded-lg hover:bg-white/5 text-white/40 hover:text-white" title="Drucken"><Download className="w-4 h-4" /></button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Pagination page={page} totalPages={data.totalPages || 1} total={data.total || 0} limit={30} onPageChange={setPage} />
+        </>
       )}
     </div>
   );
@@ -867,56 +994,49 @@ function InvoicesTab({ token }: { token: string }) {
 // ═══════════════════════════════════════════════════════════
 function GatewaysTab({ token }: { token: string }) {
   const [gateways, setGateways] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const [paymentStats, setPaymentStats] = useState<any[]>([]);
 
+  const { data: settingsData } = useSWR(`${API}/settings`, fetcher, { revalidateOnFocus: false });
+  const { data: dashData } = useSWR(`${API}/dashboard`, fetcher, { revalidateOnFocus: false, dedupingInterval: 60000 });
+
   useEffect(() => {
-    // Load payment gateways from saved audit file or from settings
-    setLoading(true);
-    Promise.all([
-      fetch(`${API}/settings`, { headers: { Authorization: `Bearer ${token}` } }).then(r => { if (!r.ok) throw new Error(); return r.json(); }),
-      fetch(`${API}/dashboard`, { headers: { Authorization: `Bearer ${token}` } }).then(r => { if (!r.ok) throw new Error(); return r.json(); }),
-    ]).then(([settingsData, dashData]) => {
-      // Build gateway list from payment method stats + saved settings
-      const methods = dashData.paymentMethods || [];
-      setPaymentStats(methods);
+    if (!settingsData || !dashData) return;
+    const methods = dashData.paymentMethods || [];
+    setPaymentStats(methods);
 
-      // Load gateway configs from settings
-      const settings = settingsData.settings || [];
-      const gwSettings = settings.filter((s: any) => s.key.startsWith("gateway_"));
-      
-      // Build known gateways list
-      const knownGateways = [
-        { id: "ppcp-gateway", name: "PayPal", icon: "💳", description: "PayPal Standard & Pay Later", enabled: true },
-        { id: "mollie_wc_gateway_creditcard", name: "Kreditkarte (Mollie)", icon: "💳", description: "Visa, Mastercard via Mollie", enabled: true },
-        { id: "mollie_wc_gateway_applepay", name: "Apple Pay (Mollie)", icon: "🍎", description: "Apple Pay via Mollie", enabled: true },
-        { id: "mollie_wc_gateway_banktransfer", name: "Banküberweisung (Mollie)", icon: "🏦", description: "SEPA Banküberweisung via Mollie", enabled: true },
-        { id: "mollie_wc_gateway_billie", name: "Billie (Mollie)", icon: "📄", description: "Rechnungskauf für Unternehmen", enabled: true },
-        { id: "mollie_wc_gateway_trustly", name: "Trustly (Mollie)", icon: "🔒", description: "Sofortüberweisung via Trustly", enabled: true },
-        { id: "mollie_wc_gateway_riverty", name: "Riverty (Mollie)", icon: "📋", description: "Riverty Rechnung", enabled: true },
-        { id: "bacs", name: "Banküberweisung (Direkt)", icon: "🏦", description: "Direkte Banküberweisung (BACS)", enabled: true },
-      ];
+    const settings = settingsData.settings || [];
+    const gwSettings = settings.filter((s: any) => s.key.startsWith("gateway_"));
 
-      // Merge settings
-      for (const gw of knownGateways) {
-        const setting = gwSettings.find((s: any) => s.key === `gateway_${gw.id}_enabled`);
-        if (setting) gw.enabled = setting.value === "true";
-      }
+    const knownGateways = [
+      { id: "ppcp-gateway", name: "PayPal", icon: "💳", description: "PayPal Standard & Pay Later", enabled: true },
+      { id: "mollie_wc_gateway_creditcard", name: "Kreditkarte (Mollie)", icon: "💳", description: "Visa, Mastercard via Mollie", enabled: true },
+      { id: "mollie_wc_gateway_applepay", name: "Apple Pay (Mollie)", icon: "🍎", description: "Apple Pay via Mollie", enabled: true },
+      { id: "mollie_wc_gateway_banktransfer", name: "Banküberweisung (Mollie)", icon: "🏦", description: "SEPA Banküberweisung via Mollie", enabled: true },
+      { id: "mollie_wc_gateway_billie", name: "Billie (Mollie)", icon: "📄", description: "Rechnungskauf für Unternehmen", enabled: true },
+      { id: "mollie_wc_gateway_trustly", name: "Trustly (Mollie)", icon: "🔒", description: "Sofortüberweisung via Trustly", enabled: true },
+      { id: "mollie_wc_gateway_riverty", name: "Riverty (Mollie)", icon: "📋", description: "Riverty Rechnung", enabled: true },
+      { id: "bacs", name: "Banküberweisung (Direkt)", icon: "🏦", description: "Direkte Banküberweisung (BACS)", enabled: true },
+    ];
 
-      setGateways(knownGateways);
-    }).catch(() => {}).finally(() => setLoading(false));
-  }, [token]);
+    for (const gw of knownGateways) {
+      const setting = gwSettings.find((s: any) => s.key === `gateway_${gw.id}_enabled`);
+      if (setting) gw.enabled = setting.value === "true";
+    }
+
+    setGateways(knownGateways);
+  }, [settingsData, dashData]);
 
   async function toggleGateway(id: string, enabled: boolean) {
     setGateways(prev => prev.map(g => g.id === id ? { ...g, enabled } : g));
     await fetch(`${API}/settings`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify({ key: `gateway_${id}_enabled`, value: String(enabled) }),
     });
   }
 
-  if (loading) return <div className="text-center py-20"><RefreshCw className="w-6 h-6 text-white/40 animate-spin mx-auto" /></div>;
+  if (!settingsData || !dashData) return <SkeletonTable rows={4} />;
 
   return (
     <div className="space-y-6">
@@ -925,7 +1045,6 @@ function GatewaysTab({ token }: { token: string }) {
         <p className="text-white/40 text-sm">Konfiguration der aktiven Zahlungsmethoden (migriert von WooCommerce)</p>
       </div>
 
-      {/* Gateway Usage Stats */}
       {paymentStats.length > 0 && (
         <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06]">
           <h3 className="text-white font-semibold mb-4 flex items-center gap-2"><TrendingUp className="w-4 h-4 text-primary" /> Nutzungsstatistiken</h3>
@@ -948,7 +1067,6 @@ function GatewaysTab({ token }: { token: string }) {
         </div>
       )}
 
-      {/* Gateway List */}
       <div className="space-y-3">
         {gateways.map(gw => (
           <div key={gw.id} className={`p-5 rounded-2xl border transition-colors ${gw.enabled ? "bg-dark-900/80 border-white/[0.06]" : "bg-dark-950/50 border-white/[0.03] opacity-60"}`}>
@@ -983,22 +1101,15 @@ function GatewaysTab({ token }: { token: string }) {
 // SETTINGS TAB
 // ═══════════════════════════════════════════════════════════
 function SettingsTab({ token }: { token: string }) {
-  const [settings, setSettings] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [newKey, setNewKey] = useState("");
   const [newValue, setNewValue] = useState("");
 
-  const load = useCallback(() => {
-    setLoading(true);
-    fetch(`${API}/settings`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(d => setSettings(d.settings || [])).catch(() => {}).finally(() => setLoading(false));
-  }, [token]);
+  const { data, error, isLoading, mutate } = useSWR(`${API}/settings`, fetcher, { revalidateOnFocus: false });
 
-  useEffect(() => { load(); }, [load]);
+  const settings = data?.settings || [];
 
-  // Group settings by prefix
-  const grouped = settings.reduce((acc: Record<string, any[]>, s: any) => {
+  const grouped: Record<string, any[]> = settings.reduce((acc: Record<string, any[]>, s: any) => {
     const prefix = s.key.includes("_") ? s.key.split("_")[0] : "general";
     if (!acc[prefix]) acc[prefix] = [];
     acc[prefix].push(s);
@@ -1016,25 +1127,26 @@ function SettingsTab({ token }: { token: string }) {
   };
 
   async function updateSetting(key: string, value: string) {
-    await fetch(`${API}/settings`, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify({ key, value }) });
+    await fetch(`${API}/settings`, { method: "POST", headers: { "Content-Type": "application/json" }, credentials: "include", body: JSON.stringify({ key, value }) });
   }
 
   async function addSetting() {
     if (!newKey.trim()) return;
     setSaving(true);
-    await fetch(`${API}/settings`, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify({ key: newKey.trim(), value: newValue }) });
+    await fetch(`${API}/settings`, { method: "POST", headers: { "Content-Type": "application/json" }, credentials: "include", body: JSON.stringify({ key: newKey.trim(), value: newValue }) });
     setNewKey(""); setNewValue("");
-    load();
+    mutate();
     setSaving(false);
   }
 
   async function deleteSetting(key: string) {
     if (!confirm(`"${key}" löschen?`)) return;
-    await fetch(`${API}/settings?key=${encodeURIComponent(key)}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
-    load();
+    await fetch(`${API}/settings?key=${encodeURIComponent(key)}`, { method: "DELETE", credentials: "include" });
+    mutate();
   }
 
-  if (loading) return <div className="text-center py-20"><RefreshCw className="w-6 h-6 text-white/40 animate-spin mx-auto" /></div>;
+  if (error) return <ErrorState onRetry={() => mutate()} />;
+  if (isLoading) return <SkeletonTable rows={6} />;
 
   return (
     <div className="space-y-6">
@@ -1043,7 +1155,6 @@ function SettingsTab({ token }: { token: string }) {
         <p className="text-white/40 text-sm">{settings.length} Einstellungen gespeichert</p>
       </div>
 
-      {/* Add new setting */}
       <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06]">
         <h3 className="text-white font-semibold mb-3 flex items-center gap-2"><Plus className="w-4 h-4 text-primary" /> Neue Einstellung</h3>
         <div className="flex gap-3">
@@ -1053,7 +1164,6 @@ function SettingsTab({ token }: { token: string }) {
         </div>
       </div>
 
-      {/* Grouped settings */}
       {Object.entries(grouped).sort(([a], [b]) => a.localeCompare(b)).map(([group, items]) => (
         <div key={group} className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06]">
           <h3 className="text-white font-semibold mb-4">{groupLabels[group] || `📁 ${group}`}</h3>
@@ -1077,31 +1187,33 @@ function SettingsTab({ token }: { token: string }) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// BLOG TAB — Full Blog Management with Scheduling
+// BLOG TAB — Full Blog Management with SWR + Pagination
 // ═══════════════════════════════════════════════════════════
 function BlogTab({ token }: { token: string }) {
-  const [posts, setPosts] = useState<PostData[]>([]);
-  const [categories, setCategories] = useState<{ id: string; name: string; slug: string }[]>([]);
+  const { toast } = useToast();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [editing, setEditing] = useState<PostData | null | undefined>(undefined); // undefined = list, null = new, PostData = edit
-  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [editing, setEditing] = useState<PostData | null | undefined>(undefined);
+  const [categories, setCategories] = useState<{ id: string; name: string; slug: string }[]>([]);
+  const debouncedSearch = useDebounce(search, 300);
 
-  const loadPosts = useCallback(() => {
-    setLoading(true);
-    const q = statusFilter !== "all" ? `?status=${statusFilter}` : "";
-    fetch(`${API}/posts${q}`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => { if (!r.ok) throw new Error(); return r.json(); })
-      .then(d => { setPosts(d.posts || []); })
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, [token, statusFilter]);
+  const params = new URLSearchParams({ page: String(page), limit: "20" });
+  if (statusFilter !== "all") params.set("status", statusFilter);
+  if (debouncedSearch) params.set("search", debouncedSearch);
+  const swrKey = `${API}/posts?${params}`;
 
-  useEffect(() => { loadPosts(); }, [loadPosts]);
+  const { data, error, isLoading, mutate } = useSWR(swrKey, fetcher, { revalidateOnFocus: false, keepPreviousData: true });
 
-  // Load categories for the editor
+  const posts: PostData[] = data?.posts || [];
+  const total = data?.total || 0;
+  const totalPages = data?.totalPages || 1;
+
+  useEffect(() => { setPage(1); }, [debouncedSearch, statusFilter]);
+
+  // Load categories from first page of posts (for editor)
   useEffect(() => {
-    fetch(`${API}/posts`, { headers: { Authorization: `Bearer ${token}` } })
+    fetch(`${API}/posts?limit=100`, { credentials: "include" })
       .then(r => { if (!r.ok) throw new Error(); return r.json(); })
       .then(d => {
         const cats = new Map<string, { id: string; name: string; slug: string }>();
@@ -1111,47 +1223,48 @@ function BlogTab({ token }: { token: string }) {
           })
         );
         setCategories(Array.from(cats.values()));
+      })
+      .catch(() => {});
+  }, []);
+
+  // Count by status from current data (approximate from total when filtered)
+  const statusCounts = useMemo(() => {
+    const counts = { all: total, published: 0, draft: 0, scheduled: 0 };
+    if (statusFilter === "all") {
+      posts.forEach(p => {
+        if (p.status === "published") counts.published++;
+        else if (p.status === "draft") counts.draft++;
+        else if (p.status === "scheduled") counts.scheduled++;
       });
-  }, [token]);
+    }
+    return counts;
+  }, [posts, total, statusFilter]);
 
   async function handleDelete(id: string) {
     if (!confirm("Diesen Beitrag wirklich löschen?")) return;
-    await fetch(`${API}/posts?id=${id}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
-    loadPosts();
+    try {
+      await fetch(`${API}/posts?id=${id}`, { method: "DELETE", credentials: "include" });
+      toast("Beitrag gelöscht");
+      mutate();
+    } catch { toast("Fehler beim Löschen", "error"); }
   }
 
-  // Filtered list
-  const filtered = posts.filter(p => {
-    const matchSearch = !search || p.title.toLowerCase().includes(search.toLowerCase()) || p.slug.toLowerCase().includes(search.toLowerCase());
-    return matchSearch;
-  });
-
-  // Show editor
   if (editing !== undefined) {
-    return <BlogEditor post={editing} token={token} categories={categories} onSave={() => { setEditing(undefined); loadPosts(); }} onCancel={() => setEditing(undefined)} />;
+    return <BlogEditor post={editing} token={token} categories={categories} onSave={() => { setEditing(undefined); mutate(); }} onCancel={() => setEditing(undefined)} />;
   }
-
-  const counts = {
-    all: posts.length,
-    published: posts.filter(p => p.status === "published").length,
-    draft: posts.filter(p => p.status === "draft").length,
-    scheduled: posts.filter(p => p.status === "scheduled").length,
-  };
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-white">Blog-Beiträge</h2>
-          <p className="text-white/40 text-sm mt-1">{counts.all} Beiträge insgesamt</p>
+          <p className="text-white/40 text-sm mt-1">{total} Beiträge insgesamt</p>
         </div>
         <button onClick={() => setEditing(null)} className="px-5 py-2.5 rounded-xl bg-primary text-white font-medium text-sm flex items-center gap-2 hover:bg-primary/90 transition-colors">
           <Plus className="w-4 h-4" /> Neuer Beitrag
         </button>
       </div>
 
-      {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="flex-1 relative">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
@@ -1160,64 +1273,57 @@ function BlogTab({ token }: { token: string }) {
         <div className="flex gap-1.5">
           {(["all", "published", "draft", "scheduled"] as const).map(s => (
             <button key={s} onClick={() => setStatusFilter(s)} className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors ${statusFilter === s ? "bg-primary/10 text-primary border border-primary/20" : "bg-dark-900/60 text-white/40 border border-white/[0.06] hover:text-white"}`}>
-              {s === "all" ? "Alle" : s === "published" ? "Veröffentlicht" : s === "draft" ? "Entwurf" : "Geplant"} ({counts[s]})
+              {s === "all" ? "Alle" : s === "published" ? "Veröffentlicht" : s === "draft" ? "Entwurf" : "Geplant"}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Posts List */}
-      {loading ? (
-        <div className="text-center py-10"><RefreshCw className="w-5 h-5 text-white/40 animate-spin mx-auto" /></div>
+      {error ? <ErrorState onRetry={() => mutate()} /> : isLoading ? <SkeletonTable /> : posts.length === 0 ? (
+        <EmptyState icon={BookOpen} title={debouncedSearch ? "Keine Ergebnisse" : "Keine Beiträge"} description={debouncedSearch ? `Keine Ergebnisse für "${debouncedSearch}"` : undefined} />
       ) : (
-        <div className="space-y-2">
-          {filtered.map(post => (
-            <div key={post.id} className="flex items-center gap-4 p-4 rounded-xl bg-dark-900/60 border border-white/[0.04] hover:border-white/10 transition-colors group">
-              {/* Thumbnail */}
-              {post.featuredImage ? (
-                <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 border border-white/[0.06]">
-                  <img src={post.featuredImage} alt="" className="w-full h-full object-cover" />
-                </div>
-              ) : (
-                <div className="w-16 h-16 rounded-lg bg-dark-800 border border-white/[0.06] flex items-center justify-center flex-shrink-0">
-                  <BookOpen className="w-5 h-5 text-white/20" />
-                </div>
-              )}
+        <>
+          <div className="space-y-2">
+            {posts.map(post => (
+              <div key={post.id} className="flex items-center gap-4 p-4 rounded-xl bg-dark-900/60 border border-white/[0.04] hover:border-white/10 transition-colors group">
+                {post.featuredImage ? (
+                  <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 border border-white/[0.06]">
+                    <img src={post.featuredImage} alt="" className="w-full h-full object-cover" />
+                  </div>
+                ) : (
+                  <div className="w-16 h-16 rounded-lg bg-dark-800 border border-white/[0.06] flex items-center justify-center flex-shrink-0">
+                    <BookOpen className="w-5 h-5 text-white/20" />
+                  </div>
+                )}
 
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <h3 className="text-white font-medium truncate">{post.title}</h3>
-                <div className="flex items-center gap-3 mt-1">
-                  <span className="text-white/30 text-xs">/{post.slug}/</span>
-                  {post.publishedAt && <span className="text-white/30 text-xs">{formatDate(post.publishedAt)}</span>}
-                  {post.status === "scheduled" && post.scheduledAt && (
-                    <span className="text-yellow-400/70 text-xs flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      Geplant: {new Date(post.scheduledAt).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" })} {new Date(post.scheduledAt).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
-                    </span>
-                  )}
-                  {post.categories?.map(c => (
-                    <span key={c.category.id} className="text-primary/70 text-xs">{c.category.name}</span>
-                  ))}
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-white font-medium truncate">{post.title}</h3>
+                  <div className="flex items-center gap-3 mt-1">
+                    <span className="text-white/30 text-xs">/{post.slug}/</span>
+                    {post.publishedAt && <span className="text-white/30 text-xs">{formatDate(post.publishedAt)}</span>}
+                    {post.status === "scheduled" && post.scheduledAt && (
+                      <span className="text-yellow-400/70 text-xs flex items-center gap-1">
+                        <Clock className="w-3 h-3" />
+                        Geplant: {new Date(post.scheduledAt).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" })} {new Date(post.scheduledAt).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
+                      </span>
+                    )}
+                    {post.categories?.map(c => (
+                      <span key={c.category.id} className="text-primary/70 text-xs">{c.category.name}</span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <Badge status={post.status} />
+                  <a href={`/blog/${post.slug}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg hover:bg-white/5 text-white/30 hover:text-white transition-colors"><Eye className="w-4 h-4" /></a>
+                  <button onClick={() => setEditing(post)} className="p-2 rounded-lg hover:bg-white/5 text-white/30 hover:text-white transition-colors"><Pencil className="w-4 h-4" /></button>
+                  <button onClick={() => handleDelete(post.id)} className="p-2 rounded-lg hover:bg-red-500/10 text-white/30 hover:text-red-400 transition-colors"><Trash2 className="w-4 h-4" /></button>
                 </div>
               </div>
-
-              {/* Status + Actions */}
-              <div className="flex items-center gap-2">
-                <Badge status={post.status} />
-                <a href={`/blog/${post.slug}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg hover:bg-white/5 text-white/30 hover:text-white transition-colors"><Eye className="w-4 h-4" /></a>
-                <button onClick={() => setEditing(post)} className="p-2 rounded-lg hover:bg-white/5 text-white/30 hover:text-white transition-colors"><Pencil className="w-4 h-4" /></button>
-                <button onClick={() => handleDelete(post.id)} className="p-2 rounded-lg hover:bg-red-500/10 text-white/30 hover:text-red-400 transition-colors"><Trash2 className="w-4 h-4" /></button>
-              </div>
-            </div>
-          ))}
-          {filtered.length === 0 && (
-            <div className="text-center py-16">
-              <BookOpen className="w-10 h-10 text-white/10 mx-auto mb-3" />
-              <p className="text-white/30">Keine Beiträge gefunden</p>
-            </div>
-          )}
-        </div>
+            ))}
+          </div>
+          <Pagination page={page} totalPages={totalPages} total={total} limit={20} onPageChange={setPage} />
+        </>
       )}
     </div>
   );
@@ -1242,7 +1348,6 @@ function BlogEditor({
   const isNew = !post?.id;
   const { toast } = useToast();
 
-  // Content fields
   const [title, setTitle] = useState(post?.title || "");
   const [slug, setSlug] = useState(post?.slug || "");
   const [content, setContent] = useState(post?.content || "");
@@ -1250,7 +1355,6 @@ function BlogEditor({
   const [author, setAuthor] = useState(post?.author || "");
   const [featuredImage, setFeaturedImage] = useState(post?.featuredImage || "");
 
-  // Status & Scheduling
   const [publishMode, setPublishMode] = useState<"draft" | "publish" | "schedule">(
     post?.status === "scheduled" ? "schedule" : post?.status === "published" ? "publish" : "draft"
   );
@@ -1258,7 +1362,6 @@ function BlogEditor({
     post?.scheduledAt ? new Date(post.scheduledAt).toISOString().slice(0, 16) : ""
   );
 
-  // SEO
   const [activeTab, setActiveTab] = useState<"content" | "seo">("content");
   const [metaTitle, setMetaTitle] = useState(post?.seo?.metaTitle || "");
   const [metaDesc, setMetaDesc] = useState(post?.seo?.metaDescription || "");
@@ -1271,7 +1374,6 @@ function BlogEditor({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
-  // Auto-generate slug from title
   function generateSlug(t: string) {
     return t
       .toLowerCase()
@@ -1309,22 +1411,21 @@ function BlogEditor({
       seo: {
         metaTitle: metaTitle || title,
         metaDescription: metaDesc || excerpt || "",
-        canonicalUrl: canonical || `https://ikfzdigitalzulassung.de/blog/${slug}/`,
+        canonicalUrl: canonical || `https://ikfzdigitalzulassung.de/blog/${finalSlug}/`,
         ogTitle: ogTitle || null,
         ogDescription: ogDesc || null,
         ogImage: ogImage || featuredImage || null,
       },
     };
 
-    if (status === "scheduled") {
-      body.scheduledAt = scheduleDate;
-    }
+    if (status === "scheduled") body.scheduledAt = scheduleDate;
     if (post?.id) body.id = post.id;
 
     try {
       const res = await fetch(`${API}/posts`, {
         method: post?.id ? "PUT" : "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(body),
       });
       const data = await res.json();
@@ -1340,7 +1441,6 @@ function BlogEditor({
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold text-white">{isNew ? "Neuer Beitrag" : "Beitrag bearbeiten"}</h2>
@@ -1356,7 +1456,6 @@ function BlogEditor({
 
       {error && <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">{error}</div>}
 
-      {/* Tabs */}
       <div className="flex gap-2">
         <button onClick={() => setActiveTab("content")} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === "content" ? "bg-primary text-white" : "bg-dark-800 text-white/60 hover:text-white"}`}>Inhalt</button>
         <button onClick={() => setActiveTab("seo")} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === "seo" ? "bg-primary text-white" : "bg-dark-800 text-white/60 hover:text-white"}`}>SEO</button>
@@ -1364,7 +1463,6 @@ function BlogEditor({
 
       {activeTab === "content" ? (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Main Content (2/3) */}
           <div className="lg:col-span-2 space-y-4">
             <div>
               <label className="block text-xs text-white/40 mb-1.5">Titel</label>
@@ -1384,46 +1482,24 @@ function BlogEditor({
             </div>
           </div>
 
-          {/* Sidebar (1/3) */}
           <div className="space-y-4">
-            {/* Publish Settings */}
             <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-4">
               <h3 className="text-white font-semibold text-sm flex items-center gap-2"><Zap className="w-4 h-4 text-primary" /> Veröffentlichung</h3>
-
               <div className="space-y-2">
-                <label className="flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${publishMode === 'draft' ? 'border-white/20 bg-white/[0.03]' : 'border-white/[0.06]'}">
-                  <input type="radio" name="publishMode" checked={publishMode === "draft"} onChange={() => setPublishMode("draft")} className="accent-primary" />
-                  <div>
-                    <span className="text-white text-sm font-medium">Entwurf</span>
-                    <p className="text-white/30 text-xs">Nicht veröffentlicht</p>
-                  </div>
-                </label>
-                <label className="flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${publishMode === 'publish' ? 'border-primary/30 bg-primary/[0.05]' : 'border-white/[0.06]'}">
-                  <input type="radio" name="publishMode" checked={publishMode === "publish"} onChange={() => setPublishMode("publish")} className="accent-primary" />
-                  <div>
-                    <span className="text-white text-sm font-medium">Sofort veröffentlichen</span>
-                    <p className="text-white/30 text-xs">Wird sofort live</p>
-                  </div>
-                </label>
-                <label className="flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${publishMode === 'schedule' ? 'border-yellow-500/30 bg-yellow-500/[0.05]' : 'border-white/[0.06]'}">
-                  <input type="radio" name="publishMode" checked={publishMode === "schedule"} onChange={() => setPublishMode("schedule")} className="accent-primary" />
-                  <div>
-                    <span className="text-white text-sm font-medium">Zeitgesteuert</span>
-                    <p className="text-white/30 text-xs">Automatisch veröffentlichen</p>
-                  </div>
-                </label>
+                {(["draft", "publish", "schedule"] as const).map(mode => (
+                  <label key={mode} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${publishMode === mode ? "border-primary/30 bg-primary/[0.05]" : "border-white/[0.06]"}`}>
+                    <input type="radio" name="publishMode" checked={publishMode === mode} onChange={() => setPublishMode(mode)} className="accent-primary" />
+                    <div>
+                      <span className="text-white text-sm font-medium">{mode === "draft" ? "Entwurf" : mode === "publish" ? "Sofort veröffentlichen" : "Zeitgesteuert"}</span>
+                      <p className="text-white/30 text-xs">{mode === "draft" ? "Nicht veröffentlicht" : mode === "publish" ? "Wird sofort live" : "Automatisch veröffentlichen"}</p>
+                    </div>
+                  </label>
+                ))}
               </div>
-
               {publishMode === "schedule" && (
                 <div className="pt-2">
                   <label className="block text-xs text-white/40 mb-1.5">Datum & Uhrzeit</label>
-                  <input
-                    type="datetime-local"
-                    value={scheduleDate}
-                    onChange={e => setScheduleDate(e.target.value)}
-                    min={new Date().toISOString().slice(0, 16)}
-                    className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none [color-scheme:dark]"
-                  />
+                  <input type="datetime-local" value={scheduleDate} onChange={e => setScheduleDate(e.target.value)} min={new Date().toISOString().slice(0, 16)} className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none [color-scheme:dark]" />
                   {scheduleDate && (
                     <p className="text-xs text-yellow-400/70 mt-2 flex items-center gap-1">
                       <Clock className="w-3 h-3" />
@@ -1434,19 +1510,16 @@ function BlogEditor({
               )}
             </div>
 
-            {/* Featured Image */}
             <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-3">
               <h3 className="text-white font-semibold text-sm">Beitragsbild</h3>
               <ImageField label="" value={featuredImage} onChange={setFeaturedImage} token={token} />
             </div>
 
-            {/* Author */}
             <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-3">
               <h3 className="text-white font-semibold text-sm">Autor</h3>
               <input value={author} onChange={e => setAuthor(e.target.value)} placeholder="Autorname..." className="w-full px-3 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none" />
             </div>
 
-            {/* Post Info (edit only) */}
             {!isNew && post && (
               <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-2">
                 <h3 className="text-white font-semibold text-sm mb-3">Info</h3>
@@ -1458,7 +1531,6 @@ function BlogEditor({
           </div>
         </div>
       ) : (
-        /* SEO Tab */
         <div className="max-w-3xl space-y-4">
           <div className="grid md:grid-cols-2 gap-4">
             <div>
@@ -1488,7 +1560,6 @@ function BlogEditor({
             </div>
           </div>
 
-          {/* Google Preview */}
           <div className="p-5 rounded-2xl bg-dark-950 border border-white/10">
             <p className="text-xs text-white/30 mb-3 font-medium uppercase tracking-wider">Google-Vorschau</p>
             <p className="text-blue-400 text-lg hover:underline cursor-default">{metaTitle || title || "Titel"}</p>
@@ -1518,7 +1589,6 @@ function AdminPageInner() {
   const [checking, setChecking] = useState(true);
   const { toast } = useToast();
 
-  // Check session via httpOnly cookie on mount
   useEffect(() => {
     fetch(`${API}/auth`, { credentials: "include" })
       .then(r => { if (!r.ok) throw new Error(); return r.json(); })
@@ -1527,7 +1597,6 @@ function AdminPageInner() {
       .finally(() => setChecking(false));
   }, []);
 
-  // Intercept 401 responses globally for session expiry
   useEffect(() => {
     const originalFetch = window.fetch;
     window.fetch = async (...args) => {
@@ -1577,7 +1646,6 @@ function AdminPageInner() {
 
   return (
     <div className="min-h-screen bg-dark-950 flex">
-      {/* Sidebar */}
       <aside className="w-64 border-r border-white/[0.06] bg-dark-900/50 flex flex-col">
         <div className="p-6 border-b border-white/[0.06]">
           <h1 className="text-lg font-bold text-white">iKFZ Admin</h1>
@@ -1603,7 +1671,6 @@ function AdminPageInner() {
         </div>
       </aside>
 
-      {/* Main Content */}
       <main className="flex-1 p-8 overflow-y-auto">
         <div className="max-w-6xl mx-auto">
           {tab === "dashboard" && <DashboardTab token={token} />}

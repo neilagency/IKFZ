@@ -2,17 +2,38 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { verifyAuth, unauthorized } from '@/lib/auth';
 
-// GET /api/admin/seo - List all SEO records
+// GET /api/admin/seo - List SEO records with pagination
 export async function GET(req: NextRequest) {
   const user = verifyAuth(req);
   if (!user) return unauthorized();
 
-  const seoRecords = await prisma.sEO.findMany({
-    include: { page: { select: { title: true, slug: true } }, post: { select: { title: true, slug: true } } },
-    orderBy: { id: 'desc' },
-  });
+  const searchParams = req.nextUrl.searchParams;
+  const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
+  const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '30')));
+  const search = searchParams.get('search') || '';
 
-  return NextResponse.json({ seo: seoRecords, total: seoRecords.length });
+  const where: any = search ? {
+    OR: [
+      { metaTitle: { contains: search } },
+      { page: { title: { contains: search } } },
+      { page: { slug: { contains: search } } },
+      { post: { title: { contains: search } } },
+      { post: { slug: { contains: search } } },
+    ],
+  } : {};
+
+  const [seo, total] = await Promise.all([
+    prisma.sEO.findMany({
+      where,
+      include: { page: { select: { title: true, slug: true } }, post: { select: { title: true, slug: true } } },
+      orderBy: { id: 'desc' },
+      skip: (page - 1) * limit,
+      take: limit,
+    }),
+    prisma.sEO.count({ where }),
+  ]);
+
+  return NextResponse.json({ seo, total, page, totalPages: Math.ceil(total / limit) });
 }
 
 // PUT /api/admin/seo - Update an SEO record
