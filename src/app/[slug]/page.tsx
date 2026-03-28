@@ -324,11 +324,14 @@ function BlogPostView({ post, products }: { post: any; products: any[] }) {
   const wordCount = stripHtml(post.content).split(/\s+/).filter(Boolean).length;
   const readingTime = Math.ceil(wordCount / 200);
 
+  // Strip inline styles (WP content has color:#000 etc. which is invisible on dark bg)
+  const strippedContent = post.content.replace(/\s*style="[^"]*"/g, '');
+
   // Inject heading IDs and extract TOC
   const headingRegex = /<h([23])[^>]*>(.*?)<\/h[23]>/gi;
   const headings: { level: number; text: string; id: string }[] = [];
-  let processedContent = post.content;
-  const matches = [...post.content.matchAll(headingRegex)];
+  let processedContent = strippedContent;
+  const matches = [...strippedContent.matchAll(headingRegex)];
 
   for (const match of matches) {
     const level = parseInt(match[1]);
@@ -455,15 +458,15 @@ function BlogPostView({ post, products }: { post: any; products: any[] }) {
 
               {/* Blog Content */}
               <div
-                className="prose prose-lg prose-invert max-w-none
+                className="prose prose-lg prose-invert max-w-2xl
                   prose-headings:text-white prose-headings:font-bold
-                  prose-p:text-white/70 prose-p:leading-relaxed
+                  prose-p:text-white/75 prose-p:leading-relaxed
                   prose-a:text-primary prose-a:no-underline hover:prose-a:underline
                   prose-strong:text-white
                   prose-blockquote:border-primary prose-blockquote:text-white/60
-                  prose-code:text-primary prose-code:bg-dark-900 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
+                  prose-code:text-primary prose-code:bg-white/5 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
                   prose-img:rounded-xl prose-img:border prose-img:border-white/[0.06]
-                  prose-li:text-white/70"
+                  prose-li:text-white/75"
                 dangerouslySetInnerHTML={{ __html: sanitizedContent }}
               />
 
