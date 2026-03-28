@@ -167,7 +167,7 @@ function DashboardTab({ token }: { token: string }) {
 
   useEffect(() => {
     fetch(`${API}/dashboard`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => r.json()).then(setData).finally(() => setLoading(false));
+      .then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(setData).catch(() => {}).finally(() => setLoading(false));
   }, [token]);
 
   if (loading) return <div className="flex items-center justify-center py-20"><RefreshCw className="w-6 h-6 text-white/40 animate-spin" /></div>;
@@ -280,7 +280,7 @@ function CMSListTab({ type, token }: { type: "pages" | "posts"; token: string })
   const load = useCallback(() => {
     setLoading(true);
     fetch(`${API}/${type}?search=${search}`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => r.json()).then(d => { setItems(Array.isArray(d) ? d : d[type] || []); }).finally(() => setLoading(false));
+      .then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(d => { setItems(Array.isArray(d) ? d : d[type] || []); }).catch(() => {}).finally(() => setLoading(false));
   }, [type, search, token]);
 
   useEffect(() => { load(); }, [load]);
@@ -337,7 +337,7 @@ function SEOTab({ token }: { token: string }) {
   const load = useCallback(() => {
     setLoading(true);
     fetch(`${API}/seo`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => r.json()).then(d => setRecords(d.seo || [])).finally(() => setLoading(false));
+      .then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(d => setRecords(d.seo || [])).catch(() => {}).finally(() => setLoading(false));
   }, [token]);
 
   useEffect(() => { load(); }, [load]);
@@ -463,7 +463,7 @@ function ProductsTab({ token }: { token: string }) {
   const load = useCallback(() => {
     setLoading(true);
     fetch(`${API}/products`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => r.json()).then(setProducts).finally(() => setLoading(false));
+      .then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(d => setProducts(Array.isArray(d) ? d : [])).catch(() => {}).finally(() => setLoading(false));
   }, [token]);
 
   useEffect(() => { load(); }, [load]);
@@ -572,7 +572,7 @@ function OrdersTab({ token }: { token: string }) {
     if (search) params.set("search", search);
     if (statusFilter) params.set("status", statusFilter);
     fetch(`${API}/orders?${params}`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => r.json()).then(setData).finally(() => setLoading(false));
+      .then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(setData).catch(() => {}).finally(() => setLoading(false));
   }, [token, page, search, statusFilter]);
 
   useEffect(() => { load(); }, [load]);
@@ -693,7 +693,7 @@ function CustomersTab({ token }: { token: string }) {
     const params = new URLSearchParams({ page: String(page), limit: "30" });
     if (search) params.set("search", search);
     fetch(`${API}/customers?${params}`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => r.json()).then(setData).finally(() => setLoading(false));
+      .then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(setData).catch(() => {}).finally(() => setLoading(false));
   }, [token, page, search]);
 
   return (
@@ -745,7 +745,7 @@ function PaymentsTab({ token }: { token: string }) {
     const params = new URLSearchParams({ page: String(page), limit: "30" });
     if (statusFilter) params.set("status", statusFilter);
     fetch(`${API}/payments?${params}`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => r.json()).then(setData).finally(() => setLoading(false));
+      .then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(setData).catch(() => {}).finally(() => setLoading(false));
   }, [token, page, statusFilter]);
 
   useEffect(() => { load(); }, [load]);
@@ -800,7 +800,7 @@ function InvoicesTab({ token }: { token: string }) {
     const params = new URLSearchParams({ page: String(page), limit: "30" });
     if (statusFilter) params.set("status", statusFilter);
     fetch(`${API}/invoices?${params}`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => r.json()).then(setData).finally(() => setLoading(false));
+      .then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(setData).catch(() => {}).finally(() => setLoading(false));
   }, [token, page, statusFilter]);
 
   function printInvoice(inv: any) {
@@ -874,8 +874,8 @@ function GatewaysTab({ token }: { token: string }) {
     // Load payment gateways from saved audit file or from settings
     setLoading(true);
     Promise.all([
-      fetch(`${API}/settings`, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
-      fetch(`${API}/dashboard`, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
+      fetch(`${API}/settings`, { headers: { Authorization: `Bearer ${token}` } }).then(r => { if (!r.ok) throw new Error(); return r.json(); }),
+      fetch(`${API}/dashboard`, { headers: { Authorization: `Bearer ${token}` } }).then(r => { if (!r.ok) throw new Error(); return r.json(); }),
     ]).then(([settingsData, dashData]) => {
       // Build gateway list from payment method stats + saved settings
       const methods = dashData.paymentMethods || [];
@@ -904,7 +904,7 @@ function GatewaysTab({ token }: { token: string }) {
       }
 
       setGateways(knownGateways);
-    }).finally(() => setLoading(false));
+    }).catch(() => {}).finally(() => setLoading(false));
   }, [token]);
 
   async function toggleGateway(id: string, enabled: boolean) {
@@ -992,7 +992,7 @@ function SettingsTab({ token }: { token: string }) {
   const load = useCallback(() => {
     setLoading(true);
     fetch(`${API}/settings`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => r.json()).then(d => setSettings(d.settings || [])).finally(() => setLoading(false));
+      .then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(d => setSettings(d.settings || [])).catch(() => {}).finally(() => setLoading(false));
   }, [token]);
 
   useEffect(() => { load(); }, [load]);
@@ -1091,8 +1091,9 @@ function BlogTab({ token }: { token: string }) {
     setLoading(true);
     const q = statusFilter !== "all" ? `?status=${statusFilter}` : "";
     fetch(`${API}/posts${q}`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => r.json())
+      .then(r => { if (!r.ok) throw new Error(); return r.json(); })
       .then(d => { setPosts(d.posts || []); })
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, [token, statusFilter]);
 
@@ -1101,7 +1102,7 @@ function BlogTab({ token }: { token: string }) {
   // Load categories for the editor
   useEffect(() => {
     fetch(`${API}/posts`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => r.json())
+      .then(r => { if (!r.ok) throw new Error(); return r.json(); })
       .then(d => {
         const cats = new Map<string, { id: string; name: string; slug: string }>();
         (d.posts || []).forEach((p: any) =>
@@ -1511,7 +1512,7 @@ function AdminPageInner() {
   // Check session via httpOnly cookie on mount
   useEffect(() => {
     fetch(`${API}/auth`, { credentials: "include" })
-      .then(r => r.json())
+      .then(r => { if (!r.ok) throw new Error(); return r.json(); })
       .then(d => { if (d.authenticated) setToken(d.user?.email || "session"); })
       .catch(() => {})
       .finally(() => setChecking(false));
