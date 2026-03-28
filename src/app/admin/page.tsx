@@ -1267,22 +1267,34 @@ function BlogEditor({
   const [ogImage, setOgImage] = useState(post?.seo?.ogImage || "");
   const [canonical, setCanonical] = useState(post?.seo?.canonicalUrl || "");
 
+  const [slugManual, setSlugManual] = useState(!!post?.slug);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
   // Auto-generate slug from title
-  function autoSlug() {
-    const s = title
+  function generateSlug(t: string) {
+    return t
       .toLowerCase()
       .replace(/[äÄ]/g, "ae").replace(/[öÖ]/g, "oe").replace(/[üÜ]/g, "ue").replace(/ß/g, "ss")
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)/g, "");
+  }
+
+  function handleTitleChange(t: string) {
+    setTitle(t);
+    if (!slugManual) setSlug(generateSlug(t));
+  }
+
+  function handleSlugChange(s: string) {
+    setSlugManual(true);
     setSlug(s);
   }
 
   async function handleSave() {
     if (!title.trim()) { setError("Titel ist erforderlich"); return; }
-    if (!slug.trim()) { setError("Slug ist erforderlich"); return; }
+    const finalSlug = slug.trim() || generateSlug(title);
+    if (!finalSlug) { setError("Slug ist erforderlich"); return; }
+    if (!slug) setSlug(finalSlug);
     if (publishMode === "schedule" && !scheduleDate) { setError("Bitte Datum und Uhrzeit für die geplante Veröffentlichung angeben"); return; }
 
     setSaving(true); setError("");
@@ -1292,7 +1304,7 @@ function BlogEditor({
     const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
     const body: any = {
-      title, slug, content, excerpt, status, author: author || null,
+      title, slug: finalSlug, content, excerpt, status, author: author || null,
       featuredImage: featuredImage || null, readingTime,
       seo: {
         metaTitle: metaTitle || title,
@@ -1356,14 +1368,11 @@ function BlogEditor({
           <div className="lg:col-span-2 space-y-4">
             <div>
               <label className="block text-xs text-white/40 mb-1.5">Titel</label>
-              <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Beitragstitel..." className="w-full px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white text-lg font-semibold focus:border-primary focus:outline-none" />
+              <input value={title} onChange={e => handleTitleChange(e.target.value)} placeholder="Beitragstitel..." className="w-full px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white text-lg font-semibold focus:border-primary focus:outline-none" />
             </div>
             <div>
-              <div className="flex items-center gap-2 mb-1.5">
-                <label className="text-xs text-white/40">Slug</label>
-                {title && !slug && <button onClick={autoSlug} className="text-xs text-primary hover:underline">Auto-generieren</button>}
-              </div>
-              <input value={slug} onChange={e => setSlug(e.target.value)} placeholder="beitrag-slug" className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white/60 text-sm focus:border-primary focus:outline-none" />
+              <label className="block text-xs text-white/40 mb-1.5">Slug</label>
+              <input value={slug} onChange={e => handleSlugChange(e.target.value)} placeholder="beitrag-slug" className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white/60 text-sm focus:border-primary focus:outline-none" />
             </div>
             <div>
               <label className="block text-xs text-white/40 mb-1.5">Inhalt (HTML)</label>
