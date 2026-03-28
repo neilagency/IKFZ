@@ -13,18 +13,6 @@ export function middleware(request: NextRequest) {
     );
   }
 
-  // 2. Trailing slash enforcement (add trailing slash to paths without extension)
-  const { pathname } = url;
-  if (
-    pathname !== '/' &&
-    !pathname.endsWith('/') &&
-    !pathname.includes('.') &&
-    !pathname.startsWith('/api/')
-  ) {
-    url.pathname = `${pathname}/`;
-    return NextResponse.redirect(url, 301);
-  }
-
   return NextResponse.next();
 }
 
