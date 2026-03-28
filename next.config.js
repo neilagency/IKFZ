@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   trailingSlash: true,
+  outputFileTracingIncludes: {
+    '/**': ['./prisma/dev.db'],
+  },
   experimental: {
     instrumentationHook: true,
   },

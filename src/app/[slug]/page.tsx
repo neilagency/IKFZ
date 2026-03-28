@@ -27,11 +27,21 @@ export const revalidate = 60;
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  const pages = await prisma.page.findMany({
-    where: { status: 'published' },
-    select: { slug: true },
-  });
-  return pages.filter(p => !RESERVED_SLUGS.has(p.slug)).map(p => ({ slug: p.slug }));
+  const [pages, posts] = await Promise.all([
+    prisma.page.findMany({
+      where: { status: 'published' },
+      select: { slug: true },
+    }),
+    prisma.blogPost.findMany({
+      where: { status: 'publish' },
+      select: { slug: true },
+    }),
+  ]);
+  const all = [
+    ...pages.map(p => ({ slug: p.slug })),
+    ...posts.map(p => ({ slug: p.slug })),
+  ];
+  return all.filter(p => !RESERVED_SLUGS.has(p.slug));
 }
 
 export async function generateMetadata({
