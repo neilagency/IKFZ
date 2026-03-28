@@ -236,9 +236,7 @@ async function main() {
   // Step 2: Clear existing data
   console.log('\n🗑️  Step 5: Clearing existing database...');
   await prisma.sEO.deleteMany();
-  await prisma.postCategory.deleteMany();
-  await prisma.postTag.deleteMany();
-  await prisma.post.deleteMany();
+  await prisma.blogPost.deleteMany();
   await prisma.page.deleteMany();
   await prisma.category.deleteMany();
   await prisma.tag.deleteMany();
@@ -253,7 +251,7 @@ async function main() {
       data: {
         name: stripHtml(cat.name),
         slug: cat.slug,
-        description: cat.description || null,
+        description: cat.description || "",
       },
     });
     categoryMap.set(cat.id, created.id);
@@ -330,7 +328,7 @@ async function main() {
   }
   console.log(`   ✅ ${pageCount} pages seeded with SEO`);
 
-  // Step 6: Seed Posts + SEO + Categories + Tags
+  // Step 6: Seed Posts → BlogPost (flat model, inline SEO)
   console.log('\n📝 Step 9: Seeding Blog Posts with SEO...');
   let postCount = 0;
   for (const wp of wpPosts) {
@@ -343,56 +341,55 @@ async function main() {
     console.log(`      🔍 Scraping SEO from ${postUrl}`);
     const seo = await scrapeSEO(postUrl);
 
-    const post = await prisma.post.create({
+    // Collect category names (comma-separated string)
+    const catNames = wp.categories
+      .map(id => categoryMap.get(id))
+      .filter(Boolean)
+      .map(dbId => {
+        // Look up name from the map (we stored id, need to find name)
+        // categoryMap is id→dbId, so we iterate to find name — use a reverse approach below
+        return dbId;
+      });
+
+    // Build category string from WP category names directly
+    const catLabels = wp.categories
+      .map(id => {
+        // find in wpCategories
+        const found = wpCategories.find((c: any) => c.id === id);
+        return found ? stripHtml(found.name) : null;
+      })
+      .filter(Boolean)
+      .join(', ');
+
+    // Build tags string
+    const tagLabels = wp.tags
+      .map(id => {
+        const found = wpTags.find((t: any) => t.id === id);
+        return found ? stripHtml(found.name) : null;
+      })
+      .filter(Boolean)
+      .join(', ');
+
+    await prisma.blogPost.create({
       data: {
-        wpId: wp.id,
+        wpPostId: wp.id,
         slug: wp.slug,
         title: title,
         content: wp.content.rendered,
         excerpt: wp.excerpt?.rendered ? stripHtml(wp.excerpt.rendered) : null,
-        status: 'published',
+        status: 'publish',
         author: 'iKFZ-Team',
-        readingTime: estimateReadingTime(wp.content.rendered),
+        category: catLabels || "",
+        tags: tagLabels || "",
         publishedAt: new Date(wp.date),
-        seo: {
-          create: {
-            metaTitle: seo.metaTitle || title,
-            metaDescription: seo.metaDescription || null,
-            canonicalUrl: seo.canonicalUrl || postUrl,
-            ogTitle: seo.ogTitle || title,
-            ogDescription: seo.ogDescription || seo.metaDescription || null,
-            ogImage: seo.ogImage || null,
-            ogType: seo.ogType || 'article',
-            twitterCard: seo.twitterCard || 'summary_large_image',
-            twitterTitle: seo.twitterTitle || title,
-            twitterDesc: seo.twitterDesc || seo.metaDescription || null,
-            twitterImage: seo.twitterImage || seo.ogImage || null,
-            robots: seo.robots || 'follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large',
-            schemaJson: seo.schemaJson || null,
-          },
-        },
+        metaTitle: seo.metaTitle || title,
+        metaDescription: seo.metaDescription || null,
+        canonical: seo.canonicalUrl || `https://ikfzdigitalzulassung.de/${wp.slug}/`,
+        ogTitle: seo.ogTitle || title,
+        ogDescription: seo.ogDescription || seo.metaDescription || null,
+        ogImage: seo.ogImage || null,
       },
     });
-
-    // Link categories
-    for (const catId of wp.categories) {
-      const dbCatId = categoryMap.get(catId);
-      if (dbCatId) {
-        await prisma.postCategory.create({
-          data: { postId: post.id, categoryId: dbCatId },
-        });
-      }
-    }
-
-    // Link tags
-    for (const tagId of wp.tags) {
-      const dbTagId = tagMap.get(tagId);
-      if (dbTagId) {
-        await prisma.postTag.create({
-          data: { postId: post.id, tagId: dbTagId },
-        });
-      }
-    }
 
     postCount++;
     await new Promise(r => setTimeout(r, 300));
@@ -450,7 +447,7 @@ async function main() {
   
   const counts = {
     pages: await prisma.page.count(),
-    posts: await prisma.post.count(),
+    posts: await prisma.blogPost.count(),
     categories: await prisma.category.count(),
     tags: await prisma.tag.count(),
     seo: await prisma.sEO.count(),

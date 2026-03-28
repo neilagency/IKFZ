@@ -1,0 +1,16 @@
+[2026-03-28T18:25:15.454Z] [PHASE] ═══ PHASE 1: FETCHING ALL WOOCOMMERCE DATA ═══
+[2026-03-28T18:25:15.454Z] [FETCH] products page 1/1
+[2026-03-28T18:25:18.870Z] [OK] products page 1: 1 items (total so far: 1)
+[2026-03-28T18:25:18.871Z] [OK] Fetched 1 products
+[2026-03-28T18:25:18.871Z] [FETCH] products/categories page 1/1
+[2026-03-28T18:25:20.706Z] [OK] products/categories page 1: 1 items (total so far: 1)
+[2026-03-28T18:25:20.707Z] [OK] Fetched 1 product categories
+[2026-03-28T18:25:20.707Z] [FETCH] orders page 1/1
+[2026-03-28T18:25:23.493Z] [OK] orders page 1: 100 items (total so far: 100)
+[2026-03-28T18:25:23.493Z] [FETCH] orders page 2/2
+[2026-03-28T18:25:25.536Z] [OK] orders page 2: 23 items (total so far: 123)
+[2026-03-28T18:25:25.542Z] [OK] Fetched 123 orders
+[2026-03-28T18:25:25.542Z] [FETCH] customers page 1/1
+[2026-03-28T18:25:27.848Z] [OK] customers page 1: 0 items (total so far: 0)
+[2026-03-28T18:25:27.850Z] [OK] Fetched 0 customers
+[2026-03-28T18:25:29.613Z] [OK] Fetched 22 payment gateways
