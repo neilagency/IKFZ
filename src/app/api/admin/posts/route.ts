@@ -117,7 +117,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ post }, { status: 201 });
   } catch (error: any) {
     console.error('Create post error:', error);
-    return NextResponse.json({ error: 'Server-Fehler', details: error?.message || String(error) }, { status: 500 });
+    return NextResponse.json({ error: error?.message || 'Server-Fehler' }, { status: 500 });
   }
 }
 
