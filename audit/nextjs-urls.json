@@ -1,0 +1,1121 @@
+[
+  {
+    "path": "",
+    "url": "http://localhost:3000",
+    "slug": "",
+    "statusCode": 200,
+    "title": "KFZ Zulassung online – Auto online anmelden | IKFZ Digital Zulassung",
+    "metaDescription": "KFZ Zulassung online – Auto online anmelden in wenigen Minuten. Ohne Termin bei der Behörde. Offiziell registrierter i-Kfz Dienstleister beim KBA.",
+    "canonical": "https://ikfzdigitalzulassung.de",
+    "robots": "index, follow",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "start"
+    ]
+  },
+  {
+    "path": "/agb",
+    "url": "http://localhost:3000/agb",
+    "slug": "agb",
+    "statusCode": 200,
+    "title": "Allgemeine Geschäftsbedingungen – IKFZ Digital Zulassung | IKFZ Digital Zulassung",
+    "metaDescription": "Allgemeine Geschäftsbedingungen (AGB) der iKFZ Digital Zulassung UG.",
+    "canonical": "https://ikfzdigitalzulassung.de/agb",
+    "robots": "index, follow",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/faq",
+    "url": "http://localhost:3000/faq",
+    "slug": "faq",
+    "statusCode": 200,
+    "title": "FAQ – Häufig gestellte Fragen zur IKFZ Digitalzulassung | IKFZ Digital Zulassung",
+    "metaDescription": "Alles, was Sie über Fahrzeuganmeldung, Ab/Ummeldung, eVB und Kennzeichen wissen müssen – einfach erklärt und übersichtlich dargestellt.",
+    "canonical": "https://ikfzdigitalzulassung.de/faq/",
+    "robots": "index, follow",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/antragsuebersicht-2",
+    "url": "http://localhost:3000/antragsuebersicht-2",
+    "slug": "antragsuebersicht-2",
+    "statusCode": 200,
+    "title": "Bestellübersicht - ikfzdigitalzulassung.de | IKFZ Digital Zulassung",
+    "canonical": "https://ikfzdigitalzulassung.de/antragsuebersicht-2/",
+    "robots": "noindex, follow",
+    "hasNoindex": true,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/zulassungsstelle-aachen",
+    "url": "http://localhost:3000/zulassungsstelle-aachen",
+    "slug": "zulassungsstelle-aachen",
+    "statusCode": 200,
+    "title": "Kfz Zulassung Aachen | Auto anmelden in Aachen ohne Termin | IKFZ Digital Zulassung",
+    "metaDescription": "Kfz Zulassung Aachen online starten: Auto anmelden, ummelden oder abmelden ohne Termin. Einfach, schnell und mit persönlicher Hilfe.",
+    "canonical": "https://ikfzdigitalzulassung.de/zulassungsstelle-aachen/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/auto-online-anmelden",
+    "url": "http://localhost:3000/auto-online-anmelden",
+    "slug": "auto-online-anmelden",
+    "statusCode": 200,
+    "title": "Auto Online Anmelden in 5 Minuten | iKfz Digitalzulassung | IKFZ Digital Zulassung",
+    "metaDescription": "Auto Online Anmelden: In nur 5 Minuten erledigt – schnell, einfach und mit Live-Support bei iKfz Digitalzulassung. Bequem von zu Hause aus durchführen!",
+    "canonical": "https://ikfzdigitalzulassung.de/auto-online-anmelden/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/kfz-online-abmelden",
+    "url": "http://localhost:3000/kfz-online-abmelden",
+    "slug": "kfz-online-abmelden",
+    "statusCode": 200,
+    "title": "Kfz online abmelden für nur 24,90 € | Schnell &amp; einfach | IKFZ Digital Zulassung",
+    "metaDescription": "Kfz Online abmelden – für nur 24,90 € inkl. Kennzeichenreservierung. Schnell, sicher und bequem von zu Hause aus!",
+    "canonical": "https://ikfzdigitalzulassung.de/kfz-online-abmelden/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/evb",
+    "url": "http://localhost:3000/evb",
+    "slug": "evb",
+    "statusCode": 200,
+    "title": "eVB-Nummer anfordern – Elektronische Versicherungsbestätigung | IKFZ Digital Zulassung",
+    "metaDescription": "eVB-Nummer schnell und einfach anfordern. Die elektronische Versicherungsbestätigung für Ihre KFZ-Zulassung.",
+    "canonical": "https://ikfzdigitalzulassung.de/evb/",
+    "robots": "index, follow",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/ikfzdigitalblog",
+    "url": "http://localhost:3000/ikfzdigitalblog",
+    "slug": "ikfzdigitalblog",
+    "statusCode": 200,
+    "title": "iKfzDigitalBlog – 5 Tipps für Ihre Kfz-Zulassung täglich | IKFZ Digital Zulassung",
+    "metaDescription": "iKfzDigitalBlog regelmäßig neue Artikel und 5 hilfreiche Tipps zu Kfz-Zulassung, eVB, Abmeldung, Ummeldung und Autoankauf Informativ und verständlich!",
+    "canonical": "https://ikfzdigitalzulassung.de/ikfzdigitalblog/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/impressum",
+    "url": "http://localhost:3000/impressum",
+    "slug": "impressum",
+    "statusCode": 200,
+    "title": "Impressum – IKFZ Digital Zulassung | IKFZ Digital Zulassung",
+    "metaDescription": "Impressum der iKFZ Digital Zulassung UG (haftungsbeschränkt). Angaben gemäß § 5 TMG.",
+    "canonical": "https://ikfzdigitalzulassung.de/impressum",
+    "robots": "index, follow",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/datenschutzerklarung",
+    "url": "http://localhost:3000/datenschutzerklarung",
+    "slug": "datenschutzerklarung",
+    "statusCode": 200,
+    "title": "Datenschutzerklärung – IKFZ Digital Zulassung | IKFZ Digital Zulassung",
+    "metaDescription": "Datenschutzerklärung der iKFZ Digital Zulassung UG. Informationen zur Erhebung und Verarbeitung Ihrer Daten.",
+    "canonical": "https://ikfzdigitalzulassung.de/datenschutzerklarung",
+    "robots": "index, follow",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/kfz-services",
+    "url": "http://localhost:3000/kfz-services",
+    "slug": "kfz-services",
+    "statusCode": 200,
+    "title": "KFZ Dienstleistungen – Online Zulassungsservice | IKFZ Digital Zulassung",
+    "metaDescription": "Alle KFZ-Dienstleistungen online: Fahrzeuganmeldung, Abmeldung, Ummeldung, eVB-Nummer und Kennzeichenreservierung.",
+    "canonical": "https://ikfzdigitalzulassung.de/kfz-services/",
+    "robots": "index, follow",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/bezahlmoeglichkeiten",
+    "url": "http://localhost:3000/bezahlmoeglichkeiten",
+    "slug": "bezahlmoeglichkeiten",
+    "statusCode": 200,
+    "title": "Zahlungsarten - ikfzdigitalzulassung.de | IKFZ Digital Zulassung",
+    "metaDescription": "[payment_methods_info]",
+    "canonical": "https://ikfzdigitalzulassung.de/bezahlmoeglichkeiten/",
+    "robots": "nofollow, noindex, noarchive, nosnippet, noimageindex",
+    "hasNoindex": true,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/kennzeichen-bestellen",
+    "url": "http://localhost:3000/kennzeichen-bestellen",
+    "slug": "kennzeichen-bestellen",
+    "statusCode": 200,
+    "title": "Kennzeichen bestellen - ikfzdigitalzulassung.de | IKFZ Digital Zulassung",
+    "metaDescription": "Finde die Fahrzeugidentifikationsnummer (VIN) in deinen Zulassungspapieren, die sich in Spalte E befindet. Diese Nummer setzt sich aus Buchstaben und Zahlen",
+    "canonical": "https://ikfzdigitalzulassung.de/kennzeichen-bestellen/",
+    "robots": "nofollow, noindex, noimageindex, nosnippet, noarchive",
+    "hasNoindex": true,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/auto-verkaufen",
+    "url": "http://localhost:3000/auto-verkaufen",
+    "slug": "auto-verkaufen",
+    "statusCode": 200,
+    "title": "Auto verkaufen online – Kostenlose Bewertung &amp; Top-Preise | IKFZ Digital Zulassung",
+    "metaDescription": "Auto verkaufen leicht gemacht: Jetzt Fahrzeugdaten eingeben und vom schnellen, sicheren Autoankauf profitieren. Kostenlose Abholung und Abmeldung inklusive!",
+    "canonical": "https://ikfzdigitalzulassung.de/auto-verkaufen/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/motorrad-online-anmelden",
+    "url": "http://localhost:3000/motorrad-online-anmelden",
+    "slug": "motorrad-online-anmelden",
+    "statusCode": 200,
+    "title": "Motorrad Online Anmelden in 5 Minuten | iKfz Digitalzulassung | IKFZ Digital Zulassung",
+    "metaDescription": "Motorrad Online Anmelden: In nur 5 Minuten erledigt – schnell, einfach und mit Live-Support bei iKfz Digitalzulassung. Bequem von zu Hause aus durchführen!",
+    "canonical": "https://ikfzdigitalzulassung.de/motorrad-online-anmelden/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/zulassungsstelle-andernach",
+    "url": "http://localhost:3000/zulassungsstelle-andernach",
+    "slug": "zulassungsstelle-andernach",
+    "statusCode": 200,
+    "title": "Zulassungsstelle Andernach online: Sofort Auto anmelden | IKFZ Digital Zulassung",
+    "metaDescription": "Jetzt bei der Zulassungsstelle Andernach online Ihr Auto anmelden. ⚡ Offizieller i-Kfz Service für MYK ohne Termin. Inkl. Wunschkennzeichen &amp; Live-Chat-Hilfe!",
+    "canonical": "https://ikfzdigitalzulassung.de/zulassungsstelle-andernach/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/zulassungsstelle-aalen",
+    "url": "http://localhost:3000/zulassungsstelle-aalen",
+    "slug": "zulassungsstelle-aalen",
+    "statusCode": 200,
+    "title": "Kfz Zulassung Aalen | Auto in 2 Minuten anmelden ohne Termin | IKFZ Digital Zulassung",
+    "metaDescription": "Kfz Zulassung Aalen online starten: Auto anmelden, ummelden oder Kennzeichen reservieren. Einfach, schnell und mit persönlicher Hilfe.",
+    "canonical": "https://ikfzdigitalzulassung.de/zulassungsstelle-aalen/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/zulassungsstelle-amberg",
+    "url": "http://localhost:3000/zulassungsstelle-amberg",
+    "slug": "zulassungsstelle-amberg",
+    "statusCode": 200,
+    "title": "Zulassungsstelle Amberg online: In 3 Schritten Auto anmelden | IKFZ Digital Zulassung",
+    "metaDescription": "Jetzt bei der Zulassungsstelle Amberg online Ihr Auto anmelden. ⚡ Offizieller i-Kfz Service ohne Termin. Inkl. Wunschkennzeichen AM &amp; eID-Hilfe!",
+    "canonical": "https://ikfzdigitalzulassung.de/zulassungsstelle-amberg/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/auto-online-anmelden-oder-abmelden-im-landkreis-altenkirchen",
+    "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-altenkirchen",
+    "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-altenkirchen",
+    "statusCode": 200,
+    "title": "Auto online anmelden oder abmelden im Landkreis Altenkirchen| In 5 Minuten | IKFZ Digital Zulassung",
+    "metaDescription": "Auto online anmelden oder abmelden im Landkreis Altenkirchen – Einfach, sicher &amp; schnell in 5 Minuten! Jetzt digital erledigen: eVB, Kennzeichen &amp; Dokumente bequem online.",
+    "canonical": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-landkreis-altenkirchen/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/auto-online-anmelden-oder-abmelden-im-landkreis-anhalt-bitterfeld",
+    "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-anhalt-bitterfeld",
+    "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-anhalt-bitterfeld",
+    "statusCode": 200,
+    "title": "Auto online anmelden oder abmelden im Landkreis Anhalt-Bitterfeld | In 5 Minuten | IKFZ Digital Zulassung",
+    "metaDescription": "Auto online anmelden oder abmelden im Landkreis Anhalt-Bitterfeld – Einfach, sicher &amp; schnell in 5 Minuten! Jetzt digital erledigen: eVB, Kennzeichen &amp; Dokumente bequem online.",
+    "canonical": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-landkreis-anhalt-bitterfeld/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/auto-online-anmelden-oder-abmelden-im-landkreis-ammerland",
+    "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-ammerland",
+    "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-ammerland",
+    "statusCode": 200,
+    "title": "Auto online anmelden oder abmelden im Landkreis Ammerland| In 5 Minuten | IKFZ Digital Zulassung",
+    "metaDescription": "Auto online anmelden oder abmelden im Landkreis Ammerland – Einfach, sicher &amp; schnell in 5 Minuten! Jetzt digital erledigen: eVB, Kennzeichen &amp; Dokumente bequem online.",
+    "canonical": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-landkreis-ammerland/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/auto-online-anmelden-oder-abmelden-im-landkreis-amberg-sulzbach",
+    "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-amberg-sulzbach",
+    "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-amberg-sulzbach",
+    "statusCode": 200,
+    "title": "Auto online anmelden oder abmelden im Landkreis Amberg-Sulzbach | In 5 Minuten | IKFZ Digital Zulassung",
+    "metaDescription": "Auto online anmelden oder abmelden im Landkreis Amberg-Sulzbach – Einfach, sicher &amp; schnell in 5 Minuten! Jetzt digital erledigen: eVB, Kennzeichen &amp; Dokumente bequem online.",
+    "canonical": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-landkreis-amberg-sulzbach/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/motorrad-versicherung-vergleichen",
+    "url": "http://localhost:3000/motorrad-versicherung-vergleichen",
+    "slug": "motorrad-versicherung-vergleichen",
+    "statusCode": 200,
+    "title": "Motorrad-Versicherung in 2 Minuten berechnen | Kostenlos | IKFZ Digital Zulassung",
+    "metaDescription": "Berechne deine Motorrad-Versicherung in nur 2 Minuten! Schnell, einfach und kostenlos online vergleichen und die beste Versicherung finden. Starte jetzt!",
+    "canonical": "https://ikfzdigitalzulassung.de/motorrad-versicherung-vergleichen/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/kfz-versicherung-berechnen",
+    "url": "http://localhost:3000/kfz-versicherung-berechnen",
+    "slug": "kfz-versicherung-berechnen",
+    "statusCode": 200,
+    "title": "KFZ-Versicherung in 2 Minuten berechnen – Einfach &amp; Schnell | IKFZ Digital Zulassung",
+    "metaDescription": "Berechne deine KFZ-Versicherung in nur 2 Minuten! Schnell, einfach und kostenlos online vergleichen und die beste Versicherung finden. Starte jetzt!",
+    "canonical": "https://ikfzdigitalzulassung.de/kfz-versicherung-berechnen/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/zulassungsstelle-alb-donau-kreis",
+    "url": "http://localhost:3000/zulassungsstelle-alb-donau-kreis",
+    "slug": "zulassungsstelle-alb-donau-kreis",
+    "statusCode": 200,
+    "title": "Zulassungsstelle Alb-Donau-Kreis online | Auto anmelden UL | IKFZ Digital Zulassung",
+    "metaDescription": "Jetzt im Alb-Donau-Kreis online Ihr Auto anmelden oder ummelden. ⚡ Offizieller i-Kfz Service für UL (Ehingen, Ulm &amp; Umgebung). Ohne Termin.",
+    "canonical": "https://ikfzdigitalzulassung.de/zulassungsstelle-alb-donau-kreis/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/auto-online-anmelden-oder-abmelden-im-landkreis-altoetting",
+    "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-altoetting",
+    "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-altoetting",
+    "statusCode": 200,
+    "title": "Auto online anmelden oder abmelden im Landkreis Altötting | In 5 Minuten | IKFZ Digital Zulassung",
+    "metaDescription": "Auto online anmelden oder abmelden im Landkreis Altötting – Einfach, sicher &amp; schnell in 5 Minuten! Jetzt digital erledigen: eVB, Kennzeichen &amp; Dokumente bequem online.",
+    "canonical": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-landkreis-altoetting/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/auto-online-anmelden-oder-abmelden-im-landkreis-altenburger-land",
+    "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-altenburger-land",
+    "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-altenburger-land",
+    "statusCode": 200,
+    "title": "Auto online anmelden oder abmelden im Landkreis Altenburger Land | In 5 Minuten | IKFZ Digital Zulassung",
+    "metaDescription": "Auto online anmelden oder abmelden im Landkreis Altenburger Land – Einfach, sicher &amp; schnell in 5 Minuten! Jetzt digital erledigen: eVB, Kennzeichen &amp; Dokumente bequem online.",
+    "canonical": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-landkreis-altenburger-land/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/auto-online-anmelden-oder-abmelden-im-landkreis-alzey-worms",
+    "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-alzey-worms",
+    "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-alzey-worms",
+    "statusCode": 200,
+    "title": "Auto online anmelden oder abmelden im Landkreis Alzey-Worms | In 5 Minuten | IKFZ Digital Zulassung",
+    "metaDescription": "Auto online anmelden oder abmelden im Landkreis Alzey-Worms – Einfach, sicher &amp; schnell in 5 Minuten! Jetzt digital erledigen: eVB, Kennzeichen &amp; Dokumente bequem online.",
+    "canonical": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-landkreis-alzey-worms/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/auto-online-anmelden-oder-abmelden-im-kreis-aichach-friedberg",
+    "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-kreis-aichach-friedberg",
+    "slug": "auto-online-anmelden-oder-abmelden-im-kreis-aichach-friedberg",
+    "statusCode": 200,
+    "title": "Auto online anmelden oder abmelden im Kreis Aichach-Friedberg | In 5 Minuten | IKFZ Digital Zulassung",
+    "metaDescription": "Auto online anmelden oder abmelden im Kreis Aichach-Friedberg – Einfach, sicher &amp; schnell in 5 Minuten! Jetzt digital erledigen: eVB, Kennzeichen &amp; Dokumente bequem online.",
+    "canonical": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-kreis-aichach-friedberg/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/auto-online-anmelden-oder-abmelden-im-kreis-ahrweiler",
+    "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-kreis-ahrweiler",
+    "slug": "auto-online-anmelden-oder-abmelden-im-kreis-ahrweiler",
+    "statusCode": 200,
+    "title": "Auto online anmelden oder abmelden im Kreis Ahrweiler in 5 min | IKFZ Digital Zulassung",
+    "metaDescription": "Auto online anmelden oder abmelden im Kreis Ahrweiler– Einfach, sicher &amp; schnell in 5 Minuten! Jetzt digital erledigen: eVB, Autoankauf uvm. bequem online.",
+    "canonical": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-kreis-ahrweiler/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/auto-online-anmelden-oder-abmelden-im-landkreis-ansbach",
+    "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-ansbach",
+    "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-ansbach",
+    "statusCode": 200,
+    "title": "Auto online anmelden oder abmelden im Landkreis Ansbach | IKFZ Digital Zulassung",
+    "metaDescription": "Auto online anmelden oder abmelden im Landkreis Ansbach – Einfach, sicher &amp; schnell in 5 Minuten! Jetzt digital erledigen: eVB, Kennzeichen &amp; Dokumente online.",
+    "canonical": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-landkreis-ansbach/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/landkreis-bad-kissingen",
+    "url": "http://localhost:3000/landkreis-bad-kissingen",
+    "slug": "landkreis-bad-kissingen",
+    "statusCode": 200,
+    "title": "Auto online anmelden oder abmelden im Landkreis Bad Kissingen | IKFZ Digital Zulassung",
+    "metaDescription": "Auto online anmelden oder abmelden im Landkreis Bad Kissingen – Einfach, sicher &amp; schnell in 5 Minuten! Jetzt digital erledigen: eVB, Kennzeichen &amp; Dokumente online.",
+    "canonical": "https://ikfzdigitalzulassung.de/landkreis-bad-kissingen/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/landkreis-aurich",
+    "url": "http://localhost:3000/landkreis-aurich",
+    "slug": "landkreis-aurich",
+    "statusCode": 200,
+    "title": "Auto online anmelden oder abmelden im Landkreis Aurich | IKFZ Digital Zulassung",
+    "metaDescription": "Auto online anmelden oder abmelden im Landkreis Aurich – Einfach, sicher &amp; schnell in 5 Minuten! Jetzt digital erledigen: eVB, Kennzeichen &amp; Dokumente online.",
+    "canonical": "https://ikfzdigitalzulassung.de/landkreis-aurich/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/landkreis-augsburg",
+    "url": "http://localhost:3000/landkreis-augsburg",
+    "slug": "landkreis-augsburg",
+    "statusCode": 200,
+    "title": "Auto online anmelden oder abmelden im Landkreis Augsburg | IKFZ Digital Zulassung",
+    "metaDescription": "Auto online anmelden oder abmelden im Landkreis Augsburg – Einfach, sicher &amp; schnell in 5 Minuten! Jetzt digital erledigen: eVB, Kennzeichen &amp; Dokumente online.",
+    "canonical": "https://ikfzdigitalzulassung.de/landkreis-augsburg/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/in-baden-baden",
+    "url": "http://localhost:3000/in-baden-baden",
+    "slug": "in-baden-baden",
+    "statusCode": 200,
+    "title": "Auto online anmelden oder abmelden in Baden-Baden | In 5 Minuten | IKFZ Digital Zulassung",
+    "metaDescription": "Auto online anmelden oder abmelden in Baden-Baden – Einfach, sicher &amp; schnell in 5 Minuten! Jetzt digital erledigen: eVB, Kennzeichen &amp; Dokumente bequem online.",
+    "canonical": "https://ikfzdigitalzulassung.de/in-baden-baden/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/landkreis-bad-kreuznach",
+    "url": "http://localhost:3000/landkreis-bad-kreuznach",
+    "slug": "landkreis-bad-kreuznach",
+    "statusCode": 200,
+    "title": "Auto online anmelden oder abmelden im Landkreis Bad Kreuznach | IKFZ Digital Zulassung",
+    "metaDescription": "Auto online anmelden oder abmelden im Landkreis Bad Kreuznach– Einfach, sicher &amp; schnell in 5 Minuten! Jetzt digital erledigen: eVB, Kennzeichen &amp; Dokumente online.",
+    "canonical": "https://ikfzdigitalzulassung.de/landkreis-bad-kreuznach/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/auto-online-anmelden-oder-abmelden-im-landkreis-aschaffenburg",
+    "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-aschaffenburg",
+    "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-aschaffenburg",
+    "statusCode": 200,
+    "title": "Auto online anmelden oder abmelden im Landkreis Aschaffenburg | IKFZ Digital Zulassung",
+    "metaDescription": "Auto online anmelden oder abmelden im Landkreis Aschaffenburg – Einfach, sicher &amp; schnell in 5 Minuten! Jetzt digital erledigen: eVB, Kennzeichen &amp; Dokumente online.",
+    "canonical": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-landkreis-aschaffenburg/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/landkreis-bad-toelz-wolfratshausen",
+    "url": "http://localhost:3000/landkreis-bad-toelz-wolfratshausen",
+    "slug": "landkreis-bad-toelz-wolfratshausen",
+    "statusCode": 200,
+    "title": "Auto online anmelden oder abmelden im Landkreis Bad Tölz-Wolfratshausen | IKFZ Digital Zulassung",
+    "metaDescription": "Auto online anmelden oder abmelden im Landkreis Bad Tölz-Wolfratshausen – Einfach, sicher &amp; schnell in 5 Minuten! Jetzt digital erledigen: eVB, Kennzeichen &amp; Dokumente online.",
+    "canonical": "https://ikfzdigitalzulassung.de/landkreis-bad-toelz-wolfratshausen/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/kfz-zulassung-in-deiner-stadt",
+    "url": "http://localhost:3000/kfz-zulassung-in-deiner-stadt",
+    "slug": "kfz-zulassung-in-deiner-stadt",
+    "statusCode": 200,
+    "title": "KFZ-Zulassung in deiner Stadt | Auto online anmelden &amp; abmelden | IKFZ Digital Zulassung",
+    "metaDescription": "Jetzt Auto oder Motorrad bequem von Zuhause aus online anmelden oder abmelden. Alle Städte und Landkreise im Überblick – sicher, schnell &amp; deutschlandweit.",
+    "canonical": "https://ikfzdigitalzulassung.de/kfz-zulassung-in-deiner-stadt/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/auto-anmelden-berlin",
+    "url": "http://localhost:3000/auto-anmelden-berlin",
+    "slug": "auto-anmelden-berlin",
+    "statusCode": 200,
+    "title": "Auto anmelden Berlin – KFZ Zulassung online sicher ab 19.70€ | IKFZ Digital ZulassungAuto anmelden Berlin – KFZ Zulassung online & Wunschkennzeichen BerlinPraktisch von überall24/7 verfügbarLive-SupportGeld-zurück-Garantie",
+    "metaDescription": "Auto anmelden Berlin: KFZ online zulassen ohne Termin. Wunschkennzeichen Berlin sichern und Bestätigung schnell per E-Mail erhalten.",
+    "canonical": "https://ikfzdigitalzulassung.de/auto-anmelden-berlin/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/autoanmeldung-koeln",
+    "url": "http://localhost:3000/autoanmeldung-koeln",
+    "slug": "autoanmeldung-koeln",
+    "statusCode": 200,
+    "title": "Autoanmeldung Köln – KFZ Zulassung Köln online sicher ab 19€ | IKFZ Digital ZulassungPraktisch von überall24/7 verfügbarLive-SupportGeld-zurück-Garantie",
+    "metaDescription": "Autoanmeldung Köln: KFZ Zulassung online beantragen, Wunschkennzeichen Köln sichern und Fahrzeug ohne Termin digital anmelden oder abmelden.",
+    "canonical": "https://ikfzdigitalzulassung.de/autoanmeldung-koeln/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/kfz-zulassung-berlin",
+    "url": "http://localhost:3000/kfz-zulassung-berlin",
+    "slug": "kfz-zulassung-berlin",
+    "statusCode": 200,
+    "title": "Kfz Zulassung Berlin | Auto anmelden ohne Termin | IKFZ Digital Zulassung",
+    "metaDescription": "Kfz Zulassung Berlin online starten: Auto anmelden, ummelden oder Kennzeichen reservieren. Einfach, schnell und mit persönlicher Hilfe.",
+    "canonical": "https://ikfzdigitalzulassung.de/kfz-zulassung-berlin/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/kfz-zulassung-essen",
+    "url": "http://localhost:3000/kfz-zulassung-essen",
+    "slug": "kfz-zulassung-essen",
+    "statusCode": 200,
+    "title": "Kfz Zulassung Essen – Auto anmelden Essen ohne Termin | IKFZ Digital Zulassung",
+    "metaDescription": "Kfz Zulassung Essen ohne Termin. Offiziell &amp; sicher mit persönlicher Hilfe. Jetzt online starten.",
+    "canonical": "https://ikfzdigitalzulassung.de/kfz-zulassung-essen/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/zulassungsstelle-hamburg",
+    "url": "http://localhost:3000/zulassungsstelle-hamburg",
+    "slug": "zulassungsstelle-hamburg",
+    "statusCode": 200,
+    "title": "Zulassungsstelle Hamburg online: Sofort Auto anmelden | IKFZ Digital ZulassungPraktisch von überall24/7 verfügbarLive-SupportGeld-zurück-Garantie",
+    "metaDescription": "Jetzt bei der Zulassungsstelle Hamburg online Ihr Auto anmelden. ⚡ Offizieller i-Kfz Service ohne Termin. Inkl. Wunschkennzeichen &amp; Hilfe!",
+    "canonical": "https://ikfzdigitalzulassung.de/zulassungsstelle-hamburg/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/digitale-kfz-zulassung-2024",
+    "url": "http://localhost:3000/digitale-kfz-zulassung-2024",
+    "slug": "digitale-kfz-zulassung-2024",
+    "statusCode": 200,
+    "title": "Digitale Kfz-Zulassung 2024 – Schnell, sicher und flexibel | IKFZ Digital Zulassung",
+    "metaDescription": "Digitale Kfz-Zulassung 2024 – Melden Sie Ihr Kfz online an. Schnell, sicher und inkl. Kennzeichenreservierung. Jetzt bequem starten!",
+    "canonical": "https://ikfzdigitalzulassung.de/digitale-kfz-zulassung-2024/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/blog",
+    "url": "http://localhost:3000/blog",
+    "slug": "blog",
+    "statusCode": 200,
+    "title": "Blog | iKFZ Digital Zulassung | IKFZ Digital Zulassung",
+    "metaDescription": "Aktuelle Artikel rund um KFZ-Zulassung, Abmeldung, Ummeldung und alles was Sie wissen müssen.",
+    "canonical": "https://ikfzdigitalzulassung.de/blog/",
+    "robots": "index, follow",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/kostenlos-online-auto-abmelden-deutschlandweit",
+    "url": "http://localhost:3000/kostenlos-online-auto-abmelden-deutschlandweit",
+    "slug": "kostenlos-online-auto-abmelden-deutschlandweit",
+    "statusCode": 200,
+    "title": "Kostenlos online Auto abmelden deutschlandweit | für 2025 | IKFZ Digital Zulassung",
+    "metaDescription": "Kostenlos online Auto abmelden deutschlandweit | Ihr Auto bequem online abmelden: Schneller Service mit Live-Support, inkl. Kennzeichenreservierung für 24,95 €",
+    "canonical": "https://ikfzdigitalzulassung.de/kostenlos-online-auto-abmelden-deutschlandweit/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/auto-abmelden",
+    "url": "http://localhost:3000/auto-abmelden",
+    "slug": "auto-abmelden",
+    "statusCode": 200,
+    "title": "Auto abmelden – Schnell, einfach &amp; online | für 24,95€ | IKFZ Digital Zulassung",
+    "metaDescription": "Auto abmelden: So funktioniert es schnell und einfach! Schritt-für-Schritt-Anleitung zur Fahrzeugabmeldung – vor Ort oder online. Jetzt informieren!",
+    "canonical": "https://ikfzdigitalzulassung.de/auto-abmelden/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/fahrzeugschein-kw",
+    "url": "http://localhost:3000/fahrzeugschein-kw",
+    "slug": "fahrzeugschein-kw",
+    "statusCode": 200,
+    "title": "fahrzeugschein kw – Bedeutung, Tipps &amp; Infos || 2025 | IKFZ Digital Zulassung",
+    "metaDescription": "Fahrzeugschein kw : Erfahren sie wo Sie die kW-Zahl finden, wie sie berechnet wird und warum sie wichtig ist. Jetzt alle Infos hier lesen!",
+    "canonical": "https://ikfzdigitalzulassung.de/fahrzeugschein-kw/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/magdeburg",
+    "url": "http://localhost:3000/magdeburg",
+    "slug": "magdeburg",
+    "statusCode": 200,
+    "title": "Magdeburg| Fahrzeug online anmelden abmelden &amp; ummelden 2025 | IKFZ Digital Zulassung",
+    "metaDescription": "Magdeburg Fahrzeugzulassung leicht gemacht: Auto online anmelden, abmelden oder ummelden – schnell, sicher und bequem. Jetzt unseren Service nutzen!",
+    "canonical": "https://ikfzdigitalzulassung.de/magdeburg/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/auto-abmelden-online",
+    "url": "http://localhost:3000/auto-abmelden-online",
+    "slug": "auto-abmelden-online",
+    "statusCode": 200,
+    "title": "Auto abmelden online – Schnell, sicher &amp; bequem | für 24,95€ | IKFZ Digital Zulassung",
+    "metaDescription": "Auto abmelden online: Melden Sie Ihr Fahrzeug bequem von zu Hause aus ab. Schnell, sicher und flexibel mit iKfz Digital Zulassung. Jetzt ausprobieren!",
+    "canonical": "https://ikfzdigitalzulassung.de/auto-abmelden-online/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/qr-code",
+    "url": "http://localhost:3000/qr-code",
+    "slug": "qr-code",
+    "statusCode": 200,
+    "title": "QR Code und internetbasierte Fahrzeugzulassung 2025 digital | IKFZ Digital Zulassung",
+    "metaDescription": "QR Code: Erfahren Sie, wie die internetbasierte Fahrzeugzulassung mit QR Code funktioniert. Schnell, sicher und bequem online anmelden, ummelden oder abmelden",
+    "canonical": "https://ikfzdigitalzulassung.de/qr-code/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/kaufvertrag-auto",
+    "url": "http://localhost:3000/kaufvertrag-auto",
+    "slug": "kaufvertrag-auto",
+    "statusCode": 200,
+    "title": "Kaufvertrag Auto: Rechtssicher &amp; Kostenlos als PDF | 2025 | IKFZ Digital Zulassung",
+    "metaDescription": "Sichern Sie sich den Kaufvertrag Auto als kostenloses PDF! Ideal für den privaten Fahrzeugverkauf – inkl. Rechtsschutz. Jetzt herunterladen bei uns.",
+    "canonical": "https://ikfzdigitalzulassung.de/kaufvertrag-auto/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/auto-online-abmelden",
+    "url": "http://localhost:3000/auto-online-abmelden",
+    "slug": "auto-online-abmelden",
+    "statusCode": 200,
+    "title": "Auto online abmelden – Schnell, sicher unkompliziert 2025 | IKFZ Digital Zulassung",
+    "metaDescription": "Auto online abmelden. Einfacher Prozess, schnelle Bestätigung und kein Behördengang nötig. Jetzt mehr erfahren!",
+    "canonical": "https://ikfzdigitalzulassung.de/auto-online-abmelden/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/zulassungsservice",
+    "url": "http://localhost:3000/zulassungsservice",
+    "slug": "zulassungsservice",
+    "statusCode": 200,
+    "title": "Zulassungsservice – Schnell und digital | Jetzt informieren! | IKFZ Digital Zulassung",
+    "metaDescription": "Zulassungsservice sparen Sie Zeit und Aufwand. Fahrzeuganmeldung, Abmeldung und Ummeldung einfach online erledigen. Jetzt mehr erfahren!",
+    "canonical": "https://ikfzdigitalzulassung.de/zulassungsservice/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/online-abmeldung",
+    "url": "http://localhost:3000/online-abmeldung",
+    "slug": "online-abmeldung",
+    "statusCode": 200,
+    "title": "Online-Abmeldung – in 5 Minuten bei iKFZ Digital Zulassung | IKFZ Digital Zulassung",
+    "metaDescription": "Online-Abmeldung: Melden Sie Ihr Fahrzeug online ab – sicher, schnell und einfach mit iKFZ Digital Zulassung. Jetzt Zeit und Aufwand sparen!",
+    "canonical": "https://ikfzdigitalzulassung.de/online-abmeldung/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/fahrzeug-ausser-betrieb-setzen",
+    "url": "http://localhost:3000/fahrzeug-ausser-betrieb-setzen",
+    "slug": "fahrzeug-ausser-betrieb-setzen",
+    "statusCode": 200,
+    "title": "Fahrzeug außer Betrieb setzen – Schnell und online bei iKFZ Digital Zulassung | IKFZ Digital Zulassung",
+    "metaDescription": "Fahrzeug außer Betrieb setzen – einfach, schnell und digital mit iKFZ Digital Zulassung. Jetzt Zeit und Aufwand sparen",
+    "canonical": "https://ikfzdigitalzulassung.de/fahrzeug-ausser-betrieb-setzen/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/kfz-online-abmelden-ihr-leitfaden",
+    "url": "http://localhost:3000/kfz-online-abmelden-ihr-leitfaden",
+    "slug": "kfz-online-abmelden-ihr-leitfaden",
+    "statusCode": 200,
+    "title": "Kfz online abmelden – Einfach, schnell und sicher | in 5 min | IKFZ Digital Zulassung",
+    "metaDescription": "Kfz online abmelden können sie Schnell, flexibel und ohne Wartezeiten – jetzt alle Infos zur digitalen Abmeldung erhalten.",
+    "canonical": "https://ikfzdigitalzulassung.de/kfz-online-abmelden-ihr-leitfaden/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/sicherheitscode",
+    "url": "http://localhost:3000/sicherheitscode",
+    "slug": "sicherheitscode",
+    "statusCode": 200,
+    "title": "Sicherheitscode – Schnell und sicher nutzen 2025 | IKFZ Digital Zulassung",
+    "metaDescription": "Sicherheitscode: Erfahren Sie, wie der Sicherheitscode Ihre Fahrzeugabmeldung vereinfacht. iKFZ Digital Zulassung einfach online abmelden sicher und schnell!",
+    "canonical": "https://ikfzdigitalzulassung.de/sicherheitscode/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/elektronischer-abmeldebescheid",
+    "url": "http://localhost:3000/elektronischer-abmeldebescheid",
+    "slug": "elektronischer-abmeldebescheid",
+    "statusCode": 200,
+    "title": "Elektronischer Abmeldebescheid – Einfach online in 2025 | IKFZ Digital Zulassung",
+    "metaDescription": "Elektronischer Abmeldebescheid: schnell und sicher mit iKFZ Digital Zulassung. Melden Sie Ihr Fahrzeug online ab",
+    "canonical": "https://ikfzdigitalzulassung.de/elektronischer-abmeldebescheid/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/zulassungsbescheinigung-teil-1",
+    "url": "http://localhost:3000/zulassungsbescheinigung-teil-1",
+    "slug": "zulassungsbescheinigung-teil-1",
+    "statusCode": 200,
+    "title": "Zulassungsbescheinigung Teil 1– was Sie wissen müssen 2025 | IKFZ Digital Zulassung",
+    "metaDescription": "Zulassungsbescheinigung Teil 1: wie Sie Vorgänge online erledigen. Einfach, schnell und digital mit iKFZ Digital Zulassung!",
+    "canonical": "https://ikfzdigitalzulassung.de/zulassungsbescheinigung-teil-1/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/kennzeichen-mit-qr-code",
+    "url": "http://localhost:3000/kennzeichen-mit-qr-code",
+    "slug": "kennzeichen-mit-qr-code",
+    "statusCode": 200,
+    "title": "Kennzeichen mit QR-Code – Schnell und sicher 2025 | IKFZ Digital Zulassung",
+    "metaDescription": "Kennzeichen mit QR-Code –Erfahren Sie, wie Kennzeichen mit QR-Code die Fahrzeugzulassung erleichtern. Jetzt online abmelden oder anmelden",
+    "canonical": "https://ikfzdigitalzulassung.de/kennzeichen-mit-qr-code/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/ohne-warteschlangen",
+    "url": "http://localhost:3000/ohne-warteschlangen",
+    "slug": "ohne-warteschlangen",
+    "statusCode": 200,
+    "title": "Ohne Warteschlangen – Fahrzeug online zulassen | IKFZ Digital Zulassung",
+    "metaDescription": "Ohne Warteschlangen – Fahrzeug online anmelden oder abmelden. Schnell, flexibel und ohne Termin mit iKFZ Digital Zulassung bequem von zu Hause aus erledigen",
+    "canonical": "https://ikfzdigitalzulassung.de/ohne-warteschlangen/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/fahrzeugbrief",
+    "url": "http://localhost:3000/fahrzeugbrief",
+    "slug": "fahrzeugbrief",
+    "statusCode": 200,
+    "title": "Fahrzeugbrief – Alles Wichtige zur ZB Teil 2 | IKFZ Digital Zulassung",
+    "metaDescription": "Fahrzeugbrief: Erfahren Sie alles über die Zulassungsbescheinigung Teil 2, warum sie wichtig ist und wie Sie Ihr Fahrzeug online an- oder abmelden.",
+    "canonical": "https://ikfzdigitalzulassung.de/fahrzeugbrief/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/kosten-24-95-euro",
+    "url": "http://localhost:3000/kosten-24-95-euro",
+    "slug": "kosten-24-95-euro",
+    "statusCode": 200,
+    "title": "Kosten 24.95 Euro – Online Fahrzeugabmeldung 2025 | IKFZ Digital Zulassung",
+    "metaDescription": "Kosten 24.95 Euro. Schnell, sicher und bequem – mit iKFZ Digital Zulassung den digitalen Abmeldeprozess starten!",
+    "canonical": "https://ikfzdigitalzulassung.de/kosten-24-95-euro/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/ohne-papierkram",
+    "url": "http://localhost:3000/ohne-papierkram",
+    "slug": "ohne-papierkram",
+    "statusCode": 200,
+    "title": "Ohne Papierkram – Fahrzeug online abmelden in nur 2 Minuten | IKFZ Digital Zulassung",
+    "metaDescription": "Ohne Papierkram Ihr Kfz online abmelden – 100 % digital, schnell und sicher mit iKFZ Digital Zulassung. Kein Drucker, keine Formulare, kein Behördengang nötig!",
+    "canonical": "https://ikfzdigitalzulassung.de/ohne-papierkram/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/fahrzeugschein",
+    "url": "http://localhost:3000/fahrzeugschein",
+    "slug": "fahrzeugschein",
+    "statusCode": 200,
+    "title": "Fahrzeugschein – Alles Wichtige zur Zulassungsbescheinigung Teil 1 | IKFZ Digital Zulassung",
+    "metaDescription": "Fahrzeugschein: Erfahren Sie alles über die Zulassungsbescheinigung Teil 1, warum sie wichtig ist und wie Sie Ihr Fahrzeug online an- oder abmelden",
+    "canonical": "https://ikfzdigitalzulassung.de/fahrzeugschein/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/zulassungsstelle",
+    "url": "http://localhost:3000/zulassungsstelle",
+    "slug": "zulassungsstelle",
+    "statusCode": 200,
+    "title": "Zulassungsstelle – Fahrzeug online anmelden - abmelden NR. 1 | IKFZ Digital Zulassung",
+    "metaDescription": "Zulassungsstelle: Melden Sie Ihr Fahrzeug bequem von zu Hause aus an oder ab – ohne Wartezeiten und ohne Behördengang mit iKFZ Digital Zulassung.",
+    "canonical": "https://ikfzdigitalzulassung.de/zulassungsstelle/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/kfz-abmelden-online-in-deutschland",
+    "url": "http://localhost:3000/kfz-abmelden-online-in-deutschland",
+    "slug": "kfz-abmelden-online-in-deutschland",
+    "statusCode": 200,
+    "title": "KFZ abmelden online in Deutschland – Schnell &amp; sicher 2 min | IKFZ Digital Zulassung",
+    "metaDescription": "KFZ abmelden online in Deutschland: Einfach, sicher und schnell mit iKFZ Digital Zulassung – Abmeldung ohne Wartezeiten und ohne Behördengang",
+    "canonical": "https://ikfzdigitalzulassung.de/kfz-abmelden-online-in-deutschland/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/fahrzeug-online-zulassen",
+    "url": "http://localhost:3000/fahrzeug-online-zulassen",
+    "slug": "fahrzeug-online-zulassen",
+    "statusCode": 200,
+    "title": "Fahrzeug online zulassen – Schnell &amp; bequem 2025 | IKFZ Digital Zulassung",
+    "metaDescription": "Fahrzeug online zulassen: Einfach, sicher und schnell mit iKFZ Digital Zulassung – Zulassung ohne Wartezeiten und ohne Behördengang.",
+    "canonical": "https://ikfzdigitalzulassung.de/fahrzeug-online-zulassen/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/online-zulassung-fuer-ihr-fahrzeug",
+    "url": "http://localhost:3000/online-zulassung-fuer-ihr-fahrzeug",
+    "slug": "online-zulassung-fuer-ihr-fahrzeug",
+    "statusCode": 200,
+    "title": "Online-Zulassung für Ihr Fahrzeug – Sofort in nur 5 Minuten | IKFZ Digital Zulassung",
+    "metaDescription": "Online-Zulassung für Ihr Fahrzeug einfach &amp; schnell: Melden Sie Ihr Auto, Motorrad oder Anhänger jetzt komplett digital an – ohne Behördengang.",
+    "canonical": "https://ikfzdigitalzulassung.de/online-zulassung-fuer-ihr-fahrzeug/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/kfz-zulassung-ohne-behoerdengang",
+    "url": "http://localhost:3000/kfz-zulassung-ohne-behoerdengang",
+    "slug": "kfz-zulassung-ohne-behoerdengang",
+    "statusCode": 200,
+    "title": "KFZ-Zulassung ohne Behördengang – Schnell &amp; Digital 2025 | IKFZ Digital Zulassung",
+    "metaDescription": "KFZ-Zulassung ohne Behördengang – Schnell, digital &amp; bequem online abwickeln. Keine Wartezeit, kein Papierkram. Jetzt online starten!",
+    "canonical": "https://ikfzdigitalzulassung.de/kfz-zulassung-ohne-behoerdengang/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/online-zulassung-fuer-alle-fahrzeugtypen",
+    "url": "http://localhost:3000/online-zulassung-fuer-alle-fahrzeugtypen",
+    "slug": "online-zulassung-fuer-alle-fahrzeugtypen",
+    "statusCode": 200,
+    "title": "Online-Zulassung für alle Fahrzeugtypen – 2025 | IKFZ Digital Zulassung",
+    "metaDescription": "Online-Zulassung für alle Fahrzeugtypen: Einfach, sicher und schnell mit iKFZ Digital Zulassung – Anmeldung ohne Wartezeiten und ohne Behördengang",
+    "canonical": "https://ikfzdigitalzulassung.de/online-zulassung-fuer-alle-fahrzeugtypen/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/online-zulassung-aufenthaltstitel",
+    "url": "http://localhost:3000/online-zulassung-aufenthaltstitel",
+    "slug": "online-zulassung-aufenthaltstitel",
+    "statusCode": 200,
+    "title": "Online Zulassung Aufenthaltstitel: 7 Tipps 2025 | IKFZ Digital Zulassung",
+    "metaDescription": "Online Zulassung Aufenthaltstitel: Mit Verimi &amp; Smartphone – mit oder ohne iPad. Schnell, sicher &amp; digital bei iKFZ Digitalzulassung.",
+    "canonical": "https://ikfzdigitalzulassung.de/online-zulassung-aufenthaltstitel/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/kfz-online-service-2025",
+    "url": "http://localhost:3000/kfz-online-service-2025",
+    "slug": "kfz-online-service-2025",
+    "statusCode": 200,
+    "title": "KFZ Online Service 2025 – schnell, digital &amp; sicher | IKFZ Digital Zulassung",
+    "metaDescription": "KFZ Online Service 2025: Auto online anmelden, ummelden oder abmelden. Einfach digital, schnell &amp; ohne Behördengang – inkl. sofortiger Bestätigung.",
+    "canonical": "https://ikfzdigitalzulassung.de/kfz-online-service-2025/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/online-zulassung-fuer-gebrauchtwagen",
+    "url": "http://localhost:3000/online-zulassung-fuer-gebrauchtwagen",
+    "slug": "online-zulassung-fuer-gebrauchtwagen",
+    "statusCode": 200,
+    "title": "Online-Zulassung für Gebrauchtwagen – Schnell &amp; sicher 2025 | IKFZ Digital Zulassung",
+    "metaDescription": "Online-Zulassung für Gebrauchtwagen: Einfach, sicher und schnell mit iKFZ Digital Zulassung – Anmeldung ohne Wartezeiten und ohne Behördengang",
+    "canonical": "https://ikfzdigitalzulassung.de/online-zulassung-fuer-gebrauchtwagen/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/eucaris",
+    "url": "http://localhost:3000/eucaris",
+    "slug": "eucaris",
+    "statusCode": 200,
+    "title": "EUCARIS – Das europäische Fahrzeug für 2025 | IKFZ Digital Zulassung",
+    "metaDescription": "EUCARIS ermöglicht den sicheren Austausch von Fahrzeug- und Führerscheindaten in Europa. Erfahren Sie, wie das System funktioniert und welche Vorteile es bietet",
+    "canonical": "https://ikfzdigitalzulassung.de/eucaris/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/kfz-zulassung-online-abgelehnt-steuerrueckstaende",
+    "url": "http://localhost:3000/kfz-zulassung-online-abgelehnt-steuerrueckstaende",
+    "slug": "kfz-zulassung-online-abgelehnt-steuerrueckstaende",
+    "statusCode": 200,
+    "title": "7 Tipps: Kfz Zulassung online abgelehnt Steuerrückstände | IKFZ Digital Zulassung",
+    "metaDescription": "Kfz Zulassung online abgelehnt Steuerrückstände? 🛑 Erfahren Sie hier die 7 besten Lösungen, warum Bezahlen nicht reicht &amp; wie Sie anonym abmelden. Jetzt lesen!",
+    "canonical": "https://ikfzdigitalzulassung.de/kfz-zulassung-online-abgelehnt-steuerrueckstaende/",
+    "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+    "hasNoindex": false,
+    "linkedFrom": [
+      "sitemap"
+    ]
+  },
+  {
+    "path": "/kfz-service/kfz-online-service",
+    "url": "http://localhost:3000/kfz-service/kfz-online-service",
+    "slug": "kfz-service/kfz-online-service",
+    "statusCode": 200,
+    "title": "Jetzt Fahrzeug Online an- oder abmelden – KFZ Online Service | IKFZ Digital Zulassung",
+    "metaDescription": "KFZ-Service in Minuten – 100% Online & Ohne Wartezeit! Fahrzeug anmelden, abmelden oder ummelden. Offiziell beim KBA registriert.",
+    "canonical": "https://ikfzdigitalzulassung.de/kfz-service/kfz-online-service/",
+    "robots": "index, follow",
+    "hasNoindex": false,
+    "linkedFrom": [
+      ""
+    ]
+  }
+]

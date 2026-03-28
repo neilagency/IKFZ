@@ -1,0 +1,352 @@
+// Prisma schema for iKFZ Digital Zulassung CMS + E-commerce
+// SQLite database for pages, posts, SEO, admin, and shop
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// ═══════════════════════════════════════════════
+// CMS MODELS
+// ═══════════════════════════════════════════════
+
+// Admin Users
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         String   @default("admin")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// Pages (from WordPress)
+model Page {
+  id            String    @id @default(cuid())
+  wpId          Int?      @unique
+  slug          String    @unique
+  title         String
+  content       String
+  excerpt       String?
+  template      String?
+  status        String    @default("published")
+  menuOrder     Int       @default(0)
+  pageType      String    @default("generic")
+  featuredImage String?
+  parentSlug    String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  publishedAt   DateTime?
+  seo           SEO?
+}
+
+// Blog Posts
+model Post {
+  id            String       @id @default(cuid())
+  wpId          Int?         @unique
+  slug          String       @unique
+  title         String
+  content       String
+  excerpt       String?
+  status        String       @default("published")
+  featuredImage String?
+  author        String?
+  readingTime   Int?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  publishedAt   DateTime?
+  scheduledAt   DateTime?
+  seo           SEO?
+  categories    PostCategory[]
+  tags          PostTag[]
+}
+
+// Categories
+model Category {
+  id          String         @id @default(cuid())
+  name        String         @unique
+  slug        String         @unique
+  description String?
+  posts       PostCategory[]
+}
+
+model PostCategory {
+  postId     String
+  categoryId String
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([postId, categoryId])
+}
+
+// Tags
+model Tag {
+  id    String    @id @default(cuid())
+  name  String    @unique
+  slug  String    @unique
+  posts PostTag[]
+}
+
+model PostTag {
+  postId String
+  tagId  String
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
+}
+
+// SEO Metadata
+model SEO {
+  id              String  @id @default(cuid())
+  pageId          String? @unique
+  postId          String? @unique
+  metaTitle       String?
+  metaDescription String?
+  canonicalUrl    String?
+  ogTitle         String?
+  ogDescription   String?
+  ogImage         String?
+  ogType          String? @default("website")
+  twitterCard     String? @default("summary_large_image")
+  twitterTitle    String?
+  twitterDesc     String?
+  twitterImage    String?
+  robots          String? @default("follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large")
+  schemaJson      String?
+  focusKeyword    String?
+  page            Page?   @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  post            Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+// Redirects
+model Redirect {
+  id         String   @id @default(cuid())
+  fromPath   String   @unique
+  toPath     String
+  statusCode Int      @default(301)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+}
+
+// Media (uploads)
+model Media {
+  id        String   @id @default(cuid())
+  url       String
+  filename  String
+  mimeType  String
+  size      Int
+  alt       String?
+  createdAt DateTime @default(now())
+}
+
+// Site Settings
+model SiteSetting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+}
+
+// ═══════════════════════════════════════════════
+// E-COMMERCE MODELS
+// ═══════════════════════════════════════════════
+
+// Shop Products
+model Product {
+  id               String          @id @default(cuid())
+  wcId             Int?            @unique
+  name             String
+  slug             String          @unique
+  type             String          @default("simple")
+  status           String          @default("publish")
+  description      String?
+  shortDescription String?
+  sku              String?
+  price            Float           @default(0)
+  regularPrice     Float           @default(0)
+  salePrice        Float?
+  currency         String          @default("EUR")
+  stockStatus      String          @default("instock")
+  stockQuantity    Int?
+  weight           String?
+  featured         Boolean         @default(false)
+  catalogVisibility String         @default("visible")
+  taxStatus        String          @default("taxable")
+  taxClass         String?
+  permalink        String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  images           ProductImage[]
+  productCategories ProductProductCategory[]
+  orderItems       OrderItem[]
+}
+
+// Product Images
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String
+  wcId      Int?
+  src       String
+  name      String?
+  alt       String?
+  position  Int     @default(0)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+// Product Categories (WooCommerce)
+model ProductCategory {
+  id          String                    @id @default(cuid())
+  wcId        Int?                      @unique
+  name        String
+  slug        String                    @unique
+  description String?
+  count       Int                       @default(0)
+  products    ProductProductCategory[]
+}
+
+model ProductProductCategory {
+  productId  String
+  categoryId String
+  product    Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  category   ProductCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([productId, categoryId])
+}
+
+// Customers (extracted from orders)
+model Customer {
+  id        String   @id @default(cuid())
+  wcId      Int?     @unique
+  email     String   @unique
+  firstName String?
+  lastName  String?
+  company   String?
+  phone     String?
+  // Billing Address
+  billingAddress1  String?
+  billingAddress2  String?
+  billingCity      String?
+  billingState     String?
+  billingPostcode  String?
+  billingCountry   String?
+  // Shipping Address
+  shippingAddress1 String?
+  shippingAddress2 String?
+  shippingCity     String?
+  shippingState    String?
+  shippingPostcode String?
+  shippingCountry  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orders    Order[]
+}
+
+// Orders
+model Order {
+  id                String      @id @default(cuid())
+  wcId              Int?        @unique
+  orderNumber       String?
+  status            String      @default("pending")
+  currency          String      @default("EUR")
+  total             Float       @default(0)
+  subtotal          Float       @default(0)
+  totalTax          Float       @default(0)
+  shippingTotal     Float       @default(0)
+  discountTotal     Float       @default(0)
+  paymentMethod     String?
+  paymentMethodTitle String?
+  transactionId     String?
+  customerNote      String?
+  // Billing Info (denormalized for historical accuracy)
+  billingFirstName  String?
+  billingLastName   String?
+  billingCompany    String?
+  billingEmail      String?
+  billingPhone      String?
+  billingAddress1   String?
+  billingAddress2   String?
+  billingCity       String?
+  billingState      String?
+  billingPostcode   String?
+  billingCountry    String?
+  // Shipping Info
+  shippingFirstName String?
+  shippingLastName  String?
+  shippingAddress1  String?
+  shippingAddress2  String?
+  shippingCity      String?
+  shippingState     String?
+  shippingPostcode  String?
+  shippingCountry   String?
+  // Relations
+  customerId        String?
+  customer          Customer?   @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  items             OrderItem[]
+  payment           Payment?
+  invoice           Invoice?
+  // Dates
+  datePaid          DateTime?
+  dateCompleted     DateTime?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+}
+
+// Order Line Items
+model OrderItem {
+  id          String  @id @default(cuid())
+  orderId     String
+  productId   String?
+  wcProductId Int?
+  name        String
+  quantity    Int     @default(1)
+  price       Float   @default(0)
+  total       Float   @default(0)
+  totalTax    Float   @default(0)
+  sku         String?
+  // Meta data (JSON string for flexibility)
+  metaData    String?
+  order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product     Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+}
+
+// Payments
+model Payment {
+  id              String   @id @default(cuid())
+  orderId         String   @unique
+  method          String
+  methodTitle     String?
+  transactionId   String?
+  status          String   @default("pending")
+  amount          Float    @default(0)
+  currency        String   @default("EUR")
+  paidAt          DateTime?
+  gatewayResponse String?
+  order           Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Invoices
+model Invoice {
+  id            String   @id @default(cuid())
+  orderId       String   @unique
+  invoiceNumber String   @unique
+  status        String   @default("issued")
+  amount        Float    @default(0)
+  currency      String   @default("EUR")
+  issuedAt      DateTime @default(now())
+  dueAt         DateTime?
+  paidAt        DateTime?
+  billingName   String?
+  billingEmail  String?
+  billingAddress String?
+  items         String?
+  notes         String?
+  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+}

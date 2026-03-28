@@ -1,0 +1,3016 @@
+[
+  {
+    "id": "ppcp-gateway",
+    "title": "PayPal",
+    "description": "mit PayPal zahlen",
+    "order": 3,
+    "enabled": true,
+    "method_title": "PayPal",
+    "method_description": "Pay via PayPal.",
+    "method_supports": [
+      "products",
+      "refunds",
+      "tokenization",
+      "add_payment_method"
+    ],
+    "settings": [],
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-gateway",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/ppcp-gateway",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  },
+  {
+    "id": "bacs",
+    "title": "Banküberweisung",
+    "description": "Überweisen Sie direkt an unsere Bankverbindung. Bitte nutzen Sie die Bestellnummer als Verwendungszweck.",
+    "order": 5,
+    "enabled": true,
+    "method_title": "Direkte Banküberweisung",
+    "method_description": "Nehmen Sie persönlich Zahlungen per BACS entgegen. Eher unter der Bezeichnung „Banküberweisung“ bekannt.",
+    "method_supports": [
+      "products"
+    ],
+    "settings": {
+      "title": {
+        "id": "title",
+        "label": "Titel",
+        "description": "Dies steuert den Titel, den der Benutzer beim Bezahlvorgang sieht.",
+        "type": "safe_text",
+        "value": "Banküberweisung",
+        "default": "Direkte Banküberweisung",
+        "tip": "Dies steuert den Titel, den der Benutzer beim Bezahlvorgang sieht.",
+        "placeholder": ""
+      },
+      "instructions": {
+        "id": "instructions",
+        "label": "Anweisungen",
+        "description": "Anweisung, die zur „Danke“-Seite und zu E-Mails hinzugefügt werden.",
+        "type": "textarea",
+        "value": "",
+        "default": "",
+        "tip": "Anweisung, die zur „Danke“-Seite und zu E-Mails hinzugefügt werden.",
+        "placeholder": ""
+      }
+    },
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&path=/offline/bacs",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/bacs",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  },
+  {
+    "id": "cheque",
+    "title": "Scheckzahlungen",
+    "description": "Bitte senden Sie Ihren Scheck an die Adresse: Shop-Name, Shop-Straße, Shop-PLZ, Shop-Ort, Shop-Land.",
+    "order": 6,
+    "enabled": false,
+    "method_title": "Scheckzahlungen",
+    "method_description": "Nehmen Sie Zahlungen persönlich per Scheck entgegen. Dieser Offline-Zahlungsweg kann auch nützlich sein, um Einkäufe zu testen.",
+    "method_supports": [
+      "products"
+    ],
+    "settings": {
+      "title": {
+        "id": "title",
+        "label": "Titel",
+        "description": "Dies steuert den Titel, den der Benutzer beim Bezahlvorgang sieht.",
+        "type": "safe_text",
+        "value": "Scheckzahlungen",
+        "default": "Scheckzahlungen",
+        "tip": "Dies steuert den Titel, den der Benutzer beim Bezahlvorgang sieht.",
+        "placeholder": ""
+      },
+      "instructions": {
+        "id": "instructions",
+        "label": "Anweisungen",
+        "description": "Anweisung, die zur „Danke“-Seite und zu E-Mails hinzugefügt werden.",
+        "type": "textarea",
+        "value": "",
+        "default": "",
+        "tip": "Anweisung, die zur „Danke“-Seite und zu E-Mails hinzugefügt werden.",
+        "placeholder": ""
+      }
+    },
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&path=/offline/cheque",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/cheque",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  },
+  {
+    "id": "cod",
+    "title": "Per Nachnahme",
+    "description": "Per Nachnahme zahlen.",
+    "order": 7,
+    "enabled": false,
+    "method_title": "Per Nachnahme",
+    "method_description": "Lassen Sie Ihre Kunden bei der Zustellung bezahlen – in bar oder mit anderen Zahlungsmethoden.",
+    "method_supports": [
+      "products"
+    ],
+    "settings": {
+      "title": {
+        "id": "title",
+        "label": "Titel",
+        "description": "Beschreibung der Zahlungsart, die Kunden bei der Kaufabwicklung sehen.",
+        "type": "safe_text",
+        "value": "Per Nachnahme",
+        "default": "Per Nachnahme",
+        "tip": "Beschreibung der Zahlungsart, die Kunden bei der Kaufabwicklung sehen.",
+        "placeholder": ""
+      },
+      "instructions": {
+        "id": "instructions",
+        "label": "Anweisungen",
+        "description": "Anweisungen, die der „Danke“-Seite hinzugefügt werden.",
+        "type": "textarea",
+        "value": "Per Nachnahme zahlen.",
+        "default": "Per Nachnahme zahlen.",
+        "tip": "Anweisungen, die der „Danke“-Seite hinzugefügt werden.",
+        "placeholder": ""
+      },
+      "enable_for_methods": {
+        "id": "enable_for_methods",
+        "label": "Für Versandarten verfügbar machen",
+        "description": "Falls die Zahlung per Nachnahme nur für bestimmte Versandarten möglich ist, bitte hier erfassen. Leer lassen, um sie für alle Versandarten verfügbar zu machen.",
+        "type": "multiselect",
+        "value": "",
+        "default": "",
+        "tip": "Falls die Zahlung per Nachnahme nur für bestimmte Versandarten möglich ist, bitte hier erfassen. Leer lassen, um sie für alle Versandarten verfügbar zu machen.",
+        "placeholder": "",
+        "options": {
+          "Versandkostenpauschale": {
+            "flat_rate": "Jede &quot;Versandkostenpauschale&quot; Methode"
+          },
+          "Kostenlose Lieferung": {
+            "free_shipping": "Jede &quot;Kostenlose Lieferung&quot; Methode"
+          },
+          "Abholung vor Ort": {
+            "local_pickup": "Jede &quot;Abholung vor Ort&quot; Methode"
+          }
+        }
+      },
+      "enable_for_virtual": {
+        "id": "enable_for_virtual",
+        "label": "Zahlung per Nachnahme für virtuelle Bestellungen akzeptieren",
+        "description": "",
+        "type": "checkbox",
+        "value": "yes",
+        "default": "yes",
+        "tip": "",
+        "placeholder": ""
+      }
+    },
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&path=/offline/cod",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/cod",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  },
+  {
+    "id": "mollie_wc_gateway_applepay",
+    "title": null,
+    "description": null,
+    "order": 9,
+    "enabled": true,
+    "method_title": "Mollie - Apple Pay",
+    "method_description": "To accept payments via Apple Pay",
+    "method_supports": [
+      "products",
+      "refunds",
+      "subscriptions",
+      "subscriptions",
+      "subscription_cancellation",
+      "subscription_suspension",
+      "subscription_reactivation",
+      "subscription_amount_changes",
+      "subscription_date_changes",
+      "multiple_subscriptions",
+      "subscription_payment_method_change",
+      "subscription_payment_method_change_admin",
+      "subscription_payment_method_change_customer"
+    ],
+    "settings": {
+      "notice": {
+        "id": "notice",
+        "label": "<p>The appearance of the Apple Pay button can be controlled in the <a href=\"https://ikfzdigitalzulassung.de/wp-admin/post.php?post=13&#038;action=edit\">Checkout page editor</a>.</p>",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "display": {
+        "id": "display",
+        "label": "Apple Pay Anzeigeeinstellungen",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "use_api_title": {
+        "id": "use_api_title",
+        "label": "Retrieve the gateway title and logo from the Mollie API",
+        "description": "",
+        "type": "checkbox",
+        "value": "no",
+        "default": "yes",
+        "tip": "",
+        "placeholder": ""
+      },
+      "title": {
+        "id": "title",
+        "label": "Titel",
+        "description": "Hierdurch wird der Titel gesteuert, den Benutzer beim Bezahlvorgang sehen. Standard: <code>Apple Pay</code>",
+        "type": "text",
+        "value": "",
+        "default": "Apple Pay",
+        "tip": "Hierdurch wird der Titel gesteuert, den Benutzer beim Bezahlvorgang sehen. Standard: <code>Apple Pay</code>",
+        "placeholder": ""
+      },
+      "display_logo": {
+        "id": "display_logo",
+        "label": "Logo bei Bezahlvorgang anzeigen. Standard: <code>aktiviert</code>",
+        "description": "",
+        "type": "checkbox",
+        "value": "yes",
+        "default": "yes",
+        "tip": "",
+        "placeholder": ""
+      },
+      "enable_custom_logo": {
+        "id": "enable_custom_logo",
+        "label": "Aktivieren Sie die Funktion zum Hinzufügen eines eigenen Logos für dieses Zahlungsportal. Die Funktion hat Vorrang über andere Logo-Optionen.",
+        "description": "",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "",
+        "placeholder": ""
+      },
+      "upload_logo": {
+        "id": "upload_logo",
+        "label": "Eigenes Logo hochladen",
+        "description": "Laden Sie ein eigenes Symbol für dieses Zahlungsportal hoch. Die entsprechende Funktion muss aktiviert sein.",
+        "type": "file",
+        "value": "",
+        "default": "",
+        "tip": "Laden Sie ein eigenes Symbol für dieses Zahlungsportal hoch. Die entsprechende Funktion muss aktiviert sein.",
+        "placeholder": ""
+      },
+      "sales": {
+        "id": "sales",
+        "label": "Vertriebsländer",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "allowed_countries": {
+        "id": "allowed_countries",
+        "label": "In bestimmten Ländern verkaufen",
+        "description": "",
+        "type": "multi_select_countries",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "surcharge": {
+        "id": "surcharge",
+        "label": "Apple Pay Zuschlag",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "payment_surcharge": {
+        "id": "payment_surcharge",
+        "label": "Zahlungsgebühr",
+        "description": "Wählen Sie eine Zahlungsgebühr für dieses Zahlungsportal aus",
+        "type": "select",
+        "value": "no_fee",
+        "default": "no_fee",
+        "tip": "Wählen Sie eine Zahlungsgebühr für dieses Zahlungsportal aus",
+        "placeholder": "",
+        "options": {
+          "no_fee": "Keine Gebühr",
+          "fixed_fee": "Feste Gebühr",
+          "percentage": "Prozentsatz",
+          "fixed_fee_percentage": "Feste Gebühr und Prozentsatz"
+        }
+      },
+      "fixed_fee": {
+        "id": "fixed_fee",
+        "label": "Fester Betrag des Zuschlags in €",
+        "description": "Legen Sie die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Legen Sie die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "placeholder": ""
+      },
+      "percentage": {
+        "id": "percentage",
+        "label": "Prozentsatz für den Zuschlag in %",
+        "description": "Legen Sie einen Prozentsatz für die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Legen Sie einen Prozentsatz für die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "placeholder": ""
+      },
+      "surcharge_limit": {
+        "id": "surcharge_limit",
+        "label": "Grenzwert für den Zuschlag in €",
+        "description": "Setzen Sie einen Grenzwert für die Gebühr, die zum Einkaufswagen hinzugefügt wird. Der Standardwert 0 steht für keinen Grenzwert",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Setzen Sie einen Grenzwert für die Gebühr, die zum Einkaufswagen hinzugefügt wird. Der Standardwert 0 steht für keinen Grenzwert",
+        "placeholder": ""
+      },
+      "maximum_limit": {
+        "id": "maximum_limit",
+        "label": "Nur unterhalb dieses Grenzwerts in € fallen Gebühren an",
+        "description": "Maximaler Kaufbetrag, bei dem der Zuschlag fällig wird. Wenn die Bestellung mehr als diese Zahl beträgt, wird der Zuschlag nicht fällig. Der Standardwert 0 steht für kein Maximum",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Maximaler Kaufbetrag, bei dem der Zuschlag fällig wird. Wenn die Bestellung mehr als diese Zahl beträgt, wird der Zuschlag nicht fällig. Der Standardwert 0 steht für kein Maximum",
+        "placeholder": ""
+      },
+      "advanced": {
+        "id": "advanced",
+        "label": "Apple Pay fortgeschritten",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "activate_expiry_days_setting": {
+        "id": "activate_expiry_days_setting",
+        "label": "Ablaufzeitpunkt für Zahlungen aktivieren",
+        "description": "Aktivieren Sie diese Option, um den Zeitpunkt, an dem die Bestellung abläuft, selbst festzulegen.",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "Aktivieren Sie diese Option, um den Zeitpunkt, an dem die Bestellung abläuft, selbst festzulegen.",
+        "placeholder": ""
+      },
+      "order_dueDate": {
+        "id": "order_dueDate",
+        "label": "Ablaufzeitpunkt",
+        "description": "Number of MINUTES after the order will expire and will be canceled at Mollie and WooCommerce.",
+        "type": "number",
+        "value": "10",
+        "default": "10",
+        "tip": "Number of MINUTES after the order will expire and will be canceled at Mollie and WooCommerce.",
+        "placeholder": ""
+      },
+      "mollie_apple_pay_button_enabled_cart": {
+        "id": "mollie_apple_pay_button_enabled_cart",
+        "label": "Schalfläche Apple Pay im Einkaufswagen aktivieren",
+        "description": "",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "",
+        "placeholder": ""
+      },
+      "mollie_apple_pay_button_enabled_product": {
+        "id": "mollie_apple_pay_button_enabled_product",
+        "label": "Schalfläche Apple Pay auf Produktseite aktivieren",
+        "description": "",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "",
+        "placeholder": ""
+      },
+      "mollie_apple_pay_button_enabled_express_checkout": {
+        "id": "mollie_apple_pay_button_enabled_express_checkout",
+        "label": "Enable Apple Pay Express Button on Checkout page",
+        "description": "",
+        "type": "checkbox",
+        "value": "",
+        "default": "no",
+        "tip": "",
+        "placeholder": ""
+      }
+    },
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&section=mollie_wc_gateway_applepay",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/mollie_wc_gateway_applepay",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  },
+  {
+    "id": "mollie_wc_gateway_creditcard",
+    "title": null,
+    "description": "",
+    "order": 10,
+    "enabled": true,
+    "method_title": "Mollie - Karte",
+    "method_description": "",
+    "method_supports": [
+      "products",
+      "refunds",
+      "subscriptions",
+      "subscriptions",
+      "subscription_cancellation",
+      "subscription_suspension",
+      "subscription_reactivation",
+      "subscription_amount_changes",
+      "subscription_date_changes",
+      "multiple_subscriptions",
+      "subscription_payment_method_change",
+      "subscription_payment_method_change_admin",
+      "subscription_payment_method_change_customer"
+    ],
+    "settings": {
+      "0": {
+        "id": 0,
+        "label": "Symbole personalisieren",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "display": {
+        "id": "display",
+        "label": "Karte Anzeigeeinstellungen",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "use_api_title": {
+        "id": "use_api_title",
+        "label": "Retrieve the gateway title and logo from the Mollie API",
+        "description": "",
+        "type": "checkbox",
+        "value": "no",
+        "default": "yes",
+        "tip": "",
+        "placeholder": ""
+      },
+      "title": {
+        "id": "title",
+        "label": "Titel",
+        "description": "Hierdurch wird der Titel gesteuert, den Benutzer beim Bezahlvorgang sehen. Standard: <code>Karte</code>",
+        "type": "text",
+        "value": "",
+        "default": "Karte",
+        "tip": "Hierdurch wird der Titel gesteuert, den Benutzer beim Bezahlvorgang sehen. Standard: <code>Karte</code>",
+        "placeholder": ""
+      },
+      "display_logo": {
+        "id": "display_logo",
+        "label": "Logo bei Bezahlvorgang anzeigen. Standard: <code>aktiviert</code>",
+        "description": "",
+        "type": "checkbox",
+        "value": "yes",
+        "default": "yes",
+        "tip": "",
+        "placeholder": ""
+      },
+      "enable_custom_logo": {
+        "id": "enable_custom_logo",
+        "label": "Aktivieren Sie die Funktion zum Hinzufügen eines eigenen Logos für dieses Zahlungsportal. Die Funktion hat Vorrang über andere Logo-Optionen.",
+        "description": "",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "",
+        "placeholder": ""
+      },
+      "upload_logo": {
+        "id": "upload_logo",
+        "label": "Eigenes Logo hochladen",
+        "description": "Laden Sie ein eigenes Symbol für dieses Zahlungsportal hoch. Die entsprechende Funktion muss aktiviert sein.",
+        "type": "file",
+        "value": "",
+        "default": "",
+        "tip": "Laden Sie ein eigenes Symbol für dieses Zahlungsportal hoch. Die entsprechende Funktion muss aktiviert sein.",
+        "placeholder": ""
+      },
+      "sales": {
+        "id": "sales",
+        "label": "Vertriebsländer",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "allowed_countries": {
+        "id": "allowed_countries",
+        "label": "In bestimmten Ländern verkaufen",
+        "description": "",
+        "type": "multi_select_countries",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "surcharge": {
+        "id": "surcharge",
+        "label": "Karte Zuschlag",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "payment_surcharge": {
+        "id": "payment_surcharge",
+        "label": "Zahlungsgebühr",
+        "description": "Wählen Sie eine Zahlungsgebühr für dieses Zahlungsportal aus",
+        "type": "select",
+        "value": "no_fee",
+        "default": "no_fee",
+        "tip": "Wählen Sie eine Zahlungsgebühr für dieses Zahlungsportal aus",
+        "placeholder": "",
+        "options": {
+          "no_fee": "Keine Gebühr",
+          "fixed_fee": "Feste Gebühr",
+          "percentage": "Prozentsatz",
+          "fixed_fee_percentage": "Feste Gebühr und Prozentsatz"
+        }
+      },
+      "fixed_fee": {
+        "id": "fixed_fee",
+        "label": "Fester Betrag des Zuschlags in €",
+        "description": "Legen Sie die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Legen Sie die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "placeholder": ""
+      },
+      "percentage": {
+        "id": "percentage",
+        "label": "Prozentsatz für den Zuschlag in %",
+        "description": "Legen Sie einen Prozentsatz für die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Legen Sie einen Prozentsatz für die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "placeholder": ""
+      },
+      "surcharge_limit": {
+        "id": "surcharge_limit",
+        "label": "Grenzwert für den Zuschlag in €",
+        "description": "Setzen Sie einen Grenzwert für die Gebühr, die zum Einkaufswagen hinzugefügt wird. Der Standardwert 0 steht für keinen Grenzwert",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Setzen Sie einen Grenzwert für die Gebühr, die zum Einkaufswagen hinzugefügt wird. Der Standardwert 0 steht für keinen Grenzwert",
+        "placeholder": ""
+      },
+      "maximum_limit": {
+        "id": "maximum_limit",
+        "label": "Nur unterhalb dieses Grenzwerts in € fallen Gebühren an",
+        "description": "Maximaler Kaufbetrag, bei dem der Zuschlag fällig wird. Wenn die Bestellung mehr als diese Zahl beträgt, wird der Zuschlag nicht fällig. Der Standardwert 0 steht für kein Maximum",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Maximaler Kaufbetrag, bei dem der Zuschlag fällig wird. Wenn die Bestellung mehr als diese Zahl beträgt, wird der Zuschlag nicht fällig. Der Standardwert 0 steht für kein Maximum",
+        "placeholder": ""
+      },
+      "advanced": {
+        "id": "advanced",
+        "label": "Karte fortgeschritten",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "activate_expiry_days_setting": {
+        "id": "activate_expiry_days_setting",
+        "label": "Ablaufzeitpunkt für Zahlungen aktivieren",
+        "description": "Aktivieren Sie diese Option, um den Zeitpunkt, an dem die Bestellung abläuft, selbst festzulegen.",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "Aktivieren Sie diese Option, um den Zeitpunkt, an dem die Bestellung abläuft, selbst festzulegen.",
+        "placeholder": ""
+      },
+      "order_dueDate": {
+        "id": "order_dueDate",
+        "label": "Ablaufzeitpunkt",
+        "description": "Number of MINUTES after the order will expire and will be canceled at Mollie and WooCommerce.",
+        "type": "number",
+        "value": "10",
+        "default": "10",
+        "tip": "Number of MINUTES after the order will expire and will be canceled at Mollie and WooCommerce.",
+        "placeholder": ""
+      },
+      "mollie_components_enabled": {
+        "id": "mollie_components_enabled",
+        "label": "Mollie-Komponenten aktivieren",
+        "description": "Use the Mollie Components for this Gateway. Read more about <a href='https://www.mollie.com/en/news/post/better-checkout-flows-with-mollie-components?utm_source=woocommerce&utm_medium=plugin&utm_campaign=partner'>Mollie-Komponenten</a> and how it improves your conversion.",
+        "type": "checkbox",
+        "value": "yes",
+        "default": "no",
+        "tip": "Use the Mollie Components for this Gateway. Read more about <a href='https://www.mollie.com/en/news/post/better-checkout-flows-with-mollie-components?utm_source=woocommerce&utm_medium=plugin&utm_campaign=partner'>Mollie-Komponenten</a> and how it improves your conversion.",
+        "placeholder": ""
+      },
+      "mollie_creditcard_icons_enabler": {
+        "id": "mollie_creditcard_icons_enabler",
+        "label": "Auswahlwerkzeug für Symbole aktivieren",
+        "description": "Benutzerdefinierte Kreditkartensymbole auf der Bezahlseite anzeigen",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "Benutzerdefinierte Kreditkartensymbole auf der Bezahlseite anzeigen",
+        "placeholder": ""
+      }
+    },
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&section=mollie_wc_gateway_creditcard",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/mollie_wc_gateway_creditcard",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  },
+  {
+    "id": "mollie_wc_gateway_paypal",
+    "title": null,
+    "description": null,
+    "order": 11,
+    "enabled": false,
+    "method_title": "Mollie - PayPal",
+    "method_description": "",
+    "method_supports": [
+      "products",
+      "refunds",
+      "subscriptions",
+      "subscriptions",
+      "subscription_cancellation",
+      "subscription_suspension",
+      "subscription_reactivation",
+      "subscription_amount_changes",
+      "subscription_date_changes",
+      "multiple_subscriptions",
+      "subscription_payment_method_change",
+      "subscription_payment_method_change_admin",
+      "subscription_payment_method_change_customer"
+    ],
+    "settings": {
+      "display": {
+        "id": "display",
+        "label": "PayPal Anzeigeeinstellungen",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "use_api_title": {
+        "id": "use_api_title",
+        "label": "Retrieve the gateway title and logo from the Mollie API",
+        "description": "",
+        "type": "checkbox",
+        "value": "no",
+        "default": "yes",
+        "tip": "",
+        "placeholder": ""
+      },
+      "title": {
+        "id": "title",
+        "label": "Titel",
+        "description": "Hierdurch wird der Titel gesteuert, den Benutzer beim Bezahlvorgang sehen. Standard: <code>PayPal</code>",
+        "type": "text",
+        "value": "",
+        "default": "PayPal",
+        "tip": "Hierdurch wird der Titel gesteuert, den Benutzer beim Bezahlvorgang sehen. Standard: <code>PayPal</code>",
+        "placeholder": ""
+      },
+      "display_logo": {
+        "id": "display_logo",
+        "label": "Logo bei Bezahlvorgang anzeigen. Standard: <code>aktiviert</code>",
+        "description": "",
+        "type": "checkbox",
+        "value": "yes",
+        "default": "yes",
+        "tip": "",
+        "placeholder": ""
+      },
+      "enable_custom_logo": {
+        "id": "enable_custom_logo",
+        "label": "Aktivieren Sie die Funktion zum Hinzufügen eines eigenen Logos für dieses Zahlungsportal. Die Funktion hat Vorrang über andere Logo-Optionen.",
+        "description": "",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "",
+        "placeholder": ""
+      },
+      "upload_logo": {
+        "id": "upload_logo",
+        "label": "Eigenes Logo hochladen",
+        "description": "Laden Sie ein eigenes Symbol für dieses Zahlungsportal hoch. Die entsprechende Funktion muss aktiviert sein.",
+        "type": "file",
+        "value": "",
+        "default": "",
+        "tip": "Laden Sie ein eigenes Symbol für dieses Zahlungsportal hoch. Die entsprechende Funktion muss aktiviert sein.",
+        "placeholder": ""
+      },
+      "sales": {
+        "id": "sales",
+        "label": "Vertriebsländer",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "allowed_countries": {
+        "id": "allowed_countries",
+        "label": "In bestimmten Ländern verkaufen",
+        "description": "",
+        "type": "multi_select_countries",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "surcharge": {
+        "id": "surcharge",
+        "label": "PayPal Zuschlag",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "payment_surcharge": {
+        "id": "payment_surcharge",
+        "label": "Zahlungsgebühr",
+        "description": "Wählen Sie eine Zahlungsgebühr für dieses Zahlungsportal aus",
+        "type": "select",
+        "value": "no_fee",
+        "default": "no_fee",
+        "tip": "Wählen Sie eine Zahlungsgebühr für dieses Zahlungsportal aus",
+        "placeholder": "",
+        "options": {
+          "no_fee": "Keine Gebühr",
+          "fixed_fee": "Feste Gebühr",
+          "percentage": "Prozentsatz",
+          "fixed_fee_percentage": "Feste Gebühr und Prozentsatz"
+        }
+      },
+      "fixed_fee": {
+        "id": "fixed_fee",
+        "label": "Fester Betrag des Zuschlags in €",
+        "description": "Legen Sie die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Legen Sie die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "placeholder": ""
+      },
+      "percentage": {
+        "id": "percentage",
+        "label": "Prozentsatz für den Zuschlag in %",
+        "description": "Legen Sie einen Prozentsatz für die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Legen Sie einen Prozentsatz für die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "placeholder": ""
+      },
+      "surcharge_limit": {
+        "id": "surcharge_limit",
+        "label": "Grenzwert für den Zuschlag in €",
+        "description": "Setzen Sie einen Grenzwert für die Gebühr, die zum Einkaufswagen hinzugefügt wird. Der Standardwert 0 steht für keinen Grenzwert",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Setzen Sie einen Grenzwert für die Gebühr, die zum Einkaufswagen hinzugefügt wird. Der Standardwert 0 steht für keinen Grenzwert",
+        "placeholder": ""
+      },
+      "maximum_limit": {
+        "id": "maximum_limit",
+        "label": "Nur unterhalb dieses Grenzwerts in € fallen Gebühren an",
+        "description": "Maximaler Kaufbetrag, bei dem der Zuschlag fällig wird. Wenn die Bestellung mehr als diese Zahl beträgt, wird der Zuschlag nicht fällig. Der Standardwert 0 steht für kein Maximum",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Maximaler Kaufbetrag, bei dem der Zuschlag fällig wird. Wenn die Bestellung mehr als diese Zahl beträgt, wird der Zuschlag nicht fällig. Der Standardwert 0 steht für kein Maximum",
+        "placeholder": ""
+      },
+      "advanced": {
+        "id": "advanced",
+        "label": "PayPal fortgeschritten",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "activate_expiry_days_setting": {
+        "id": "activate_expiry_days_setting",
+        "label": "Ablaufzeitpunkt für Zahlungen aktivieren",
+        "description": "Aktivieren Sie diese Option, um den Zeitpunkt, an dem die Bestellung abläuft, selbst festzulegen.",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "Aktivieren Sie diese Option, um den Zeitpunkt, an dem die Bestellung abläuft, selbst festzulegen.",
+        "placeholder": ""
+      },
+      "order_dueDate": {
+        "id": "order_dueDate",
+        "label": "Ablaufzeitpunkt",
+        "description": "Number of MINUTES after the order will expire and will be canceled at Mollie and WooCommerce.",
+        "type": "number",
+        "value": "10",
+        "default": "10",
+        "tip": "Number of MINUTES after the order will expire and will be canceled at Mollie and WooCommerce.",
+        "placeholder": ""
+      },
+      "mollie_paypal_button_enabled_cart": {
+        "id": "mollie_paypal_button_enabled_cart",
+        "label": "Im Einkaufswagen anzeigen",
+        "description": "Aktivieren Sie die PayPal-Schaltfläche, die im Einkaufswagen verwendet werden soll.",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "Aktivieren Sie die PayPal-Schaltfläche, die im Einkaufswagen verwendet werden soll.",
+        "placeholder": ""
+      },
+      "mollie_paypal_button_enabled_product": {
+        "id": "mollie_paypal_button_enabled_product",
+        "label": "Auf der Produktseite anzeigen",
+        "description": "Aktivieren Sie die PayPal-Schaltfläche, die auf der Produktseite verwendet werden soll.",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "Aktivieren Sie die PayPal-Schaltfläche, die auf der Produktseite verwendet werden soll.",
+        "placeholder": ""
+      },
+      "color": {
+        "id": "color",
+        "label": "Sprache und Farbe des Schaltflächentextes",
+        "description": "Wählen Sie Text und Farbe der Schaltfläche aus.",
+        "type": "select",
+        "value": "buy-gold",
+        "default": "buy-gold",
+        "tip": "Wählen Sie Text und Farbe der Schaltfläche aus.",
+        "placeholder": "",
+        "options": {
+          "en-buy-pill-blue": "Englisch -- Kauf über PayPal - Klein und rund, blau",
+          "en-buy-rounded-blue": "Englisch -- Kauf über PayPal - Abgerundet, blau",
+          "en-buy-pill-golden": "Englisch -- Kauf über PayPal - Klein und rund, goldfarben",
+          "en-buy-rounded-golden": "Englisch -- Kauf über PayPal - Abgerundet, goldfarben",
+          "en-buy-pill-gray": "Englisch -- Kauf über PayPal - Klein und rund, grau",
+          "en-buy-rounded-gray": "Englisch -- Kauf über PayPal - Abgerundet, grau",
+          "en-buy-pill-white": "Englisch -- Kauf über PayPal - Klein und rund, weiß",
+          "en-buy-rounded-white": "Englisch -- Kauf über PayPal - Abgerundet, weiß",
+          "en-checkout-pill-black": "Englisch -- Bezahlung mit PayPal - Klein und rund, schwarz",
+          "en-checkout-rounded-black": "Englisch -- Bezahlung mit PayPal - Abgerundet, schwarz",
+          "en-checkout-pill-blue": "Englisch -- Bezahlung mit PayPal - Klein und rund, blau",
+          "en-checkout-rounded-blue": "Englisch -- Bezahlung mit PayPal - Abgerundet, blau",
+          "en-checkout-pill-golden": "Englisch -- Bezahlung mit PayPal - Klein und rund, goldfarben",
+          "en-checkout-rounded-golden": "Englisch -- Bezahlung mit PayPal - Abgerundet, goldfarben",
+          "en-checkout-pill-gray": "Englisch -- Bezahlung mit PayPal - Klein und rund, grau",
+          "en-checkout-rounded-gray": "Englisch -- Bezahlung mit PayPal - Abgerundet, grau",
+          "en-checkout-pill-white": "Englisch -- Bezahlung mit PayPal - Klein und rund, weiß",
+          "en-checkout-rounded-white": "Englisch -- Bezahlung mit PayPal - Abgerundet, weiß",
+          "nl-buy-pill-black": "Niederländisch -- Kauf über PayPal - Klein und rund, schwarz",
+          "nl-buy-rounded-black": "Niederländisch -- Kauf über PayPal - Abgerundet, schwarz",
+          "nl-buy-pill-blue": "Niederländisch -- Kauf über PayPal - Klein und rund, blau",
+          "nl-buy-rounded-blue": "Niederländisch -- Kauf über PayPal - Abgerundet, blau",
+          "nl-buy-pill-golden": "Niederländisch -- Kauf über PayPal - Klein und rund, goldfarben",
+          "nl-buy-rounded-golden": "Niederländisch -- Kauf über PayPal - Abgerundet, goldfarben",
+          "nl-buy-pill-gray": "Niederländisch -- Kauf über PayPal - Klein und rund, grau",
+          "nl-buy-rounded-gray": "Niederländisch -- Kauf über PayPal - Abgerundet, grau",
+          "nl-buy-pill-white": "Niederländisch -- Kauf über PayPal - Klein und rund, weiß",
+          "nl-buy-rounded-white": "Niederländisch -- Kauf über PayPal - Abgerundet, weiß",
+          "nl-checkout-pill-black": "Niederländisch -- Bezahlung mit PayPal - Klein und rund, schwarz",
+          "nl-checkout-rounded-black": "Niederländisch -- Bezahlung mit PayPal - Abgerundet, schwarz",
+          "nl-checkout-pill-blue": "Niederländisch -- Bezahlung mit PayPal - Klein und rund, blau",
+          "nl-checkout-rounded-blue": "Niederländisch -- Bezahlung mit PayPal - Abgerundet, blau",
+          "nl-checkout-pill-golden": "Niederländisch -- Bezahlung mit PayPal - Klein und rund, goldfarben",
+          "nl-checkout-rounded-golden": "Niederländisch -- Bezahlung mit PayPal - Abgerundet, goldfarben",
+          "nl-checkout-pill-gray": "Niederländisch -- Bezahlung mit PayPal - Klein und rund, grau",
+          "nl-checkout-rounded-gray": "Niederländisch -- Bezahlung mit PayPal - Abgerundet, grau",
+          "nl-checkout-pill-white": "Niederländisch -- Bezahlung mit PayPal - Klein und rund, weiß",
+          "nl-checkout-rounded-white": "Niederländisch -- Bezahlung mit PayPal - Abgerundet, weiß",
+          "de-buy-pill-black": "Deutsch -- Kauf über PayPal - Klein und rund, schwarz",
+          "de-buy-rounded-black": "Deutsch -- Kauf über PayPal - Abgerundet, schwarz",
+          "de-buy-pill-blue": "Deutsch -- Kauf über PayPal - Klein und rund, blau",
+          "de-buy-rounded-blue": "Deutsch -- Kauf über PayPal - Abgerundet, blau",
+          "de-buy-pill-golden": "Deutsch -- Kauf über PayPal - Klein und rund, goldfarben",
+          "de-buy-rounded-golden": "Deutsch -- Kauf über PayPal - Abgerundet, goldfarben",
+          "de-buy-pill-gray": "Deutsch -- Kauf über PayPal - Klein und rund, grau",
+          "de-buy-rounded-gray": "Deutsch -- Kauf über PayPal - Abgerundet, grau",
+          "de-buy-pill-white": "Deutsch -- Kauf über PayPal - Klein und rund, weiß",
+          "de-buy-rounded-white": "Deutsch -- Kauf über PayPal - Abgerundet, weiß",
+          "de-checkout-pill-black": "Deutsch -- Bezahlung mit PayPal - Klein und rund, schwarz",
+          "de-checkout-rounded-black": "Deutsch -- Bezahlung mit PayPal - Abgerundet, schwarz",
+          "de-checkout-pill-blue": "Deutsch -- Bezahlung mit PayPal - Klein und rund, blau",
+          "de-checkout-rounded-blue": "Deutsch -- Bezahlung mit PayPal - Abgerundet, blau",
+          "de-checkout-pill-golden": "Deutsch -- Bezahlung mit PayPal - Klein und rund, goldfarben",
+          "de-checkout-rounded-golden": "Deutsch -- Bezahlung mit PayPal - Abgerundet, goldfarben",
+          "de-checkout-pill-gray": "Deutsch -- Bezahlung mit PayPal - Klein und rund, grau",
+          "de-checkout-rounded-gray": "Deutsch -- Bezahlung mit PayPal - Abgerundet, grau",
+          "de-checkout-pill-white": "Deutsch -- Bezahlung mit PayPal - Klein und rund, weiß",
+          "de-checkout-rounded-white": "Deutsch -- Bezahlung mit PayPal - Abgerundet, weiß",
+          "fr-buy-rounded-gold": "Französisch -- Kauf über PayPal - Gold",
+          "fr-checkout-rounded-gold": "Französisch -- Bezahlung mit PayPal - Gold",
+          "fr-checkout-rounded-silver": "Französisch -- Bezahlung mit PayPal - Silber",
+          "pl-buy-rounded-gold": "Polnisch -- Kauf über PayPal - Gold",
+          "pl-checkout-rounded-gold": "Polnisch -- Bezahlung mit PayPal - Gold",
+          "pl-checkout-rounded-silver": "Polnisch -- Bezahlung mit PayPal - Silber"
+        }
+      },
+      "mollie_paypal_button_minimum_amount": {
+        "id": "mollie_paypal_button_minimum_amount",
+        "label": "Mindestbetrag zur Anzeige der Schaltfläche",
+        "description": "Wenn der Betrag des Produkts oder des Einkaufswagens unter dieser Zahl liegt, wird die Schaltfläche nicht angezeigt.",
+        "type": "number",
+        "value": "",
+        "default": "",
+        "tip": "Wenn der Betrag des Produkts oder des Einkaufswagens unter dieser Zahl liegt, wird die Schaltfläche nicht angezeigt.",
+        "placeholder": ""
+      }
+    },
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&section=mollie_wc_gateway_paypal",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/mollie_wc_gateway_paypal",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  },
+  {
+    "id": "mollie_wc_gateway_banktransfer",
+    "title": null,
+    "description": null,
+    "order": 12,
+    "enabled": true,
+    "method_title": "Mollie - Überweisung",
+    "method_description": "",
+    "method_supports": [
+      "products",
+      "refunds"
+    ],
+    "settings": {
+      "display": {
+        "id": "display",
+        "label": "Überweisung Anzeigeeinstellungen",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "use_api_title": {
+        "id": "use_api_title",
+        "label": "Retrieve the gateway title and logo from the Mollie API",
+        "description": "",
+        "type": "checkbox",
+        "value": "no",
+        "default": "yes",
+        "tip": "",
+        "placeholder": ""
+      },
+      "title": {
+        "id": "title",
+        "label": "Titel",
+        "description": "Hierdurch wird der Titel gesteuert, den Benutzer beim Bezahlvorgang sehen. Standard: <code>Überweisung</code>",
+        "type": "text",
+        "value": "",
+        "default": "Überweisung",
+        "tip": "Hierdurch wird der Titel gesteuert, den Benutzer beim Bezahlvorgang sehen. Standard: <code>Überweisung</code>",
+        "placeholder": ""
+      },
+      "display_logo": {
+        "id": "display_logo",
+        "label": "Logo bei Bezahlvorgang anzeigen. Standard: <code>aktiviert</code>",
+        "description": "",
+        "type": "checkbox",
+        "value": "yes",
+        "default": "yes",
+        "tip": "",
+        "placeholder": ""
+      },
+      "enable_custom_logo": {
+        "id": "enable_custom_logo",
+        "label": "Aktivieren Sie die Funktion zum Hinzufügen eines eigenen Logos für dieses Zahlungsportal. Die Funktion hat Vorrang über andere Logo-Optionen.",
+        "description": "",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "",
+        "placeholder": ""
+      },
+      "upload_logo": {
+        "id": "upload_logo",
+        "label": "Eigenes Logo hochladen",
+        "description": "Laden Sie ein eigenes Symbol für dieses Zahlungsportal hoch. Die entsprechende Funktion muss aktiviert sein.",
+        "type": "file",
+        "value": "",
+        "default": "",
+        "tip": "Laden Sie ein eigenes Symbol für dieses Zahlungsportal hoch. Die entsprechende Funktion muss aktiviert sein.",
+        "placeholder": ""
+      },
+      "sales": {
+        "id": "sales",
+        "label": "Vertriebsländer",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "allowed_countries": {
+        "id": "allowed_countries",
+        "label": "In bestimmten Ländern verkaufen",
+        "description": "",
+        "type": "multi_select_countries",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "surcharge": {
+        "id": "surcharge",
+        "label": "Überweisung Zuschlag",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "payment_surcharge": {
+        "id": "payment_surcharge",
+        "label": "Zahlungsgebühr",
+        "description": "Wählen Sie eine Zahlungsgebühr für dieses Zahlungsportal aus",
+        "type": "select",
+        "value": "no_fee",
+        "default": "no_fee",
+        "tip": "Wählen Sie eine Zahlungsgebühr für dieses Zahlungsportal aus",
+        "placeholder": "",
+        "options": {
+          "no_fee": "Keine Gebühr",
+          "fixed_fee": "Feste Gebühr",
+          "percentage": "Prozentsatz",
+          "fixed_fee_percentage": "Feste Gebühr und Prozentsatz"
+        }
+      },
+      "fixed_fee": {
+        "id": "fixed_fee",
+        "label": "Fester Betrag des Zuschlags in €",
+        "description": "Legen Sie die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Legen Sie die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "placeholder": ""
+      },
+      "percentage": {
+        "id": "percentage",
+        "label": "Prozentsatz für den Zuschlag in %",
+        "description": "Legen Sie einen Prozentsatz für die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Legen Sie einen Prozentsatz für die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "placeholder": ""
+      },
+      "surcharge_limit": {
+        "id": "surcharge_limit",
+        "label": "Grenzwert für den Zuschlag in €",
+        "description": "Setzen Sie einen Grenzwert für die Gebühr, die zum Einkaufswagen hinzugefügt wird. Der Standardwert 0 steht für keinen Grenzwert",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Setzen Sie einen Grenzwert für die Gebühr, die zum Einkaufswagen hinzugefügt wird. Der Standardwert 0 steht für keinen Grenzwert",
+        "placeholder": ""
+      },
+      "maximum_limit": {
+        "id": "maximum_limit",
+        "label": "Nur unterhalb dieses Grenzwerts in € fallen Gebühren an",
+        "description": "Maximaler Kaufbetrag, bei dem der Zuschlag fällig wird. Wenn die Bestellung mehr als diese Zahl beträgt, wird der Zuschlag nicht fällig. Der Standardwert 0 steht für kein Maximum",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Maximaler Kaufbetrag, bei dem der Zuschlag fällig wird. Wenn die Bestellung mehr als diese Zahl beträgt, wird der Zuschlag nicht fällig. Der Standardwert 0 steht für kein Maximum",
+        "placeholder": ""
+      },
+      "advanced": {
+        "id": "advanced",
+        "label": "Überweisung fortgeschritten",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "initial_order_status": {
+        "id": "initial_order_status",
+        "label": "Initialer Bestellstatus",
+        "description": "Some payment methods take longer than a few hours to complete. The initial order state is then set to 'In Wartestellung'. This ensures the order is not cancelled when the setting <a href=\"https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=products&section=inventory\" target=\"_blank\">Hold Stock (minutes)</a> is used. This will also prevent the order to be canceled when expired.",
+        "type": "select",
+        "value": "on-hold",
+        "default": "on-hold",
+        "tip": "Some payment methods take longer than a few hours to complete. The initial order state is then set to 'In Wartestellung'. This ensures the order is not cancelled when the setting <a href=\"https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=products&section=inventory\" target=\"_blank\">Hold Stock (minutes)</a> is used. This will also prevent the order to be canceled when expired.",
+        "placeholder": "",
+        "options": {
+          "on-hold": "In Wartestellung (Standard)",
+          "pending": "Bezahlung ausstehend"
+        }
+      },
+      "activate_expiry_days_setting": {
+        "id": "activate_expiry_days_setting",
+        "label": "Ablaufzeitpunkt für Zahlungen aktivieren",
+        "description": "Aktivieren Sie diese Option, um den Zeitpunkt, an dem die Zahlungsfrist abläuft, selbst festzulegen. Alle Transaktionen werden dadurch in Zahlungen anstatt Bestellungen umgewandelt",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "Aktivieren Sie diese Option, um den Zeitpunkt, an dem die Zahlungsfrist abläuft, selbst festzulegen. Alle Transaktionen werden dadurch in Zahlungen anstatt Bestellungen umgewandelt",
+        "placeholder": ""
+      },
+      "order_dueDate": {
+        "id": "order_dueDate",
+        "label": "Ablaufzeitpunkt",
+        "description": "TAGE nach Ende der Zahlungsfrist. Standard: <code>12</code> Tage.",
+        "type": "number",
+        "value": 12,
+        "default": 12,
+        "tip": "TAGE nach Ende der Zahlungsfrist. Standard: <code>12</code> Tage.",
+        "placeholder": ""
+      },
+      "skip_mollie_payment_screen": {
+        "id": "skip_mollie_payment_screen",
+        "label": "Mollie-Bezahlseite überspringen, wenn Überweisung ausgewählt wurde",
+        "description": "Aktivieren Sie diese Option, um die Weiterleitung Ihres Benutzers auf die Mollie-Bezahlseite zu überspringen. Stattdessen wird Ihr Benutzer direkt zur Bestellbestätigung von WooCommerce weitergeleitet und bekommt eine Schrittanweisung zur Abwicklung der Überweisungszahlung angezeigt.",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "Aktivieren Sie diese Option, um die Weiterleitung Ihres Benutzers auf die Mollie-Bezahlseite zu überspringen. Stattdessen wird Ihr Benutzer direkt zur Bestellbestätigung von WooCommerce weitergeleitet und bekommt eine Schrittanweisung zur Abwicklung der Überweisungszahlung angezeigt.",
+        "placeholder": ""
+      }
+    },
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&section=mollie_wc_gateway_banktransfer",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/mollie_wc_gateway_banktransfer",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  },
+  {
+    "id": "mollie_wc_gateway_billie",
+    "title": null,
+    "description": "",
+    "order": 13,
+    "enabled": true,
+    "method_title": "Mollie - Rechnungskauf für Firmenkunden - Billie",
+    "method_description": "To accept payments via Billie, all default WooCommerce checkout fields should be enabled and required.",
+    "method_supports": [
+      "products",
+      "refunds"
+    ],
+    "settings": {
+      "display": {
+        "id": "display",
+        "label": "Rechnungskauf für Firmenkunden - Billie Anzeigeeinstellungen",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "use_api_title": {
+        "id": "use_api_title",
+        "label": "Retrieve the gateway title and logo from the Mollie API",
+        "description": "",
+        "type": "checkbox",
+        "value": "no",
+        "default": "yes",
+        "tip": "",
+        "placeholder": ""
+      },
+      "title": {
+        "id": "title",
+        "label": "Titel",
+        "description": "Hierdurch wird der Titel gesteuert, den Benutzer beim Bezahlvorgang sehen. Standard: <code>Rechnungskauf für Firmenkunden - Billie</code>",
+        "type": "text",
+        "value": "",
+        "default": "Rechnungskauf für Firmenkunden - Billie",
+        "tip": "Hierdurch wird der Titel gesteuert, den Benutzer beim Bezahlvorgang sehen. Standard: <code>Rechnungskauf für Firmenkunden - Billie</code>",
+        "placeholder": ""
+      },
+      "display_logo": {
+        "id": "display_logo",
+        "label": "Logo bei Bezahlvorgang anzeigen. Standard: <code>aktiviert</code>",
+        "description": "",
+        "type": "checkbox",
+        "value": "yes",
+        "default": "yes",
+        "tip": "",
+        "placeholder": ""
+      },
+      "enable_custom_logo": {
+        "id": "enable_custom_logo",
+        "label": "Aktivieren Sie die Funktion zum Hinzufügen eines eigenen Logos für dieses Zahlungsportal. Die Funktion hat Vorrang über andere Logo-Optionen.",
+        "description": "",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "",
+        "placeholder": ""
+      },
+      "upload_logo": {
+        "id": "upload_logo",
+        "label": "Eigenes Logo hochladen",
+        "description": "Laden Sie ein eigenes Symbol für dieses Zahlungsportal hoch. Die entsprechende Funktion muss aktiviert sein.",
+        "type": "file",
+        "value": "",
+        "default": "",
+        "tip": "Laden Sie ein eigenes Symbol für dieses Zahlungsportal hoch. Die entsprechende Funktion muss aktiviert sein.",
+        "placeholder": ""
+      },
+      "sales": {
+        "id": "sales",
+        "label": "Vertriebsländer",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "surcharge": {
+        "id": "surcharge",
+        "label": "Rechnungskauf für Firmenkunden - Billie Zuschlag",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "payment_surcharge": {
+        "id": "payment_surcharge",
+        "label": "Zahlungsgebühr",
+        "description": "Wählen Sie eine Zahlungsgebühr für dieses Zahlungsportal aus",
+        "type": "select",
+        "value": "no_fee",
+        "default": "no_fee",
+        "tip": "Wählen Sie eine Zahlungsgebühr für dieses Zahlungsportal aus",
+        "placeholder": "",
+        "options": {
+          "no_fee": "Keine Gebühr",
+          "fixed_fee": "Feste Gebühr",
+          "percentage": "Prozentsatz",
+          "fixed_fee_percentage": "Feste Gebühr und Prozentsatz"
+        }
+      },
+      "fixed_fee": {
+        "id": "fixed_fee",
+        "label": "Fester Betrag des Zuschlags in €",
+        "description": "Legen Sie die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Legen Sie die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "placeholder": ""
+      },
+      "percentage": {
+        "id": "percentage",
+        "label": "Prozentsatz für den Zuschlag in %",
+        "description": "Legen Sie einen Prozentsatz für die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Legen Sie einen Prozentsatz für die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "placeholder": ""
+      },
+      "surcharge_limit": {
+        "id": "surcharge_limit",
+        "label": "Grenzwert für den Zuschlag in €",
+        "description": "Setzen Sie einen Grenzwert für die Gebühr, die zum Einkaufswagen hinzugefügt wird. Der Standardwert 0 steht für keinen Grenzwert",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Setzen Sie einen Grenzwert für die Gebühr, die zum Einkaufswagen hinzugefügt wird. Der Standardwert 0 steht für keinen Grenzwert",
+        "placeholder": ""
+      },
+      "maximum_limit": {
+        "id": "maximum_limit",
+        "label": "Nur unterhalb dieses Grenzwerts in € fallen Gebühren an",
+        "description": "Maximaler Kaufbetrag, bei dem der Zuschlag fällig wird. Wenn die Bestellung mehr als diese Zahl beträgt, wird der Zuschlag nicht fällig. Der Standardwert 0 steht für kein Maximum",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Maximaler Kaufbetrag, bei dem der Zuschlag fällig wird. Wenn die Bestellung mehr als diese Zahl beträgt, wird der Zuschlag nicht fällig. Der Standardwert 0 steht für kein Maximum",
+        "placeholder": ""
+      },
+      "advanced": {
+        "id": "advanced",
+        "label": "Rechnungskauf für Firmenkunden - Billie fortgeschritten",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "activate_expiry_days_setting": {
+        "id": "activate_expiry_days_setting",
+        "label": "Ablaufzeitpunkt für Zahlungen aktivieren",
+        "description": "Aktivieren Sie diese Option, um den Zeitpunkt, an dem die Bestellung abläuft, selbst festzulegen.",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "Aktivieren Sie diese Option, um den Zeitpunkt, an dem die Bestellung abläuft, selbst festzulegen.",
+        "placeholder": ""
+      },
+      "order_dueDate": {
+        "id": "order_dueDate",
+        "label": "Ablaufzeitpunkt",
+        "description": "Number of MINUTES after the order will expire and will be canceled at Mollie and WooCommerce.",
+        "type": "number",
+        "value": "10",
+        "default": "10",
+        "tip": "Number of MINUTES after the order will expire and will be canceled at Mollie and WooCommerce.",
+        "placeholder": ""
+      }
+    },
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&section=mollie_wc_gateway_billie",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/mollie_wc_gateway_billie",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  },
+  {
+    "id": "mollie_wc_gateway_klarna",
+    "title": null,
+    "description": null,
+    "order": 14,
+    "enabled": false,
+    "method_title": "Mollie - Klarna",
+    "method_description": "To accept payments via Klarna, all default WooCommerce checkout fields should be enabled and required.",
+    "method_supports": [
+      "products",
+      "refunds"
+    ],
+    "settings": {
+      "display": {
+        "id": "display",
+        "label": "Bezahle mit Klarna Anzeigeeinstellungen",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "use_api_title": {
+        "id": "use_api_title",
+        "label": "Retrieve the gateway title and logo from the Mollie API",
+        "description": "",
+        "type": "checkbox",
+        "value": "no",
+        "default": "yes",
+        "tip": "",
+        "placeholder": ""
+      },
+      "title": {
+        "id": "title",
+        "label": "Titel",
+        "description": "Hierdurch wird der Titel gesteuert, den Benutzer beim Bezahlvorgang sehen. Standard: <code>Bezahle mit Klarna</code>",
+        "type": "text",
+        "value": "Klarna",
+        "default": "Bezahle mit Klarna",
+        "tip": "Hierdurch wird der Titel gesteuert, den Benutzer beim Bezahlvorgang sehen. Standard: <code>Bezahle mit Klarna</code>",
+        "placeholder": ""
+      },
+      "display_logo": {
+        "id": "display_logo",
+        "label": "Logo bei Bezahlvorgang anzeigen. Standard: <code>aktiviert</code>",
+        "description": "",
+        "type": "checkbox",
+        "value": "yes",
+        "default": "yes",
+        "tip": "",
+        "placeholder": ""
+      },
+      "enable_custom_logo": {
+        "id": "enable_custom_logo",
+        "label": "Aktivieren Sie die Funktion zum Hinzufügen eines eigenen Logos für dieses Zahlungsportal. Die Funktion hat Vorrang über andere Logo-Optionen.",
+        "description": "",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "",
+        "placeholder": ""
+      },
+      "upload_logo": {
+        "id": "upload_logo",
+        "label": "Eigenes Logo hochladen",
+        "description": "Laden Sie ein eigenes Symbol für dieses Zahlungsportal hoch. Die entsprechende Funktion muss aktiviert sein.",
+        "type": "file",
+        "value": "",
+        "default": "",
+        "tip": "Laden Sie ein eigenes Symbol für dieses Zahlungsportal hoch. Die entsprechende Funktion muss aktiviert sein.",
+        "placeholder": ""
+      },
+      "sales": {
+        "id": "sales",
+        "label": "Vertriebsländer",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "allowed_countries": {
+        "id": "allowed_countries",
+        "label": "In bestimmten Ländern verkaufen",
+        "description": "",
+        "type": "multi_select_countries",
+        "value": [
+          "AF",
+          "AL",
+          "DZ",
+          "AS",
+          "VI",
+          "AD",
+          "AO",
+          "AI",
+          "AQ",
+          "AG",
+          "AR",
+          "AM",
+          "AW",
+          "AZ",
+          "AU",
+          "BS",
+          "BH",
+          "BD",
+          "BB",
+          "BY",
+          "PW",
+          "BE",
+          "BZ",
+          "BJ",
+          "BM",
+          "BT",
+          "BO",
+          "BQ",
+          "BA",
+          "BW",
+          "BV",
+          "BR",
+          "VG",
+          "IO",
+          "BN",
+          "BG",
+          "BF",
+          "BI",
+          "CL",
+          "CN",
+          "CK",
+          "CR",
+          "CW",
+          "DE",
+          "DM",
+          "DO",
+          "DJ",
+          "DK",
+          "EC",
+          "SV",
+          "CI",
+          "ER",
+          "EE",
+          "SZ",
+          "FK",
+          "FJ",
+          "FI",
+          "FR",
+          "GF",
+          "PF",
+          "TF",
+          "FO",
+          "GA",
+          "GM",
+          "GE",
+          "GH",
+          "GI",
+          "GD",
+          "GR",
+          "GL",
+          "GP",
+          "GU",
+          "GT",
+          "GG",
+          "GN",
+          "GW",
+          "GY",
+          "HT",
+          "HM",
+          "HN",
+          "HK",
+          "IN",
+          "ID",
+          "IQ",
+          "IR",
+          "IE",
+          "IS",
+          "IM",
+          "IL",
+          "IT",
+          "JM",
+          "JP",
+          "YE",
+          "JE",
+          "JO",
+          "KY",
+          "KH",
+          "CM",
+          "CA",
+          "CV",
+          "KZ",
+          "QA",
+          "KE",
+          "KG",
+          "KI",
+          "CC",
+          "CO",
+          "KM",
+          "CG",
+          "CD",
+          "HR",
+          "CU",
+          "KW",
+          "LA",
+          "LS",
+          "LV",
+          "LB",
+          "LR",
+          "LY",
+          "LI",
+          "LT",
+          "LU",
+          "MO",
+          "MG",
+          "MW",
+          "MY",
+          "MV",
+          "ML",
+          "MT",
+          "MA",
+          "MH",
+          "MQ",
+          "MR",
+          "MU",
+          "YT",
+          "MX",
+          "FM",
+          "MD",
+          "MC",
+          "MN",
+          "ME",
+          "MS",
+          "MZ",
+          "MM",
+          "NA",
+          "NR",
+          "NP",
+          "NC",
+          "NZ",
+          "NI",
+          "NL",
+          "NE",
+          "NG",
+          "NU",
+          "KP",
+          "MK",
+          "NF",
+          "NO",
+          "MP",
+          "OM",
+          "TL",
+          "PK",
+          "PS",
+          "PA",
+          "PG",
+          "PY",
+          "PE",
+          "PH",
+          "PN",
+          "PL",
+          "PT",
+          "PR",
+          "RW",
+          "RO",
+          "RU",
+          "RE",
+          "ST",
+          "BL",
+          "SX",
+          "PM",
+          "SB",
+          "ZM",
+          "WS",
+          "SM",
+          "SA",
+          "SE",
+          "CH",
+          "SN",
+          "RS",
+          "SC",
+          "SL",
+          "ZW",
+          "SG",
+          "SK",
+          "SI",
+          "SO",
+          "ES",
+          "SJ",
+          "LK",
+          "SH",
+          "KN",
+          "LC",
+          "MF",
+          "VC",
+          "SD",
+          "SR",
+          "SY",
+          "ZA",
+          "GS",
+          "KR",
+          "SS",
+          "TJ",
+          "TW",
+          "TZ",
+          "TH",
+          "TG",
+          "TK",
+          "TO",
+          "TT",
+          "TD",
+          "CZ",
+          "TN",
+          "TM",
+          "TC",
+          "TV",
+          "TR",
+          "UG",
+          "UA",
+          "HU",
+          "UM",
+          "UY",
+          "UZ",
+          "VU",
+          "VA",
+          "VE",
+          "AE",
+          "US",
+          "GB",
+          "VN",
+          "WF",
+          "CX",
+          "EH",
+          "CF",
+          "CY",
+          "EG",
+          "GQ",
+          "ET",
+          "AX",
+          "AT"
+        ],
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "surcharge": {
+        "id": "surcharge",
+        "label": "Bezahle mit Klarna Zuschlag",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "payment_surcharge": {
+        "id": "payment_surcharge",
+        "label": "Zahlungsgebühr",
+        "description": "Wählen Sie eine Zahlungsgebühr für dieses Zahlungsportal aus",
+        "type": "select",
+        "value": "no_fee",
+        "default": "no_fee",
+        "tip": "Wählen Sie eine Zahlungsgebühr für dieses Zahlungsportal aus",
+        "placeholder": "",
+        "options": {
+          "no_fee": "Keine Gebühr",
+          "fixed_fee": "Feste Gebühr",
+          "percentage": "Prozentsatz",
+          "fixed_fee_percentage": "Feste Gebühr und Prozentsatz"
+        }
+      },
+      "fixed_fee": {
+        "id": "fixed_fee",
+        "label": "Fester Betrag des Zuschlags in €",
+        "description": "Legen Sie die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Legen Sie die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "placeholder": ""
+      },
+      "percentage": {
+        "id": "percentage",
+        "label": "Prozentsatz für den Zuschlag in %",
+        "description": "Legen Sie einen Prozentsatz für die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Legen Sie einen Prozentsatz für die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "placeholder": ""
+      },
+      "surcharge_limit": {
+        "id": "surcharge_limit",
+        "label": "Grenzwert für den Zuschlag in €",
+        "description": "Setzen Sie einen Grenzwert für die Gebühr, die zum Einkaufswagen hinzugefügt wird. Der Standardwert 0 steht für keinen Grenzwert",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Setzen Sie einen Grenzwert für die Gebühr, die zum Einkaufswagen hinzugefügt wird. Der Standardwert 0 steht für keinen Grenzwert",
+        "placeholder": ""
+      },
+      "maximum_limit": {
+        "id": "maximum_limit",
+        "label": "Nur unterhalb dieses Grenzwerts in € fallen Gebühren an",
+        "description": "Maximaler Kaufbetrag, bei dem der Zuschlag fällig wird. Wenn die Bestellung mehr als diese Zahl beträgt, wird der Zuschlag nicht fällig. Der Standardwert 0 steht für kein Maximum",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Maximaler Kaufbetrag, bei dem der Zuschlag fällig wird. Wenn die Bestellung mehr als diese Zahl beträgt, wird der Zuschlag nicht fällig. Der Standardwert 0 steht für kein Maximum",
+        "placeholder": ""
+      },
+      "advanced": {
+        "id": "advanced",
+        "label": "Bezahle mit Klarna fortgeschritten",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "activate_expiry_days_setting": {
+        "id": "activate_expiry_days_setting",
+        "label": "Ablaufzeitpunkt für Zahlungen aktivieren",
+        "description": "Aktivieren Sie diese Option, um den Zeitpunkt, an dem die Bestellung abläuft, selbst festzulegen.",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "Aktivieren Sie diese Option, um den Zeitpunkt, an dem die Bestellung abläuft, selbst festzulegen.",
+        "placeholder": ""
+      },
+      "order_dueDate": {
+        "id": "order_dueDate",
+        "label": "Ablaufzeitpunkt",
+        "description": "Number of MINUTES after the order will expire and will be canceled at Mollie and WooCommerce.",
+        "type": "number",
+        "value": "32",
+        "default": "10",
+        "tip": "Number of MINUTES after the order will expire and will be canceled at Mollie and WooCommerce.",
+        "placeholder": ""
+      }
+    },
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&section=mollie_wc_gateway_klarna",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/mollie_wc_gateway_klarna",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  },
+  {
+    "id": "mollie_wc_gateway_trustly",
+    "title": null,
+    "description": null,
+    "order": 15,
+    "enabled": true,
+    "method_title": "Mollie - Sofortüberweisung",
+    "method_description": "",
+    "method_supports": [
+      "products",
+      "refunds"
+    ],
+    "settings": {
+      "display": {
+        "id": "display",
+        "label": "Sofortüberweisung Anzeigeeinstellungen",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "use_api_title": {
+        "id": "use_api_title",
+        "label": "Retrieve the gateway title and logo from the Mollie API",
+        "description": "",
+        "type": "checkbox",
+        "value": "no",
+        "default": "yes",
+        "tip": "",
+        "placeholder": ""
+      },
+      "title": {
+        "id": "title",
+        "label": "Titel",
+        "description": "Hierdurch wird der Titel gesteuert, den Benutzer beim Bezahlvorgang sehen. Standard: <code>Sofortüberweisung</code>",
+        "type": "text",
+        "value": "",
+        "default": "Sofortüberweisung",
+        "tip": "Hierdurch wird der Titel gesteuert, den Benutzer beim Bezahlvorgang sehen. Standard: <code>Sofortüberweisung</code>",
+        "placeholder": ""
+      },
+      "display_logo": {
+        "id": "display_logo",
+        "label": "Logo bei Bezahlvorgang anzeigen. Standard: <code>aktiviert</code>",
+        "description": "",
+        "type": "checkbox",
+        "value": "yes",
+        "default": "yes",
+        "tip": "",
+        "placeholder": ""
+      },
+      "enable_custom_logo": {
+        "id": "enable_custom_logo",
+        "label": "Aktivieren Sie die Funktion zum Hinzufügen eines eigenen Logos für dieses Zahlungsportal. Die Funktion hat Vorrang über andere Logo-Optionen.",
+        "description": "",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "",
+        "placeholder": ""
+      },
+      "upload_logo": {
+        "id": "upload_logo",
+        "label": "Eigenes Logo hochladen",
+        "description": "Laden Sie ein eigenes Symbol für dieses Zahlungsportal hoch. Die entsprechende Funktion muss aktiviert sein.",
+        "type": "file",
+        "value": "",
+        "default": "",
+        "tip": "Laden Sie ein eigenes Symbol für dieses Zahlungsportal hoch. Die entsprechende Funktion muss aktiviert sein.",
+        "placeholder": ""
+      },
+      "sales": {
+        "id": "sales",
+        "label": "Vertriebsländer",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "allowed_countries": {
+        "id": "allowed_countries",
+        "label": "In bestimmten Ländern verkaufen",
+        "description": "",
+        "type": "multi_select_countries",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "surcharge": {
+        "id": "surcharge",
+        "label": "Sofortüberweisung Zuschlag",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "payment_surcharge": {
+        "id": "payment_surcharge",
+        "label": "Zahlungsgebühr",
+        "description": "Wählen Sie eine Zahlungsgebühr für dieses Zahlungsportal aus",
+        "type": "select",
+        "value": "no_fee",
+        "default": "no_fee",
+        "tip": "Wählen Sie eine Zahlungsgebühr für dieses Zahlungsportal aus",
+        "placeholder": "",
+        "options": {
+          "no_fee": "Keine Gebühr",
+          "fixed_fee": "Feste Gebühr",
+          "percentage": "Prozentsatz",
+          "fixed_fee_percentage": "Feste Gebühr und Prozentsatz"
+        }
+      },
+      "fixed_fee": {
+        "id": "fixed_fee",
+        "label": "Fester Betrag des Zuschlags in €",
+        "description": "Legen Sie die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Legen Sie die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "placeholder": ""
+      },
+      "percentage": {
+        "id": "percentage",
+        "label": "Prozentsatz für den Zuschlag in %",
+        "description": "Legen Sie einen Prozentsatz für die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Legen Sie einen Prozentsatz für die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "placeholder": ""
+      },
+      "surcharge_limit": {
+        "id": "surcharge_limit",
+        "label": "Grenzwert für den Zuschlag in €",
+        "description": "Setzen Sie einen Grenzwert für die Gebühr, die zum Einkaufswagen hinzugefügt wird. Der Standardwert 0 steht für keinen Grenzwert",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Setzen Sie einen Grenzwert für die Gebühr, die zum Einkaufswagen hinzugefügt wird. Der Standardwert 0 steht für keinen Grenzwert",
+        "placeholder": ""
+      },
+      "maximum_limit": {
+        "id": "maximum_limit",
+        "label": "Nur unterhalb dieses Grenzwerts in € fallen Gebühren an",
+        "description": "Maximaler Kaufbetrag, bei dem der Zuschlag fällig wird. Wenn die Bestellung mehr als diese Zahl beträgt, wird der Zuschlag nicht fällig. Der Standardwert 0 steht für kein Maximum",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Maximaler Kaufbetrag, bei dem der Zuschlag fällig wird. Wenn die Bestellung mehr als diese Zahl beträgt, wird der Zuschlag nicht fällig. Der Standardwert 0 steht für kein Maximum",
+        "placeholder": ""
+      },
+      "advanced": {
+        "id": "advanced",
+        "label": "Sofortüberweisung fortgeschritten",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "initial_order_status": {
+        "id": "initial_order_status",
+        "label": "Initialer Bestellstatus",
+        "description": "Some payment methods take longer than a few hours to complete. The initial order state is then set to 'In Wartestellung'. This ensures the order is not cancelled when the setting <a href=\"https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=products&section=inventory\" target=\"_blank\">Hold Stock (minutes)</a> is used. This will also prevent the order to be canceled when expired.",
+        "type": "select",
+        "value": "on-hold",
+        "default": "on-hold",
+        "tip": "Some payment methods take longer than a few hours to complete. The initial order state is then set to 'In Wartestellung'. This ensures the order is not cancelled when the setting <a href=\"https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=products&section=inventory\" target=\"_blank\">Hold Stock (minutes)</a> is used. This will also prevent the order to be canceled when expired.",
+        "placeholder": "",
+        "options": {
+          "on-hold": "In Wartestellung (Standard)",
+          "pending": "Bezahlung ausstehend"
+        }
+      },
+      "activate_expiry_days_setting": {
+        "id": "activate_expiry_days_setting",
+        "label": "Ablaufzeitpunkt für Zahlungen aktivieren",
+        "description": "Aktivieren Sie diese Option, um den Zeitpunkt, an dem die Bestellung abläuft, selbst festzulegen.",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "Aktivieren Sie diese Option, um den Zeitpunkt, an dem die Bestellung abläuft, selbst festzulegen.",
+        "placeholder": ""
+      },
+      "order_dueDate": {
+        "id": "order_dueDate",
+        "label": "Ablaufzeitpunkt",
+        "description": "Number of MINUTES after the order will expire and will be canceled at Mollie and WooCommerce.",
+        "type": "number",
+        "value": "10",
+        "default": "10",
+        "tip": "Number of MINUTES after the order will expire and will be canceled at Mollie and WooCommerce.",
+        "placeholder": ""
+      }
+    },
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&section=mollie_wc_gateway_trustly",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/mollie_wc_gateway_trustly",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  },
+  {
+    "id": "ppcp-credit-card-gateway",
+    "title": "Advanced Card Processing",
+    "description": "Accept debit and credit cards, and local payment methods with PayPal’s latest solution.",
+    "order": 16,
+    "enabled": false,
+    "method_title": "Advanced Card Processing",
+    "method_description": "Accept debit and credit cards, and local payment methods with PayPal’s latest solution.",
+    "method_supports": [
+      "products",
+      "refunds"
+    ],
+    "settings": [],
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-credit-card-gateway",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/ppcp-credit-card-gateway",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  },
+  {
+    "id": "ppcp-pay-upon-invoice-gateway",
+    "title": "Pay upon Invoice",
+    "description": "Once you place an order, pay within 30 days. Our payment partner Ratepay will send you payment instructions.",
+    "order": 17,
+    "enabled": false,
+    "method_title": "Pay upon Invoice",
+    "method_description": "Pay upon Invoice is an invoice payment method in Germany. It is a local buy now, pay later payment method that allows the buyer to place an order, receive the goods, try them, verify they are in good order, and then pay the invoice within 30 days.",
+    "method_supports": [
+      "refunds"
+    ],
+    "settings": {
+      "title": {
+        "id": "title",
+        "label": "Title",
+        "description": "This controls the title which the user sees during checkout.",
+        "type": "text",
+        "value": "Pay upon Invoice",
+        "default": "Pay upon Invoice",
+        "tip": "This controls the title which the user sees during checkout.",
+        "placeholder": ""
+      },
+      "experience_context": {
+        "id": "experience_context",
+        "label": "Experience Context",
+        "description": "Specify brand name, logo and customer service instructions to be presented on Ratepay's payment instructions.",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "Specify brand name, logo and customer service instructions to be presented on Ratepay's payment instructions.",
+        "placeholder": ""
+      },
+      "brand_name": {
+        "id": "brand_name",
+        "label": "Brand name",
+        "description": "Merchant name displayed in Ratepay's payment instructions. Should not exceed 127 characters.",
+        "type": "text",
+        "value": "ikfzdigitalzulassung.de",
+        "default": "ikfzdigitalzulassung.de",
+        "tip": "Merchant name displayed in Ratepay's payment instructions. Should not exceed 127 characters.",
+        "placeholder": ""
+      },
+      "logo_url": {
+        "id": "logo_url",
+        "label": "Logo URL",
+        "description": "Logo to be presented on Ratepay's payment instructions.",
+        "type": "url",
+        "value": "",
+        "default": "",
+        "tip": "Logo to be presented on Ratepay's payment instructions.",
+        "placeholder": ""
+      },
+      "customer_service_instructions": {
+        "id": "customer_service_instructions",
+        "label": "Customer service instructions",
+        "description": "Customer service instructions to be presented on Ratepay's payment instructions.",
+        "type": "text",
+        "value": "",
+        "default": "",
+        "tip": "Customer service instructions to be presented on Ratepay's payment instructions.",
+        "placeholder": ""
+      }
+    },
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-pay-upon-invoice-gateway",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/ppcp-pay-upon-invoice-gateway",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  },
+  {
+    "id": "ppcp-bancontact",
+    "title": "Bancontact",
+    "description": "",
+    "order": 18,
+    "enabled": false,
+    "method_title": "Bancontact (via PayPal)",
+    "method_description": "A popular and trusted electronic payment method in Belgium, used by Belgian customers with Bancontact cards issued by local banks. Transactions are processed in EUR.",
+    "method_supports": [
+      "refunds",
+      "products"
+    ],
+    "settings": {
+      "title": {
+        "id": "title",
+        "label": "Title",
+        "description": "This controls the title which the user sees during checkout.",
+        "type": "text",
+        "value": "Bancontact",
+        "default": "Bancontact",
+        "tip": "This controls the title which the user sees during checkout.",
+        "placeholder": ""
+      }
+    },
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-bancontact",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/ppcp-bancontact",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  },
+  {
+    "id": "ppcp-blik",
+    "title": "Blik",
+    "description": "",
+    "order": 19,
+    "enabled": false,
+    "method_title": "Blik (via PayPal)",
+    "method_description": "A widely used mobile payment method in Poland, allowing Polish customers to pay directly via their banking apps. Transactions are processed in PLN.",
+    "method_supports": [
+      "refunds",
+      "products"
+    ],
+    "settings": {
+      "title": {
+        "id": "title",
+        "label": "Title",
+        "description": "This controls the title which the user sees during checkout.",
+        "type": "text",
+        "value": "Blik",
+        "default": "Blik",
+        "tip": "This controls the title which the user sees during checkout.",
+        "placeholder": ""
+      }
+    },
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-blik",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/ppcp-blik",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  },
+  {
+    "id": "ppcp-eps",
+    "title": "EPS",
+    "description": "",
+    "order": 20,
+    "enabled": false,
+    "method_title": "EPS (via PayPal)",
+    "method_description": "An online payment method in Austria, enabling Austrian buyers to make secure payments directly through their bank accounts. Transactions are processed in EUR.",
+    "method_supports": [
+      "refunds",
+      "products"
+    ],
+    "settings": {
+      "title": {
+        "id": "title",
+        "label": "Title",
+        "description": "This controls the title which the user sees during checkout.",
+        "type": "text",
+        "value": "EPS",
+        "default": "EPS",
+        "tip": "This controls the title which the user sees during checkout.",
+        "placeholder": ""
+      }
+    },
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-eps",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/ppcp-eps",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  },
+  {
+    "id": "ppcp-ideal",
+    "title": "iDeal",
+    "description": "",
+    "order": 21,
+    "enabled": false,
+    "method_title": "iDeal (via PayPal)",
+    "method_description": "The most common payment method in the Netherlands, allowing Dutch buyers to pay directly through their preferred bank. Transactions are processed in EUR.",
+    "method_supports": [
+      "refunds",
+      "products"
+    ],
+    "settings": {
+      "title": {
+        "id": "title",
+        "label": "Title",
+        "description": "This controls the title which the user sees during checkout.",
+        "type": "text",
+        "value": "iDeal",
+        "default": "iDeal",
+        "tip": "This controls the title which the user sees during checkout.",
+        "placeholder": ""
+      }
+    },
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-ideal",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/ppcp-ideal",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  },
+  {
+    "id": "ppcp-mybank",
+    "title": "MyBank",
+    "description": "",
+    "order": 22,
+    "enabled": false,
+    "method_title": "MyBank (via PayPal)",
+    "method_description": "A European online banking payment solution primarily used in Italy, enabling customers to make secure bank transfers during checkout. Transactions are processed in EUR.",
+    "method_supports": [
+      "refunds",
+      "products"
+    ],
+    "settings": {
+      "title": {
+        "id": "title",
+        "label": "Title",
+        "description": "This controls the title which the user sees during checkout.",
+        "type": "text",
+        "value": "MyBank",
+        "default": "MyBank",
+        "tip": "This controls the title which the user sees during checkout.",
+        "placeholder": ""
+      }
+    },
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-mybank",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/ppcp-mybank",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  },
+  {
+    "id": "ppcp-p24",
+    "title": "Przelewy24",
+    "description": "",
+    "order": 23,
+    "enabled": false,
+    "method_title": "Przelewy24 (via PayPal)",
+    "method_description": "A popular online payment gateway in Poland, offering various payment options for Polish customers. Transactions can be processed in PLN or EUR.",
+    "method_supports": [
+      "refunds",
+      "products"
+    ],
+    "settings": {
+      "title": {
+        "id": "title",
+        "label": "Title",
+        "description": "This controls the title which the user sees during checkout.",
+        "type": "text",
+        "value": "Przelewy24",
+        "default": "Przelewy24",
+        "tip": "This controls the title which the user sees during checkout.",
+        "placeholder": ""
+      }
+    },
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-p24",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/ppcp-p24",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  },
+  {
+    "id": "ppcp-trustly",
+    "title": "Trustly",
+    "description": "",
+    "order": 24,
+    "enabled": false,
+    "method_title": "Trustly (via PayPal)",
+    "method_description": "A European payment method that allows buyers to make payments directly from their bank accounts, suitable for customers across multiple European countries. Supported currencies include EUR, DKK, SEK, GBP, and NOK.",
+    "method_supports": [
+      "refunds",
+      "products"
+    ],
+    "settings": {
+      "title": {
+        "id": "title",
+        "label": "Title",
+        "description": "This controls the title which the user sees during checkout.",
+        "type": "text",
+        "value": "Trustly",
+        "default": "Trustly",
+        "tip": "This controls the title which the user sees during checkout.",
+        "placeholder": ""
+      }
+    },
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-trustly",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/ppcp-trustly",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  },
+  {
+    "id": "ppcp-multibanco",
+    "title": "Multibanco",
+    "description": "",
+    "order": 25,
+    "enabled": false,
+    "method_title": "Multibanco (via PayPal)",
+    "method_description": "An online payment method in Portugal, enabling Portuguese buyers to make secure payments directly through their bank accounts. Transactions are processed in EUR.",
+    "method_supports": [
+      "refunds",
+      "products"
+    ],
+    "settings": {
+      "title": {
+        "id": "title",
+        "label": "Title",
+        "description": "This controls the title which the user sees during checkout.",
+        "type": "text",
+        "value": "Multibanco",
+        "default": "Multibanco",
+        "tip": "This controls the title which the user sees during checkout.",
+        "placeholder": ""
+      }
+    },
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-multibanco",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/ppcp-multibanco",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  },
+  {
+    "id": "mollie_wc_gateway_riverty",
+    "title": null,
+    "description": "",
+    "order": 26,
+    "enabled": true,
+    "method_title": "Mollie - Rechnung mit Riverty",
+    "method_description": "To accept payments via Riverty, all default WooCommerce checkout fields should be enabled and required.",
+    "method_supports": [
+      "products",
+      "refunds"
+    ],
+    "settings": {
+      "display": {
+        "id": "display",
+        "label": "Rechnung mit Riverty Anzeigeeinstellungen",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "use_api_title": {
+        "id": "use_api_title",
+        "label": "Retrieve the gateway title and logo from the Mollie API",
+        "description": "",
+        "type": "checkbox",
+        "value": "no",
+        "default": "yes",
+        "tip": "",
+        "placeholder": ""
+      },
+      "title": {
+        "id": "title",
+        "label": "Titel",
+        "description": "Hierdurch wird der Titel gesteuert, den Benutzer beim Bezahlvorgang sehen. Standard: <code>Rechnung mit Riverty</code>",
+        "type": "text",
+        "value": "",
+        "default": "Rechnung mit Riverty",
+        "tip": "Hierdurch wird der Titel gesteuert, den Benutzer beim Bezahlvorgang sehen. Standard: <code>Rechnung mit Riverty</code>",
+        "placeholder": ""
+      },
+      "display_logo": {
+        "id": "display_logo",
+        "label": "Logo bei Bezahlvorgang anzeigen. Standard: <code>aktiviert</code>",
+        "description": "",
+        "type": "checkbox",
+        "value": "yes",
+        "default": "yes",
+        "tip": "",
+        "placeholder": ""
+      },
+      "enable_custom_logo": {
+        "id": "enable_custom_logo",
+        "label": "Aktivieren Sie die Funktion zum Hinzufügen eines eigenen Logos für dieses Zahlungsportal. Die Funktion hat Vorrang über andere Logo-Optionen.",
+        "description": "",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "",
+        "placeholder": ""
+      },
+      "upload_logo": {
+        "id": "upload_logo",
+        "label": "Eigenes Logo hochladen",
+        "description": "Laden Sie ein eigenes Symbol für dieses Zahlungsportal hoch. Die entsprechende Funktion muss aktiviert sein.",
+        "type": "file",
+        "value": "",
+        "default": "",
+        "tip": "Laden Sie ein eigenes Symbol für dieses Zahlungsportal hoch. Die entsprechende Funktion muss aktiviert sein.",
+        "placeholder": ""
+      },
+      "sales": {
+        "id": "sales",
+        "label": "Vertriebsländer",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "allowed_countries": {
+        "id": "allowed_countries",
+        "label": "In bestimmten Ländern verkaufen",
+        "description": "",
+        "type": "multi_select_countries",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "surcharge": {
+        "id": "surcharge",
+        "label": "Rechnung mit Riverty Zuschlag",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "payment_surcharge": {
+        "id": "payment_surcharge",
+        "label": "Zahlungsgebühr",
+        "description": "Wählen Sie eine Zahlungsgebühr für dieses Zahlungsportal aus",
+        "type": "select",
+        "value": "no_fee",
+        "default": "no_fee",
+        "tip": "Wählen Sie eine Zahlungsgebühr für dieses Zahlungsportal aus",
+        "placeholder": "",
+        "options": {
+          "no_fee": "Keine Gebühr",
+          "fixed_fee": "Feste Gebühr",
+          "percentage": "Prozentsatz",
+          "fixed_fee_percentage": "Feste Gebühr und Prozentsatz"
+        }
+      },
+      "fixed_fee": {
+        "id": "fixed_fee",
+        "label": "Fester Betrag des Zuschlags in €",
+        "description": "Legen Sie die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Legen Sie die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "placeholder": ""
+      },
+      "percentage": {
+        "id": "percentage",
+        "label": "Prozentsatz für den Zuschlag in %",
+        "description": "Legen Sie einen Prozentsatz für die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Legen Sie einen Prozentsatz für die Gebühr fest, die zum Einkaufswagen hinzugefügt wird. Standard: 0,00",
+        "placeholder": ""
+      },
+      "surcharge_limit": {
+        "id": "surcharge_limit",
+        "label": "Grenzwert für den Zuschlag in €",
+        "description": "Setzen Sie einen Grenzwert für die Gebühr, die zum Einkaufswagen hinzugefügt wird. Der Standardwert 0 steht für keinen Grenzwert",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Setzen Sie einen Grenzwert für die Gebühr, die zum Einkaufswagen hinzugefügt wird. Der Standardwert 0 steht für keinen Grenzwert",
+        "placeholder": ""
+      },
+      "maximum_limit": {
+        "id": "maximum_limit",
+        "label": "Nur unterhalb dieses Grenzwerts in € fallen Gebühren an",
+        "description": "Maximaler Kaufbetrag, bei dem der Zuschlag fällig wird. Wenn die Bestellung mehr als diese Zahl beträgt, wird der Zuschlag nicht fällig. Der Standardwert 0 steht für kein Maximum",
+        "type": "number",
+        "value": "0.00",
+        "default": "0.00",
+        "tip": "Maximaler Kaufbetrag, bei dem der Zuschlag fällig wird. Wenn die Bestellung mehr als diese Zahl beträgt, wird der Zuschlag nicht fällig. Der Standardwert 0 steht für kein Maximum",
+        "placeholder": ""
+      },
+      "advanced": {
+        "id": "advanced",
+        "label": "Rechnung mit Riverty fortgeschritten",
+        "description": "",
+        "type": "title",
+        "value": "",
+        "default": "",
+        "tip": "",
+        "placeholder": ""
+      },
+      "activate_expiry_days_setting": {
+        "id": "activate_expiry_days_setting",
+        "label": "Ablaufzeitpunkt für Zahlungen aktivieren",
+        "description": "Aktivieren Sie diese Option, um den Zeitpunkt, an dem die Bestellung abläuft, selbst festzulegen.",
+        "type": "checkbox",
+        "value": "no",
+        "default": "no",
+        "tip": "Aktivieren Sie diese Option, um den Zeitpunkt, an dem die Bestellung abläuft, selbst festzulegen.",
+        "placeholder": ""
+      },
+      "order_dueDate": {
+        "id": "order_dueDate",
+        "label": "Ablaufzeitpunkt",
+        "description": "Number of MINUTES after the order will expire and will be canceled at Mollie and WooCommerce.",
+        "type": "number",
+        "value": "10",
+        "default": "10",
+        "tip": "Number of MINUTES after the order will expire and will be canceled at Mollie and WooCommerce.",
+        "placeholder": ""
+      }
+    },
+    "needs_setup": false,
+    "post_install_scripts": [],
+    "settings_url": "https://ikfzdigitalzulassung.de/wp-admin/admin.php?page=wc-settings&tab=checkout&section=mollie_wc_gateway_riverty",
+    "connection_url": null,
+    "setup_help_text": null,
+    "required_settings_keys": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways/mollie_wc_gateway_riverty",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/payment_gateways"
+        }
+      ]
+    }
+  }
+]

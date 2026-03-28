@@ -1,0 +1,1100 @@
+{
+  "timestamp": "2026-03-22T15:37:39.636Z",
+  "summary": {
+    "wpTotal": 77,
+    "nextTotal": 80,
+    "matched": 77,
+    "missing": 0,
+    "extra": 0,
+    "broken": 0,
+    "seoIssues": 74
+  },
+  "matched": [
+    {
+      "slug": "kfz-zulassung-essen",
+      "wpUrl": "https://ikfzdigitalzulassung.de/kfz-zulassung-essen/",
+      "nextUrl": "http://localhost:3000/kfz-zulassung-essen",
+      "seoMatch": true
+    },
+    {
+      "slug": "kfz-zulassung-berlin",
+      "wpUrl": "https://ikfzdigitalzulassung.de/kfz-zulassung-berlin/",
+      "nextUrl": "http://localhost:3000/kfz-zulassung-berlin",
+      "seoMatch": true
+    },
+    {
+      "slug": "zulassungsstelle-hamburg",
+      "wpUrl": "https://ikfzdigitalzulassung.de/zulassungsstelle-hamburg/",
+      "nextUrl": "http://localhost:3000/zulassungsstelle-hamburg",
+      "seoMatch": true
+    },
+    {
+      "slug": "autoanmeldung-koeln",
+      "wpUrl": "https://ikfzdigitalzulassung.de/autoanmeldung-koeln/",
+      "nextUrl": "http://localhost:3000/autoanmeldung-koeln",
+      "seoMatch": true
+    },
+    {
+      "slug": "auto-anmelden-berlin",
+      "wpUrl": "https://ikfzdigitalzulassung.de/auto-anmelden-berlin/",
+      "nextUrl": "http://localhost:3000/auto-anmelden-berlin",
+      "seoMatch": true
+    },
+    {
+      "slug": "kfz-zulassung-in-deiner-stadt",
+      "wpUrl": "https://ikfzdigitalzulassung.de/kfz-zulassung-in-deiner-stadt/",
+      "nextUrl": "http://localhost:3000/kfz-zulassung-in-deiner-stadt",
+      "seoMatch": true
+    },
+    {
+      "slug": "in-baden-baden",
+      "wpUrl": "https://ikfzdigitalzulassung.de/in-baden-baden/",
+      "nextUrl": "http://localhost:3000/in-baden-baden",
+      "seoMatch": true
+    },
+    {
+      "slug": "landkreis-bad-toelz-wolfratshausen",
+      "wpUrl": "https://ikfzdigitalzulassung.de/landkreis-bad-toelz-wolfratshausen/",
+      "nextUrl": "http://localhost:3000/landkreis-bad-toelz-wolfratshausen",
+      "seoMatch": true
+    },
+    {
+      "slug": "landkreis-bad-kreuznach",
+      "wpUrl": "https://ikfzdigitalzulassung.de/landkreis-bad-kreuznach/",
+      "nextUrl": "http://localhost:3000/landkreis-bad-kreuznach",
+      "seoMatch": true
+    },
+    {
+      "slug": "landkreis-bad-kissingen",
+      "wpUrl": "https://ikfzdigitalzulassung.de/landkreis-bad-kissingen/",
+      "nextUrl": "http://localhost:3000/landkreis-bad-kissingen",
+      "seoMatch": true
+    },
+    {
+      "slug": "landkreis-aurich",
+      "wpUrl": "https://ikfzdigitalzulassung.de/landkreis-aurich/",
+      "nextUrl": "http://localhost:3000/landkreis-aurich",
+      "seoMatch": true
+    },
+    {
+      "slug": "landkreis-augsburg",
+      "wpUrl": "https://ikfzdigitalzulassung.de/landkreis-augsburg/",
+      "nextUrl": "http://localhost:3000/landkreis-augsburg",
+      "seoMatch": true
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-aschaffenburg",
+      "wpUrl": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-landkreis-aschaffenburg/",
+      "nextUrl": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-aschaffenburg",
+      "seoMatch": true
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-ansbach",
+      "wpUrl": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-landkreis-ansbach/",
+      "nextUrl": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-ansbach",
+      "seoMatch": true
+    },
+    {
+      "slug": "motorrad-versicherung-vergleichen",
+      "wpUrl": "https://ikfzdigitalzulassung.de/motorrad-versicherung-vergleichen/",
+      "nextUrl": "http://localhost:3000/motorrad-versicherung-vergleichen",
+      "seoMatch": true
+    },
+    {
+      "slug": "kfz-versicherung-berechnen",
+      "wpUrl": "https://ikfzdigitalzulassung.de/kfz-versicherung-berechnen/",
+      "nextUrl": "http://localhost:3000/kfz-versicherung-berechnen",
+      "seoMatch": true
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-kreis-ahrweiler",
+      "wpUrl": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-kreis-ahrweiler/",
+      "nextUrl": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-kreis-ahrweiler",
+      "seoMatch": true
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-kreis-aichach-friedberg",
+      "wpUrl": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-kreis-aichach-friedberg/",
+      "nextUrl": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-kreis-aichach-friedberg",
+      "seoMatch": true
+    },
+    {
+      "slug": "zulassungsstelle-alb-donau-kreis",
+      "wpUrl": "https://ikfzdigitalzulassung.de/zulassungsstelle-alb-donau-kreis/",
+      "nextUrl": "http://localhost:3000/zulassungsstelle-alb-donau-kreis",
+      "seoMatch": true
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-altenburger-land",
+      "wpUrl": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-landkreis-altenburger-land/",
+      "nextUrl": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-altenburger-land",
+      "seoMatch": true
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-alzey-worms",
+      "wpUrl": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-landkreis-alzey-worms/",
+      "nextUrl": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-alzey-worms",
+      "seoMatch": true
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-altoetting",
+      "wpUrl": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-landkreis-altoetting/",
+      "nextUrl": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-altoetting",
+      "seoMatch": true
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-altenkirchen",
+      "wpUrl": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-landkreis-altenkirchen/",
+      "nextUrl": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-altenkirchen",
+      "seoMatch": true
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-amberg-sulzbach",
+      "wpUrl": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-landkreis-amberg-sulzbach/",
+      "nextUrl": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-amberg-sulzbach",
+      "seoMatch": true
+    },
+    {
+      "slug": "zulassungsstelle-amberg",
+      "wpUrl": "https://ikfzdigitalzulassung.de/zulassungsstelle-amberg/",
+      "nextUrl": "http://localhost:3000/zulassungsstelle-amberg",
+      "seoMatch": true
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-ammerland",
+      "wpUrl": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-landkreis-ammerland/",
+      "nextUrl": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-ammerland",
+      "seoMatch": true
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-anhalt-bitterfeld",
+      "wpUrl": "https://ikfzdigitalzulassung.de/auto-online-anmelden-oder-abmelden-im-landkreis-anhalt-bitterfeld/",
+      "nextUrl": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-anhalt-bitterfeld",
+      "seoMatch": true
+    },
+    {
+      "slug": "zulassungsstelle-andernach",
+      "wpUrl": "https://ikfzdigitalzulassung.de/zulassungsstelle-andernach/",
+      "nextUrl": "http://localhost:3000/zulassungsstelle-andernach",
+      "seoMatch": true
+    },
+    {
+      "slug": "zulassungsstelle-aalen",
+      "wpUrl": "https://ikfzdigitalzulassung.de/zulassungsstelle-aalen/",
+      "nextUrl": "http://localhost:3000/zulassungsstelle-aalen",
+      "seoMatch": true
+    },
+    {
+      "slug": "motorrad-online-anmelden",
+      "wpUrl": "https://ikfzdigitalzulassung.de/motorrad-online-anmelden/",
+      "nextUrl": "http://localhost:3000/motorrad-online-anmelden",
+      "seoMatch": true
+    },
+    {
+      "slug": "auto-verkaufen",
+      "wpUrl": "https://ikfzdigitalzulassung.de/auto-verkaufen/",
+      "nextUrl": "http://localhost:3000/auto-verkaufen",
+      "seoMatch": true
+    },
+    {
+      "slug": "ikfzdigitalblog",
+      "wpUrl": "https://ikfzdigitalzulassung.de/ikfzdigitalblog/",
+      "nextUrl": "http://localhost:3000/ikfzdigitalblog",
+      "seoMatch": true
+    },
+    {
+      "slug": "bezahlmoeglichkeiten",
+      "wpUrl": "https://ikfzdigitalzulassung.de/bezahlmoeglichkeiten/",
+      "nextUrl": "http://localhost:3000/bezahlmoeglichkeiten",
+      "seoMatch": false
+    },
+    {
+      "slug": "impressum",
+      "wpUrl": "https://ikfzdigitalzulassung.de/impressum/",
+      "nextUrl": "http://localhost:3000/impressum",
+      "seoMatch": true
+    },
+    {
+      "slug": "datenschutzerklarung",
+      "wpUrl": "https://ikfzdigitalzulassung.de/datenschutzerklarung/",
+      "nextUrl": "http://localhost:3000/datenschutzerklarung",
+      "seoMatch": true
+    },
+    {
+      "slug": "kfz-services",
+      "wpUrl": "https://ikfzdigitalzulassung.de/kfz-services/",
+      "nextUrl": "http://localhost:3000/kfz-services",
+      "seoMatch": true
+    },
+    {
+      "slug": "evb",
+      "wpUrl": "https://ikfzdigitalzulassung.de/evb/",
+      "nextUrl": "http://localhost:3000/evb",
+      "seoMatch": true
+    },
+    {
+      "slug": "kennzeichen-bestellen",
+      "wpUrl": "https://ikfzdigitalzulassung.de/kennzeichen-bestellen/",
+      "nextUrl": "http://localhost:3000/kennzeichen-bestellen",
+      "seoMatch": false
+    },
+    {
+      "slug": "kfz-online-abmelden",
+      "wpUrl": "https://ikfzdigitalzulassung.de/kfz-online-abmelden/",
+      "nextUrl": "http://localhost:3000/kfz-online-abmelden",
+      "seoMatch": true
+    },
+    {
+      "slug": "zulassungsstelle-aachen",
+      "wpUrl": "https://ikfzdigitalzulassung.de/zulassungsstelle-aachen/",
+      "nextUrl": "http://localhost:3000/zulassungsstelle-aachen",
+      "seoMatch": true
+    },
+    {
+      "slug": "auto-online-anmelden",
+      "wpUrl": "https://ikfzdigitalzulassung.de/auto-online-anmelden/",
+      "nextUrl": "http://localhost:3000/auto-online-anmelden",
+      "seoMatch": true
+    },
+    {
+      "slug": "antragsuebersicht-2",
+      "wpUrl": "https://ikfzdigitalzulassung.de/antragsuebersicht-2/",
+      "nextUrl": "http://localhost:3000/antragsuebersicht-2",
+      "seoMatch": false
+    },
+    {
+      "slug": "agb",
+      "wpUrl": "https://ikfzdigitalzulassung.de/agb/",
+      "nextUrl": "http://localhost:3000/agb",
+      "seoMatch": true
+    },
+    {
+      "slug": "faq",
+      "wpUrl": "https://ikfzdigitalzulassung.de/faq/",
+      "nextUrl": "http://localhost:3000/faq",
+      "seoMatch": true
+    },
+    {
+      "slug": "kfz-zulassung-online-abgelehnt-steuerrueckstaende",
+      "wpUrl": "https://ikfzdigitalzulassung.de/kfz-zulassung-online-abgelehnt-steuerrueckstaende/",
+      "nextUrl": "http://localhost:3000/kfz-zulassung-online-abgelehnt-steuerrueckstaende",
+      "seoMatch": true
+    },
+    {
+      "slug": "kfz-online-service-2025",
+      "wpUrl": "https://ikfzdigitalzulassung.de/kfz-online-service-2025/",
+      "nextUrl": "http://localhost:3000/kfz-online-service-2025",
+      "seoMatch": true
+    },
+    {
+      "slug": "online-zulassung-aufenthaltstitel",
+      "wpUrl": "https://ikfzdigitalzulassung.de/online-zulassung-aufenthaltstitel/",
+      "nextUrl": "http://localhost:3000/online-zulassung-aufenthaltstitel",
+      "seoMatch": true
+    },
+    {
+      "slug": "online-zulassung-fuer-ihr-fahrzeug",
+      "wpUrl": "https://ikfzdigitalzulassung.de/online-zulassung-fuer-ihr-fahrzeug/",
+      "nextUrl": "http://localhost:3000/online-zulassung-fuer-ihr-fahrzeug",
+      "seoMatch": true
+    },
+    {
+      "slug": "eucaris",
+      "wpUrl": "https://ikfzdigitalzulassung.de/eucaris/",
+      "nextUrl": "http://localhost:3000/eucaris",
+      "seoMatch": true
+    },
+    {
+      "slug": "kfz-zulassung-ohne-behoerdengang",
+      "wpUrl": "https://ikfzdigitalzulassung.de/kfz-zulassung-ohne-behoerdengang/",
+      "nextUrl": "http://localhost:3000/kfz-zulassung-ohne-behoerdengang",
+      "seoMatch": true
+    },
+    {
+      "slug": "online-zulassung-fuer-alle-fahrzeugtypen",
+      "wpUrl": "https://ikfzdigitalzulassung.de/online-zulassung-fuer-alle-fahrzeugtypen/",
+      "nextUrl": "http://localhost:3000/online-zulassung-fuer-alle-fahrzeugtypen",
+      "seoMatch": true
+    },
+    {
+      "slug": "online-zulassung-fuer-gebrauchtwagen",
+      "wpUrl": "https://ikfzdigitalzulassung.de/online-zulassung-fuer-gebrauchtwagen/",
+      "nextUrl": "http://localhost:3000/online-zulassung-fuer-gebrauchtwagen",
+      "seoMatch": true
+    },
+    {
+      "slug": "fahrzeug-online-zulassen",
+      "wpUrl": "https://ikfzdigitalzulassung.de/fahrzeug-online-zulassen/",
+      "nextUrl": "http://localhost:3000/fahrzeug-online-zulassen",
+      "seoMatch": true
+    },
+    {
+      "slug": "kfz-abmelden-online-in-deutschland",
+      "wpUrl": "https://ikfzdigitalzulassung.de/kfz-abmelden-online-in-deutschland/",
+      "nextUrl": "http://localhost:3000/kfz-abmelden-online-in-deutschland",
+      "seoMatch": true
+    },
+    {
+      "slug": "zulassungsstelle",
+      "wpUrl": "https://ikfzdigitalzulassung.de/zulassungsstelle/",
+      "nextUrl": "http://localhost:3000/zulassungsstelle",
+      "seoMatch": true
+    },
+    {
+      "slug": "fahrzeugbrief",
+      "wpUrl": "https://ikfzdigitalzulassung.de/fahrzeugbrief/",
+      "nextUrl": "http://localhost:3000/fahrzeugbrief",
+      "seoMatch": true
+    },
+    {
+      "slug": "fahrzeugschein",
+      "wpUrl": "https://ikfzdigitalzulassung.de/fahrzeugschein/",
+      "nextUrl": "http://localhost:3000/fahrzeugschein",
+      "seoMatch": true
+    },
+    {
+      "slug": "ohne-papierkram",
+      "wpUrl": "https://ikfzdigitalzulassung.de/ohne-papierkram/",
+      "nextUrl": "http://localhost:3000/ohne-papierkram",
+      "seoMatch": true
+    },
+    {
+      "slug": "ohne-warteschlangen",
+      "wpUrl": "https://ikfzdigitalzulassung.de/ohne-warteschlangen/",
+      "nextUrl": "http://localhost:3000/ohne-warteschlangen",
+      "seoMatch": true
+    },
+    {
+      "slug": "kosten-24-95-euro",
+      "wpUrl": "https://ikfzdigitalzulassung.de/kosten-24-95-euro/",
+      "nextUrl": "http://localhost:3000/kosten-24-95-euro",
+      "seoMatch": true
+    },
+    {
+      "slug": "elektronischer-abmeldebescheid",
+      "wpUrl": "https://ikfzdigitalzulassung.de/elektronischer-abmeldebescheid/",
+      "nextUrl": "http://localhost:3000/elektronischer-abmeldebescheid",
+      "seoMatch": true
+    },
+    {
+      "slug": "kennzeichen-mit-qr-code",
+      "wpUrl": "https://ikfzdigitalzulassung.de/kennzeichen-mit-qr-code/",
+      "nextUrl": "http://localhost:3000/kennzeichen-mit-qr-code",
+      "seoMatch": true
+    },
+    {
+      "slug": "zulassungsbescheinigung-teil-1",
+      "wpUrl": "https://ikfzdigitalzulassung.de/zulassungsbescheinigung-teil-1/",
+      "nextUrl": "http://localhost:3000/zulassungsbescheinigung-teil-1",
+      "seoMatch": true
+    },
+    {
+      "slug": "sicherheitscode",
+      "wpUrl": "https://ikfzdigitalzulassung.de/sicherheitscode/",
+      "nextUrl": "http://localhost:3000/sicherheitscode",
+      "seoMatch": true
+    },
+    {
+      "slug": "online-abmeldung",
+      "wpUrl": "https://ikfzdigitalzulassung.de/online-abmeldung/",
+      "nextUrl": "http://localhost:3000/online-abmeldung",
+      "seoMatch": true
+    },
+    {
+      "slug": "fahrzeug-ausser-betrieb-setzen",
+      "wpUrl": "https://ikfzdigitalzulassung.de/fahrzeug-ausser-betrieb-setzen/",
+      "nextUrl": "http://localhost:3000/fahrzeug-ausser-betrieb-setzen",
+      "seoMatch": true
+    },
+    {
+      "slug": "zulassungsservice",
+      "wpUrl": "https://ikfzdigitalzulassung.de/zulassungsservice/",
+      "nextUrl": "http://localhost:3000/zulassungsservice",
+      "seoMatch": true
+    },
+    {
+      "slug": "kfz-online-abmelden-ihr-leitfaden",
+      "wpUrl": "https://ikfzdigitalzulassung.de/kfz-online-abmelden-ihr-leitfaden/",
+      "nextUrl": "http://localhost:3000/kfz-online-abmelden-ihr-leitfaden",
+      "seoMatch": true
+    },
+    {
+      "slug": "auto-online-abmelden",
+      "wpUrl": "https://ikfzdigitalzulassung.de/auto-online-abmelden/",
+      "nextUrl": "http://localhost:3000/auto-online-abmelden",
+      "seoMatch": true
+    },
+    {
+      "slug": "kaufvertrag-auto",
+      "wpUrl": "https://ikfzdigitalzulassung.de/kaufvertrag-auto/",
+      "nextUrl": "http://localhost:3000/kaufvertrag-auto",
+      "seoMatch": true
+    },
+    {
+      "slug": "qr-code",
+      "wpUrl": "https://ikfzdigitalzulassung.de/qr-code/",
+      "nextUrl": "http://localhost:3000/qr-code",
+      "seoMatch": true
+    },
+    {
+      "slug": "magdeburg",
+      "wpUrl": "https://ikfzdigitalzulassung.de/magdeburg/",
+      "nextUrl": "http://localhost:3000/magdeburg",
+      "seoMatch": true
+    },
+    {
+      "slug": "fahrzeugschein-kw",
+      "wpUrl": "https://ikfzdigitalzulassung.de/fahrzeugschein-kw/",
+      "nextUrl": "http://localhost:3000/fahrzeugschein-kw",
+      "seoMatch": true
+    },
+    {
+      "slug": "auto-abmelden",
+      "wpUrl": "https://ikfzdigitalzulassung.de/auto-abmelden/",
+      "nextUrl": "http://localhost:3000/auto-abmelden",
+      "seoMatch": true
+    },
+    {
+      "slug": "auto-abmelden-online",
+      "wpUrl": "https://ikfzdigitalzulassung.de/auto-abmelden-online/",
+      "nextUrl": "http://localhost:3000/auto-abmelden-online",
+      "seoMatch": true
+    },
+    {
+      "slug": "kostenlos-online-auto-abmelden-deutschlandweit",
+      "wpUrl": "https://ikfzdigitalzulassung.de/kostenlos-online-auto-abmelden-deutschlandweit/",
+      "nextUrl": "http://localhost:3000/kostenlos-online-auto-abmelden-deutschlandweit",
+      "seoMatch": true
+    },
+    {
+      "slug": "digitale-kfz-zulassung-2024",
+      "wpUrl": "https://ikfzdigitalzulassung.de/digitale-kfz-zulassung-2024/",
+      "nextUrl": "http://localhost:3000/digitale-kfz-zulassung-2024",
+      "seoMatch": true
+    }
+  ],
+  "missing": [],
+  "extra": [],
+  "broken": [],
+  "seoIssues": [
+    {
+      "slug": "bezahlmoeglichkeiten",
+      "url": "http://localhost:3000/bezahlmoeglichkeiten",
+      "issues": [
+        "Has noindex (should be indexed!)"
+      ]
+    },
+    {
+      "slug": "kennzeichen-bestellen",
+      "url": "http://localhost:3000/kennzeichen-bestellen",
+      "issues": [
+        "Has noindex (should be indexed!)"
+      ]
+    },
+    {
+      "slug": "antragsuebersicht-2",
+      "url": "http://localhost:3000/antragsuebersicht-2",
+      "issues": [
+        "Missing meta description",
+        "Has noindex (should be indexed!)"
+      ]
+    },
+    {
+      "slug": "agb",
+      "url": "http://localhost:3000/agb",
+      "issues": [
+        "Title too long (81 chars)"
+      ]
+    },
+    {
+      "slug": "faq",
+      "url": "http://localhost:3000/faq",
+      "issues": [
+        "Title too long (80 chars)"
+      ]
+    },
+    {
+      "slug": "zulassungsstelle-aachen",
+      "url": "http://localhost:3000/zulassungsstelle-aachen",
+      "issues": [
+        "Title too long (83 chars)"
+      ]
+    },
+    {
+      "slug": "auto-online-anmelden",
+      "url": "http://localhost:3000/auto-online-anmelden",
+      "issues": [
+        "Title too long (82 chars)"
+      ]
+    },
+    {
+      "slug": "kfz-online-abmelden",
+      "url": "http://localhost:3000/kfz-online-abmelden",
+      "issues": [
+        "Title too long (84 chars)"
+      ]
+    },
+    {
+      "slug": "evb",
+      "url": "http://localhost:3000/evb",
+      "issues": [
+        "Title too long (86 chars)"
+      ]
+    },
+    {
+      "slug": "ikfzdigitalblog",
+      "url": "http://localhost:3000/ikfzdigitalblog",
+      "issues": [
+        "Title too long (81 chars)"
+      ]
+    },
+    {
+      "slug": "kfz-services",
+      "url": "http://localhost:3000/kfz-services",
+      "issues": [
+        "Title too long (72 chars)"
+      ]
+    },
+    {
+      "slug": "auto-verkaufen",
+      "url": "http://localhost:3000/auto-verkaufen",
+      "issues": [
+        "Title too long (86 chars)"
+      ]
+    },
+    {
+      "slug": "motorrad-online-anmelden",
+      "url": "http://localhost:3000/motorrad-online-anmelden",
+      "issues": [
+        "Title too long (86 chars)"
+      ]
+    },
+    {
+      "slug": "zulassungsstelle-andernach",
+      "url": "http://localhost:3000/zulassungsstelle-andernach",
+      "issues": [
+        "Title too long (80 chars)"
+      ]
+    },
+    {
+      "slug": "zulassungsstelle-aalen",
+      "url": "http://localhost:3000/zulassungsstelle-aalen",
+      "issues": [
+        "Title too long (85 chars)"
+      ]
+    },
+    {
+      "slug": "zulassungsstelle-amberg",
+      "url": "http://localhost:3000/zulassungsstelle-amberg",
+      "issues": [
+        "Title too long (85 chars)"
+      ]
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-altenkirchen",
+      "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-altenkirchen",
+      "issues": [
+        "Title too long (99 chars)",
+        "Meta description too long (179 chars)"
+      ]
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-anhalt-bitterfeld",
+      "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-anhalt-bitterfeld",
+      "issues": [
+        "Title too long (105 chars)",
+        "Meta description too long (184 chars)"
+      ]
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-ammerland",
+      "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-ammerland",
+      "issues": [
+        "Title too long (96 chars)",
+        "Meta description too long (176 chars)"
+      ]
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-amberg-sulzbach",
+      "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-amberg-sulzbach",
+      "issues": [
+        "Title too long (103 chars)",
+        "Meta description too long (182 chars)"
+      ]
+    },
+    {
+      "slug": "motorrad-versicherung-vergleichen",
+      "url": "http://localhost:3000/motorrad-versicherung-vergleichen",
+      "issues": [
+        "Title too long (81 chars)"
+      ]
+    },
+    {
+      "slug": "kfz-versicherung-berechnen",
+      "url": "http://localhost:3000/kfz-versicherung-berechnen",
+      "issues": [
+        "Title too long (88 chars)"
+      ]
+    },
+    {
+      "slug": "zulassungsstelle-alb-donau-kreis",
+      "url": "http://localhost:3000/zulassungsstelle-alb-donau-kreis",
+      "issues": [
+        "Title too long (83 chars)"
+      ]
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-altoetting",
+      "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-altoetting",
+      "issues": [
+        "Title too long (97 chars)",
+        "Meta description too long (176 chars)"
+      ]
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-altenburger-land",
+      "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-altenburger-land",
+      "issues": [
+        "Title too long (104 chars)",
+        "Meta description too long (183 chars)"
+      ]
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-alzey-worms",
+      "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-alzey-worms",
+      "issues": [
+        "Title too long (99 chars)",
+        "Meta description too long (178 chars)"
+      ]
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-kreis-aichach-friedberg",
+      "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-kreis-aichach-friedberg",
+      "issues": [
+        "Title too long (101 chars)",
+        "Meta description too long (180 chars)"
+      ]
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-kreis-ahrweiler",
+      "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-kreis-ahrweiler",
+      "issues": [
+        "Title too long (87 chars)"
+      ]
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-ansbach",
+      "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-ansbach",
+      "issues": [
+        "Title too long (80 chars)"
+      ]
+    },
+    {
+      "slug": "landkreis-bad-kissingen",
+      "url": "http://localhost:3000/landkreis-bad-kissingen",
+      "issues": [
+        "Title too long (86 chars)",
+        "Meta description too long (173 chars)"
+      ]
+    },
+    {
+      "slug": "landkreis-aurich",
+      "url": "http://localhost:3000/landkreis-aurich",
+      "issues": [
+        "Title too long (79 chars)"
+      ]
+    },
+    {
+      "slug": "landkreis-augsburg",
+      "url": "http://localhost:3000/landkreis-augsburg",
+      "issues": [
+        "Title too long (81 chars)"
+      ]
+    },
+    {
+      "slug": "in-baden-baden",
+      "url": "http://localhost:3000/in-baden-baden",
+      "issues": [
+        "Title too long (89 chars)"
+      ]
+    },
+    {
+      "slug": "landkreis-bad-kreuznach",
+      "url": "http://localhost:3000/landkreis-bad-kreuznach",
+      "issues": [
+        "Title too long (86 chars)",
+        "Meta description too long (172 chars)"
+      ]
+    },
+    {
+      "slug": "auto-online-anmelden-oder-abmelden-im-landkreis-aschaffenburg",
+      "url": "http://localhost:3000/auto-online-anmelden-oder-abmelden-im-landkreis-aschaffenburg",
+      "issues": [
+        "Title too long (86 chars)",
+        "Meta description too long (173 chars)"
+      ]
+    },
+    {
+      "slug": "landkreis-bad-toelz-wolfratshausen",
+      "url": "http://localhost:3000/landkreis-bad-toelz-wolfratshausen",
+      "issues": [
+        "Title too long (96 chars)",
+        "Meta description too long (183 chars)"
+      ]
+    },
+    {
+      "slug": "kfz-zulassung-in-deiner-stadt",
+      "url": "http://localhost:3000/kfz-zulassung-in-deiner-stadt",
+      "issues": [
+        "Title too long (92 chars)"
+      ]
+    },
+    {
+      "slug": "auto-anmelden-berlin",
+      "url": "http://localhost:3000/auto-anmelden-berlin",
+      "issues": [
+        "Title too long (222 chars)"
+      ]
+    },
+    {
+      "slug": "autoanmeldung-koeln",
+      "url": "http://localhost:3000/autoanmeldung-koeln",
+      "issues": [
+        "Title too long (152 chars)"
+      ]
+    },
+    {
+      "slug": "kfz-zulassung-berlin",
+      "url": "http://localhost:3000/kfz-zulassung-berlin",
+      "issues": [
+        "Title too long (73 chars)"
+      ]
+    },
+    {
+      "slug": "kfz-zulassung-essen",
+      "url": "http://localhost:3000/kfz-zulassung-essen",
+      "issues": [
+        "Title too long (78 chars)"
+      ]
+    },
+    {
+      "slug": "zulassungsstelle-hamburg",
+      "url": "http://localhost:3000/zulassungsstelle-hamburg",
+      "issues": [
+        "Title too long (145 chars)"
+      ]
+    },
+    {
+      "slug": "digitale-kfz-zulassung-2024",
+      "url": "http://localhost:3000/digitale-kfz-zulassung-2024",
+      "issues": [
+        "Title too long (83 chars)"
+      ]
+    },
+    {
+      "slug": "kostenlos-online-auto-abmelden-deutschlandweit",
+      "url": "http://localhost:3000/kostenlos-online-auto-abmelden-deutschlandweit",
+      "issues": [
+        "Title too long (82 chars)"
+      ]
+    },
+    {
+      "slug": "auto-abmelden",
+      "url": "http://localhost:3000/auto-abmelden",
+      "issues": [
+        "Title too long (83 chars)"
+      ]
+    },
+    {
+      "slug": "fahrzeugschein-kw",
+      "url": "http://localhost:3000/fahrzeugschein-kw",
+      "issues": [
+        "Title too long (81 chars)"
+      ]
+    },
+    {
+      "slug": "magdeburg",
+      "url": "http://localhost:3000/magdeburg",
+      "issues": [
+        "Title too long (89 chars)"
+      ]
+    },
+    {
+      "slug": "auto-abmelden-online",
+      "url": "http://localhost:3000/auto-abmelden-online",
+      "issues": [
+        "Title too long (89 chars)"
+      ]
+    },
+    {
+      "slug": "qr-code",
+      "url": "http://localhost:3000/qr-code",
+      "issues": [
+        "Title too long (84 chars)"
+      ]
+    },
+    {
+      "slug": "kaufvertrag-auto",
+      "url": "http://localhost:3000/kaufvertrag-auto",
+      "issues": [
+        "Title too long (86 chars)"
+      ]
+    },
+    {
+      "slug": "auto-online-abmelden",
+      "url": "http://localhost:3000/auto-online-abmelden",
+      "issues": [
+        "Title too long (82 chars)"
+      ]
+    },
+    {
+      "slug": "zulassungsservice",
+      "url": "http://localhost:3000/zulassungsservice",
+      "issues": [
+        "Title too long (85 chars)"
+      ]
+    },
+    {
+      "slug": "online-abmeldung",
+      "url": "http://localhost:3000/online-abmeldung",
+      "issues": [
+        "Title too long (83 chars)"
+      ]
+    },
+    {
+      "slug": "fahrzeug-ausser-betrieb-setzen",
+      "url": "http://localhost:3000/fahrzeug-ausser-betrieb-setzen",
+      "issues": [
+        "Title too long (102 chars)"
+      ]
+    },
+    {
+      "slug": "kfz-online-abmelden-ihr-leitfaden",
+      "url": "http://localhost:3000/kfz-online-abmelden-ihr-leitfaden",
+      "issues": [
+        "Title too long (85 chars)"
+      ]
+    },
+    {
+      "slug": "sicherheitscode",
+      "url": "http://localhost:3000/sicherheitscode",
+      "issues": [
+        "Title too long (73 chars)"
+      ]
+    },
+    {
+      "slug": "elektronischer-abmeldebescheid",
+      "url": "http://localhost:3000/elektronischer-abmeldebescheid",
+      "issues": [
+        "Title too long (80 chars)"
+      ]
+    },
+    {
+      "slug": "zulassungsbescheinigung-teil-1",
+      "url": "http://localhost:3000/zulassungsbescheinigung-teil-1",
+      "issues": [
+        "Title too long (83 chars)"
+      ]
+    },
+    {
+      "slug": "kennzeichen-mit-qr-code",
+      "url": "http://localhost:3000/kennzeichen-mit-qr-code",
+      "issues": [
+        "Title too long (74 chars)"
+      ]
+    },
+    {
+      "slug": "ohne-warteschlangen",
+      "url": "http://localhost:3000/ohne-warteschlangen",
+      "issues": [
+        "Title too long (71 chars)"
+      ]
+    },
+    {
+      "slug": "kosten-24-95-euro",
+      "url": "http://localhost:3000/kosten-24-95-euro",
+      "issues": [
+        "Title too long (74 chars)"
+      ]
+    },
+    {
+      "slug": "ohne-papierkram",
+      "url": "http://localhost:3000/ohne-papierkram",
+      "issues": [
+        "Title too long (84 chars)"
+      ]
+    },
+    {
+      "slug": "fahrzeugschein",
+      "url": "http://localhost:3000/fahrzeugschein",
+      "issues": [
+        "Title too long (91 chars)"
+      ]
+    },
+    {
+      "slug": "zulassungsstelle",
+      "url": "http://localhost:3000/zulassungsstelle",
+      "issues": [
+        "Title too long (85 chars)"
+      ]
+    },
+    {
+      "slug": "kfz-abmelden-online-in-deutschland",
+      "url": "http://localhost:3000/kfz-abmelden-online-in-deutschland",
+      "issues": [
+        "Title too long (88 chars)"
+      ]
+    },
+    {
+      "slug": "fahrzeug-online-zulassen",
+      "url": "http://localhost:3000/fahrzeug-online-zulassen",
+      "issues": [
+        "Title too long (77 chars)"
+      ]
+    },
+    {
+      "slug": "online-zulassung-fuer-ihr-fahrzeug",
+      "url": "http://localhost:3000/online-zulassung-fuer-ihr-fahrzeug",
+      "issues": [
+        "Title too long (84 chars)"
+      ]
+    },
+    {
+      "slug": "kfz-zulassung-ohne-behoerdengang",
+      "url": "http://localhost:3000/kfz-zulassung-ohne-behoerdengang",
+      "issues": [
+        "Title too long (85 chars)"
+      ]
+    },
+    {
+      "slug": "online-zulassung-fuer-alle-fahrzeugtypen",
+      "url": "http://localhost:3000/online-zulassung-fuer-alle-fahrzeugtypen",
+      "issues": [
+        "Title too long (71 chars)"
+      ]
+    },
+    {
+      "slug": "online-zulassung-aufenthaltstitel",
+      "url": "http://localhost:3000/online-zulassung-aufenthaltstitel",
+      "issues": [
+        "Title too long (72 chars)"
+      ]
+    },
+    {
+      "slug": "kfz-online-service-2025",
+      "url": "http://localhost:3000/kfz-online-service-2025",
+      "issues": [
+        "Title too long (80 chars)"
+      ]
+    },
+    {
+      "slug": "online-zulassung-fuer-gebrauchtwagen",
+      "url": "http://localhost:3000/online-zulassung-fuer-gebrauchtwagen",
+      "issues": [
+        "Title too long (88 chars)"
+      ]
+    },
+    {
+      "slug": "kfz-zulassung-online-abgelehnt-steuerrueckstaende",
+      "url": "http://localhost:3000/kfz-zulassung-online-abgelehnt-steuerrueckstaende",
+      "issues": [
+        "Title too long (81 chars)"
+      ]
+    },
+    {
+      "slug": "kfz-service/kfz-online-service",
+      "url": "http://localhost:3000/kfz-service/kfz-online-service",
+      "issues": [
+        "Title too long (85 chars)"
+      ]
+    }
+  ],
+  "sitemapComparison": {
+    "inWpOnly": [
+      "/kfz-service/kfz-online-service"
+    ],
+    "inNextOnly": [
+      "/antragsuebersicht-2",
+      "/kennzeichen-bestellen",
+      "/bezahlmoeglichkeiten",
+      "/blog"
+    ],
+    "inBoth": [
+      "/ikfzdigitalblog",
+      "/kfz-zulassung-online-abgelehnt-steuerrueckstaende",
+      "/kfz-online-service-2025",
+      "/online-zulassung-aufenthaltstitel",
+      "/online-zulassung-fuer-ihr-fahrzeug",
+      "/online-zulassung-fuer-alle-fahrzeugtypen",
+      "/kfz-zulassung-ohne-behoerdengang",
+      "/fahrzeug-online-zulassen",
+      "/online-zulassung-fuer-gebrauchtwagen",
+      "/zulassungsstelle",
+      "/kfz-abmelden-online-in-deutschland",
+      "/fahrzeugbrief",
+      "/ohne-warteschlangen",
+      "/ohne-papierkram",
+      "/fahrzeugschein",
+      "/kosten-24-95-euro",
+      "/kennzeichen-mit-qr-code",
+      "/elektronischer-abmeldebescheid",
+      "/sicherheitscode",
+      "/zulassungsbescheinigung-teil-1",
+      "/fahrzeug-ausser-betrieb-setzen",
+      "/online-abmeldung",
+      "/kfz-online-abmelden-ihr-leitfaden",
+      "/zulassungsservice",
+      "/auto-online-abmelden",
+      "/magdeburg",
+      "/kostenlos-online-auto-abmelden-deutschlandweit",
+      "/auto-abmelden-online",
+      "/qr-code",
+      "/digitale-kfz-zulassung-2024",
+      "/kaufvertrag-auto",
+      "/eucaris",
+      "/fahrzeugschein-kw",
+      "/auto-abmelden",
+      "",
+      "/datenschutzerklarung",
+      "/kfz-zulassung-in-deiner-stadt",
+      "/kfz-zulassung-berlin",
+      "/zulassungsstelle-aalen",
+      "/zulassungsstelle-aachen",
+      "/kfz-zulassung-essen",
+      "/auto-online-anmelden",
+      "/zulassungsstelle-hamburg",
+      "/zulassungsstelle-andernach",
+      "/zulassungsstelle-amberg",
+      "/zulassungsstelle-alb-donau-kreis",
+      "/autoanmeldung-koeln",
+      "/auto-anmelden-berlin",
+      "/agb",
+      "/auto-online-anmelden-oder-abmelden-im-kreis-ahrweiler",
+      "/auto-verkaufen",
+      "/auto-online-anmelden-oder-abmelden-im-landkreis-altenburger-land",
+      "/auto-online-anmelden-oder-abmelden-im-kreis-aichach-friedberg",
+      "/kfz-online-abmelden",
+      "/faq",
+      "/evb",
+      "/in-baden-baden",
+      "/landkreis-bad-toelz-wolfratshausen",
+      "/auto-online-anmelden-oder-abmelden-im-landkreis-aschaffenburg",
+      "/landkreis-augsburg",
+      "/landkreis-aurich",
+      "/auto-online-anmelden-oder-abmelden-im-landkreis-ansbach",
+      "/auto-online-anmelden-oder-abmelden-im-landkreis-alzey-worms",
+      "/auto-online-anmelden-oder-abmelden-im-landkreis-altoetting",
+      "/auto-online-anmelden-oder-abmelden-im-landkreis-altenkirchen",
+      "/auto-online-anmelden-oder-abmelden-im-landkreis-amberg-sulzbach",
+      "/auto-online-anmelden-oder-abmelden-im-landkreis-anhalt-bitterfeld",
+      "/impressum",
+      "/auto-online-anmelden-oder-abmelden-im-landkreis-ammerland",
+      "/motorrad-online-anmelden",
+      "/landkreis-bad-kreuznach",
+      "/landkreis-bad-kissingen",
+      "/motorrad-versicherung-vergleichen",
+      "/kfz-versicherung-berechnen",
+      "/kfz-services"
+    ]
+  }
+}

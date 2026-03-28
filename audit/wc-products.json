@@ -1,0 +1,445 @@
+[
+  {
+    "id": 15980,
+    "name": "Digitale Kfz-Zulassung",
+    "slug": "kfz-online-service",
+    "permalink": "https://ikfzdigitalzulassung.de/kfz-service/kfz-online-service/",
+    "date_created": "2024-11-02T21:55:37",
+    "date_created_gmt": "2024-11-02T20:55:37",
+    "date_modified": "2026-03-05T04:16:17",
+    "date_modified_gmt": "2026-03-05T03:16:17",
+    "type": "simple",
+    "status": "publish",
+    "featured": false,
+    "catalog_visibility": "visible",
+    "description": "<link rel=\"stylesheet\" id=\"wd-section-title-css\" href=\"https://ikfzdigitalzulassung.de/wp-content/themes/woodmart/css/parts/el-section-title.min.css?ver=7.6.0\" type=\"text/css\" media=\"all\" />\n\t\t\t\t\tKFZ-Service in Minuten <br /> 100 % Online &amp; Ohne Wartezeit!\t\t\t\t</p>\n<h1>Jetzt Fahrzeug Online an- oder abmelden</p>\n</h1>\n<p>  Benötigen Sie Hilfe?<br />\n  Rufen Sie uns einfach an:<br />\n    <a href=\"tel:015224999190\" style=\"font-size:18px; color:#37BC46; text-decoration:none; font-weight:bold;\"><br />\n     ℡ 01522 4999190<br />\n    </a></p>\n",
+    "short_description": "",
+    "sku": "",
+    "price": "0.00",
+    "regular_price": "0.00",
+    "sale_price": "",
+    "date_on_sale_from": null,
+    "date_on_sale_from_gmt": null,
+    "date_on_sale_to": null,
+    "date_on_sale_to_gmt": null,
+    "on_sale": false,
+    "purchasable": true,
+    "total_sales": 98,
+    "virtual": true,
+    "downloadable": false,
+    "downloads": [],
+    "download_limit": -1,
+    "download_expiry": -1,
+    "external_url": "",
+    "button_text": "",
+    "tax_status": "taxable",
+    "tax_class": "",
+    "manage_stock": false,
+    "stock_quantity": null,
+    "backorders": "no",
+    "backorders_allowed": false,
+    "backordered": false,
+    "low_stock_amount": null,
+    "sold_individually": false,
+    "weight": "",
+    "dimensions": {
+      "length": "",
+      "width": "",
+      "height": ""
+    },
+    "shipping_required": false,
+    "shipping_taxable": false,
+    "shipping_class": "",
+    "shipping_class_id": 0,
+    "reviews_allowed": true,
+    "average_rating": "0.00",
+    "rating_count": 0,
+    "upsell_ids": [],
+    "cross_sell_ids": [],
+    "parent_id": 0,
+    "purchase_note": "",
+    "categories": [
+      {
+        "id": 20,
+        "name": "KFZ-Dienste",
+        "slug": "kfz-dienste"
+      }
+    ],
+    "brands": [],
+    "tags": [],
+    "images": [
+      {
+        "id": 15889,
+        "date_created": "2024-11-01T23:04:47",
+        "date_created_gmt": "2024-11-01T22:04:47",
+        "date_modified": "2024-12-09T03:01:38",
+        "date_modified_gmt": "2024-12-09T01:01:38",
+        "src": "https://ikfzdigitalzulassung.de/wp-content/uploads/2024/11/logo-v2-05.png",
+        "name": "KFZ online anmelden",
+        "alt": "KFZ online anmelden",
+        "srcset": "https://ikfzdigitalzulassung.de/wp-content/uploads/2024/11/logo-v2-05.png 2560w, https://ikfzdigitalzulassung.de/wp-content/uploads/2024/11/logo-v2-05-20x20.png 20w, https://ikfzdigitalzulassung.de/wp-content/uploads/2024/11/logo-v2-05-300x300.png 300w, https://ikfzdigitalzulassung.de/wp-content/uploads/2024/11/logo-v2-05-800x800.png 800w, https://ikfzdigitalzulassung.de/wp-content/uploads/2024/11/logo-v2-05-150x150.png 150w, https://ikfzdigitalzulassung.de/wp-content/uploads/2024/11/logo-v2-05-768x768.png 768w, https://ikfzdigitalzulassung.de/wp-content/uploads/2024/11/logo-v2-05-1536x1536.png 1536w, https://ikfzdigitalzulassung.de/wp-content/uploads/2024/11/logo-v2-05-2048x2048.png 2048w",
+        "sizes": "(max-width: 2560px) 100vw, 2560px",
+        "thumbnail": "https://ikfzdigitalzulassung.de/wp-content/uploads/2024/11/logo-v2-05-20x20.png"
+      }
+    ],
+    "attributes": [],
+    "default_attributes": [],
+    "variations": [],
+    "grouped_products": [],
+    "menu_order": 0,
+    "price_html": "<span class=\"woocommerce-Price-amount amount\"><bdi>0,00&nbsp;<span class=\"woocommerce-Price-currencySymbol\">&euro;</span></bdi></span>",
+    "related_ids": [],
+    "meta_data": [
+      {
+        "id": 7788,
+        "key": "_wp_page_template",
+        "value": "elementor_header_footer"
+      },
+      {
+        "id": 7789,
+        "key": "woodmart_sguide_select",
+        "value": "none"
+      },
+      {
+        "id": 7790,
+        "key": "woodmart_price_unit_of_measure",
+        "value": ""
+      },
+      {
+        "id": 7791,
+        "key": "woodmart_fbt_bundles_id",
+        "value": [
+          ""
+        ]
+      },
+      {
+        "id": 7809,
+        "key": "woodmart_total_stock_quantity",
+        "value": ""
+      },
+      {
+        "id": 7810,
+        "key": "_product_360_image_gallery",
+        "value": ""
+      },
+      {
+        "id": 7811,
+        "key": "_woodmart_whb_header",
+        "value": "none"
+      },
+      {
+        "id": 7812,
+        "key": "_woodmart_main_layout",
+        "value": "default"
+      },
+      {
+        "id": 7813,
+        "key": "_woodmart_sidebar_width",
+        "value": "default"
+      },
+      {
+        "id": 7814,
+        "key": "_woodmart_custom_sidebar",
+        "value": "none"
+      },
+      {
+        "id": 7815,
+        "key": "_woodmart_new_label",
+        "value": ""
+      },
+      {
+        "id": 7816,
+        "key": "_woodmart_new_label_date",
+        "value": ""
+      },
+      {
+        "id": 7817,
+        "key": "_woodmart_swatches_attribute",
+        "value": ""
+      },
+      {
+        "id": 7818,
+        "key": "_woodmart_related_off",
+        "value": ""
+      },
+      {
+        "id": 7819,
+        "key": "_woodmart_exclude_show_single_variation",
+        "value": ""
+      },
+      {
+        "id": 7820,
+        "key": "_woodmart_product_video",
+        "value": ""
+      },
+      {
+        "id": 7821,
+        "key": "_woodmart_product_hashtag",
+        "value": ""
+      },
+      {
+        "id": 7822,
+        "key": "_woodmart_single_product_style",
+        "value": "inherit"
+      },
+      {
+        "id": 7823,
+        "key": "_woodmart_thums_position",
+        "value": "inherit"
+      },
+      {
+        "id": 7824,
+        "key": "_woodmart_extra_content",
+        "value": ""
+      },
+      {
+        "id": 7825,
+        "key": "_woodmart_extra_position",
+        "value": "after"
+      },
+      {
+        "id": 7826,
+        "key": "_woodmart_product_design",
+        "value": "inherit"
+      },
+      {
+        "id": 7827,
+        "key": "_woodmart_product-background",
+        "value": ""
+      },
+      {
+        "id": 7828,
+        "key": "_woodmart_hide_tabs_titles",
+        "value": ""
+      },
+      {
+        "id": 7829,
+        "key": "_woodmart_product_custom_tab_title",
+        "value": ""
+      },
+      {
+        "id": 7830,
+        "key": "_woodmart_product_custom_tab_content_type",
+        "value": "text"
+      },
+      {
+        "id": 7831,
+        "key": "_woodmart_product_custom_tab_content",
+        "value": ""
+      },
+      {
+        "id": 7832,
+        "key": "_woodmart_product_custom_tab_html_block",
+        "value": ""
+      },
+      {
+        "id": 7833,
+        "key": "_woodmart_product_custom_tab_title_2",
+        "value": ""
+      },
+      {
+        "id": 7834,
+        "key": "_woodmart_product_custom_tab_content_type_2",
+        "value": "text"
+      },
+      {
+        "id": 7835,
+        "key": "_woodmart_product_custom_tab_content_2",
+        "value": ""
+      },
+      {
+        "id": 7836,
+        "key": "_woodmart_product_custom_tab_html_block_2",
+        "value": ""
+      },
+      {
+        "id": 7900,
+        "key": "_elementor_edit_mode",
+        "value": "builder"
+      },
+      {
+        "id": 7901,
+        "key": "_elementor_template_type",
+        "value": "product-post"
+      },
+      {
+        "id": 7902,
+        "key": "_elementor_version",
+        "value": "3.35.6"
+      },
+      {
+        "id": 7903,
+        "key": "_elementor_pro_version",
+        "value": "3.25.1"
+      },
+      {
+        "id": 7947,
+        "key": "_elementor_data",
+        "value": "[{\"id\":\"0e4962d\",\"elType\":\"container\",\"settings\":{\"wd_section_stretch\":\"stretch\",\"background_background\":\"classic\",\"mobile_bg_img_hidden\":\"no\",\"tablet_bg_img_hidden\":\"no\",\"woodmart_parallax\":\"0\",\"woodmart_gradient_switch\":\"no\",\"row_reverse_mobile\":\"0\",\"row_reverse_tablet\":\"0\",\"woodmart_disable_overflow\":\"0\",\"padding\":{\"unit\":\"px\",\"top\":\"0\",\"right\":\"31\",\"bottom\":\"0\",\"left\":\"30\",\"isLinked\":false},\"margin\":{\"unit\":\"px\",\"top\":\"0\",\"right\":\"0\",\"bottom\":\"0\",\"left\":\"0\",\"isLinked\":\"\"},\"margin_mobile\":{\"unit\":\"px\",\"top\":\"-6\",\"right\":\"0\",\"bottom\":\"-30\",\"left\":\"0\",\"isLinked\":\"\"},\"padding_mobile\":{\"unit\":\"px\",\"top\":\"21\",\"right\":\"21\",\"bottom\":\"21\",\"left\":\"21\",\"isLinked\":true},\"flex_gap\":{\"size\":0,\"column\":\"0\",\"row\":\"0\",\"unit\":\"px\",\"isLinked\":true},\"scroll_y\":-80,\"flex_gap_tablet\":{\"column\":\"50\",\"row\":\"50\",\"isLinked\":true,\"unit\":\"px\",\"size\":50},\"flex_gap_mobile\":{\"column\":\"0\",\"row\":\"0\",\"isLinked\":true,\"unit\":\"px\",\"size\":0},\"container_sticky_offset\":50,\"__globals__\":{\"background_color\":\"globals\\/colors?id=5da849d\"},\"background_image\":{\"url\":\"\",\"id\":\"\",\"size\":\"large\",\"alt\":\"\",\"source\":\"library\"},\"background_position\":\"top center\",\"background_hover_transition\":{\"unit\":\"px\",\"size\":0.2,\"sizes\":[]},\"width\":{\"unit\":\"%\",\"size\":100,\"sizes\":[]},\"min_height\":{\"unit\":\"px\",\"size\":0,\"sizes\":[]},\"min_height_tablet\":{\"unit\":\"px\",\"size\":432,\"sizes\":[]},\"min_height_mobile\":{\"unit\":\"px\",\"size\":10,\"sizes\":[]},\"flex_direction\":\"column\",\"flex_justify_content\":\"flex-end\",\"flex_align_items\":\"center\",\"width_mobile\":{\"unit\":\"px\",\"size\":500,\"sizes\":[]},\"presetTitle\":\"Container\",\"presetIcon\":\"eicon-container\"},\"elements\":[{\"id\":\"30ed689\",\"elType\":\"container\",\"settings\":{\"content_position\":\"middle\",\"mobile_bg_img_hidden\":\"no\",\"tablet_bg_img_hidden\":\"no\",\"woodmart_parallax\":\"0\",\"woodmart_gradient_switch\":\"no\",\"row_reverse_mobile\":\"0\",\"row_reverse_tablet\":\"0\",\"woodmart_disable_overflow\":\"0\",\"structure\":\"20\",\"margin\":{\"unit\":\"px\",\"top\":\"0\",\"right\":\"0\",\"bottom\":\"153\",\"left\":\"0\",\"isLinked\":\"\"},\"margin_tablet\":{\"unit\":\"px\",\"top\":\"0\",\"right\":\"0\",\"bottom\":\"91\",\"left\":\"0\",\"isLinked\":\"\"},\"margin_mobile\":{\"unit\":\"px\",\"top\":\"0\",\"right\":\"0\",\"bottom\":\"22\",\"left\":\"0\",\"isLinked\":\"\"},\"flex_direction\":\"row\",\"flex_align_items\":\"center\",\"flex_gap\":{\"size\":30,\"column\":\"30\",\"row\":\"35\",\"unit\":\"px\",\"isLinked\":false},\"flex_direction_tablet\":\"row\",\"scroll_y\":-80,\"flex_direction_mobile\":\"column\",\"container_sticky_offset\":50,\"content_width\":\"full\",\"flex_gap_mobile\":{\"column\":\"0\",\"row\":\"0\",\"isLinked\":true,\"unit\":\"px\",\"size\":0},\"width_mobile\":{\"unit\":\"px\",\"size\":355.5},\"_flex_size\":\"none\",\"_element_width_mobile\":\"initial\",\"width\":{\"unit\":\"%\",\"size\":102.999},\"_element_width\":\"initial\"},\"elements\":[{\"id\":\"8cb7d36\",\"elType\":\"container\",\"settings\":{\"_column_size\":\"50\",\"mobile_bg_img_hidden\":\"no\",\"tablet_bg_img_hidden\":\"no\",\"woodmart_parallax\":\"0\",\"parallax_scroll\":\"no\",\"mobile_reset_margin\":\"no\",\"tablet_reset_margin\":\"no\",\"column_sticky_offset\":\"50\",\"scroll_y\":\"-80\",\"width_tablet\":{\"size\":\"\",\"unit\":\"%\"},\"padding\":{\"unit\":\"custom\",\"top\":\"0\",\"right\":\"0\",\"bottom\":\"0\",\"left\":\"0\",\"isLinked\":true},\"content_width\":\"full\",\"width\":{\"unit\":\"%\",\"size\":100,\"sizes\":[]},\"padding_tablet\":{\"unit\":\"custom\",\"top\":\"\",\"right\":\"\",\"bottom\":\"\",\"left\":\"\",\"isLinked\":true},\"padding_mobile\":{\"unit\":\"%\",\"top\":\"0\",\"right\":\"0\",\"bottom\":\"0\",\"left\":\"0\",\"isLinked\":true},\"container_sticky_offset\":50,\"flex_justify_content\":\"center\",\"flex_align_items\":\"center\",\"boxed_width\":{\"unit\":\"px\",\"size\":1589,\"sizes\":[]},\"flex_gap_mobile\":{\"column\":\"0\",\"row\":\"0\",\"isLinked\":true,\"unit\":\"px\",\"size\":0},\"margin_mobile\":{\"unit\":\"px\",\"top\":\"0\",\"right\":\"0\",\"bottom\":\"0\",\"left\":\"0\",\"isLinked\":false}},\"elements\":[{\"id\":\"9bad36c\",\"elType\":\"container\",\"settings\":{\"content_width\":\"full\",\"container_sticky_offset\":50,\"scroll_y\":-80,\"min_height\":{\"unit\":\"px\",\"size\":0,\"sizes\":[]}},\"elements\":[{\"id\":\"24cfd66\",\"elType\":\"widget\",\"settings\":{\"subtitle\":\"KFZ-Service in Minuten <br> 100 % Online & Ohne Wartezeit!\",\"title\":\"Jetzt Fahrzeug Online an- oder abmelden\\n\\n\",\"after_title\":\"\",\"subtitle_color\":\"#FFFFFF\",\"subtitle_typography_typography\":\"custom\",\"subtitle_typography_font_family\":\"Montserrat\",\"subtitle_typography_font_size\":{\"unit\":\"em\",\"size\":2,\"sizes\":[]},\"subtitle_typography_font_weight\":\"600\",\"tag\":\"h1\",\"title_typography_typography\":\"custom\",\"title_typography_font_family\":\"Montserrat Alternates\",\"title_typography_font_size\":{\"unit\":\"em\",\"size\":2.4,\"sizes\":[]},\"title_typography_font_weight\":\"bold\",\"text_color\":\"#FFFFFF\",\"text_typography_typography\":\"custom\",\"text_typography_font_size\":{\"unit\":\"em\",\"size\":1.43,\"sizes\":[]},\"scroll_y\":\"-80\",\"__globals__\":{\"subtitle_color\":\"\",\"title_color\":\"\"},\"width_mobile\":{\"unit\":\"px\",\"size\":367,\"sizes\":[]},\"subtitle_typography_font_size_mobile\":{\"unit\":\"em\",\"size\":1.2,\"sizes\":[]},\"title_typography_font_size_mobile\":{\"unit\":\"em\",\"size\":0.9,\"sizes\":[]},\"text_typography_font_size_mobile\":{\"unit\":\"em\",\"size\":0.9,\"sizes\":[]},\"_margin_mobile\":{\"unit\":\"px\",\"top\":\"53\",\"right\":\"0\",\"bottom\":\"0\",\"left\":\"0\",\"isLinked\":false},\"width\":{\"unit\":\"px\",\"size\":1000,\"sizes\":[]},\"width_tablet\":{\"unit\":\"px\",\"size\":\"\",\"sizes\":[]},\"subtitle_typography_font_size_tablet\":{\"unit\":\"em\",\"size\":\"\",\"sizes\":[]},\"title_typography_font_size_tablet\":{\"unit\":\"px\",\"size\":28,\"sizes\":[]},\"title_typography_line_height_mobile\":{\"unit\":\"em\",\"size\":1.1,\"sizes\":[]},\"title_typography_letter_spacing_mobile\":{\"unit\":\"px\",\"size\":0,\"sizes\":[]},\"text_typography_font_size_tablet\":{\"unit\":\"em\",\"size\":\"\",\"sizes\":[]},\"text_typography_line_height\":{\"unit\":\"px\",\"size\":33,\"sizes\":[]},\"text_typography_line_height_mobile\":{\"unit\":\"em\",\"size\":1.4,\"sizes\":[]},\"text_typography_letter_spacing\":{\"unit\":\"px\",\"size\":0,\"sizes\":[]},\"_margin\":{\"unit\":\"px\",\"top\":\"100\",\"right\":\"0\",\"bottom\":\"-200\",\"left\":\"0\",\"isLinked\":false},\"_element_width_tablet\":\"initial\",\"_element_custom_width\":{\"unit\":\"%\",\"size\":108.941},\"_element_custom_width_tablet\":{\"unit\":\"px\",\"size\":1000},\"_element_custom_width_mobile\":{\"unit\":\"px\",\"size\":\"\"},\"_offset_x_mobile\":{\"size\":-1,\"unit\":\"px\"},\"_offset_y_mobile\":{\"size\":33,\"unit\":\"px\"},\"_z_index\":\"1\",\"size\":\"large\",\"title_color\":\"#000000\",\"_margin_tablet\":{\"unit\":\"px\",\"top\":\"0\",\"right\":\"0\",\"bottom\":\"0\",\"left\":\"0\",\"isLinked\":false},\"_element_width_mobile\":\"auto\",\"_flex_size\":\"none\",\"text_typography_font_weight\":\"bold\",\"_padding_mobile\":{\"unit\":\"px\",\"top\":\"24\",\"right\":\"0\",\"bottom\":\"-21\",\"left\":\"0\",\"isLinked\":false},\"_z_index_mobile\":1},\"elements\":[],\"widgetType\":\"wd_title\"}],\"isInner\":true}],\"isInner\":true}],\"isInner\":true}],\"isInner\":true},{\"id\":\"385752a\",\"elType\":\"container\",\"settings\":{\"flex_direction\":\"column\",\"container_sticky_offset\":50,\"scroll_y\":-80},\"elements\":[{\"id\":\"4673a35\",\"elType\":\"widget\",\"settings\":{\"html\":\"<div style=\\\"background-color:#f7f7f7; padding:1px; border-radius:10px; font-size:16px; text-align:center; line-height:1.6; margin-bottom:5px;\\\">\\r\\n  <div style=\\\"font-weight:bold; font-size:18px; color:#37BC46;\\\">Ben\\u00f6tigen Sie Hilfe?<\\/div>\\r\\n  <div style=\\\"color:#7A7A7A; margin-top:0;\\\">Rufen Sie uns einfach an:<\\/div>\\r\\n  <div style=\\\"margin-top:8px;\\\">\\r\\n    <a href=\\\"tel:015224999190\\\" style=\\\"font-size:18px; color:#37BC46; text-decoration:none; font-weight:bold;\\\">\\r\\n     \\u2121 01522 4999190\\r\\n    <\\/a>\\r\\n  <\\/div>\\r\\n<\\/div>\\r\\n\",\"scroll_y\":-80},\"elements\":[],\"widgetType\":\"html\"}],\"isInner\":false},{\"id\":\"52a8adc\",\"elType\":\"container\",\"settings\":{\"flex_direction\":\"column\",\"container_sticky_offset\":50,\"scroll_y\":-80,\"min_height\":{\"unit\":\"px\",\"size\":0,\"sizes\":[]},\"flex_gap\":{\"column\":\"0\",\"row\":\"0\",\"isLinked\":false,\"unit\":\"px\",\"size\":0},\"background_background\":\"classic\",\"background_color\":\"#7A7A7A0A\",\"width_mobile\":{\"unit\":\"px\",\"size\":367.111},\"_flex_size\":\"none\",\"_element_width_mobile\":\"initial\"},\"elements\":[{\"id\":\"2a7797d\",\"elType\":\"widget\",\"settings\":{\"scroll_y\":-80,\"button_typography_typography\":\"custom\",\"button_typography_font_family\":\"Arial, Helvetica, sans-serif\",\"button_typography_font_size\":{\"unit\":\"px\",\"size\":22,\"sizes\":[]},\"button_typography_letter_spacing\":{\"unit\":\"px\",\"size\":0,\"sizes\":[]},\"show_quantity\":\"\",\"_element_width\":\"inherit\",\"button_typography_font_size_mobile\":{\"unit\":\"px\",\"size\":13,\"sizes\":[]},\"__globals__\":{\"button_text_color\":\"\"},\"layout\":\"auto\"},\"elements\":[],\"widgetType\":\"woocommerce-product-add-to-cart\"}],\"isInner\":false}]"
+      },
+      {
+        "id": 20694,
+        "key": "rank_math_analytic_object_id",
+        "value": "7"
+      },
+      {
+        "id": 21205,
+        "key": "rank_math_internal_links_processed",
+        "value": "1"
+      },
+      {
+        "id": 22104,
+        "key": "rank_math_seo_score",
+        "value": "25"
+      },
+      {
+        "id": 22105,
+        "key": "rank_math_contentai_score",
+        "value": {
+          "keywords": "74.51",
+          "wordCount": "0",
+          "linkCount": "0",
+          "headingCount": "0",
+          "mediaCount": "0"
+        }
+      },
+      {
+        "id": 22106,
+        "key": "rank_math_primary_product_cat",
+        "value": "0"
+      },
+      {
+        "id": 26035,
+        "key": "rank_math_focus_keyword",
+        "value": "KFZ online Portal,online auto abmelden,online auto ummelden,ikfz"
+      },
+      {
+        "id": 26036,
+        "key": "rank_math_title",
+        "value": "KFZ online anmelden in 5 Minuten – Sofort Losfahren"
+      },
+      {
+        "id": 26037,
+        "key": "rank_math_description",
+        "value": "KFZ online anmelden in Minuten Zugelassen &amp; persönlichem Support. Einfach, schnell und flexibel. Jetzt Fahrzeuganmeldung starten!\n\n\n\n\n\n"
+      },
+      {
+        "id": 26039,
+        "key": "_b2s_post_meta",
+        "value": {
+          "og_title": "Digitale Kfz-Zulassung",
+          "og_desc": "KFZ-Service in Minuten 100 % Online &amp; Ohne Wartezeit! Jetzt dein Fahrzeug Online an- oder abmelden ohne Behördengänge, ohne Papierkram! ✔ Offizielle",
+          "og_image": "https://ikfzdigitalzulassung.de/wp-content/uploads/2024/11/logo-v2-05.png",
+          "og_image_alt": "",
+          "card_title": "Digitale Kfz-Zulassung",
+          "card_desc": "KFZ-Service in Minuten 100 % Online &amp; Ohne Wartezeit! Jetzt dein Fahrzeug Online an- oder abmelden ohne Behördengänge, ohne Papierkram! ✔ Offizielle",
+          "card_image": "https://ikfzdigitalzulassung.de/wp-content/uploads/2024/11/logo-v2-05.png"
+        }
+      },
+      {
+        "id": 30301,
+        "key": "cmplz_hide_cookiebanner",
+        "value": ""
+      },
+      {
+        "id": 72995,
+        "key": "rank_math_primary_product_brand",
+        "value": "0"
+      },
+      {
+        "id": 139443,
+        "key": "wd_page_css_files",
+        "value": [
+          "widget-wd-recent-posts",
+          "widget-product-list",
+          "wp-gutenberg",
+          "wpcf7",
+          "woo-paypal-payments",
+          "elementor-base",
+          "elementor-pro-base",
+          "woocommerce-base",
+          "mod-star-rating",
+          "woo-el-track-order",
+          "woocommerce-block-notices",
+          "woo-gutenberg",
+          "woo-mod-quantity",
+          "woo-single-prod-el-base",
+          "woo-mod-stock-status",
+          "woo-mod-shop-attributes",
+          "header-base",
+          "mod-tools",
+          "header-cart-side",
+          "header-cart",
+          "widget-shopping-cart",
+          "header-mobile-nav-dropdown",
+          "page-title",
+          "section-title",
+          "widget-collapse",
+          "footer-base",
+          "photoswipe",
+          "text-block",
+          "mod-nav-menu-label",
+          "scroll-top"
+        ]
+      },
+      {
+        "id": 141711,
+        "key": "_elementor_page_assets",
+        "value": {
+          "scripts": [
+            "elementor-frontend"
+          ],
+          "styles": [
+            "widget-woocommerce-product-add-to-cart"
+          ]
+        }
+      },
+      {
+        "id": 141712,
+        "key": "_elementor_css",
+        "value": {
+          "0": "",
+          "time": 1774130034,
+          "fonts": [
+            "Montserrat",
+            "Montserrat Alternates",
+            "Arial, Helvetica, sans-serif"
+          ],
+          "icons": [],
+          "dynamic_elements_ids": [],
+          "status": "file"
+        }
+      },
+      {
+        "id": 141713,
+        "key": "_elementor_element_cache",
+        "value": "{\"timeout\":1774220035,\"value\":{\"content\":\"<div class=\\\"wd-negative-gap elementor-element elementor-element-0e4962d wd-section-stretch e-flex e-con-boxed e-con e-child\\\" data-id=\\\"0e4962d\\\" data-element_type=\\\"container\\\" data-e-type=\\\"container\\\" data-settings=\\\"{&quot;background_background&quot;:&quot;classic&quot;}\\\">\\n\\t\\t\\t\\t\\t<div class=\\\"e-con-inner\\\">\\n\\t\\t<div class=\\\"elementor-element elementor-element-30ed689 e-con-full e-flex e-con e-child\\\" data-id=\\\"30ed689\\\" data-element_type=\\\"container\\\" data-e-type=\\\"container\\\">\\n\\t\\t<div class=\\\"elementor-element elementor-element-8cb7d36 e-con-full e-flex e-con e-child\\\" data-id=\\\"8cb7d36\\\" data-element_type=\\\"container\\\" data-e-type=\\\"container\\\">\\n\\t\\t<div class=\\\"elementor-element elementor-element-9bad36c e-con-full e-flex e-con e-child\\\" data-id=\\\"9bad36c\\\" data-element_type=\\\"container\\\" data-e-type=\\\"container\\\">\\n\\t\\t[elementor-element k=\\\"6048b83df96236cd4301808bbbf2df08\\\" data=\\\"eyJpZCI6IjI0Y2ZkNjYiLCJlbFR5cGUiOiJ3aWRnZXQiLCJzZXR0aW5ncyI6eyJzdWJ0aXRsZSI6IktGWi1TZXJ2aWNlIGluIE1pbnV0ZW4gPGJyPiAxMDAgJSBPbmxpbmUgJiBPaG5lIFdhcnRlemVpdCEiLCJ0aXRsZSI6IkpldHp0IEZhaHJ6ZXVnIE9ubGluZSBhbi0gb2RlciBhYm1lbGRlblxuXG4iLCJhZnRlcl90aXRsZSI6IiIsInN1YnRpdGxlX2NvbG9yIjoiI0ZGRkZGRiIsInN1YnRpdGxlX3R5cG9ncmFwaHlfdHlwb2dyYXBoeSI6ImN1c3RvbSIsInN1YnRpdGxlX3R5cG9ncmFwaHlfZm9udF9mYW1pbHkiOiJNb250c2VycmF0Iiwic3VidGl0bGVfdHlwb2dyYXBoeV9mb250X3NpemUiOnsidW5pdCI6ImVtIiwic2l6ZSI6Miwic2l6ZXMiOltdfSwic3VidGl0bGVfdHlwb2dyYXBoeV9mb250X3dlaWdodCI6IjYwMCIsInRhZyI6ImgxIiwidGl0bGVfdHlwb2dyYXBoeV90eXBvZ3JhcGh5IjoiY3VzdG9tIiwidGl0bGVfdHlwb2dyYXBoeV9mb250X2ZhbWlseSI6Ik1vbnRzZXJyYXQgQWx0ZXJuYXRlcyIsInRpdGxlX3R5cG9ncmFwaHlfZm9udF9zaXplIjp7InVuaXQiOiJlbSIsInNpemUiOjIuNCwic2l6ZXMiOltdfSwidGl0bGVfdHlwb2dyYXBoeV9mb250X3dlaWdodCI6ImJvbGQiLCJ0ZXh0X2NvbG9yIjoiI0ZGRkZGRiIsInRleHRfdHlwb2dyYXBoeV90eXBvZ3JhcGh5IjoiY3VzdG9tIiwidGV4dF90eXBvZ3JhcGh5X2ZvbnRfc2l6ZSI6eyJ1bml0IjoiZW0iLCJzaXplIjoxLjQzLCJzaXplcyI6W119LCJzY3JvbGxfeSI6Ii04MCIsIl9fZ2xvYmFsc19fIjp7InN1YnRpdGxlX2NvbG9yIjoiIiwidGl0bGVfY29sb3IiOiIifSwid2lkdGhfbW9iaWxlIjp7InVuaXQiOiJweCIsInNpemUiOjM2Nywic2l6ZXMiOltdfSwic3VidGl0bGVfdHlwb2dyYXBoeV9mb250X3NpemVfbW9iaWxlIjp7InVuaXQiOiJlbSIsInNpemUiOjEuMiwic2l6ZXMiOltdfSwidGl0bGVfdHlwb2dyYXBoeV9mb250X3NpemVfbW9iaWxlIjp7InVuaXQiOiJlbSIsInNpemUiOjAuOSwic2l6ZXMiOltdfSwidGV4dF90eXBvZ3JhcGh5X2ZvbnRfc2l6ZV9tb2JpbGUiOnsidW5pdCI6ImVtIiwic2l6ZSI6MC45LCJzaXplcyI6W119LCJfbWFyZ2luX21vYmlsZSI6eyJ1bml0IjoicHgiLCJ0b3AiOiI1MyIsInJpZ2h0IjoiMCIsImJvdHRvbSI6IjAiLCJsZWZ0IjoiMCIsImlzTGlua2VkIjpmYWxzZX0sIndpZHRoIjp7InVuaXQiOiJweCIsInNpemUiOjEwMDAsInNpemVzIjpbXX0sIndpZHRoX3RhYmxldCI6eyJ1bml0IjoicHgiLCJzaXplIjoiIiwic2l6ZXMiOltdfSwic3VidGl0bGVfdHlwb2dyYXBoeV9mb250X3NpemVfdGFibGV0Ijp7InVuaXQiOiJlbSIsInNpemUiOiIiLCJzaXplcyI6W119LCJ0aXRsZV90eXBvZ3JhcGh5X2ZvbnRfc2l6ZV90YWJsZXQiOnsidW5pdCI6InB4Iiwic2l6ZSI6MjgsInNpemVzIjpbXX0sInRpdGxlX3R5cG9ncmFwaHlfbGluZV9oZWlnaHRfbW9iaWxlIjp7InVuaXQiOiJlbSIsInNpemUiOjEuMSwic2l6ZXMiOltdfSwidGl0bGVfdHlwb2dyYXBoeV9sZXR0ZXJfc3BhY2luZ19tb2JpbGUiOnsidW5pdCI6InB4Iiwic2l6ZSI6MCwic2l6ZXMiOltdfSwidGV4dF90eXBvZ3JhcGh5X2ZvbnRfc2l6ZV90YWJsZXQiOnsidW5pdCI6ImVtIiwic2l6ZSI6IiIsInNpemVzIjpbXX0sInRleHRfdHlwb2dyYXBoeV9saW5lX2hlaWdodCI6eyJ1bml0IjoicHgiLCJzaXplIjozMywic2l6ZXMiOltdfSwidGV4dF90eXBvZ3JhcGh5X2xpbmVfaGVpZ2h0X21vYmlsZSI6eyJ1bml0IjoiZW0iLCJzaXplIjoxLjQsInNpemVzIjpbXX0sInRleHRfdHlwb2dyYXBoeV9sZXR0ZXJfc3BhY2luZyI6eyJ1bml0IjoicHgiLCJzaXplIjowLCJzaXplcyI6W119LCJfbWFyZ2luIjp7InVuaXQiOiJweCIsInRvcCI6IjEwMCIsInJpZ2h0IjoiMCIsImJvdHRvbSI6Ii0yMDAiLCJsZWZ0IjoiMCIsImlzTGlua2VkIjpmYWxzZX0sIl9lbGVtZW50X3dpZHRoX3RhYmxldCI6ImluaXRpYWwiLCJfZWxlbWVudF9jdXN0b21fd2lkdGgiOnsidW5pdCI6IiUiLCJzaXplIjoxMDguOTQxfSwiX2VsZW1lbnRfY3VzdG9tX3dpZHRoX3RhYmxldCI6eyJ1bml0IjoicHgiLCJzaXplIjoxMDAwfSwiX2VsZW1lbnRfY3VzdG9tX3dpZHRoX21vYmlsZSI6eyJ1bml0IjoicHgiLCJzaXplIjoiIn0sIl9vZmZzZXRfeF9tb2JpbGUiOnsic2l6ZSI6LTEsInVuaXQiOiJweCJ9LCJfb2Zmc2V0X3lfbW9iaWxlIjp7InNpemUiOjMzLCJ1bml0IjoicHgifSwiX3pfaW5kZXgiOiIxIiwic2l6ZSI6ImxhcmdlIiwidGl0bGVfY29sb3IiOiIjMDAwMDAwIiwiX21hcmdpbl90YWJsZXQiOnsidW5pdCI6InB4IiwidG9wIjoiMCIsInJpZ2h0IjoiMCIsImJvdHRvbSI6IjAiLCJsZWZ0IjoiMCIsImlzTGlua2VkIjpmYWxzZX0sIl9lbGVtZW50X3dpZHRoX21vYmlsZSI6ImF1dG8iLCJfZmxleF9zaXplIjoibm9uZSIsInRleHRfdHlwb2dyYXBoeV9mb250X3dlaWdodCI6ImJvbGQiLCJfcGFkZGluZ19tb2JpbGUiOnsidW5pdCI6InB4IiwidG9wIjoiMjQiLCJyaWdodCI6IjAiLCJib3R0b20iOiItMjEiLCJsZWZ0IjoiMCIsImlzTGlua2VkIjpmYWxzZX0sIl96X2luZGV4X21vYmlsZSI6MX0sImVsZW1lbnRzIjpbXSwid2lkZ2V0VHlwZSI6IndkX3RpdGxlIn0=\\\"]\\t\\t<\\/div>\\n\\t\\t\\t\\t<\\/div>\\n\\t\\t\\t\\t<\\/div>\\n\\t\\t\\t\\t\\t<\\/div>\\n\\t\\t\\t\\t<\\/div>\\n\\t\\t<div class=\\\"wd-negative-gap elementor-element elementor-element-385752a e-flex e-con-boxed e-con e-parent\\\" data-id=\\\"385752a\\\" data-element_type=\\\"container\\\" data-e-type=\\\"container\\\">\\n\\t\\t\\t\\t\\t<div class=\\\"e-con-inner\\\">\\n\\t\\t\\t\\t<div class=\\\"elementor-element elementor-element-4673a35 elementor-widget elementor-widget-html\\\" data-id=\\\"4673a35\\\" data-element_type=\\\"widget\\\" data-e-type=\\\"widget\\\" data-widget_type=\\\"html.default\\\">\\n\\t\\t\\t\\t<div class=\\\"elementor-widget-container\\\">\\n\\t\\t\\t\\t\\t<div style=\\\"background-color:#f7f7f7; padding:1px; border-radius:10px; font-size:16px; text-align:center; line-height:1.6; margin-bottom:5px;\\\">\\r\\n  <div style=\\\"font-weight:bold; font-size:18px; color:#37BC46;\\\">Ben\\u00f6tigen Sie Hilfe?<\\/div>\\r\\n  <div style=\\\"color:#7A7A7A; margin-top:0;\\\">Rufen Sie uns einfach an:<\\/div>\\r\\n  <div style=\\\"margin-top:8px;\\\">\\r\\n    <a href=\\\"tel:015224999190\\\" style=\\\"font-size:18px; color:#37BC46; text-decoration:none; font-weight:bold;\\\">\\r\\n     \\u2121 01522 4999190\\r\\n    <\\/a>\\r\\n  <\\/div>\\r\\n<\\/div>\\r\\n\\t\\t\\t\\t<\\/div>\\n\\t\\t\\t\\t<\\/div>\\n\\t\\t\\t\\t\\t<\\/div>\\n\\t\\t\\t\\t<\\/div>\\n\\t\\t<div class=\\\"wd-negative-gap elementor-element elementor-element-52a8adc e-flex e-con-boxed e-con e-parent\\\" data-id=\\\"52a8adc\\\" data-element_type=\\\"container\\\" data-e-type=\\\"container\\\" data-settings=\\\"{&quot;background_background&quot;:&quot;classic&quot;}\\\">\\n\\t\\t\\t\\t\\t<div class=\\\"e-con-inner\\\">\\n\\t\\t[elementor-element k=\\\"6048b83df96236cd4301808bbbf2df08\\\" data=\\\"eyJpZCI6IjJhNzc5N2QiLCJlbFR5cGUiOiJ3aWRnZXQiLCJzZXR0aW5ncyI6eyJzY3JvbGxfeSI6LTgwLCJidXR0b25fdHlwb2dyYXBoeV90eXBvZ3JhcGh5IjoiY3VzdG9tIiwiYnV0dG9uX3R5cG9ncmFwaHlfZm9udF9mYW1pbHkiOiJBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmIiwiYnV0dG9uX3R5cG9ncmFwaHlfZm9udF9zaXplIjp7InVuaXQiOiJweCIsInNpemUiOjIyLCJzaXplcyI6W119LCJidXR0b25fdHlwb2dyYXBoeV9sZXR0ZXJfc3BhY2luZyI6eyJ1bml0IjoicHgiLCJzaXplIjowLCJzaXplcyI6W119LCJzaG93X3F1YW50aXR5IjoiIiwiX2VsZW1lbnRfd2lkdGgiOiJpbmhlcml0IiwiYnV0dG9uX3R5cG9ncmFwaHlfZm9udF9zaXplX21vYmlsZSI6eyJ1bml0IjoicHgiLCJzaXplIjoxMywic2l6ZXMiOltdfSwiX19nbG9iYWxzX18iOnsiYnV0dG9uX3RleHRfY29sb3IiOiIifSwibGF5b3V0IjoiYXV0byJ9LCJlbGVtZW50cyI6W10sIndpZGdldFR5cGUiOiJ3b29jb21tZXJjZS1wcm9kdWN0LWFkZC10by1jYXJ0In0=\\\"]\\t\\t\\t<\\/div>\\n\\t\\t\\t\\t<\\/div>\\n\\t\\t\",\"scripts\":[],\"styles\":[]}}"
+      }
+    ],
+    "stock_status": "instock",
+    "has_options": false,
+    "post_password": "",
+    "global_unique_id": "",
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/products/15980",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/products"
+        }
+      ]
+    }
+  }
+]

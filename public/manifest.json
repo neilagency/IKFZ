@@ -1,0 +1,21 @@
+{
+  "name": "IKFZ Digital Zulassung",
+  "short_name": "IKFZ",
+  "description": "KFZ Zulassung online – Auto online anmelden in wenigen Minuten",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#00a85a",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

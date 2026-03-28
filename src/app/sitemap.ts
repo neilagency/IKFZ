@@ -1,0 +1,88 @@
+import { MetadataRoute } from 'next';
+import prisma from '@/lib/db';
+
+const SITE_URL = 'https://ikfzdigitalzulassung.de';
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // Fetch all published pages with SEO data to check robots directives
+  const pages = await prisma.page.findMany({
+    where: { status: 'published' },
+    select: { slug: true, updatedAt: true, pageType: true, seo: { select: { robots: true } } },
+    orderBy: { updatedAt: 'desc' },
+  });
+
+  // Fetch all published posts from DB
+  const posts = await prisma.post.findMany({
+    where: { status: 'published' },
+    select: { slug: true, updatedAt: true },
+    orderBy: { updatedAt: 'desc' },
+  });
+
+  // Static routes with high priority
+  const staticRoutes: MetadataRoute.Sitemap = [
+    {
+      url: `${SITE_URL}/`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 1.0,
+    },
+  ];
+
+  // Slugs to exclude from sitemap
+  const excludedSlugs = new Set([
+    'antragsuebersicht', 'antragsuebersicht-2', 'warenkorb', 'mein-konto', 'kasse',
+    'starseite-2', 'startseite', // handled by homepage
+    'bezahlmoeglichkeiten', 'kennzeichen-bestellen', // noindex pages
+    'ikfzdigitalblog', // internal/unused
+  ]);
+
+  // Page routes from DB (exclude noindex pages and excluded slugs)
+  const pageRoutes: MetadataRoute.Sitemap = pages
+    .filter(p => {
+      if (excludedSlugs.has(p.slug)) return false;
+      // Exclude pages with noindex robots directive
+      if (p.seo?.robots && p.seo.robots.includes('noindex')) return false;
+      return true;
+    })
+    .map(page => {
+      // Determine URL based on slug (with trailing slash)
+      let url = `${SITE_URL}/${page.slug}/`;
+      
+      // Special routes
+      if (page.slug === 'kfz-online-service') {
+        url = `${SITE_URL}/kfz-service/kfz-online-service/`;
+      }
+
+      // Determine priority based on page type
+      let priority = 0.7;
+      if (page.pageType === 'service') priority = 0.9;
+      if (page.pageType === 'city') priority = 0.8;
+      if (page.pageType === 'legal') priority = 0.5;
+      if (page.pageType === 'landing') priority = 0.9;
+
+      return {
+        url,
+        lastModified: page.updatedAt,
+        changeFrequency: page.pageType === 'city' ? 'weekly' as const : 'monthly' as const,
+        priority,
+      };
+    });
+
+  // Blog post routes from DB (with trailing slash)
+  const postRoutes: MetadataRoute.Sitemap = posts.map(post => ({
+    url: `${SITE_URL}/blog/${post.slug}/`,
+    lastModified: post.updatedAt,
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }));
+
+  // Blog listing page
+  const blogRoute: MetadataRoute.Sitemap = [{
+    url: `${SITE_URL}/blog/`,
+    lastModified: new Date(),
+    changeFrequency: 'daily',
+    priority: 0.8,
+  }];
+
+  return [...staticRoutes, ...pageRoutes, ...blogRoute, ...postRoutes];
+}

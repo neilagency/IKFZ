@@ -1,0 +1,43 @@
+[
+  {
+    "id": 20,
+    "name": "KFZ-Dienste",
+    "slug": "kfz-dienste",
+    "parent": 0,
+    "description": "",
+    "display": "default",
+    "image": {
+      "id": 15909,
+      "date_created": "2024-11-01T22:11:58",
+      "date_created_gmt": "2024-11-01T22:11:58",
+      "date_modified": "2024-11-25T02:27:42",
+      "date_modified_gmt": "2024-11-25T01:27:42",
+      "src": "https://ikfzdigitalzulassung.de/wp-content/uploads/2024/11/ikfz-logo-01.png",
+      "name": "KFZ-Dienste",
+      "alt": "KFZ-Dienste"
+    },
+    "menu_order": 0,
+    "count": 1,
+    "_links": {
+      "self": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/products/categories/20",
+          "targetHints": {
+            "allow": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://ikfzdigitalzulassung.de/wp-json/wc/v3/products/categories"
+        }
+      ]
+    }
+  }
+]
