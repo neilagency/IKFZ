@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import prisma, { buildSEOMetadata, getPostBySlug, stripHtml, getActiveProducts } from '@/lib/db';
 import { getPageSEO } from '@/lib/seo';
-import { sanitizeHtml, sanitizeForSchema } from '@/lib/sanitize';
+import { sanitizeHtml, sanitizeBlogHtml, sanitizeForSchema } from '@/lib/sanitize';
 import WPContentRenderer from '@/components/WPContentRenderer';
 import ScrollReveal from '@/components/ScrollReveal';
 import Link from 'next/link';
@@ -324,14 +324,11 @@ function BlogPostView({ post, products }: { post: any; products: any[] }) {
   const wordCount = stripHtml(post.content).split(/\s+/).filter(Boolean).length;
   const readingTime = Math.ceil(wordCount / 200);
 
-  // Strip inline styles (WP content has color:#000 etc. which is invisible on dark bg)
-  const strippedContent = post.content.replace(/\s*style="[^"]*"/g, '');
-
   // Inject heading IDs and extract TOC
   const headingRegex = /<h([23])[^>]*>(.*?)<\/h[23]>/gi;
   const headings: { level: number; text: string; id: string }[] = [];
-  let processedContent = strippedContent;
-  const matches = [...strippedContent.matchAll(headingRegex)];
+  let processedContent = post.content;
+  const matches = [...post.content.matchAll(headingRegex)];
 
   for (const match of matches) {
     const level = parseInt(match[1]);
@@ -348,7 +345,7 @@ function BlogPostView({ post, products }: { post: any; products: any[] }) {
     );
   }
 
-  const sanitizedContent = sanitizeHtml(processedContent);
+  const sanitizedContent = sanitizeBlogHtml(processedContent);
   const dateStr = post.publishedAt
     ? new Date(post.publishedAt).toLocaleDateString('de-DE', { year: 'numeric', month: 'long', day: 'numeric' })
     : '';

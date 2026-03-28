@@ -32,6 +32,18 @@ export function sanitizeHtml(html: string): string {
   });
 }
 
+// Blog-specific sanitizer: strips ALL inline styles and color attrs so dark-mode prose classes work
+export function sanitizeBlogHtml(html: string): string {
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: [...ALLOWED_TAGS.filter(t => t !== 'font'), 'span'],
+    ALLOWED_ATTR: ['id', 'class', 'href', 'target', 'rel', 'src', 'alt', 'width', 'height', 'loading'],
+    FORBID_ATTR: ['style', 'color', 'bgcolor', 'face', 'size'],
+    ALLOW_DATA_ATTR: false,
+    ALLOW_ARIA_ATTR: true,
+    ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|tel|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
+  });
+}
+
 export function sanitizeForSchema(text: string): string {
   // Strip ALL HTML for JSON-LD structured data
   return text
