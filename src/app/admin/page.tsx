@@ -773,6 +773,40 @@ function OrdersTab({ token }: { token: string }) {
           </div>
         </div>
 
+        {/* Service Data (from forms) */}
+        {o.serviceData && (() => {
+          try {
+            const sd = typeof o.serviceData === 'string' ? JSON.parse(o.serviceData) : o.serviceData;
+            return (
+              <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-3">
+                <h3 className="text-white font-semibold">Formulardaten</h3>
+                {o.productName && <p className="text-white/50 text-xs mb-2">Produkt: {o.productName}</p>}
+                <div className="grid md:grid-cols-2 gap-2">
+                  {Object.entries(sd).filter(([k]) => k !== 'uploadedFiles').map(([key, val]) => (
+                    <div key={key} className="flex justify-between p-2 rounded-lg bg-white/[0.02]">
+                      <span className="text-white/40 text-xs capitalize">{key.replace(/([A-Z])/g, ' $1')}</span>
+                      <span className="text-white/80 text-xs font-medium">{typeof val === 'object' ? JSON.stringify(val) : String(val)}</span>
+                    </div>
+                  ))}
+                </div>
+                {sd.uploadedFiles && Object.keys(sd.uploadedFiles).length > 0 && (
+                  <div className="mt-3 pt-3 border-t border-white/[0.06]">
+                    <h4 className="text-white/60 text-xs font-semibold mb-2 uppercase">Hochgeladene Dokumente</h4>
+                    <div className="space-y-1">
+                      {Object.entries(sd.uploadedFiles).map(([docKey, docUrl]) => (
+                        <a key={docKey} href={String(docUrl)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.02] hover:bg-white/[0.05] transition-colors">
+                          <span className="text-white/40 text-xs capitalize">{docKey}</span>
+                          <span className="text-primary text-xs hover:underline ml-auto">Anzeigen →</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          } catch { return null; }
+        })()}
+
         <div className="flex gap-2">
           <span className="text-white/50 text-sm self-center mr-2">Status ändern:</span>
           {["processing", "completed", "cancelled", "refunded"].map(s => (

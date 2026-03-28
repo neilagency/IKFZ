@@ -27,8 +27,8 @@ export const siteConfig = {
       href: '/kfz-service/kfz-online-service/',
       children: [
         { label: 'Motorrad Online Anmelden', href: '/motorrad-online-anmelden/' },
-        { label: 'Auto Online Anmelden', href: '/auto-online-anmelden/' },
-        { label: 'KFZ Online Abmelden', href: '/kfz-online-abmelden/' },
+        { label: 'Auto Online Anmelden', href: '/product/auto-online-anmelden/' },
+        { label: 'KFZ Online Abmelden', href: '/product/fahrzeugabmeldung/' },
       ],
     },
     {
@@ -45,8 +45,8 @@ export const siteConfig = {
   ],
   footerLinks: {
     services: [
-      { label: 'Jetzt Kfz online anmelden', href: '/kfz-service/kfz-online-service/' },
-      { label: 'Jetzt KFZ online abmelden', href: '/kfz-service/kfz-online-service/' },
+      { label: 'Jetzt Kfz online anmelden', href: '/product/auto-online-anmelden/' },
+      { label: 'Jetzt KFZ online abmelden', href: '/product/fahrzeugabmeldung/' },
       { label: 'eVB-Nummer anfordern', href: '/evb/' },
       { label: 'KFZ Zulassung Online Deutschlandweit', href: '/kfz-zulassung-in-deiner-stadt/' },
     ],
@@ -58,10 +58,10 @@ export const siteConfig = {
     ],
   },
   pricing: {
-    registration: 119.70,
+    registration: 99.70,
     deregistration: 19.70,
-    reservedPlate: 24.95,
-    platePurchase: 29.95,
+    reservedPlate: 24.70,
+    platePurchase: 29.70,
     baseService: 124.70,
   },
 } as const;

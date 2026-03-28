@@ -106,6 +106,7 @@ model SEO {
   id              String  @id @default(cuid())
   pageId          String? @unique
   postId          String? @unique
+  productId       String? @unique
   metaTitle       String?
   metaDescription String?
   canonicalUrl    String?
@@ -122,6 +123,7 @@ model SEO {
   focusKeyword    String?
   page            Page?   @relation(fields: [pageId], references: [id], onDelete: Cascade)
   post            Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  product         Product?
 }
 
 // Redirects
@@ -179,11 +181,23 @@ model Product {
   taxStatus        String          @default("taxable")
   taxClass         String?
   permalink        String?
+  // Service-specific fields
+  serviceType      String?         // anmeldung, abmeldung
+  formType         String?         // anmeldung, abmeldung
+  options          String?         // JSON: [{key, label, price}]
+  isActive         Boolean         @default(true)
+  metaDescription  String?
+  ogImage          String?
+  heroTitle        String?
+  heroSubtitle     String?
+  faq              String?         // JSON: [{question, answer}]
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
   images           ProductImage[]
   productCategories ProductProductCategory[]
   orderItems       OrderItem[]
+  seo              SEO?            @relation(fields: [seoId], references: [id])
+  seoId            String?         @unique
 }
 
 // Product Images
@@ -262,6 +276,10 @@ model Order {
   paymentMethodTitle String?
   transactionId     String?
   customerNote      String?
+  // Service-specific fields
+  serviceData       String?         // JSON: form data from service forms
+  productName       String?
+  paymentFee        Float           @default(0)
   // Billing Info (denormalized for historical accuracy)
   billingFirstName  String?
   billingLastName   String?
