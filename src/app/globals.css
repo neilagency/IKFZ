@@ -146,6 +146,30 @@
   .divider-dot {
     @apply w-1.5 h-1.5 rounded-full bg-primary/30;
   }
+
+  /* ── Blog content typography enhancements ── */
+  .blog-content h2 {
+    position: relative;
+  }
+  .blog-content h2::before {
+    content: '';
+    display: block;
+    width: 3rem;
+    height: 3px;
+    background: #00a85a;
+    border-radius: 9999px;
+    margin-bottom: 0.6rem;
+  }
+  .blog-content ul > li::marker {
+    color: #00a85a;
+  }
+  .blog-content ol > li::marker {
+    color: #00a85a;
+    font-weight: 700;
+  }
+  .blog-content blockquote p {
+    margin: 0;
+  }
 }
 
 @layer utilities {
