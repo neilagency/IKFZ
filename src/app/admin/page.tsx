@@ -65,7 +65,8 @@ function useDebounce<T>(value: T, delay: number): T {
 
 // ─── SWR Fetcher ────────────────────────────────────────────
 function fetcher(url: string) {
-  return fetch(url, { credentials: "include" }).then(r => {
+  const normalizedUrl = url.endsWith('/') ? url : `${url}/`;
+  return fetch(normalizedUrl, { credentials: "include" }).then(r => {
     if (!r.ok) throw new Error(`${r.status}`);
     return r.json();
   });
