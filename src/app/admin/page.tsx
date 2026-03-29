@@ -184,7 +184,7 @@ function LoginScreen({ onLogin }: { onLogin: (token: string) => void }) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault(); setLoading(true); setError("");
     try {
-      const res = await fetch(`${API}/auth`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, password }) });
+      const res = await fetch(`${API}/auth/`, { method: "POST", headers: { "Content-Type": "application/json" }, credentials: "include", body: JSON.stringify({ email, password }) });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Fehler");
       onLogin(data.token);
@@ -1652,7 +1652,7 @@ function AdminPageInner() {
   const { toast } = useToast();
 
   useEffect(() => {
-    fetch(`${API}/auth`, { credentials: "include" })
+    fetch(`${API}/auth/`, { credentials: "include" })
       .then(r => { if (!r.ok) throw new Error(); return r.json(); })
       .then(d => { if (d.authenticated) setToken(d.user?.email || "session"); })
       .catch(() => {})
