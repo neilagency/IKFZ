@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 import SiteShell from '@/components/SiteShell';
+import PromoBanner from '@/components/PromoBanner';
 import { siteConfig } from '@/lib/config';
 import { CustomerAuthProvider } from '@/components/CustomerAuthProvider';
 
@@ -110,7 +111,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased">
         <CustomerAuthProvider>
-          <SiteShell><Navbar /></SiteShell>
+          <SiteShell><PromoBanner /><Navbar /></SiteShell>
           <main className="min-h-screen">{children}</main>
           <SiteShell>
             <Footer />
