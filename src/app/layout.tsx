@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 import SiteShell from '@/components/SiteShell';
 import { siteConfig } from '@/lib/config';
+import { CustomerAuthProvider } from '@/components/CustomerAuthProvider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -108,12 +109,14 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans antialiased">
-        <SiteShell><Navbar /></SiteShell>
-        <main className="min-h-screen">{children}</main>
-        <SiteShell>
-          <Footer />
-          <WhatsAppFloat />
-        </SiteShell>
+        <CustomerAuthProvider>
+          <SiteShell><Navbar /></SiteShell>
+          <main className="min-h-screen">{children}</main>
+          <SiteShell>
+            <Footer />
+            <WhatsAppFloat />
+          </SiteShell>
+        </CustomerAuthProvider>
       </body>
     </html>
   );

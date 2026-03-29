@@ -3,20 +3,18 @@
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { CustomerAuthProvider, useCustomerAuth } from '@/components/CustomerAuthProvider';
+import { useCustomerAuth } from '@/components/CustomerAuthProvider';
 import { Shield, Loader2, Eye, EyeOff, Lock, Mail, User, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 export default function AnmeldenPage() {
   return (
-    <CustomerAuthProvider>
-      <Suspense fallback={
-        <div className="min-h-screen bg-dark-950 flex items-center justify-center">
-          <Loader2 className="w-6 h-6 animate-spin text-primary" />
-        </div>
-      }>
-        <AnmeldenContent />
-      </Suspense>
-    </CustomerAuthProvider>
+    <Suspense fallback={
+      <div className="min-h-screen bg-dark-950 flex items-center justify-center">
+        <Loader2 className="w-6 h-6 animate-spin text-primary" />
+      </div>
+    }>
+      <AnmeldenContent />
+    </Suspense>
   );
 }
 

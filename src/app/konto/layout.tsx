@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { CustomerAuthProvider, useCustomerAuth } from '@/components/CustomerAuthProvider';
+import { useCustomerAuth } from '@/components/CustomerAuthProvider';
 import { Package, User, LogOut } from 'lucide-react';
 
 const kontoNav = [
@@ -112,9 +112,5 @@ function KontoLayoutInner({ children }: { children: React.ReactNode }) {
 }
 
 export default function KontoLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <CustomerAuthProvider>
-      <KontoLayoutInner>{children}</KontoLayoutInner>
-    </CustomerAuthProvider>
-  );
+  return <KontoLayoutInner>{children}</KontoLayoutInner>;
 }

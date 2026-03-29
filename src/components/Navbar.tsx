@@ -3,9 +3,10 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronDown, ArrowRight } from 'lucide-react';
+import { Menu, X, ChevronDown, ArrowRight, UserCircle } from 'lucide-react';
 import { siteConfig } from '@/lib/config';
 import { cn } from '@/lib/utils';
+import { useCustomerAuth } from '@/components/CustomerAuthProvider';
 
 type NavChild = { readonly label: string; readonly href: string };
 type NavItem = { readonly label: string; readonly href: string; readonly children?: readonly NavChild[] };
@@ -16,6 +17,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const { customer, loading: authLoading } = useCustomerAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -110,8 +112,36 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* CTA + Mobile Toggle */}
+        {/* Account Icon + CTA + Mobile Toggle */}
         <div className="flex items-center gap-3">
+          {/* Login / Account Icon */}
+          {!authLoading && (
+            <Link
+              href={customer ? '/konto' : '/anmelden'}
+              title={customer ? 'Mein Konto' : 'Anmelden'}
+              className={cn(
+                'relative p-2 rounded-xl transition-all duration-200',
+                scrolled
+                  ? 'text-dark-500 hover:text-primary hover:bg-primary/5'
+                  : 'text-white/70 hover:text-white hover:bg-white/10'
+              )}
+            >
+              {customer ? (
+                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold shadow-md">
+                  {(customer.firstName?.[0] || customer.email[0]).toUpperCase()}
+                </div>
+              ) : (
+                <UserCircle className="w-6 h-6" />
+              )}
+            </Link>
+          )}
+
+          {/* Divider */}
+          <div className={cn(
+            'hidden md:block w-px h-6 transition-colors',
+            scrolled ? 'bg-dark-200' : 'bg-white/20'
+          )} />
+
           <Link
             href="/kfz-service/kfz-online-service/"
             className={cn(
@@ -194,6 +224,27 @@ export default function Navbar() {
                 </div>
 
                 <div className="mt-8 pt-6 border-t border-dark-100">
+                  {/* Mobile Account Link */}
+                  <Link
+                    href={customer ? '/konto' : '/anmelden'}
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3.5 text-[15px] font-semibold text-dark-800 hover:text-primary hover:bg-primary/5 rounded-xl transition-all mb-3"
+                  >
+                    {customer ? (
+                      <>
+                        <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold">
+                          {(customer.firstName?.[0] || customer.email[0]).toUpperCase()}
+                        </div>
+                        Mein Konto
+                      </>
+                    ) : (
+                      <>
+                        <UserCircle className="w-5 h-5" />
+                        Anmelden
+                      </>
+                    )}
+                  </Link>
+
                   <Link
                     href="/kfz-service/kfz-online-service/"
                     onClick={() => setIsOpen(false)}
