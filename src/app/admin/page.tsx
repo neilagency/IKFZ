@@ -10,7 +10,7 @@ import {
   TrendingUp, DollarSign, ChevronLeft, ChevronRight,
   Download, Filter, RefreshCw, Zap, Shield, Wallet, Clock,
   ExternalLink, Image as ImageIcon, AlertCircle, FileQuestion,
-  Tag, Calendar,
+  Tag, Calendar, Mail, Copy, Send, Percent, ToggleLeft, ToggleRight,
 } from "lucide-react";
 import { MediaLibraryTab, ImageField, MediaPicker } from "@/components/admin/MediaLibrary";
 import { ToastProvider, useToast } from "@/components/admin/Toast";
@@ -25,7 +25,7 @@ interface PageData { id: string; title: string; slug: string; content: string; e
 interface PostData { id: string; title: string; slug: string; content: string; excerpt: string; status: string; author: string | null; featuredImage: string | null; readingTime: number | null; publishedAt: string | null; scheduledAt: string | null; seo: SEOData | null; categories?: { category: { id: string; name: string; slug: string } }[]; }
 interface PaginationInfo { page: number; totalPages: number; total: number; limit: number; }
 
-type Tab = "dashboard" | "pages" | "posts" | "seo" | "products" | "orders" | "customers" | "payments" | "invoices" | "gateways" | "settings" | "media";
+type Tab = "dashboard" | "pages" | "posts" | "seo" | "products" | "orders" | "customers" | "payments" | "invoices" | "gateways" | "coupons" | "campaigns" | "settings" | "media";
 
 // ─── Helpers ────────────────────────────────────────────────
 function formatEuro(n: number) { return new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(n); }
@@ -1137,6 +1137,322 @@ function GatewaysTab({ token }: { token: string }) {
 }
 
 // ═══════════════════════════════════════════════════════════
+// COUPONS TAB
+// ═══════════════════════════════════════════════════════════
+function CouponsTab({ token }: { token: string }) {
+  const { toast } = useToast();
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [filter, setFilter] = useState("all");
+  const [editing, setEditing] = useState<any>(undefined);
+  const [creating, setCreating] = useState(false);
+  const debouncedSearch = useDebounce(search, 300);
+
+  const params = new URLSearchParams({ page: String(page), limit: "20" });
+  if (debouncedSearch) params.set("search", debouncedSearch);
+  if (filter !== "all") params.set("status", filter);
+  const { data, error, isLoading, mutate } = useSWR(`${API}/coupons?${params}`, fetcher, { revalidateOnFocus: false, keepPreviousData: true });
+
+  useEffect(() => { setPage(1); }, [debouncedSearch, filter]);
+
+  if (creating || editing !== undefined) {
+    return <CouponEditor item={editing || null} onSave={() => { setEditing(undefined); setCreating(false); mutate(); }} onCancel={() => { setEditing(undefined); setCreating(false); }} toast={toast} />;
+  }
+
+  function couponStatus(c: any): { label: string; color: string } {
+    if (!c.isActive) return { label: "Inaktiv", color: "bg-gray-500/10 text-gray-400 border-gray-500/20" };
+    if (c.endDate && new Date(c.endDate) < new Date()) return { label: "Abgelaufen", color: "bg-red-500/10 text-red-400 border-red-500/20" };
+    if (c.startDate && new Date(c.startDate) > new Date()) return { label: "Geplant", color: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20" };
+    return { label: "Aktiv", color: "bg-green-500/10 text-green-400 border-green-500/20" };
+  }
+
+  async function handleDelete(id: string) {
+    if (!confirm("Diesen Gutschein wirklich löschen?")) return;
+    const res = await fetch(`${API}/coupons/${id}/`, { method: "DELETE", credentials: "include" });
+    if (res.ok) { toast("Gutschein gelöscht"); mutate(); } else { toast("Fehler beim Löschen", "error"); }
+  }
+
+  return (
+    <div className="space-y-4">
+      <SearchBar value={search} onChange={setSearch} placeholder="Suche nach Code oder Beschreibung..." count={data?.pagination?.total}
+        suffix={<button onClick={() => setCreating(true)} className="px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors flex items-center gap-2"><Plus className="w-4 h-4" />Neu</button>}
+      />
+      <div className="flex gap-2">
+        {[["all","Alle"],["active","Aktiv"],["inactive","Inaktiv"],["expired","Abgelaufen"]].map(([v,l])=>(
+          <button key={v} onClick={()=>setFilter(v)} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${filter===v?"bg-primary text-white":"bg-dark-900 text-white/40 hover:text-white/70"}`}>{l}</button>
+        ))}
+      </div>
+
+      {error ? <ErrorState onRetry={() => mutate()} /> : isLoading ? <SkeletonTable /> : (data?.coupons || []).length === 0 ? (
+        <EmptyState icon={Tag} title="Keine Gutscheine" description="Erstellen Sie Ihren ersten Gutscheincode" />
+      ) : (
+        <>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead><tr className="text-white/40 text-xs uppercase"><th className="text-left py-2 px-3">Code</th><th className="text-left py-2 px-3">Rabatt</th><th className="text-center py-2 px-3">Nutzung</th><th className="text-left py-2 px-3">Status</th><th className="text-left py-2 px-3">Gültig</th><th className="text-right py-2 px-3">Aktionen</th></tr></thead>
+              <tbody>
+                {(data.coupons || []).map((c: any) => {
+                  const st = couponStatus(c);
+                  return (
+                    <tr key={c.id} className="border-t border-white/[0.04] hover:bg-white/[0.02]">
+                      <td className="py-3 px-3"><span className="text-white font-mono font-bold">{c.code}</span>{c.description && <span className="text-white/40 text-xs block mt-0.5">{c.description}</span>}</td>
+                      <td className="py-3 px-3 text-white/70">{c.discountType === "percentage" ? `${c.discountValue}%` : formatEuro(c.discountValue)}</td>
+                      <td className="py-3 px-3 text-center text-white/60">{c._count?.usages ?? c.usageCount ?? 0}{c.maxUsageTotal > 0 ? `/${c.maxUsageTotal}` : ""}</td>
+                      <td className="py-3 px-3"><span className={`inline-flex px-2 py-0.5 rounded-md text-xs font-medium border ${st.color}`}>{st.label}</span></td>
+                      <td className="py-3 px-3 text-white/50 text-xs">{c.startDate ? formatDate(c.startDate) : "–"} – {c.endDate ? formatDate(c.endDate) : "∞"}</td>
+                      <td className="py-3 px-3 text-right">
+                        <div className="flex items-center justify-end gap-1">
+                          <button onClick={() => setEditing(c)} className="p-1.5 rounded-lg hover:bg-white/5 text-white/40 hover:text-white transition-colors"><Pencil className="w-3.5 h-3.5" /></button>
+                          <button onClick={() => handleDelete(c.id)} className="p-1.5 rounded-lg hover:bg-red-500/10 text-white/40 hover:text-red-400 transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <Pagination page={page} totalPages={data.pagination?.pages || 1} total={data.pagination?.total || 0} limit={20} onPageChange={setPage} />
+        </>
+      )}
+    </div>
+  );
+}
+
+function CouponEditor({ item, onSave, onCancel, toast }: { item: any; onSave: () => void; onCancel: () => void; toast: (m: string, t?: "success" | "error" | "info") => void }) {
+  const [code, setCode] = useState(item?.code || "");
+  const [description, setDescription] = useState(item?.description || "");
+  const [discountType, setDiscountType] = useState(item?.discountType || "fixed");
+  const [discountValue, setDiscountValue] = useState(String(item?.discountValue || ""));
+  const [minOrderValue, setMinOrderValue] = useState(String(item?.minOrderValue || "0"));
+  const [maxUsageTotal, setMaxUsageTotal] = useState(String(item?.maxUsageTotal || "0"));
+  const [maxUsagePerUser, setMaxUsagePerUser] = useState(String(item?.maxUsagePerUser || "1"));
+  const [isActive, setIsActive] = useState(item?.isActive !== false);
+  const [showBanner, setShowBanner] = useState(item?.showBanner === true);
+  const [bannerText, setBannerText] = useState(item?.bannerText || "");
+  const [startDate, setStartDate] = useState(item?.startDate ? new Date(item.startDate).toISOString().slice(0, 10) : "");
+  const [endDate, setEndDate] = useState(item?.endDate ? new Date(item.endDate).toISOString().slice(0, 10) : "");
+  const [saving, setSaving] = useState(false);
+
+  async function handleSave() {
+    setSaving(true);
+    const body: any = { code, description, discountType, discountValue: parseFloat(discountValue), minOrderValue: parseFloat(minOrderValue), maxUsageTotal: parseInt(maxUsageTotal), maxUsagePerUser: parseInt(maxUsagePerUser), isActive, showBanner, bannerText, startDate: startDate || null, endDate: endDate || null };
+    try {
+      const url = item?.id ? `${API}/coupons/${item.id}/` : `${API}/coupons/`;
+      const res = await fetch(url, { method: item?.id ? "PUT" : "POST", headers: { "Content-Type": "application/json" }, credentials: "include", body: JSON.stringify(body) });
+      if (!res.ok) { const d = await res.json(); throw new Error(d.error || "Fehler"); }
+      toast(item?.id ? "Gutschein aktualisiert" : "Gutschein erstellt");
+      onSave();
+    } catch (err: any) { toast(err.message, "error"); } finally { setSaving(false); }
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold text-white">{item?.id ? "Gutschein bearbeiten" : "Neuer Gutschein"}</h2>
+        <div className="flex gap-2">
+          <button onClick={onCancel} className="px-4 py-2 rounded-lg border border-white/10 text-white/60 hover:bg-white/5"><X className="w-4 h-4" /></button>
+          <button onClick={handleSave} disabled={saving} className="px-6 py-2 rounded-lg bg-primary text-white font-medium hover:bg-primary/90 disabled:opacity-50 flex items-center gap-2"><Save className="w-4 h-4" />{saving ? "..." : "Speichern"}</button>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-6 rounded-2xl bg-dark-900/80 border border-white/[0.06]">
+        <div><label className="block text-xs font-medium text-white/50 mb-1">Code</label><input value={code} onChange={e => setCode(e.target.value.toUpperCase())} placeholder="z.B. SOMMER20 (leer = auto)" className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white font-mono focus:border-primary focus:outline-none" /></div>
+        <div><label className="block text-xs font-medium text-white/50 mb-1">Beschreibung</label><input value={description} onChange={e => setDescription(e.target.value)} className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none" /></div>
+        <div><label className="block text-xs font-medium text-white/50 mb-1">Rabatt-Typ</label><select value={discountType} onChange={e => setDiscountType(e.target.value)} className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none"><option value="fixed">Fester Betrag (€)</option><option value="percentage">Prozentsatz (%)</option></select></div>
+        <div><label className="block text-xs font-medium text-white/50 mb-1">Rabattwert</label><input type="number" value={discountValue} onChange={e => setDiscountValue(e.target.value)} min="0" step="0.01" className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none" /></div>
+        <div><label className="block text-xs font-medium text-white/50 mb-1">Mindestbestellwert (€)</label><input type="number" value={minOrderValue} onChange={e => setMinOrderValue(e.target.value)} min="0" step="0.01" className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none" /></div>
+        <div><label className="block text-xs font-medium text-white/50 mb-1">Max. Nutzung gesamt (0 = unbegrenzt)</label><input type="number" value={maxUsageTotal} onChange={e => setMaxUsageTotal(e.target.value)} min="0" className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none" /></div>
+        <div><label className="block text-xs font-medium text-white/50 mb-1">Max. pro Nutzer</label><input type="number" value={maxUsagePerUser} onChange={e => setMaxUsagePerUser(e.target.value)} min="1" className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none" /></div>
+        <div className="flex items-center gap-6">
+          <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="accent-primary" /><span className="text-sm text-white/70">Aktiv</span></label>
+          <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked={showBanner} onChange={e => setShowBanner(e.target.checked)} className="accent-primary" /><span className="text-sm text-white/70">Banner anzeigen</span></label>
+        </div>
+        {showBanner && <div className="md:col-span-2"><label className="block text-xs font-medium text-white/50 mb-1">Banner-Text</label><input value={bannerText} onChange={e => setBannerText(e.target.value)} placeholder="z.B. 20% Rabatt mit Code SOMMER20!" className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none" /></div>}
+        <div><label className="block text-xs font-medium text-white/50 mb-1">Startdatum</label><input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none" /></div>
+        <div><label className="block text-xs font-medium text-white/50 mb-1">Enddatum</label><input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none" /></div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════
+// EMAIL CAMPAIGNS TAB
+// ═══════════════════════════════════════════════════════════
+function EmailCampaignsTab({ token }: { token: string }) {
+  const { toast } = useToast();
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [filter, setFilter] = useState("all");
+  const [editing, setEditing] = useState<any>(undefined);
+  const [creating, setCreating] = useState(false);
+  const debouncedSearch = useDebounce(search, 300);
+
+  const params = new URLSearchParams({ page: String(page), limit: "20" });
+  if (debouncedSearch) params.set("search", debouncedSearch);
+  if (filter !== "all") params.set("status", filter);
+  const { data, error, isLoading, mutate } = useSWR(`${API}/email-campaigns?${params}`, fetcher, { revalidateOnFocus: false, keepPreviousData: true });
+
+  useEffect(() => { setPage(1); }, [debouncedSearch, filter]);
+
+  if (creating || editing !== undefined) {
+    return <CampaignEditor item={editing || null} onSave={() => { setEditing(undefined); setCreating(false); mutate(); }} onCancel={() => { setEditing(undefined); setCreating(false); }} toast={toast} />;
+  }
+
+  const campaignStatusColors: Record<string, string> = {
+    draft: "bg-gray-500/10 text-gray-400 border-gray-500/20",
+    scheduled: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
+    sending: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+    sent: "bg-green-500/10 text-green-400 border-green-500/20",
+    failed: "bg-red-500/10 text-red-400 border-red-500/20",
+  };
+  const campaignStatusLabels: Record<string, string> = {
+    draft: "Entwurf", scheduled: "Geplant", sending: "Wird gesendet", sent: "Gesendet", failed: "Fehlgeschlagen",
+  };
+
+  async function handleDelete(id: string) {
+    if (!confirm("Diese Kampagne wirklich löschen?")) return;
+    const res = await fetch(`${API}/email-campaigns/${id}/`, { method: "DELETE", credentials: "include" });
+    if (res.ok) { toast("Kampagne gelöscht"); mutate(); } else { const d = await res.json().catch(() => ({})); toast(d.error || "Fehler beim Löschen", "error"); }
+  }
+
+  async function handleDuplicate(id: string) {
+    const res = await fetch(`${API}/email-campaigns/${id}/duplicate/`, { method: "POST", credentials: "include" });
+    if (res.ok) { toast("Kampagne dupliziert"); mutate(); } else { toast("Fehler beim Duplizieren", "error"); }
+  }
+
+  async function handleSend(id: string) {
+    if (!confirm("Kampagne jetzt an alle Empfänger senden?")) return;
+    const res = await fetch(`${API}/email-campaigns/${id}/send/`, { method: "POST", credentials: "include" });
+    const d = await res.json().catch(() => ({}));
+    if (res.ok) { toast(d.message || "Kampagne wird gesendet"); mutate(); } else { toast(d.error || "Fehler beim Senden", "error"); }
+  }
+
+  return (
+    <div className="space-y-4">
+      <SearchBar value={search} onChange={setSearch} placeholder="Suche nach Name oder Betreff..." count={data?.pagination?.total}
+        suffix={<button onClick={() => setCreating(true)} className="px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors flex items-center gap-2"><Plus className="w-4 h-4" />Neue Kampagne</button>}
+      />
+      <div className="flex gap-2">
+        {[["all","Alle"],["draft","Entwurf"],["scheduled","Geplant"],["sent","Gesendet"],["failed","Fehlgeschlagen"]].map(([v,l])=>(
+          <button key={v} onClick={()=>setFilter(v)} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${filter===v?"bg-primary text-white":"bg-dark-900 text-white/40 hover:text-white/70"}`}>{l}</button>
+        ))}
+      </div>
+
+      {error ? <ErrorState onRetry={() => mutate()} /> : isLoading ? <SkeletonTable /> : (data?.campaigns || []).length === 0 ? (
+        <EmptyState icon={Mail} title="Keine Kampagnen" description="Erstellen Sie Ihre erste E-Mail-Kampagne" />
+      ) : (
+        <>
+          <div className="space-y-2">
+            {(data.campaigns || []).map((c: any) => (
+              <div key={c.id} className="flex items-center gap-4 p-4 rounded-xl bg-dark-900/40 border border-white/[0.04] hover:border-white/[0.08] transition-colors">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0"><Mail className="w-5 h-5 text-primary/60" /></div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="text-white font-medium truncate">{c.name}</span>
+                    <span className={`inline-flex px-2 py-0.5 rounded-md text-[10px] font-medium border ${campaignStatusColors[c.status] || campaignStatusColors.draft}`}>{campaignStatusLabels[c.status] || c.status}</span>
+                  </div>
+                  <p className="text-white/40 text-xs truncate">{c.subject || "Kein Betreff"}</p>
+                  {c.status === "sent" && <p className="text-white/30 text-xs mt-0.5">✉ {c.sentCount}/{c.totalRecipients} gesendet{c.failedCount > 0 ? ` · ${c.failedCount} fehlgeschlagen` : ""}</p>}
+                </div>
+                <div className="flex items-center gap-1 flex-shrink-0">
+                  {(c.status === "draft" || c.status === "scheduled") && (
+                    <>
+                      <button onClick={() => setEditing(c)} className="p-1.5 rounded-lg hover:bg-white/5 text-white/40 hover:text-white transition-colors" title="Bearbeiten"><Pencil className="w-3.5 h-3.5" /></button>
+                      <button onClick={() => handleSend(c.id)} className="p-1.5 rounded-lg hover:bg-primary/10 text-white/40 hover:text-primary transition-colors" title="Senden"><Send className="w-3.5 h-3.5" /></button>
+                    </>
+                  )}
+                  <button onClick={() => handleDuplicate(c.id)} className="p-1.5 rounded-lg hover:bg-white/5 text-white/40 hover:text-white transition-colors" title="Duplizieren"><Copy className="w-3.5 h-3.5" /></button>
+                  <button onClick={() => handleDelete(c.id)} className="p-1.5 rounded-lg hover:bg-red-500/10 text-white/40 hover:text-red-400 transition-colors" title="Löschen"><Trash2 className="w-3.5 h-3.5" /></button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <Pagination page={page} totalPages={data.pagination?.pages || 1} total={data.pagination?.total || 0} limit={20} onPageChange={setPage} />
+        </>
+      )}
+    </div>
+  );
+}
+
+function CampaignEditor({ item, onSave, onCancel, toast }: { item: any; onSave: () => void; onCancel: () => void; toast: (m: string, t?: "success" | "error" | "info") => void }) {
+  const [name, setName] = useState(item?.name || "");
+  const [subject, setSubject] = useState(item?.subject || "");
+  const [heading, setHeading] = useState(item?.heading || "");
+  const [content, setContent] = useState(item?.content || "");
+  const [imageUrl, setImageUrl] = useState(item?.imageUrl || "");
+  const [ctaText, setCtaText] = useState(item?.ctaText || "");
+  const [ctaUrl, setCtaUrl] = useState(item?.ctaUrl || "");
+  const [targetMode, setTargetMode] = useState(item?.targetMode || "all");
+  const [targetEmails, setTargetEmails] = useState(item?.targetEmails || "");
+  const [testEmail, setTestEmail] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [testing, setTesting] = useState(false);
+  const [recipientCount, setRecipientCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    const body = { targetMode, targetEmails, targetSegment: "" };
+    fetch(`${API}/email-campaigns/count-recipients/`, { method: "POST", headers: { "Content-Type": "application/json" }, credentials: "include", body: JSON.stringify(body) })
+      .then(r => r.json()).then(d => setRecipientCount(d.count ?? null)).catch(() => {});
+  }, [targetMode, targetEmails]);
+
+  async function handleSave() {
+    setSaving(true);
+    const body: any = { name, subject, heading, content, imageUrl, ctaText, ctaUrl, targetMode, targetEmails };
+    try {
+      const url = item?.id ? `${API}/email-campaigns/${item.id}/` : `${API}/email-campaigns/`;
+      const res = await fetch(url, { method: item?.id ? "PUT" : "POST", headers: { "Content-Type": "application/json" }, credentials: "include", body: JSON.stringify(body) });
+      if (!res.ok) { const d = await res.json(); throw new Error(d.error || "Fehler"); }
+      toast(item?.id ? "Kampagne aktualisiert" : "Kampagne erstellt");
+      onSave();
+    } catch (err: any) { toast(err.message, "error"); } finally { setSaving(false); }
+  }
+
+  async function handleTest() {
+    if (!testEmail) return;
+    setTesting(true);
+    try {
+      const id = item?.id;
+      if (!id) { toast("Speichern Sie zuerst die Kampagne", "error"); return; }
+      const res = await fetch(`${API}/email-campaigns/${id}/test/`, { method: "POST", headers: { "Content-Type": "application/json" }, credentials: "include", body: JSON.stringify({ email: testEmail }) });
+      const d = await res.json();
+      if (res.ok) { toast(d.message || "Test-E-Mail gesendet"); } else { toast(d.error || "Fehler", "error"); }
+    } catch { toast("Fehler beim Senden", "error"); } finally { setTesting(false); }
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold text-white">{item?.id ? "Kampagne bearbeiten" : "Neue Kampagne"}</h2>
+        <div className="flex gap-2">
+          <button onClick={onCancel} className="px-4 py-2 rounded-lg border border-white/10 text-white/60 hover:bg-white/5"><X className="w-4 h-4" /></button>
+          <button onClick={handleSave} disabled={saving} className="px-6 py-2 rounded-lg bg-primary text-white font-medium hover:bg-primary/90 disabled:opacity-50 flex items-center gap-2"><Save className="w-4 h-4" />{saving ? "..." : "Speichern"}</button>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-6 rounded-2xl bg-dark-900/80 border border-white/[0.06]">
+        <div className="md:col-span-2"><label className="block text-xs font-medium text-white/50 mb-1">Kampagnen-Name *</label><input value={name} onChange={e => setName(e.target.value)} placeholder="z.B. Frühlings-Newsletter" className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none" /></div>
+        <div className="md:col-span-2"><label className="block text-xs font-medium text-white/50 mb-1">Betreff *</label><input value={subject} onChange={e => setSubject(e.target.value)} placeholder="E-Mail Betreffzeile" className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none" /></div>
+        <div className="md:col-span-2"><label className="block text-xs font-medium text-white/50 mb-1">Überschrift</label><input value={heading} onChange={e => setHeading(e.target.value)} placeholder="Überschrift im E-Mail-Body" className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none" /></div>
+        <div className="md:col-span-2"><label className="block text-xs font-medium text-white/50 mb-1">Inhalt *</label><textarea value={content} onChange={e => setContent(e.target.value)} rows={8} placeholder="<p>Ihr E-Mail-Inhalt...</p>" className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm font-mono focus:border-primary focus:outline-none" /></div>
+        <div><label className="block text-xs font-medium text-white/50 mb-1">Bild-URL</label><input value={imageUrl} onChange={e => setImageUrl(e.target.value)} placeholder="https://..." className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none" /></div>
+        <div><label className="block text-xs font-medium text-white/50 mb-1">CTA Text</label><input value={ctaText} onChange={e => setCtaText(e.target.value)} placeholder="Jetzt bestellen" className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none" /></div>
+        <div><label className="block text-xs font-medium text-white/50 mb-1">CTA URL</label><input value={ctaUrl} onChange={e => setCtaUrl(e.target.value)} placeholder="https://..." className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none" /></div>
+        <div><label className="block text-xs font-medium text-white/50 mb-1">Empfänger</label><select value={targetMode} onChange={e => setTargetMode(e.target.value)} className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none"><option value="all">Alle Abonnenten</option><option value="specific">Bestimmte E-Mails</option></select>{recipientCount !== null && <p className="text-xs text-white/40 mt-1">{recipientCount} Empfänger</p>}</div>
+        {targetMode === "specific" && <div className="md:col-span-2"><label className="block text-xs font-medium text-white/50 mb-1">E-Mail-Adressen (kommagetrennt)</label><textarea value={targetEmails} onChange={e => setTargetEmails(e.target.value)} rows={3} placeholder="email1@test.de, email2@test.de" className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none" /></div>}
+      </div>
+      {item?.id && (
+        <div className="p-4 rounded-2xl bg-dark-900/80 border border-white/[0.06]">
+          <label className="block text-xs font-medium text-white/50 mb-2">Test-E-Mail senden</label>
+          <div className="flex gap-2">
+            <input type="email" value={testEmail} onChange={e => setTestEmail(e.target.value)} placeholder="test@email.de" className="flex-1 px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none" />
+            <button onClick={handleTest} disabled={testing || !testEmail} className="px-4 py-2.5 rounded-xl bg-primary/10 text-primary text-sm font-medium hover:bg-primary/20 disabled:opacity-50 transition-colors flex items-center gap-2"><Send className="w-4 h-4" />{testing ? "..." : "Test senden"}</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════
 // SETTINGS TAB
 // ═══════════════════════════════════════════════════════════
 function SettingsTab({ token }: { token: string }) {
@@ -1705,6 +2021,8 @@ function AdminPageInner() {
     { id: "payments", label: "Zahlungen", icon: CreditCard },
     { id: "invoices", label: "Rechnungen", icon: Receipt },
     { id: "gateways", label: "Zahlungs-Gateways", icon: Wallet },
+    { id: "coupons", label: "Gutscheine", icon: Percent, section: "Marketing" },
+    { id: "campaigns", label: "E-Mail Kampagnen", icon: Mail },
     { id: "pages", label: "Seiten", icon: FileText, section: "CMS" },
     { id: "posts", label: "Blog / Beiträge", icon: BookOpen },
     { id: "media", label: "Medien", icon: ImageIcon },
@@ -1757,6 +2075,8 @@ function AdminPageInner() {
           {tab === "payments" && <PaymentsTab token={token} />}
           {tab === "invoices" && <InvoicesTab token={token} />}
           {tab === "gateways" && <GatewaysTab token={token} />}
+          {tab === "coupons" && <CouponsTab token={token} />}
+          {tab === "campaigns" && <EmailCampaignsTab token={token} />}
           {tab === "media" && <MediaLibraryTab token={token} />}
           {tab === "settings" && <SettingsTab token={token} />}
         </div>
