@@ -20,7 +20,7 @@ export function middleware(request: NextRequest) {
   const isAdminPage = pathname.startsWith('/admin');
   const isAdminApi = pathname.startsWith('/api/admin');
   const isAdminLogin = pathname === '/admin' && request.method === 'GET'; // admin login is the admin page itself
-  const isAdminAuthApi = pathname === '/api/admin/auth'; // allow login/logout without token
+  const isAdminAuthApi = pathname === '/api/admin/auth' || pathname === '/api/admin/auth/'; // allow login/logout without token
 
   if ((isAdminPage || isAdminApi) && !isAdminLogin && !isAdminAuthApi) {
     const user = verifyAuth(request);
