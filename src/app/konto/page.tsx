@@ -77,7 +77,10 @@ function RecentSkeleton() {
   );
 }
 
-const fetcher = (url: string) => fetch(url).then((r) => { if (!r.ok) throw new Error(); return r.json(); });
+const fetcher = (url: string) => {
+  const normalizedUrl = url.endsWith('/') ? url : `${url}/`;
+  return fetch(normalizedUrl, { credentials: 'include' }).then((r) => { if (!r.ok) throw new Error(); return r.json(); });
+};
 
 export default function KontoPage() {
   const { customer, linkedOrders, clearLinkedOrders } = useCustomerAuth();

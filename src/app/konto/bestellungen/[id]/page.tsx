@@ -90,7 +90,7 @@ function CustomerOrderDocuments({ orderId }: { orderId: string }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`/api/customer/orders/${orderId}/documents`)
+    fetch(`/api/customer/orders/${orderId}/documents/`, { credentials: 'include' })
       .then((r) => r.json())
       .then((data) => setDocs(data.documents || []))
       .catch(() => {})
@@ -162,7 +162,7 @@ export default function OrderDetailPage() {
     setLoading(true);
     setError('');
     try {
-      const r = await fetch(`/api/customer/orders/${id}`);
+      const r = await fetch(`/api/customer/orders/${id}/`, { credentials: 'include' });
       if (!r.ok) throw new Error('Bestellung nicht gefunden.');
       const data = await r.json();
       setOrder(data.order);

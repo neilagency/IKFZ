@@ -39,7 +39,7 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
 
   const refresh = useCallback(async () => {
     try {
-      const res = await fetch('/api/auth/customer/session');
+      const res = await fetch('/api/auth/customer/session/', { credentials: 'include' });
       const data = await res.json();
       setCustomer(data.authenticated ? data.customer : null);
     } catch {
@@ -55,9 +55,10 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
 
   const login = useCallback(async (email: string, password: string) => {
     try {
-      const res = await fetch('/api/auth/customer/login', {
+      const res = await fetch('/api/auth/customer/login/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
@@ -72,9 +73,10 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
 
   const register = useCallback(async (formData: { email: string; password: string; firstName: string; lastName: string }) => {
     try {
-      const res = await fetch('/api/auth/customer/register', {
+      const res = await fetch('/api/auth/customer/register/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(formData),
       });
       const data = await res.json();
@@ -88,7 +90,7 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const logout = useCallback(async () => {
-    await fetch('/api/auth/customer/session', { method: 'DELETE' });
+    await fetch('/api/auth/customer/session/', { method: 'DELETE', credentials: 'include' });
     setCustomer(null);
   }, []);
 

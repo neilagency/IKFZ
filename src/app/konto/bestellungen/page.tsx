@@ -145,7 +145,10 @@ function PaginationControls({
   );
 }
 
-const fetcher = (url: string) => fetch(url).then((r) => { if (!r.ok) throw new Error(); return r.json(); });
+const fetcher = (url: string) => {
+  const u = url.endsWith('/') ? url : `${url}/`;
+  return fetch(u, { credentials: 'include' }).then((r) => { if (!r.ok) throw new Error(); return r.json(); });
+};
 
 export default function BestellungenPage() {
   const [page, setPage] = useState(1);
