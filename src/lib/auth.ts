@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
+import { cookies } from 'next/headers';
 
 function getJwtSecret(): string {
   const secret = process.env.JWT_SECRET;
@@ -69,6 +70,18 @@ export function clearAuthCookie(res: NextResponse): NextResponse {
 
 export function unauthorized() {
   return NextResponse.json({ error: 'Nicht autorisiert' }, { status: 401 });
+}
+
+/** Get admin session from cookies() — for Route Handlers (Node.js runtime) */
+export function getAdminSession(): AuthUser | null {
+  const cookieStore = cookies();
+  const token = (cookieStore as any).get(TOKEN_COOKIE)?.value;
+  if (!token) return null;
+  try {
+    return jwt.verify(token, getJwtSecret()) as AuthUser;
+  } catch {
+    return null;
+  }
 }
 
 // Role-based access helpers

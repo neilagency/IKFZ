@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { buildCampaignHtml, sendCampaignBatch } from '@/lib/campaign-email';
 import { resolveRecipients } from '@/lib/campaign-recipients';
+import { getAdminSession, unauthorized } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,6 +10,7 @@ type RouteCtx = { params: Promise<{ id: string }> };
 
 /** POST /api/admin/email-campaigns/[id]/send – send campaign */
 export async function POST(_request: NextRequest, ctx: RouteCtx) {
+  if (!getAdminSession()) return unauthorized();
   const { id } = await ctx.params;
 
   try {

@@ -1661,14 +1661,25 @@ function AdminPageInner() {
   }, []);
 
   useEffect(() => {
+    if (!token) return;
     const originalFetch = window.fetch;
     window.fetch = async (...args) => {
       const res = await originalFetch(...args);
-      if (res.status === 401 && token) {
+      if (res.status === 401) {
         const url = typeof args[0] === "string" ? args[0] : "";
-        if (url.startsWith("/api/admin/") && !url.endsWith("/auth")) {
-          setToken(null);
-          toast("Sitzung abgelaufen. Bitte erneut anmelden.", "error");
+        // Only logout if a real admin API call failed (not the auth endpoint itself)
+        if (url.startsWith("/api/admin/") && !url.includes("/auth")) {
+          // Confirm session is truly invalid before logging out
+          try {
+            const check = await originalFetch(`${API}/auth/`, { credentials: "include" });
+            if (!check.ok) {
+              setToken(null);
+              toast("Sitzung abgelaufen. Bitte erneut anmelden.", "error");
+            }
+          } catch {
+            setToken(null);
+            toast("Sitzung abgelaufen. Bitte erneut anmelden.", "error");
+          }
         }
       }
       return res;

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
+import { getAdminSession, unauthorized } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -7,6 +8,7 @@ type RouteCtx = { params: Promise<{ id: string }> };
 
 /** POST /api/admin/email-campaigns/[id]/duplicate – duplicate a campaign */
 export async function POST(_req: NextRequest, ctx: RouteCtx) {
+  if (!getAdminSession()) return unauthorized();
   const { id } = await ctx.params;
 
   try {

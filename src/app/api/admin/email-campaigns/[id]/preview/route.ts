@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { buildCampaignHtml } from '@/lib/campaign-email';
+import { getAdminSession, unauthorized } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -8,6 +9,7 @@ type RouteCtx = { params: Promise<{ id: string }> };
 
 /** GET /api/admin/email-campaigns/[id]/preview – render campaign HTML preview */
 export async function GET(_req: NextRequest, ctx: RouteCtx) {
+  if (!getAdminSession()) return unauthorized();
   const { id } = await ctx.params;
 
   try {

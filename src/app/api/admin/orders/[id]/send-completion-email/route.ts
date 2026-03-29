@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sendCompletionEmail } from '@/lib/completion-email';
+import { getAdminSession, unauthorized } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -7,6 +8,7 @@ type RouteCtx = { params: Promise<{ id: string }> };
 
 /** POST /api/admin/orders/[id]/send-completion-email – send completion email */
 export async function POST(_request: NextRequest, ctx: RouteCtx) {
+  if (!getAdminSession()) return unauthorized();
   const { id } = await ctx.params;
 
   try {

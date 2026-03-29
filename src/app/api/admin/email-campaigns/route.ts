@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { CAMPAIGN_TEMPLATES } from '@/lib/campaign-templates';
+import { getAdminSession, unauthorized } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,6 +17,7 @@ function jsonResponse(data: unknown, status = 200) {
 
 /** GET /api/admin/email-campaigns – list campaigns */
 export async function GET(request: NextRequest) {
+  if (!getAdminSession()) return unauthorized();
   const { searchParams } = new URL(request.url);
   const page = parseInt(searchParams.get('page') || '1');
   const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 100);
@@ -54,6 +56,7 @@ export async function GET(request: NextRequest) {
 
 /** POST /api/admin/email-campaigns – create campaign */
 export async function POST(request: NextRequest) {
+  if (!getAdminSession()) return unauthorized();
   try {
     const body = await request.json();
     const { name, templateId } = body;

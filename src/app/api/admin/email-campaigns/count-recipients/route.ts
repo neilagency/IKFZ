@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { countRecipients } from '@/lib/campaign-recipients';
+import { getAdminSession, unauthorized } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
 /** POST /api/admin/email-campaigns/count-recipients – count recipients for targeting */
 export async function POST(request: NextRequest) {
+  if (!getAdminSession()) return unauthorized();
   try {
     const body = await request.json();
     const { targetMode = 'all', targetEmails = '', targetSegment = '' } = body;

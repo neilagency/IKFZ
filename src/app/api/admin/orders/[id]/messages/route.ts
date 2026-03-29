@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { sendOrderMessageEmail } from '@/lib/order-message-email';
+import { getAdminSession, unauthorized } from '@/lib/auth';
 import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
@@ -23,6 +24,7 @@ const MAX_FILES = 5;
 
 /** GET /api/admin/orders/[id]/messages – list messages for order */
 export async function GET(_request: NextRequest, ctx: RouteCtx) {
+  if (!getAdminSession()) return unauthorized();
   const { id } = await ctx.params;
 
   try {
@@ -40,6 +42,7 @@ export async function GET(_request: NextRequest, ctx: RouteCtx) {
 
 /** POST /api/admin/orders/[id]/messages – create message with optional attachments */
 export async function POST(request: NextRequest, ctx: RouteCtx) {
+  if (!getAdminSession()) return unauthorized();
   const { id } = await ctx.params;
 
   try {

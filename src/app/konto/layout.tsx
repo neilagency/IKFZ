@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useCustomerAuth } from '@/components/CustomerAuthProvider';
-import { Package, User, LogOut } from 'lucide-react';
+import { Package, User, LogOut, Loader2 } from 'lucide-react';
 
 const kontoNav = [
   { label: 'Übersicht', href: '/konto', icon: User },
@@ -12,7 +12,27 @@ const kontoNav = [
 
 function KontoLayoutInner({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { customer, logout } = useCustomerAuth();
+  const router = useRouter();
+  const { customer, loading, logout } = useCustomerAuth();
+
+  // Show spinner while auth is loading — prevents flash
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Loader2 className="w-6 h-6 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  // After loading, if not authenticated, redirect to login
+  if (!customer) {
+    router.replace(`/anmelden?redirect=${encodeURIComponent(pathname)}`);
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Loader2 className="w-6 h-6 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   const handleLogout = async () => {
     await logout();

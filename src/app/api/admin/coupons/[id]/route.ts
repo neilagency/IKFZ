@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
+import { getAdminSession, unauthorized } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -7,6 +8,7 @@ type RouteCtx = { params: Promise<{ id: string }> };
 
 /** GET /api/admin/coupons/[id] – single coupon with usages */
 export async function GET(_req: NextRequest, ctx: RouteCtx) {
+  if (!getAdminSession()) return unauthorized();
   const { id } = await ctx.params;
 
   try {
@@ -32,6 +34,7 @@ export async function GET(_req: NextRequest, ctx: RouteCtx) {
 
 /** PUT /api/admin/coupons/[id] – update coupon */
 export async function PUT(request: NextRequest, ctx: RouteCtx) {
+  if (!getAdminSession()) return unauthorized();
   const { id } = await ctx.params;
 
   try {

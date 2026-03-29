@@ -28,10 +28,19 @@ function AnmeldenContent() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const { login, register, customer } = useCustomerAuth();
+  const { login, register, customer, loading: authLoading } = useCustomerAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect') || '/konto';
+
+  // Wait for auth to resolve before deciding — prevents redirect loop
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-dark-950 flex items-center justify-center">
+        <Loader2 className="w-6 h-6 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   if (customer) {
     router.replace(redirect);

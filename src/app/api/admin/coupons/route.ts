@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
+import { getAdminSession, unauthorized } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,6 +25,7 @@ function generateCode(length = 8): string {
 
 /** GET /api/admin/coupons – list coupons */
 export async function GET(request: NextRequest) {
+  if (!getAdminSession()) return unauthorized();
   const { searchParams } = new URL(request.url);
   const page = parseInt(searchParams.get('page') || '1');
   const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 100);
@@ -69,6 +71,7 @@ export async function GET(request: NextRequest) {
 
 /** POST /api/admin/coupons – create coupon */
 export async function POST(request: NextRequest) {
+  if (!getAdminSession()) return unauthorized();
   try {
     const body = await request.json();
 
