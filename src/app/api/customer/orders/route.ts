@@ -15,6 +15,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const where = {
+      deletedAt: null,
       OR: [
         { customerId: session.id },
         { billingEmail: session.email.toLowerCase() },

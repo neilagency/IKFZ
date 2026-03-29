@@ -10,6 +10,7 @@ export async function GET() {
 
   try {
     const where = {
+      deletedAt: null,
       OR: [
         { customerId: session.id },
         { billingEmail: session.email.toLowerCase() },

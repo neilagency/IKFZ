@@ -17,6 +17,7 @@ export async function GET(
     const order = await prisma.order.findFirst({
       where: {
         id,
+        deletedAt: null,
         OR: [
           { customerId: session.id },
           { billingEmail: session.email.toLowerCase() },

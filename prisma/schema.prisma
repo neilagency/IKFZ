@@ -348,6 +348,7 @@ model Order {
   // Dates
   datePaid          DateTime?
   dateCompleted     DateTime?
+  deletedAt         DateTime?
   createdAt         DateTime    @default(now())
   updatedAt         DateTime    @updatedAt
 }
