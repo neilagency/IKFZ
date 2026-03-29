@@ -275,9 +275,20 @@ model Customer {
   shippingState    String?
   shippingPostcode String?
   shippingCountry  String?
+  // Auth fields (customer login)
+  password         String?
+  totalOrders      Int       @default(0)
+  totalSpent       Float     @default(0)
+  lastLoginAt      DateTime?
+  // Email subscription
+  emailSubscribed  Boolean   @default(true)
+  unsubscribeToken String    @default("")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   orders    Order[]
+
+  @@index([createdAt])
+  @@index([emailSubscribed])
 }
 
 // Orders
@@ -327,6 +338,13 @@ model Order {
   items             OrderItem[]
   payment           Payment?
   invoice           Invoice?
+  notes             OrderNote[]
+  documents         OrderDocument[]
+  messages          OrderMessage[]
+  // Coupon / Discount
+  couponCode        String      @default("")
+  discountAmount    Float       @default(0)
+  completionEmailSent Boolean   @default(false)
   // Dates
   datePaid          DateTime?
   dateCompleted     DateTime?
@@ -387,4 +405,137 @@ model Invoice {
   notes         String?
   order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   createdAt     DateTime @default(now())
+}
+
+// ═══════════════════════════════════════════════
+// ORDER EXTENSIONS
+// ═══════════════════════════════════════════════
+
+// Order Notes (admin/system notes)
+model OrderNote {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  note      String
+  author    String   @default("system")
+  createdAt DateTime @default(now())
+
+  @@index([orderId])
+}
+
+// Order Messages (admin ↔ customer communication)
+model OrderMessage {
+  id          String   @id @default(cuid())
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  message     String
+  attachments String   @default("[]")
+  sentBy      String   @default("admin")
+  createdAt   DateTime @default(now())
+
+  @@index([orderId])
+  @@index([createdAt])
+}
+
+// Order Documents (PDFs uploaded by admin)
+model OrderDocument {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  fileName  String
+  fileUrl   String
+  fileSize  Int      @default(0)
+  token     String   @unique @default(cuid())
+  createdAt DateTime @default(now())
+
+  @@index([orderId])
+}
+
+// ═══════════════════════════════════════════════
+// EMAIL CAMPAIGNS
+// ═══════════════════════════════════════════════
+
+model EmailCampaign {
+  id              String    @id @default(cuid())
+  name            String
+  subject         String    @default("")
+  heading         String    @default("")
+  content         String    @default("")
+  imageUrl        String    @default("")
+  ctaText         String    @default("")
+  ctaUrl          String    @default("")
+
+  // Targeting
+  targetMode      String    @default("all")
+  targetEmails    String    @default("")
+  targetSegment   String    @default("")
+
+  // Scheduling
+  scheduledAt     DateTime?
+
+  // Tracking
+  openCount       Int       @default(0)
+  clickCount      Int       @default(0)
+
+  // Template
+  templateId      String    @default("")
+
+  status          String    @default("draft")
+  totalRecipients Int       @default(0)
+  sentCount       Int       @default(0)
+  failedCount     Int       @default(0)
+  errorLog        String    @default("")
+
+  sentAt          DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+  @@index([scheduledAt])
+}
+
+// ═══════════════════════════════════════════════
+// COUPONS / DISCOUNT CODES
+// ═══════════════════════════════════════════════
+
+model Coupon {
+  id              String    @id @default(cuid())
+  code            String    @unique
+  description     String    @default("")
+  discountType    String    @default("fixed")
+  discountValue   Float     @default(0)
+  minOrderValue   Float     @default(0)
+  maxUsageTotal   Int       @default(0)
+  maxUsagePerUser Int       @default(1)
+  usageCount      Int       @default(0)
+  productSlugs    String    @default("")
+
+  isActive        Boolean   @default(true)
+  showBanner      Boolean   @default(false)
+  bannerText      String    @default("")
+
+  startDate       DateTime?
+  endDate         DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  usages          CouponUsage[]
+
+  @@index([code])
+  @@index([isActive])
+  @@index([endDate])
+}
+
+model CouponUsage {
+  id        String   @id @default(cuid())
+  couponId  String
+  coupon    Coupon   @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  email     String
+  orderId   String?
+  createdAt DateTime @default(now())
+
+  @@unique([couponId, email])
+  @@index([email])
+  @@index([couponId])
 }
