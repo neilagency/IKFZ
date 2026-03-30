@@ -74,7 +74,7 @@ export async function PATCH(request: NextRequest, ctx: RouteCtx) {
     // Sync payment status
     if (body.status && order.payment) {
       const paymentStatus =
-        body.status === 'completed' || body.status === 'processing' ? 'completed' :
+        body.status === 'completed' || body.status === 'processing' ? 'paid' :
         body.status === 'refunded' ? 'refunded' :
         body.status === 'cancelled' ? 'cancelled' : order.payment.status;
       await prisma.payment.update({

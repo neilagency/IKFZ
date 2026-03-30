@@ -373,19 +373,24 @@ model OrderItem {
 
 // Payments
 model Payment {
-  id              String   @id @default(cuid())
-  orderId         String   @unique
-  method          String
-  methodTitle     String?
-  transactionId   String?
-  status          String   @default("pending")
-  amount          Float    @default(0)
-  currency        String   @default("EUR")
-  paidAt          DateTime?
-  gatewayResponse String?
-  order           Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id                String   @id @default(cuid())
+  orderId           String   @unique
+  method            String
+  methodTitle       String?
+  transactionId     String?
+  status            String   @default("pending")
+  amount            Float    @default(0)
+  currency          String   @default("EUR")
+  paidAt            DateTime?
+  gatewayResponse   String?
+  // Gateway tracking fields
+  gateway           String?          // 'mollie' | 'paypal'
+  externalPaymentId String?          // Original gateway payment/order ID
+  captureId         String?          // PayPal capture ID (for refunds)
+  idempotencyKey    String?  @unique // Prevent duplicate payment creation
+  order             Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 // Invoices

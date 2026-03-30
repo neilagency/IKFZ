@@ -31,8 +31,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL('/zahlung-fehlgeschlagen/', request.url));
     }
 
-    // If payment is already completed (webhook fired first), redirect to success
-    if (order.payment.status === 'completed') {
+    // If payment is already paid (webhook fired first), redirect to success
+    if (order.payment.status === 'paid') {
       return NextResponse.redirect(
         new URL(`/bestellung-erfolgreich/?order=${order.id}`, request.url),
       );
@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
       await prisma.payment.update({
         where: { id: order.payment.id },
         data: {
-          status: 'completed',
+          status: 'paid',
           paidAt: molliePayment.paidAt ? new Date(molliePayment.paidAt) : new Date(),
           gatewayResponse: JSON.stringify(molliePayment),
         },

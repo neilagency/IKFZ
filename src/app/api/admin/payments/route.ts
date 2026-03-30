@@ -52,7 +52,7 @@ export async function PUT(req: NextRequest) {
       data: {
         status: data.status,
         transactionId: data.transactionId,
-        paidAt: data.status === 'completed' ? new Date() : undefined,
+        paidAt: data.status === 'paid' ? new Date() : undefined,
       },
     });
     return NextResponse.json(payment);

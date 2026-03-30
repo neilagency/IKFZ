@@ -428,7 +428,7 @@ async function migrateOrders(orders: any[]) {
 
       // Payment record
       if (o.payment_method) {
-        const paymentStatus = (o.status === "completed" || o.status === "processing") ? "completed" :
+        const paymentStatus = (o.status === "completed" || o.status === "processing") ? "paid" :
                               o.status === "refunded" ? "refunded" :
                               o.status === "failed" ? "failed" : "pending";
 

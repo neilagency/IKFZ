@@ -67,7 +67,7 @@ export async function PUT(req: NextRequest) {
 
     // Update payment status if order status changed
     if (data.status && order.payment) {
-      const paymentStatus = data.status === 'completed' || data.status === 'processing' ? 'completed' :
+      const paymentStatus = data.status === 'completed' || data.status === 'processing' ? 'paid' :
                             data.status === 'refunded' ? 'refunded' :
                             data.status === 'cancelled' ? 'cancelled' : order.payment.status;
       await prisma.payment.update({

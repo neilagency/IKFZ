@@ -22,18 +22,19 @@ type RouteCtx = { params: Promise<{ id: string }> };
 /** Determine payment provider from transaction ID and payment method */
 function detectProvider(
   order: { paymentMethod: string | null; transactionId: string | null },
-  payment: { transactionId: string | null; method: string; status: string } | null,
+  payment: { transactionId: string | null; method: string; status: string; gateway: string | null; captureId: string | null } | null,
 ): { provider: 'mollie' | 'paypal'; transactionId: string } | null {
-  // 1. Check payment record
-  if (payment && payment.status === 'completed' && payment.transactionId) {
-    if (payment.transactionId.startsWith('tr_')) {
+  // 1. Check payment record (gateway field takes priority)
+  if (payment && payment.status === 'paid' && payment.transactionId) {
+    if (payment.gateway === 'mollie' || payment.transactionId.startsWith('tr_')) {
       return { provider: 'mollie', transactionId: payment.transactionId };
     }
     if (
+      payment.gateway === 'paypal' ||
       payment.method?.includes('paypal') ||
       order.paymentMethod === 'paypal'
     ) {
-      return { provider: 'paypal', transactionId: payment.transactionId };
+      return { provider: 'paypal', transactionId: payment.captureId || payment.transactionId };
     }
   }
 

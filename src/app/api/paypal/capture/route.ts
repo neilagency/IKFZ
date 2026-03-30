@@ -21,9 +21,14 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Find payment by PayPal order ID (stored as transactionId during checkout)
+    // Find payment by PayPal order ID (stored as externalPaymentId and transactionId)
     const payment = await prisma.payment.findFirst({
-      where: { transactionId: paypalOrderId },
+      where: {
+        OR: [
+          { externalPaymentId: paypalOrderId },
+          { transactionId: paypalOrderId },
+        ],
+      },
       include: { order: true },
     });
 
@@ -33,7 +38,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Idempotency: if already captured, just redirect to success
-    if (payment.status === 'completed') {
+    if (payment.status === 'paid') {
       return NextResponse.redirect(
         new URL(`/bestellung-erfolgreich/?order=${payment.orderId}`, request.url),
       );
@@ -47,9 +52,10 @@ export async function GET(request: NextRequest) {
       await prisma.payment.update({
         where: { id: payment.id },
         data: {
-          status: 'completed',
+          status: 'paid',
           paidAt: new Date(),
           transactionId: captureResult.captureId,
+          captureId: captureResult.captureId,
           gatewayResponse: JSON.stringify(captureResult),
         },
       });

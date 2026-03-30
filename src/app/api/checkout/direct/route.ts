@@ -7,9 +7,33 @@ import {
   getCheckoutMollieMethod,
 } from '@/lib/payments';
 import { createPayPalOrder } from '@/lib/paypal';
+import crypto from 'crypto';
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || 'https://ikfzdigitalzulassung.de';
+
+/* ── Server-side price catalogue ────────────────────────────── */
+const SERVICE_PRICES: Record<string, number> = {
+  'Wiederzulassung': 99.70,
+  'Neuwagen Zulassung': 99.70,
+  'Ummeldung (Halterwechsel)': 119.70,
+  'Neuzulassung (Gebrauchtwagen)': 124.70,
+  'Fahrzeugabmeldung': 19.70,
+};
+
+const ADDON_PRICES: Record<string, number> = {
+  'Kennzeichen reserviert': 24.70,
+  'Kennzeichen bestellen': 29.70,
+  'Wunschkennzeichen Reservierung': 4.70,
+};
+
+const PAYMENT_FEES: Record<string, number> = {
+  paypal: 0,
+  applepay: 0,
+  creditcard: 0.50,
+  klarna: 0,
+  sepa: 0,
+};
 
 export async function POST(request: NextRequest) {
   try {
@@ -64,43 +88,75 @@ export async function POST(request: NextRequest) {
       sepa: 'SEPA-Lastschrift',
     };
 
-    // Build order items
+    // ── Server-side price recalculation ──
+    // Never trust prices from frontend
+    const serviceName = orderItems.selectedService ?? orderItems.productName;
+    const serverBasePrice = SERVICE_PRICES[serviceName];
+    if (serverBasePrice === undefined) {
+      return NextResponse.json(
+        { error: 'Unbekannter Service. Bitte versuchen Sie es erneut.' },
+        { status: 400 }
+      );
+    }
+
+    const serverPaymentFee = PAYMENT_FEES[paymentMethod] ?? 0;
+
+    // Build order items with server-verified prices
     const items = [
       {
-        name: orderItems.selectedService ?? orderItems.productName,
+        name: serviceName,
         quantity: 1,
-        price: orderItems.basePrice,
-        total: orderItems.basePrice,
+        price: serverBasePrice,
+        total: serverBasePrice,
       },
-      ...(orderItems.addons ?? []).map(
-        (addon: { label: string; price: number }) => ({
-          name: addon.label,
-          quantity: 1,
-          price: addon.price,
-          total: addon.price,
-        })
-      ),
     ];
 
+    let serverSubtotal = serverBasePrice;
+
+    // Validate and price addons from server catalogue
+    if (orderItems.addons && Array.isArray(orderItems.addons)) {
+      for (const addon of orderItems.addons) {
+        const addonPrice = ADDON_PRICES[addon.label];
+        if (addonPrice === undefined) {
+          return NextResponse.json(
+            { error: `Unbekanntes Zusatzprodukt: ${addon.label}` },
+            { status: 400 }
+          );
+        }
+        items.push({
+          name: addon.label,
+          quantity: 1,
+          price: addonPrice,
+          total: addonPrice,
+        });
+        serverSubtotal += addonPrice;
+      }
+    }
+
     // Add payment fee as line item if applicable
-    if (paymentFee > 0) {
+    if (serverPaymentFee > 0) {
       items.push({
         name: `Zahlungsgebühr (${paymentMethodTitles[paymentMethod] ?? paymentMethod})`,
         quantity: 1,
-        price: paymentFee,
-        total: paymentFee,
+        price: serverPaymentFee,
+        total: serverPaymentFee,
       });
     }
+
+    const serverGrandTotal = Math.round((serverSubtotal + serverPaymentFee) * 100) / 100;
+
+    // Generate idempotency key to prevent duplicate payments
+    const idempotencyKey = crypto.randomUUID();
 
     // ── 1. Create Order in DB (status: pending) ──
     const order = await createOrder({
       productName: orderItems.productName,
       serviceData: JSON.stringify(orderItems.formData),
-      total: grandTotal,
-      subtotal: orderItems.total,
+      total: serverGrandTotal,
+      subtotal: serverSubtotal,
       paymentMethod,
       paymentMethodTitle: paymentMethodTitles[paymentMethod] ?? paymentMethod,
-      paymentFee: paymentFee ?? 0,
+      paymentFee: serverPaymentFee,
       billingFirstName: firstName,
       billingLastName: lastName,
       billingEmail: email,
@@ -120,16 +176,21 @@ export async function POST(request: NextRequest) {
         const paypalResult = await createPayPalOrder({
           orderId: order.id,
           orderNumber: order.orderNumber!,
-          amount: grandTotal,
+          amount: serverGrandTotal,
           description: `Bestellung ${order.orderNumber}`,
           returnUrl: `${SITE_URL}/api/paypal/capture/`,
           cancelUrl: `${SITE_URL}/zahlung-fehlgeschlagen/`,
         });
 
-        // Store PayPal order ID for capture lookup
+        // Store PayPal order ID and gateway info
         await prisma.payment.updateMany({
           where: { orderId: order.id },
-          data: { transactionId: paypalResult.paypalOrderId },
+          data: {
+            gateway: 'paypal',
+            externalPaymentId: paypalResult.paypalOrderId,
+            transactionId: paypalResult.paypalOrderId,
+            idempotencyKey,
+          },
         });
 
         return NextResponse.json({
@@ -145,17 +206,22 @@ export async function POST(request: NextRequest) {
         const mollieResult = await createMolliePayment({
           orderId: order.id,
           orderNumber: order.orderNumber!,
-          amount: grandTotal,
+          amount: serverGrandTotal,
           description: `Bestellung ${order.orderNumber}`,
           method: mollieMethod,
           redirectUrl: `${SITE_URL}/api/payment/callback/?orderId=${order.id}`,
           webhookUrl: `${SITE_URL}/api/webhooks/mollie/`,
         });
 
-        // Store Mollie payment ID for webhook/callback lookup
+        // Store Mollie payment ID and gateway info
         await prisma.payment.updateMany({
           where: { orderId: order.id },
-          data: { transactionId: mollieResult.paymentId },
+          data: {
+            gateway: 'mollie',
+            externalPaymentId: mollieResult.paymentId,
+            transactionId: mollieResult.paymentId,
+            idempotencyKey,
+          },
         });
         await prisma.order.update({
           where: { id: order.id },

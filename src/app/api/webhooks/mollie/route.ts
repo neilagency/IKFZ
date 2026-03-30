@@ -53,11 +53,11 @@ export async function POST(request: NextRequest) {
 
     if (mollieStatus === 'paid') {
       // Payment successful
-      if (order.payment && order.payment.status !== 'completed') {
+      if (order.payment && order.payment.status !== 'paid') {
         await prisma.payment.update({
           where: { id: order.payment.id },
           data: {
-            status: 'completed',
+            status: 'paid',
             paidAt: molliePayment.paidAt ? new Date(molliePayment.paidAt) : new Date(),
             transactionId: paymentId,
             gatewayResponse: JSON.stringify(molliePayment),
