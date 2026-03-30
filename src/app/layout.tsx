@@ -80,7 +80,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="de" className={inter.variable}>
+    <html lang="de" className={inter.variable} suppressHydrationWarning>
       <head>
         {/* JSON-LD Organization Schema */}
         <script
@@ -109,7 +109,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased" suppressHydrationWarning>
         <CustomerAuthProvider>
           <SiteShell><PromoBanner /><Navbar /></SiteShell>
           <main className="min-h-screen">{children}</main>
