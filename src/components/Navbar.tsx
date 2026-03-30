@@ -30,11 +30,12 @@ export default function Navbar() {
   return (
     <header
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
+        'fixed left-0 right-0 z-50 transition-all duration-500',
         scrolled
           ? 'bg-white/90 backdrop-blur-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05),0_8px_24px_rgba(0,0,0,0.04)] py-2'
           : 'bg-transparent py-4'
       )}
+      style={{ top: 'var(--promo-banner-height, 0px)' }}
     >
       <div className="container-main flex items-center justify-between">
         {/* Logo */}
