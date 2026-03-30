@@ -1,15 +1,25 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { CheckCircle, Mail, Phone, ArrowRight } from 'lucide-react';
+import { CheckCircle, Clock, Mail, Phone, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { siteConfig } from '@/lib/config';
 
 function SuccessContent() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get('order');
+  const isPending = searchParams.get('pending') === '1';
+
+  // Clear checkout data from sessionStorage after confirmed arrival
+  useEffect(() => {
+    try {
+      sessionStorage.removeItem('checkout_order');
+    } catch {
+      // Ignore errors (e.g., SSR or restricted storage)
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-white">
@@ -25,17 +35,22 @@ function SuccessContent() {
           animate={{ opacity: 1, y: 0 }}
           className="max-w-lg mx-auto text-center"
         >
-          <div className="w-20 h-20 mx-auto mb-6 bg-primary/10 rounded-full flex items-center justify-center">
-            <CheckCircle className="w-10 h-10 text-primary" />
+          <div className={`w-20 h-20 mx-auto mb-6 ${isPending ? 'bg-amber-50' : 'bg-primary/10'} rounded-full flex items-center justify-center`}>
+            {isPending ? (
+              <Clock className="w-10 h-10 text-amber-500" />
+            ) : (
+              <CheckCircle className="w-10 h-10 text-primary" />
+            )}
           </div>
 
           <h1 className="text-3xl font-bold text-dark-900 mb-4">
-            Bestellung erfolgreich!
+            {isPending ? 'Bestellung eingegangen!' : 'Bestellung erfolgreich!'}
           </h1>
 
           <p className="text-dark-500 text-lg mb-2">
-            Vielen Dank für Ihre Bestellung. Wir bearbeiten Ihren Antrag
-            schnellstmöglich.
+            {isPending
+              ? 'Vielen Dank für Ihre Bestellung. Bitte überweisen Sie den Betrag an die in der E-Mail angegebene Bankverbindung.'
+              : 'Vielen Dank für Ihre Bestellung. Wir bearbeiten Ihren Antrag schnellstmöglich.'}
           </p>
 
           {orderId && (
@@ -45,6 +60,16 @@ function SuccessContent() {
                 {orderId}
               </span>
             </p>
+          )}
+
+          {isPending && (
+            <div className="rounded-2xl bg-amber-50 border border-amber-200 p-4 text-left mb-6">
+              <p className="text-sm text-amber-800">
+                <strong>Hinweis:</strong> Ihre Bestellung wird bearbeitet, sobald
+                die Zahlung bei uns eingegangen ist. Sie erhalten die
+                Bankverbindung per E-Mail.
+              </p>
+            </div>
           )}
 
           <div className="rounded-2xl bg-dark-50 border border-dark-100 p-6 text-left mb-8">

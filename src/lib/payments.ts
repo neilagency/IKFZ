@@ -1,7 +1,7 @@
 /**
  * Mollie Payment Library
  * ======================
- * Provides refund operations via Mollie API.
+ * Provides payment creation, status checking, and refund operations via Mollie API.
  */
 
 import createMollieClient, { PaymentMethod } from '@mollie/api-client';
@@ -74,4 +74,81 @@ export async function getMollieRefunds(paymentId: string) {
     createdAt: r.createdAt,
     description: r.description,
   }));
+}
+
+/* ── Checkout → Mollie method mapping ─────────────────────── */
+const CHECKOUT_TO_MOLLIE: Record<string, PaymentMethod> = {
+  creditcard: PaymentMethod.creditcard,
+  applepay: PaymentMethod.applepay,
+  klarna: PaymentMethod.klarna,
+  sepa: PaymentMethod.banktransfer,
+};
+
+export function isMollieMethod(checkoutMethod: string): boolean {
+  return checkoutMethod in CHECKOUT_TO_MOLLIE;
+}
+
+export function getCheckoutMollieMethod(checkoutMethod: string): PaymentMethod | undefined {
+  return CHECKOUT_TO_MOLLIE[checkoutMethod];
+}
+
+/* ── Create Mollie Payment ────────────────────────────────── */
+export interface CreateMolliePaymentParams {
+  orderId: string;
+  orderNumber: string;
+  amount: number;
+  description: string;
+  method: PaymentMethod;
+  redirectUrl: string;
+  webhookUrl: string;
+}
+
+export interface MolliePaymentResult {
+  paymentId: string;
+  checkoutUrl: string | null;
+  status: string;
+}
+
+export async function createMolliePayment(
+  params: CreateMolliePaymentParams,
+): Promise<MolliePaymentResult> {
+  const mollie = getMollieClient();
+
+  const payment = await mollie.payments.create({
+    amount: {
+      currency: 'EUR',
+      value: params.amount.toFixed(2),
+    },
+    description: params.description,
+    redirectUrl: params.redirectUrl,
+    webhookUrl: params.webhookUrl,
+    method: params.method,
+    metadata: {
+      orderId: params.orderId,
+      orderNumber: params.orderNumber,
+    },
+  });
+
+  return {
+    paymentId: payment.id,
+    checkoutUrl: payment.getCheckoutUrl() ?? null,
+    status: payment.status,
+  };
+}
+
+/* ── Get Mollie Payment Status ────────────────────────────── */
+export async function getMolliePayment(paymentId: string) {
+  const mollie = getMollieClient();
+  const payment = await mollie.payments.get(paymentId);
+  return {
+    id: payment.id,
+    status: payment.status,
+    amount: {
+      currency: String(payment.amount.currency),
+      value: String(payment.amount.value),
+    },
+    metadata: payment.metadata as Record<string, string> | null,
+    paidAt: payment.paidAt ?? null,
+    method: payment.method ?? null,
+  };
 }

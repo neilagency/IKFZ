@@ -123,11 +123,20 @@ export default function CheckoutPage() {
         return;
       }
 
-      // Clear checkout data
-      sessionStorage.removeItem('checkout_order');
+      // Gateway redirect (Mollie / PayPal)
+      if (result.checkoutUrl) {
+        // Keep sessionStorage until payment is confirmed on success page
+        window.location.href = result.checkoutUrl;
+        return;
+      }
 
-      // Redirect to success page
-      router.push(`/bestellung-erfolgreich/?order=${result.orderId}`);
+      // No checkout URL (e.g. bank transfer — instructions sent by email)
+      sessionStorage.removeItem('checkout_order');
+      if (result.pendingPayment) {
+        router.push(`/bestellung-erfolgreich/?order=${result.orderId}&pending=1`);
+      } else {
+        router.push(`/bestellung-erfolgreich/?order=${result.orderId}`);
+      }
     } catch {
       setError('Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.');
       setIsSubmitting(false);

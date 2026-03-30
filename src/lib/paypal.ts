@@ -1,7 +1,7 @@
 /**
  * PayPal Direct Integration (REST API v2)
  * ========================================
- * Handles PayPal refunds via the REST API directly.
+ * Handles PayPal order creation, capture, and refunds via the REST API directly.
  *
  * Requires env vars:
  *   PAYPAL_CLIENT_ID     – Live/Sandbox client ID
@@ -147,4 +147,112 @@ export async function getPayPalCaptureRefunds(
   }
 
   return refunds;
+}
+
+/* ── Create PayPal Order ──────────────────────────────────── */
+export interface CreatePayPalOrderParams {
+  orderId: string;
+  orderNumber: string;
+  amount: number;
+  description: string;
+  returnUrl: string;
+  cancelUrl: string;
+}
+
+export interface PayPalOrderResult {
+  paypalOrderId: string;
+  approvalUrl: string;
+  status: string;
+}
+
+export async function createPayPalOrder(
+  params: CreatePayPalOrderParams,
+): Promise<PayPalOrderResult> {
+  const token = await getAccessToken();
+
+  const res = await fetch(`${PAYPAL_BASE_URL}/v2/checkout/orders`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'PayPal-Request-Id': params.orderId,
+    },
+    body: JSON.stringify({
+      intent: 'CAPTURE',
+      purchase_units: [
+        {
+          reference_id: params.orderId,
+          description: params.description.slice(0, 127),
+          custom_id: params.orderNumber,
+          amount: {
+            currency_code: 'EUR',
+            value: params.amount.toFixed(2),
+          },
+        },
+      ],
+      application_context: {
+        return_url: params.returnUrl,
+        cancel_url: params.cancelUrl,
+        brand_name: 'iKFZ Digital Zulassung',
+        user_action: 'PAY_NOW',
+        shipping_preference: 'NO_SHIPPING',
+      },
+    }),
+  });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    console.error('[paypal] Create order failed:', res.status, errText);
+    throw new Error(`PayPal create order failed (${res.status})`);
+  }
+
+  const data = await res.json();
+  const approvalLink = data.links?.find(
+    (l: { rel: string; href: string }) => l.rel === 'approve',
+  );
+
+  return {
+    paypalOrderId: data.id,
+    approvalUrl: approvalLink?.href || '',
+    status: data.status,
+  };
+}
+
+/* ── Capture PayPal Order ─────────────────────────────────── */
+export interface PayPalCaptureResult {
+  captureId: string;
+  status: string;
+  amount: string;
+}
+
+export async function capturePayPalOrder(
+  paypalOrderId: string,
+): Promise<PayPalCaptureResult> {
+  const token = await getAccessToken();
+
+  const res = await fetch(
+    `${PAYPAL_BASE_URL}/v2/checkout/orders/${encodeURIComponent(paypalOrderId)}/capture`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+
+  if (!res.ok) {
+    const errText = await res.text();
+    console.error('[paypal] Capture failed:', res.status, errText);
+    throw new Error(`PayPal capture failed (${res.status})`);
+  }
+
+  const data = await res.json();
+  const capture = data.purchase_units?.[0]?.payments?.captures?.[0];
+
+  return {
+    captureId: capture?.id || data.id || '',
+    status: data.status || '',
+    amount: capture?.amount?.value || '',
+  };
 }
