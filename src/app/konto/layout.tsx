@@ -47,7 +47,7 @@ function KontoLayoutInner({ children }: { children: React.ReactNode }) {
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-[120px]" />
           <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-primary/10 rounded-full blur-[100px]" />
         </div>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-24 sm:pt-28 pb-8 sm:pb-10 relative z-10">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-32 sm:pt-36 pb-8 sm:pb-10 relative z-10">
           <nav className="flex items-center gap-2 text-sm mb-4">
             <Link href="/" className="text-white/40 hover:text-white/70 transition">Startseite</Link>
             <span className="text-white/20">/</span>
