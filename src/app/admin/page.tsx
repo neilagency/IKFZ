@@ -11,6 +11,7 @@ import {
   Download, Filter, RefreshCw, Zap, Shield, Wallet, Clock,
   ExternalLink, Image as ImageIcon, AlertCircle, FileQuestion,
   Tag, Calendar, Mail, Copy, Send, Percent, ToggleLeft, ToggleRight,
+  Upload, MessageSquare, StickyNote, Paperclip, RotateCcw, FileUp,
 } from "lucide-react";
 import { MediaLibraryTab, ImageField, MediaPicker } from "@/components/admin/MediaLibrary";
 import { ToastProvider, useToast } from "@/components/admin/Toast";
@@ -708,7 +709,7 @@ function ProductsTab({ token }: { token: string }) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// ORDERS TAB — with SWR + Pagination
+// ORDERS TAB — with SWR + Pagination + Full Order Details
 // ═══════════════════════════════════════════════════════════
 function OrdersTab({ token }: { token: string }) {
   const { toast } = useToast();
@@ -716,6 +717,7 @@ function OrdersTab({ token }: { token: string }) {
   const [statusFilter, setStatusFilter] = useState("");
   const [page, setPage] = useState(1);
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
+  const [detailTab, setDetailTab] = useState<"overview" | "documents" | "messages" | "notes" | "refund">("overview");
   const debouncedSearch = useDebounce(search, 300);
 
   const params = new URLSearchParams({ page: String(page), limit: "20" });
@@ -725,99 +727,225 @@ function OrdersTab({ token }: { token: string }) {
 
   const { data, error, isLoading, mutate } = useSWR(swrKey, fetcher, { revalidateOnFocus: false, keepPreviousData: true });
 
+  // Detail data SWR (fetches full order with relations when selected)
+  const detailKey = selectedOrder ? `${API}/orders/${selectedOrder.id}` : null;
+  const { data: detailData, mutate: mutateDetail } = useSWR(detailKey, fetcher, { revalidateOnFocus: false });
+  const fullOrder = detailData?.order || selectedOrder;
+
   useEffect(() => { setPage(1); }, [debouncedSearch, statusFilter]);
 
   async function updateStatus(id: string, status: string) {
-    await fetch(`${API}/orders`, { method: "PUT", headers: { "Content-Type": "application/json" }, credentials: "include", body: JSON.stringify({ id, status }) });
-    mutate(); if (selectedOrder?.id === id) setSelectedOrder(null);
+    try {
+      const res = await fetch(`${API}/orders/`, { method: "PUT", headers: { "Content-Type": "application/json" }, credentials: "include", body: JSON.stringify({ id, status }) });
+      const result = await res.json();
+      mutate();
+      mutateDetail();
+      if (status === "completed" && result.emailResult) {
+        if (result.emailResult.success) {
+          toast("Abschluss-E-Mail gesendet", "success");
+        } else {
+          toast("Status aktualisiert, E-Mail konnte nicht gesendet werden", "error");
+        }
+      } else {
+        toast(`Status → ${status}`, "success");
+      }
+    } catch {
+      toast("Fehler beim Aktualisieren", "error");
+    }
+  }
+
+  async function sendCompletionEmail(id: string) {
+    try {
+      const res = await fetch(`${API}/orders/${id}/send-completion-email/`, { method: "POST", credentials: "include" });
+      const result = await res.json();
+      if (result.success) {
+        toast("Abschluss-E-Mail gesendet", "success");
+        mutateDetail();
+      } else {
+        toast(result.error || "E-Mail konnte nicht gesendet werden", "error");
+      }
+    } catch {
+      toast("E-Mail-Fehler", "error");
+    }
+  }
+
+  async function resendInvoice(id: string) {
+    try {
+      const res = await fetch(`${API}/orders/${id}/resend-invoice/`, { method: "POST", credentials: "include" });
+      const result = await res.json();
+      if (result.success) {
+        toast("Rechnung erneut gesendet", "success");
+      } else {
+        toast(result.error || "Fehler beim Senden", "error");
+      }
+    } catch {
+      toast("E-Mail-Fehler", "error");
+    }
   }
 
   if (selectedOrder) {
-    const o = selectedOrder;
+    const o = fullOrder;
     return (
       <div className="space-y-6">
-        <div className="flex items-center gap-4">
-          <button onClick={() => setSelectedOrder(null)} className="p-2 rounded-lg hover:bg-white/5 text-white/40"><ChevronLeft className="w-5 h-5" /></button>
-          <h2 className="text-xl font-bold text-white">Bestellung #{o.orderNumber}</h2>
-          <Badge status={o.status} />
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-3">
-            <h3 className="text-white font-semibold">Rechnungsadresse</h3>
-            <p className="text-white/70 text-sm">{o.billingFirstName} {o.billingLastName}</p>
-            {o.billingCompany && <p className="text-white/50 text-sm">{o.billingCompany}</p>}
-            <p className="text-white/50 text-sm">{o.billingAddress1}</p>
-            <p className="text-white/50 text-sm">{o.billingPostcode} {o.billingCity}</p>
-            <p className="text-white/50 text-sm">{o.billingEmail}</p>
-            {o.billingPhone && <p className="text-white/50 text-sm">{o.billingPhone}</p>}
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <button onClick={() => { setSelectedOrder(null); setDetailTab("overview"); }} className="p-2 rounded-lg hover:bg-white/5 text-white/40"><ChevronLeft className="w-5 h-5" /></button>
+            <h2 className="text-xl font-bold text-white">Bestellung #{o.orderNumber}</h2>
+            <Badge status={o.status} />
           </div>
-          <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-3">
-            <h3 className="text-white font-semibold">Zahlungsdetails</h3>
-            <p className="text-white/70 text-sm">Methode: {o.paymentMethodTitle || o.paymentMethod || "-"}</p>
-            <p className="text-white/70 text-sm">Transaktion: {o.transactionId || "-"}</p>
-            <p className="text-white/70 text-sm">Bezahlt am: {formatDate(o.datePaid)}</p>
-            <p className="text-white/70 text-sm">Betrag: <span className="text-white font-bold">{formatEuro(o.total)}</span></p>
+          <div className="flex items-center gap-2">
+            {o.invoice && (
+              <button onClick={() => resendInvoice(o.id)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20 hover:bg-blue-500/20 transition-colors">
+                <Receipt className="w-3.5 h-3.5" /> Rechnung senden
+              </button>
+            )}
+            <button onClick={() => sendCompletionEmail(o.id)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-green-500/10 text-green-400 border border-green-500/20 hover:bg-green-500/20 transition-colors">
+              <Mail className="w-3.5 h-3.5" /> Abschluss-E-Mail
+            </button>
           </div>
         </div>
 
-        <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06]">
-          <h3 className="text-white font-semibold mb-3">Positionen</h3>
-          <table className="w-full text-sm"><thead><tr className="text-white/40 text-xs uppercase"><th className="text-left py-2">Produkt</th><th className="text-center py-2">Menge</th><th className="text-right py-2">Preis</th><th className="text-right py-2">Gesamt</th></tr></thead>
-            <tbody>{(o.items || []).map((item: any) => (
-              <tr key={item.id} className="border-t border-white/[0.04]"><td className="py-3 text-white">{item.name}</td><td className="py-3 text-center text-white/60">{item.quantity}</td><td className="py-3 text-right text-white/60">{formatEuro(item.price)}</td><td className="py-3 text-right text-white font-medium">{formatEuro(item.total)}</td></tr>
-            ))}</tbody>
-          </table>
-          <div className="flex justify-end mt-4 pt-4 border-t border-white/[0.06]">
-            <div className="text-right space-y-1">
-              <p className="text-white/50 text-sm">Zwischensumme: {formatEuro(o.subtotal)}</p>
-              {o.shippingTotal > 0 && <p className="text-white/50 text-sm">Versand: {formatEuro(o.shippingTotal)}</p>}
-              {o.totalTax > 0 && <p className="text-white/50 text-sm">MwSt: {formatEuro(o.totalTax)}</p>}
-              <p className="text-white font-bold text-lg">Gesamt: {formatEuro(o.total)}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Service Data (from forms) */}
-        {o.serviceData && (() => {
-          try {
-            const sd = typeof o.serviceData === 'string' ? JSON.parse(o.serviceData) : o.serviceData;
-            return (
-              <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-3">
-                <h3 className="text-white font-semibold">Formulardaten</h3>
-                {o.productName && <p className="text-white/50 text-xs mb-2">Produkt: {o.productName}</p>}
-                <div className="grid md:grid-cols-2 gap-2">
-                  {Object.entries(sd).filter(([k]) => k !== 'uploadedFiles').map(([key, val]) => (
-                    <div key={key} className="flex justify-between p-2 rounded-lg bg-white/[0.02]">
-                      <span className="text-white/40 text-xs capitalize">{key.replace(/([A-Z])/g, ' $1')}</span>
-                      <span className="text-white/80 text-xs font-medium">{typeof val === 'object' ? JSON.stringify(val) : String(val)}</span>
-                    </div>
-                  ))}
-                </div>
-                {sd.uploadedFiles && Object.keys(sd.uploadedFiles).length > 0 && (
-                  <div className="mt-3 pt-3 border-t border-white/[0.06]">
-                    <h4 className="text-white/60 text-xs font-semibold mb-2 uppercase">Hochgeladene Dokumente</h4>
-                    <div className="space-y-1">
-                      {Object.entries(sd.uploadedFiles).map(([docKey, docUrl]) => (
-                        <a key={docKey} href={String(docUrl)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.02] hover:bg-white/[0.05] transition-colors">
-                          <span className="text-white/40 text-xs capitalize">{docKey}</span>
-                          <span className="text-primary text-xs hover:underline ml-auto">Anzeigen →</span>
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          } catch { return null; }
-        })()}
-
-        <div className="flex gap-2">
-          <span className="text-white/50 text-sm self-center mr-2">Status ändern:</span>
-          {["processing", "completed", "cancelled", "refunded"].map(s => (
-            <button key={s} onClick={() => updateStatus(o.id, s)} disabled={o.status === s} className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${o.status === s ? "opacity-30 cursor-not-allowed" : "hover:bg-white/5"} ${statusColors[s] || ""}`}>{s}</button>
+        {/* Detail Tabs */}
+        <div className="flex gap-1 p-1 rounded-xl bg-dark-950/50 border border-white/[0.04]">
+          {([
+            ["overview", "Übersicht", Eye],
+            ["documents", "Dokumente", FileUp],
+            ["messages", "Nachrichten", MessageSquare],
+            ["notes", "Notizen", StickyNote],
+            ["refund", "Erstattung", RotateCcw],
+          ] as const).map(([key, label, Icon]) => (
+            <button key={key} onClick={() => setDetailTab(key)} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-medium transition-colors ${detailTab === key ? "bg-white/10 text-white" : "text-white/40 hover:text-white/60"}`}>
+              <Icon className="w-3.5 h-3.5" /> {label}
+            </button>
           ))}
         </div>
+
+        {/* Overview Tab */}
+        {detailTab === "overview" && (
+          <>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-3">
+                <h3 className="text-white font-semibold">Rechnungsadresse</h3>
+                <p className="text-white/70 text-sm">{o.billingFirstName} {o.billingLastName}</p>
+                {o.billingCompany && <p className="text-white/50 text-sm">{o.billingCompany}</p>}
+                <p className="text-white/50 text-sm">{o.billingAddress1}</p>
+                <p className="text-white/50 text-sm">{o.billingPostcode} {o.billingCity}</p>
+                <p className="text-white/50 text-sm">{o.billingEmail}</p>
+                {o.billingPhone && <p className="text-white/50 text-sm">{o.billingPhone}</p>}
+              </div>
+              <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-3">
+                <h3 className="text-white font-semibold">Zahlungsdetails</h3>
+                <p className="text-white/70 text-sm">Methode: {o.paymentMethodTitle || o.paymentMethod || "-"}</p>
+                <p className="text-white/70 text-sm">Transaktion: {o.transactionId || "-"}</p>
+                <p className="text-white/70 text-sm">Bezahlt am: {formatDate(o.datePaid)}</p>
+                <p className="text-white/70 text-sm">Betrag: <span className="text-white font-bold">{formatEuro(o.total)}</span></p>
+                {o.payment && <p className="text-white/50 text-sm">Zahlungsstatus: <Badge status={o.payment.status} /></p>}
+              </div>
+            </div>
+
+            {/* Coupon / Discount */}
+            {(o.couponCode || o.discountAmount > 0) && (
+              <div className="p-4 rounded-2xl bg-orange-500/5 border border-orange-500/10">
+                <div className="flex items-center gap-3">
+                  <Percent className="w-5 h-5 text-orange-400" />
+                  <div>
+                    <span className="text-orange-300 font-semibold text-sm">Rabatt angewendet</span>
+                    {o.couponCode && <span className="ml-2 px-2 py-0.5 rounded bg-orange-500/10 text-orange-400 text-xs font-mono">{o.couponCode}</span>}
+                    <span className="ml-2 text-orange-200 text-sm font-bold">-{formatEuro(o.discountAmount || o.discountTotal)}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Items Table */}
+            <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06]">
+              <h3 className="text-white font-semibold mb-3">Positionen</h3>
+              <table className="w-full text-sm"><thead><tr className="text-white/40 text-xs uppercase"><th className="text-left py-2">Produkt</th><th className="text-center py-2">Menge</th><th className="text-right py-2">Preis</th><th className="text-right py-2">Gesamt</th></tr></thead>
+                <tbody>{(o.items || []).map((item: any) => (
+                  <tr key={item.id} className="border-t border-white/[0.04]"><td className="py-3 text-white">{item.name}</td><td className="py-3 text-center text-white/60">{item.quantity}</td><td className="py-3 text-right text-white/60">{formatEuro(item.price)}</td><td className="py-3 text-right text-white font-medium">{formatEuro(item.total)}</td></tr>
+                ))}</tbody>
+              </table>
+              <div className="flex justify-end mt-4 pt-4 border-t border-white/[0.06]">
+                <div className="text-right space-y-1">
+                  <p className="text-white/50 text-sm">Zwischensumme: {formatEuro(o.subtotal)}</p>
+                  {(o.discountTotal > 0 || o.discountAmount > 0) && <p className="text-orange-400 text-sm">Rabatt: -{formatEuro(o.discountAmount || o.discountTotal)}</p>}
+                  {o.shippingTotal > 0 && <p className="text-white/50 text-sm">Versand: {formatEuro(o.shippingTotal)}</p>}
+                  {o.totalTax > 0 && <p className="text-white/50 text-sm">MwSt: {formatEuro(o.totalTax)}</p>}
+                  {o.paymentFee > 0 && <p className="text-white/50 text-sm">Zahlungsgebühr: {formatEuro(o.paymentFee)}</p>}
+                  <p className="text-white font-bold text-lg">Gesamt: {formatEuro(o.total)}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Invoice Info */}
+            {o.invoice && (
+              <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-2">
+                <h3 className="text-white font-semibold">Rechnung</h3>
+                <div className="flex items-center gap-4 text-sm">
+                  <span className="text-white/70">Nr: <span className="text-white font-medium">{o.invoice.invoiceNumber}</span></span>
+                  <Badge status={o.invoice.status} />
+                  <span className="text-white/50">Erstellt: {formatDate(o.invoice.issuedAt || o.invoice.createdAt)}</span>
+                  <button onClick={() => resendInvoice(o.id)} className="ml-auto text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1"><Send className="w-3 h-3" /> Erneut senden</button>
+                </div>
+              </div>
+            )}
+
+            {/* Service Data */}
+            {o.serviceData && (() => {
+              try {
+                const sd = typeof o.serviceData === 'string' ? JSON.parse(o.serviceData) : o.serviceData;
+                return (
+                  <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-3">
+                    <h3 className="text-white font-semibold">Formulardaten</h3>
+                    {o.productName && <p className="text-white/50 text-xs mb-2">Produkt: {o.productName}</p>}
+                    <div className="grid md:grid-cols-2 gap-2">
+                      {Object.entries(sd).filter(([k]) => k !== 'uploadedFiles').map(([key, val]) => (
+                        <div key={key} className="flex justify-between p-2 rounded-lg bg-white/[0.02]">
+                          <span className="text-white/40 text-xs capitalize">{key.replace(/([A-Z])/g, ' $1')}</span>
+                          <span className="text-white/80 text-xs font-medium">{typeof val === 'object' ? JSON.stringify(val) : String(val)}</span>
+                        </div>
+                      ))}
+                    </div>
+                    {sd.uploadedFiles && Object.keys(sd.uploadedFiles).length > 0 && (
+                      <div className="mt-3 pt-3 border-t border-white/[0.06]">
+                        <h4 className="text-white/60 text-xs font-semibold mb-2 uppercase">Hochgeladene Dokumente</h4>
+                        <div className="space-y-1">
+                          {Object.entries(sd.uploadedFiles).map(([docKey, docUrl]) => (
+                            <a key={docKey} href={String(docUrl)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.02] hover:bg-white/[0.05] transition-colors">
+                              <span className="text-white/40 text-xs capitalize">{docKey}</span>
+                              <span className="text-primary text-xs hover:underline ml-auto">Anzeigen →</span>
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              } catch { return null; }
+            })()}
+
+            {/* Status Actions */}
+            <div className="flex flex-wrap gap-2">
+              <span className="text-white/50 text-sm self-center mr-2">Status ändern:</span>
+              {["processing", "completed", "cancelled", "refunded"].map(s => (
+                <button key={s} onClick={() => updateStatus(o.id, s)} disabled={o.status === s} className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${o.status === s ? "opacity-30 cursor-not-allowed" : "hover:bg-white/5"} ${statusColors[s] || ""}`}>{s}</button>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* Documents Tab */}
+        {detailTab === "documents" && <OrderDocumentsPanel orderId={o.id} toast={toast} onUpdate={mutateDetail} />}
+
+        {/* Messages Tab */}
+        {detailTab === "messages" && <OrderMessagesPanel orderId={o.id} orderNumber={o.orderNumber} customerName={`${o.billingFirstName || ""} ${o.billingLastName || ""}`.trim()} toast={toast} />}
+
+        {/* Notes Tab */}
+        {detailTab === "notes" && <OrderNotesPanel orderId={o.id} toast={toast} />}
+
+        {/* Refund Tab */}
+        {detailTab === "refund" && <OrderRefundPanel orderId={o.id} orderTotal={o.total} orderStatus={o.status} toast={toast} onUpdate={() => { mutate(); mutateDetail(); }} />}
       </div>
     );
   }
@@ -857,6 +985,340 @@ function OrdersTab({ token }: { token: string }) {
           </div>
           <Pagination page={page} totalPages={data.totalPages || 1} total={data.total || 0} limit={20} onPageChange={setPage} />
         </>
+      )}
+    </div>
+  );
+}
+
+// ─── Order Documents Panel ──────────────────────────────────
+function OrderDocumentsPanel({ orderId, toast, onUpdate }: { orderId: string; toast: (msg: string, type: "success" | "error" | "info") => void; onUpdate: () => void }) {
+  const { data, mutate: mutateDocs } = useSWR(`${API}/orders/${orderId}/documents`, fetcher, { revalidateOnFocus: false });
+  const [uploading, setUploading] = useState(false);
+  const [sendEmail, setSendEmail] = useState(true);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [dragOver, setDragOver] = useState(false);
+
+  async function handleUpload(file: File) {
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("sendEmail", sendEmail ? "true" : "false");
+      const res = await fetch(`${API}/orders/${orderId}/documents/`, { method: "POST", credentials: "include", body: formData });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Upload fehlgeschlagen");
+      }
+      toast(sendEmail ? "Dokument hochgeladen & E-Mail gesendet" : "Dokument hochgeladen", "success");
+      mutateDocs();
+      onUpdate();
+    } catch (e: any) {
+      toast(e.message || "Upload fehlgeschlagen", "error");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  function handleDrop(e: React.DragEvent) {
+    e.preventDefault();
+    setDragOver(false);
+    const file = e.dataTransfer.files[0];
+    if (file) handleUpload(file);
+  }
+
+  const documents = data?.documents || [];
+
+  return (
+    <div className="space-y-4">
+      {/* Upload Area */}
+      <div
+        className={`p-8 rounded-2xl border-2 border-dashed transition-colors text-center cursor-pointer ${dragOver ? "border-primary bg-primary/5" : "border-white/10 hover:border-white/20 bg-dark-900/40"}`}
+        onDragOver={e => { e.preventDefault(); setDragOver(true); }}
+        onDragLeave={() => setDragOver(false)}
+        onDrop={handleDrop}
+        onClick={() => fileInputRef.current?.click()}
+      >
+        <input ref={fileInputRef} type="file" className="hidden" accept=".pdf,.jpg,.jpeg,.png,.webp" onChange={e => { const f = e.target.files?.[0]; if (f) handleUpload(f); e.target.value = ""; }} />
+        <Upload className="w-8 h-8 text-white/30 mx-auto mb-2" />
+        <p className="text-white/50 text-sm">{uploading ? "Wird hochgeladen..." : "PDF oder Bild hier ablegen oder klicken"}</p>
+        <p className="text-white/30 text-xs mt-1">Max. 20MB – PDF, JPG, PNG, WebP</p>
+      </div>
+
+      {/* Email toggle */}
+      <label className="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" checked={sendEmail} onChange={e => setSendEmail(e.target.checked)} className="rounded border-white/20 bg-dark-900 text-primary" />
+        <span className="text-white/60 text-sm">Kunden per E-Mail benachrichtigen</span>
+      </label>
+
+      {/* Document List */}
+      <div className="space-y-2">
+        {documents.length === 0 ? (
+          <p className="text-white/30 text-sm text-center py-8">Keine Dokumente vorhanden</p>
+        ) : documents.map((doc: any) => (
+          <div key={doc.id} className="flex items-center justify-between p-3 rounded-xl bg-dark-900/60 border border-white/[0.04]">
+            <div className="flex items-center gap-3 min-w-0">
+              <FileText className="w-5 h-5 text-red-400 flex-shrink-0" />
+              <div className="min-w-0">
+                <p className="text-white text-sm truncate">{doc.fileName}</p>
+                <p className="text-white/30 text-xs">{(doc.fileSize / 1024).toFixed(0)} KB • {formatDate(doc.createdAt)}</p>
+              </div>
+            </div>
+            <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg hover:bg-white/5 text-white/40 hover:text-white">
+              <Download className="w-4 h-4" />
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Order Messages Panel ───────────────────────────────────
+function OrderMessagesPanel({ orderId, orderNumber, customerName, toast }: { orderId: string; orderNumber: string; customerName: string; toast: (msg: string, type: "success" | "error" | "info") => void }) {
+  const { data, mutate: mutateMsgs } = useSWR(`${API}/orders/${orderId}/messages`, fetcher, { revalidateOnFocus: false });
+  const [message, setMessage] = useState("");
+  const [sending, setSending] = useState(false);
+  const [files, setFiles] = useState<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const TEMPLATES = [
+    { label: "Dokumente fehlen", text: `Sehr geehrte/r ${customerName || "Kunde"},\n\nfür die Bearbeitung Ihrer Bestellung #${orderNumber} benötigen wir noch folgende Unterlagen:\n\n- \n\nBitte laden Sie die Dokumente in Ihrem Kundenkonto hoch oder antworten Sie auf diese E-Mail.\n\nMit freundlichen Grüßen,\niKFZ Digital Zulassung` },
+    { label: "In Bearbeitung", text: `Sehr geehrte/r ${customerName || "Kunde"},\n\nIhre Bestellung #${orderNumber} wird aktuell bearbeitet. Wir melden uns, sobald alles erledigt ist.\n\nMit freundlichen Grüßen,\niKFZ Digital Zulassung` },
+    { label: "Rückfrage", text: `Sehr geehrte/r ${customerName || "Kunde"},\n\nbezüglich Ihrer Bestellung #${orderNumber} haben wir eine Rückfrage:\n\n\n\nBitte antworten Sie uns schnellstmöglich.\n\nMit freundlichen Grüßen,\niKFZ Digital Zulassung` },
+    { label: "Fertigstellung", text: `Sehr geehrte/r ${customerName || "Kunde"},\n\nIhre Bestellung #${orderNumber} wurde erfolgreich abgeschlossen. Die Unterlagen finden Sie in Ihrem Kundenkonto.\n\nVielen Dank für Ihr Vertrauen!\n\nMit freundlichen Grüßen,\niKFZ Digital Zulassung` },
+  ];
+
+  async function handleSend() {
+    if (!message.trim()) return;
+    setSending(true);
+    try {
+      const formData = new FormData();
+      formData.append("message", message.trim());
+      files.forEach(f => formData.append("files", f));
+      const res = await fetch(`${API}/orders/${orderId}/messages/`, { method: "POST", credentials: "include", body: formData });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Senden fehlgeschlagen");
+      }
+      toast("Nachricht gesendet", "success");
+      setMessage("");
+      setFiles([]);
+      mutateMsgs();
+    } catch (e: any) {
+      toast(e.message || "Senden fehlgeschlagen", "error");
+    } finally {
+      setSending(false);
+    }
+  }
+
+  const messages = data?.messages || [];
+
+  return (
+    <div className="space-y-4">
+      {/* Composer */}
+      <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-3">
+        <h3 className="text-white font-semibold text-sm">Nachricht senden</h3>
+        {/* Templates */}
+        <div className="flex flex-wrap gap-1.5">
+          {TEMPLATES.map(t => (
+            <button key={t.label} onClick={() => setMessage(t.text)} className="px-2.5 py-1 rounded-lg text-xs bg-white/[0.04] text-white/50 hover:text-white hover:bg-white/[0.08] transition-colors border border-white/[0.04]">{t.label}</button>
+          ))}
+        </div>
+        <textarea value={message} onChange={e => setMessage(e.target.value)} placeholder="Nachricht eingeben..." rows={5} className="w-full px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none resize-y" />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <button onClick={() => fileInputRef.current?.click()} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-white/[0.04] text-white/50 hover:text-white border border-white/[0.04]">
+              <Paperclip className="w-3.5 h-3.5" /> Anhänge
+            </button>
+            <input ref={fileInputRef} type="file" multiple className="hidden" onChange={e => { if (e.target.files) setFiles(prev => [...prev, ...Array.from(e.target.files!)]); e.target.value = ""; }} />
+            {files.length > 0 && <span className="text-white/30 text-xs">{files.length} Datei(en)</span>}
+            {files.map((f, i) => (
+              <span key={i} className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-white/[0.04] text-white/50 text-xs">
+                {f.name} <button onClick={() => setFiles(prev => prev.filter((_, j) => j !== i))} className="text-white/30 hover:text-red-400"><X className="w-3 h-3" /></button>
+              </span>
+            ))}
+          </div>
+          <button onClick={handleSend} disabled={!message.trim() || sending} className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-primary text-white hover:bg-primary/80 disabled:opacity-50 transition-colors">
+            <Send className="w-3.5 h-3.5" /> {sending ? "Sende..." : "Senden"}
+          </button>
+        </div>
+      </div>
+
+      {/* Message History */}
+      <div className="space-y-3">
+        {messages.length === 0 ? (
+          <p className="text-white/30 text-sm text-center py-8">Keine Nachrichten</p>
+        ) : messages.map((msg: any) => {
+          const attachments = msg.attachments ? (typeof msg.attachments === "string" ? (() => { try { return JSON.parse(msg.attachments); } catch { return []; } })() : msg.attachments) : [];
+          return (
+            <div key={msg.id} className={`p-4 rounded-2xl border ${msg.sentBy === "admin" ? "bg-primary/5 border-primary/10" : "bg-dark-900/60 border-white/[0.04]"}`}>
+              <div className="flex items-center gap-2 mb-2">
+                <span className={`text-xs font-medium ${msg.sentBy === "admin" ? "text-primary" : "text-white/60"}`}>{msg.sentBy === "admin" ? "Admin" : "Kunde"}</span>
+                <span className="text-white/30 text-xs">{new Date(msg.createdAt).toLocaleString("de-DE")}</span>
+              </div>
+              <p className="text-white/80 text-sm whitespace-pre-wrap">{msg.message}</p>
+              {attachments.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {attachments.map((att: any, i: number) => (
+                    <a key={i} href={att.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-2 py-1 rounded bg-white/[0.04] text-white/50 text-xs hover:text-white">
+                      <Paperclip className="w-3 h-3" /> {att.filename}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─── Order Notes Panel ──────────────────────────────────────
+function OrderNotesPanel({ orderId, toast }: { orderId: string; toast: (msg: string, type: "success" | "error" | "info") => void }) {
+  const { data, mutate: mutateNotes } = useSWR(`${API}/orders/${orderId}/notes`, fetcher, { revalidateOnFocus: false });
+  const [note, setNote] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  async function handleAdd() {
+    if (!note.trim()) return;
+    setSaving(true);
+    try {
+      const res = await fetch(`${API}/orders/${orderId}/notes/`, { method: "POST", headers: { "Content-Type": "application/json" }, credentials: "include", body: JSON.stringify({ note: note.trim() }) });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Fehler beim Speichern");
+      }
+      toast("Notiz hinzugefügt", "success");
+      setNote("");
+      mutateNotes();
+    } catch (e: any) {
+      toast(e.message || "Fehler", "error");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  const notes = data?.notes || [];
+
+  return (
+    <div className="space-y-4">
+      {/* Add Note */}
+      <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-3">
+        <h3 className="text-white font-semibold text-sm">Notiz hinzufügen</h3>
+        <div className="flex gap-2">
+          <input value={note} onChange={e => setNote(e.target.value)} onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleAdd(); } }} placeholder="Interne Notiz..." className="flex-1 px-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none" />
+          <button onClick={handleAdd} disabled={!note.trim() || saving} className="px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-medium hover:bg-primary/80 disabled:opacity-50 transition-colors">
+            {saving ? "..." : "Hinzufügen"}
+          </button>
+        </div>
+      </div>
+
+      {/* Notes History */}
+      <div className="space-y-2">
+        {notes.length === 0 ? (
+          <p className="text-white/30 text-sm text-center py-8">Keine Notizen vorhanden</p>
+        ) : notes.map((n: any) => (
+          <div key={n.id} className="p-3 rounded-xl bg-dark-900/60 border border-white/[0.04]">
+            <div className="flex items-center gap-2 mb-1">
+              <span className={`text-xs font-medium ${n.author === "System" ? "text-yellow-400" : "text-blue-400"}`}>{n.author}</span>
+              <span className="text-white/30 text-xs">{new Date(n.createdAt).toLocaleString("de-DE")}</span>
+            </div>
+            <p className="text-white/70 text-sm">{n.note}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Order Refund Panel ─────────────────────────────────────
+function OrderRefundPanel({ orderId, orderTotal, orderStatus, toast, onUpdate }: { orderId: string; orderTotal: number; orderStatus: string; toast: (msg: string, type: "success" | "error" | "info") => void; onUpdate: () => void }) {
+  const { data: refundData, mutate: mutateRefunds } = useSWR(`${API}/orders/${orderId}/refund`, fetcher, { revalidateOnFocus: false });
+  const [refundAmount, setRefundAmount] = useState("");
+  const [refundType, setRefundType] = useState<"full" | "partial">("full");
+  const [processing, setProcessing] = useState(false);
+
+  async function handleRefund() {
+    if (refundType === "partial" && (!refundAmount || parseFloat(refundAmount) <= 0)) {
+      toast("Betrag eingeben", "error");
+      return;
+    }
+    setProcessing(true);
+    try {
+      const body: any = {};
+      if (refundType === "partial") {
+        body.amount = parseFloat(refundAmount).toFixed(2);
+      }
+      const res = await fetch(`${API}/orders/${orderId}/refund/`, { method: "POST", headers: { "Content-Type": "application/json" }, credentials: "include", body: JSON.stringify(body) });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || "Erstattung fehlgeschlagen");
+      toast(`Erstattung erfolgreich: €${result.amount} (${result.provider})`, "success");
+      setRefundAmount("");
+      mutateRefunds();
+      onUpdate();
+    } catch (e: any) {
+      toast(e.message || "Erstattung fehlgeschlagen", "error");
+    } finally {
+      setProcessing(false);
+    }
+  }
+
+  const refunds = refundData?.refunds || [];
+  const provider = refundData?.provider;
+  const alreadyRefunded = orderStatus === "refunded";
+
+  return (
+    <div className="space-y-4">
+      {/* Refund Form */}
+      <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-4">
+        <h3 className="text-white font-semibold text-sm">Erstattung durchführen</h3>
+
+        {alreadyRefunded ? (
+          <p className="text-orange-400 text-sm">Diese Bestellung wurde bereits erstattet.</p>
+        ) : (
+          <>
+            <div className="flex items-center gap-3 text-sm">
+              <span className="text-white/50">Bestellsumme:</span>
+              <span className="text-white font-bold">{formatEuro(orderTotal)}</span>
+              {provider && <span className="px-2 py-0.5 rounded bg-white/[0.04] text-white/40 text-xs">{provider}</span>}
+            </div>
+
+            <div className="flex gap-2">
+              <button onClick={() => setRefundType("full")} className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${refundType === "full" ? "bg-red-500/10 text-red-400 border-red-500/20" : "text-white/40 border-white/10 hover:text-white/60"}`}>Volle Erstattung</button>
+              <button onClick={() => setRefundType("partial")} className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${refundType === "partial" ? "bg-orange-500/10 text-orange-400 border-orange-500/20" : "text-white/40 border-white/10 hover:text-white/60"}`}>Teilerstattung</button>
+            </div>
+
+            {refundType === "partial" && (
+              <div className="flex items-center gap-2">
+                <span className="text-white/50 text-sm">€</span>
+                <input type="number" step="0.01" min="0.01" max={orderTotal} value={refundAmount} onChange={e => setRefundAmount(e.target.value)} placeholder="0.00" className="w-40 px-3 py-2 rounded-lg bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none" />
+              </div>
+            )}
+
+            <button onClick={handleRefund} disabled={processing} className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 disabled:opacity-50 transition-colors">
+              <RotateCcw className="w-3.5 h-3.5" /> {processing ? "Wird verarbeitet..." : refundType === "full" ? `Voll erstatten (${formatEuro(orderTotal)})` : `Teilerstattung durchführen`}
+            </button>
+          </>
+        )}
+      </div>
+
+      {/* Refund History */}
+      {refunds.length > 0 && (
+        <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06] space-y-3">
+          <h3 className="text-white font-semibold text-sm">Erstattungsverlauf</h3>
+          <div className="space-y-2">
+            {refunds.map((r: any, i: number) => (
+              <div key={r.id || i} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                <div>
+                  <p className="text-white text-sm font-medium">€{r.amount?.value || r.amount || "0.00"}</p>
+                  <p className="text-white/30 text-xs">{r.id} • {r.createdAt ? new Date(r.createdAt).toLocaleString("de-DE") : "-"}</p>
+                </div>
+                <Badge status={r.status} />
+              </div>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );

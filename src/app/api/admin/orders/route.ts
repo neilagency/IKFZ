@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { verifyAuth, unauthorized } from '@/lib/auth';
+import { sendCompletionEmail } from '@/lib/completion-email';
 
 // GET /api/admin/orders - List all orders
 export async function GET(req: NextRequest) {
@@ -75,7 +76,29 @@ export async function PUT(req: NextRequest) {
       });
     }
 
-    return NextResponse.json(order);
+    // Add status change note
+    if (data.status) {
+      await prisma.orderNote.create({
+        data: {
+          orderId: data.id,
+          note: `Status geändert → ${data.status}`,
+          author: 'Admin',
+        },
+      });
+    }
+
+    // Trigger completion email when status → completed
+    let emailResult = null;
+    if (data.status === 'completed') {
+      try {
+        emailResult = await sendCompletionEmail(data.id);
+      } catch (err) {
+        console.error('Completion email failed:', err);
+        emailResult = { success: false, error: 'Email send failed' };
+      }
+    }
+
+    return NextResponse.json({ ...order, emailResult });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
