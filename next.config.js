@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   trailingSlash: true,
-  outputFileTracingIncludes: {
-    '/**': ['./prisma/dev.db'],
-  },
   experimental: {
     instrumentationHook: true,
+    outputFileTracingIncludes: {
+      '/**': ['./prisma/dev.db'],
+    },
   },
   images: {
     formats: ['image/avif', 'image/webp'],
