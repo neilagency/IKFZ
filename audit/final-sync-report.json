@@ -1,0 +1,33 @@
+{
+  "before": {
+    "customers": 111,
+    "orders": 123,
+    "payments": 110,
+    "invoices": 95,
+    "orderItems": 125
+  },
+  "after": {
+    "customers": 111,
+    "orders": 123,
+    "payments": 110,
+    "invoices": 95,
+    "orderItems": 125
+  },
+  "new": {
+    "customers": 0,
+    "orders": 0,
+    "payments": 0,
+    "invoices": 0,
+    "orderItems": 0
+  },
+  "updated": {
+    "customers": 0,
+    "orders": 0
+  },
+  "wpFetched": {
+    "customers": 0,
+    "orders": 123
+  },
+  "timestamp": "2026-03-31T06:59:08.840Z",
+  "dryRun": false
+}
