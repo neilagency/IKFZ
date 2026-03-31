@@ -37,7 +37,9 @@ const badges: { icon: typeof RefreshCcw; getContent: (content: typeof homepageCo
 
 export default function TrustBadges() {
   return (
-    <section className="py-20 md:py-28 bg-dark-950 relative overflow-hidden">
+    <section className="py-14 md:py-20 bg-dark-950 relative overflow-hidden">
+      {/* Top transition gradient */}
+      <div className="absolute top-0 inset-x-0 h-16 bg-gradient-to-b from-dark-900/50 to-transparent" />
       {/* Decorative gradient orbs */}
       <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-primary/8 rounded-full blur-[120px]" />
       <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-primary/5 rounded-full blur-[100px]" />
@@ -48,7 +50,7 @@ export default function TrustBadges() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-14"
+          className="text-center mb-10"
         >
           <h2 className="text-section-mobile md:text-section text-white mb-4">
             Vertrauen & Sicherheit

@@ -26,14 +26,14 @@ export default function VehicleTypes() {
   const { vehicles } = homepageContent;
 
   return (
-    <section className="section-padding bg-dark-50/50">
+    <section className="py-14 md:py-20 bg-gradient-to-br from-gray-50/80 via-white to-primary-50/20 relative overflow-hidden">
       <div className="container-main">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-14"
+          className="text-center mb-10"
         >
           <span className="section-label mb-5 inline-flex">
             <Car className="w-3.5 h-3.5" />
@@ -70,7 +70,7 @@ export default function VehicleTypes() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="text-center text-dark-400 mt-10 text-[0.95rem]"
+          className="text-center text-dark-400 mt-8 text-[0.95rem]"
         >
           Auto online anmelden, klare Kosten, einfache Schritte und persönliche Hilfe – bundesweit.
         </motion.p>

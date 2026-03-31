@@ -21,11 +21,11 @@ export default function Support() {
   const { support } = homepageContent;
 
   return (
-    <section className="section-padding bg-dark-50/50 relative overflow-hidden" id="support">
+    <section className="py-14 md:py-20 bg-gradient-to-br from-gray-50/80 via-white to-primary-50/20 relative overflow-hidden" id="support">
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/[0.02] rounded-full blur-[100px] translate-x-1/3 -translate-y-1/3" />
       
       <div className="container-main relative">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -40,12 +40,12 @@ export default function Support() {
             <h2 className="text-section-mobile md:text-section text-dark-900 mb-5 text-balance">
               {support.title}
             </h2>
-            <p className="text-lg text-dark-400 mb-8 leading-relaxed">
+            <p className="text-lg text-dark-400 mb-6 leading-relaxed">
               {support.description}
             </p>
             <Link
               href="/kfz-service/kfz-online-service/"
-              className="btn-primary"
+              className="btn-primary cta-glow"
             >
               Zulassung jetzt starten
               <ArrowRight className="w-5 h-5" />

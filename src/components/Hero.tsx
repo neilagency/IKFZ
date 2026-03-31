@@ -32,7 +32,7 @@ export default function Hero() {
       }} />
 
       <div className="relative container-main w-full">
-        <div className="flex flex-col lg:flex-row items-center gap-16 py-28 md:py-32">
+          <div className="flex flex-col lg:flex-row items-center gap-12 py-24 md:py-28">
           {/* Text Content */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -66,14 +66,14 @@ export default function Hero() {
               {hero.subtitle}
             </p>
 
-            <p className="text-base text-white/40 font-medium mb-10">
+            <p className="text-base text-white/40 font-medium mb-8">
               {hero.badge}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Link
                 href={hero.cta.href}
-                className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-primary text-white font-bold rounded-2xl shadow-button hover:shadow-button-hover transition-all duration-300 hover:-translate-y-0.5 text-[1.05rem]"
+                className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-primary text-white font-bold rounded-2xl shadow-button hover:shadow-button-hover transition-all duration-300 hover:-translate-y-0.5 text-[1.05rem] cta-glow"
               >
                 {hero.cta.text}
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -91,7 +91,7 @@ export default function Hero() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.6 }}
-              className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-10 justify-center lg:justify-start"
+              className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-8 justify-center lg:justify-start"
             >
               {['Persönlicher-Support', '100% Geld-zurück', '24/7 Support'].map((text) => (
                 <span key={text} className="flex items-center gap-2 text-sm text-white/50">
@@ -149,7 +149,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.5 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 pb-16 relative z-10"
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 pb-12 relative z-10"
         >
           {hero.features.map((feature, index) => {
             const Icon = iconMap[feature.icon] || FileText;

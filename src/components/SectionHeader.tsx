@@ -20,7 +20,7 @@ export default function SectionHeader({
   return (
     <div
       className={cn(
-        'mb-12 md:mb-16',
+        'mb-8 md:mb-12',
         align === 'center' && 'text-center',
         align === 'left' && 'max-w-2xl'
       )}

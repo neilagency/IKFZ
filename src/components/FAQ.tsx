@@ -86,7 +86,7 @@ export default function FAQ({ title, sections, items, singleSection = false }: F
   };
 
   return (
-    <section className="section-padding bg-white" id="faq">
+    <section className="py-14 md:py-20 bg-gradient-to-b from-white via-white to-gray-50/80" id="faq">
       <div className="container-main">
         {title && (
           <motion.div
@@ -94,7 +94,7 @@ export default function FAQ({ title, sections, items, singleSection = false }: F
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-14"
+            className="text-center mb-10"
           >
             <span className="section-label mb-5 inline-flex">
               <HelpCircle className="w-3.5 h-3.5" />

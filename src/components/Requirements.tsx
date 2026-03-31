@@ -9,12 +9,12 @@ export default function Requirements() {
   const { requirements } = homepageContent;
 
   return (
-    <section className="section-padding bg-white relative overflow-hidden">
+    <section className="py-14 md:py-20 bg-gradient-to-b from-gray-50/60 via-white to-white relative overflow-hidden">
       {/* Decorative bg */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/[0.03] rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3" />
 
       <div className="container-main relative">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -29,11 +29,11 @@ export default function Requirements() {
             <h2 className="text-section-mobile md:text-section text-dark-900 mb-5 text-balance">
               {requirements.title}
             </h2>
-            <p className="text-lg text-dark-400 mb-8 leading-relaxed">
+            <p className="text-lg text-dark-400 mb-6 leading-relaxed">
               {requirements.subtitle}
             </p>
 
-            <Link href="/kfz-service/kfz-online-service/" className="btn-primary">
+            <Link href="/kfz-service/kfz-online-service/" className="btn-primary cta-glow">
               Jetzt Auto online anmelden
               <ArrowRight className="w-5 h-5" />
             </Link>

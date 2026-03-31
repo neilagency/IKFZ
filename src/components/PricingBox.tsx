@@ -9,7 +9,7 @@ export default function PricingBox() {
   const { pricing, deregistration } = homepageContent;
 
   return (
-    <section className="section-padding bg-dark-50/50 relative overflow-hidden" id="kosten">
+    <section className="py-14 md:py-20 bg-gradient-to-br from-gray-50/80 via-white to-primary-50/20 relative overflow-hidden" id="kosten">
       {/* Decorative */}
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-primary/[0.03] rounded-full blur-[80px] translate-y-1/2 -translate-x-1/3" />
 
@@ -19,7 +19,7 @@ export default function PricingBox() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10"
         >
           <span className="section-label mb-5 inline-flex">
             <Euro className="w-3.5 h-3.5" />
@@ -69,7 +69,7 @@ export default function PricingBox() {
 
               <Link
                 href="/kfz-service/kfz-online-service/"
-                className="btn-primary w-full mb-6"
+                className="btn-primary w-full mb-6 cta-glow"
               >
                 Jetzt Zulassung starten
                 <ArrowRight className="w-4.5 h-4.5" />
@@ -136,7 +136,7 @@ export default function PricingBox() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="text-center text-dark-400 mt-10 max-w-3xl mx-auto text-sm leading-relaxed"
+          className="text-center text-dark-400 mt-8 max-w-3xl mx-auto text-sm leading-relaxed"
         >
           {pricing.note}
         </motion.p>

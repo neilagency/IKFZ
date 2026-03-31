@@ -6,7 +6,9 @@ import { homepageContent } from '@/lib/content';
 
 export default function InfoCards() {
   return (
-    <section className="section-padding bg-white">
+    <section className="py-14 md:py-20 bg-gradient-to-b from-white via-white to-gray-50/60 relative">
+      {/* Separator */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-px bg-gradient-to-r from-transparent via-dark-200/30 to-transparent" />
       <div className="container-main">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
           {/* Vollmacht Card */}

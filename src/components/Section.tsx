@@ -12,17 +12,17 @@ interface SectionProps {
 }
 
 const bgVariants = {
-  white: 'bg-white',
-  light: 'bg-gradient-to-br from-gray-50 via-white to-primary-50/30',
+  white: 'bg-gradient-to-b from-white via-white to-gray-50/80',
+  light: 'bg-gradient-to-br from-gray-50/80 via-white to-primary-50/20',
   green: 'gradient-green text-white',
   dark: 'bg-dark-950 text-white',
   gradient: 'bg-gradient-to-br from-primary-50 via-white to-accent-50',
 };
 
 const sizeVariants = {
-  sm: 'py-12 md:py-16',
-  md: 'py-16 md:py-24',
-  lg: 'py-20 md:py-32',
+  sm: 'py-10 md:py-14',
+  md: 'py-14 md:py-20',
+  lg: 'py-16 md:py-24',
 };
 
 export default function Section({
