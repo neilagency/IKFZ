@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronDown, ArrowRight, UserCircle, MapPin } from 'lucide-react';
 import { siteConfig } from '@/lib/config';
@@ -40,23 +41,17 @@ export default function Navbar() {
       <div className="container-main flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 z-50 group">
-          <div className="relative w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-md group-hover:shadow-button transition-shadow duration-300">
-            <span className="text-white font-black text-sm tracking-tight">iK</span>
-          </div>
-          <div className="hidden sm:block">
-            <div className={cn(
-              'text-[15px] font-bold leading-tight transition-colors',
-              scrolled ? 'text-dark-900' : 'text-white'
-            )}>
-              IKFZ Digital
-            </div>
-            <div className={cn(
-              'text-[11px] font-medium tracking-wide transition-colors',
-              scrolled ? 'text-dark-400' : 'text-white/70'
-            )}>
-              ZULASSUNG
-            </div>
-          </div>
+          <Image
+            src="/logo-ikfz.svg"
+            alt="IKFZ Digital Zulassung"
+            width={180}
+            height={49}
+            className={cn(
+              'transition-all duration-300',
+              scrolled ? '' : 'brightness-0 invert'
+            )}
+            priority
+          />
         </Link>
 
         {/* Desktop Navigation */}
