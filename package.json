@@ -40,7 +40,14 @@
     "react-window": "^2.2.7",
     "swr": "^2.4.1",
     "tailwind-merge": "^2.5.4",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "sharp": "^0.34.5",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.15"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -53,16 +60,9 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@types/react-window": "^1.8.8",
-    "autoprefixer": "^10.4.20",
     "cheerio": "^1.0.0",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "^14.2.15",
-    "postcss": "^8.4.47",
-    "sharp": "^0.34.5",
-    "tailwindcss": "^3.4.14",
     "ts-node": "^10.9.2",
-    "tsx": "^4.21.0",
-    "typescript": "^5.6.3"
+    "tsx": "^4.21.0"
   },
   "browserslist": [
     "last 2 Chrome versions",
