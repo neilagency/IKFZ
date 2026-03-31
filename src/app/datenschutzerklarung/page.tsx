@@ -3,10 +3,10 @@ import ScrollReveal from '@/components/ScrollReveal';
 import { ShieldCheck } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Datenschutzerklärung – IKFZ Digital Zulassung',
+  title: 'Datenschutzerklärung',
   description: 'Datenschutzerklärung der iKFZ Digital Zulassung UG. Informationen zur Erhebung und Verarbeitung Ihrer Daten.',
   alternates: {
-    canonical: 'https://ikfzdigitalzulassung.de/datenschutzerklarung',
+    canonical: 'https://ikfzdigitalzulassung.de/datenschutzerklarung/',
   },
 };
 

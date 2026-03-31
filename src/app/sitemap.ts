@@ -18,6 +18,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     orderBy: { updatedAt: 'desc' },
   });
 
+  // Fetch active products
+  const products = await prisma.product.findMany({
+    where: { isActive: true },
+    select: { slug: true, updatedAt: true },
+  });
+
   // Static routes with high priority
   const staticRoutes: MetadataRoute.Sitemap = [
     {
@@ -25,6 +31,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 1.0,
+    },
+    {
+      url: `${SITE_URL}/kfz-service/kfz-online-service/`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.9,
     },
   ];
 
@@ -84,5 +96,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.9,
   }];
 
-  return [...staticRoutes, ...pageRoutes, ...blogRoute, ...postRoutes];
+  // Product pages
+  const productRoutes: MetadataRoute.Sitemap = products.map(product => ({
+    url: `${SITE_URL}/product/${product.slug}/`,
+    lastModified: product.updatedAt,
+    changeFrequency: 'monthly' as const,
+    priority: 0.9,
+  }));
+
+  return [...staticRoutes, ...pageRoutes, ...productRoutes, ...blogRoute, ...postRoutes];
 }

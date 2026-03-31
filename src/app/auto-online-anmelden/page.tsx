@@ -6,7 +6,7 @@ import ScrollReveal from '@/components/ScrollReveal';
 import { siteConfig } from '@/lib/config';
 
 export const metadata: Metadata = {
-  title: 'Kfz Zulassung online – Ihr offizieller i-Kfz Service | iKFZ Digitalzulassung',
+  title: 'Kfz Zulassung online – Ihr offizieller i-Kfz Service',
   description:
     'Auto online anmelden, ummelden oder wiederzulassen – einfach, schnell und bequem. Ihr offizieller i-Kfz Service mit persönlicher Hilfe bei der Verifizierung.',
   alternates: {

@@ -233,11 +233,10 @@ export function buildSEOMetadata(item: {
   publishedAt?: Date | string | null;
   updatedAt?: Date | string | null;
 }, siteUrl: string = SITE_URL) {
-  const siteSuffix = ' | Online Auto Abmelden';
+  const siteSuffix = ' | IKFZ Digital Zulassung';
   const rawTitle = item.metaTitle || item.title;
-  const title = rawTitle.length + siteSuffix.length > 70
-    ? rawTitle.slice(0, 70 - siteSuffix.length)
-    : rawTitle;
+  // Truncate title to fit within ~60 chars (Google's display limit)
+  const title = rawTitle.length > 55 ? rawTitle.slice(0, 55) : rawTitle;
   const description = item.metaDescription || item.excerpt || '';
   const canonical = `${siteUrl}/${item.slug}/`;
   const ogImage = item.ogImage || item.featuredImage || '';
@@ -248,7 +247,8 @@ export function buildSEOMetadata(item: {
     : 'noindex, nofollow';
 
   return {
-    title: `${title}${siteSuffix}`,
+    // Use raw title — layout template adds ' | IKFZ Digital Zulassung'
+    title,
     description,
     alternates: { canonical },
     robots,

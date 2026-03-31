@@ -22,7 +22,52 @@ export function middleware(request: NextRequest) {
     );
   }
 
-  // 2. Admin API protection — lightweight cookie check
+  // 2. WordPress legacy redirects (301)
+  const wpRedirects: Record<string, string> = {
+    '/feed': '/',
+    '/feed/': '/',
+    '/rss': '/',
+    '/rss/': '/',
+    '/comments/feed': '/',
+    '/comments/feed/': '/',
+    '/wp-login.php': '/',
+    '/wp-admin': '/admin/',
+    '/wp-admin/': '/admin/',
+    '/wp-signup.php': '/',
+    '/xmlrpc.php': '/',
+    '/wp-json': '/api/',
+    '/wp-json/': '/api/',
+    '/shop': '/kfz-services/',
+    '/shop/': '/kfz-services/',
+  };
+
+  // Exact match redirects
+  const wpTarget = wpRedirects[pathname];
+  if (wpTarget) {
+    return NextResponse.redirect(new URL(wpTarget, request.url), 301);
+  }
+
+  // Prefix-based WP redirects
+  if (pathname.startsWith('/wp-content/') || pathname.startsWith('/wp-includes/') || pathname.startsWith('/wp-json/')) {
+    return NextResponse.redirect(new URL('/', request.url), 301);
+  }
+
+  // WP author pages
+  if (pathname.startsWith('/author/') || pathname.startsWith('/author')) {
+    return NextResponse.redirect(new URL('/', request.url), 301);
+  }
+
+  // WP category/tag archives
+  if (pathname.startsWith('/category/') || pathname.startsWith('/tag/')) {
+    return NextResponse.redirect(new URL('/insiderwissen/', request.url), 301);
+  }
+
+  // WP pagination patterns /page/N/
+  if (/^\/page\/\d+\/?$/.test(pathname)) {
+    return NextResponse.redirect(new URL('/', request.url), 301);
+  }
+
+  // 3. Admin API protection — lightweight cookie check
   const isAdminApi = pathname.startsWith('/api/admin');
   const isAdminAuthApi = pathname === '/api/admin/auth' || pathname === '/api/admin/auth/';
 
@@ -35,7 +80,7 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // 3. Customer API protection — lightweight cookie check
+  // 4. Customer API protection — lightweight cookie check
   const isCustomerApi = pathname.startsWith('/api/customer');
 
   if (isCustomerApi) {
@@ -47,7 +92,7 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // 4. Customer account pages (/konto/*) — redirect to login if no cookie
+  // 5. Customer account pages (/konto/*) — redirect to login if no cookie
   const isKontoPage = pathname.startsWith('/konto');
 
   if (isKontoPage) {

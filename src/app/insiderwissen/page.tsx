@@ -37,7 +37,7 @@ export async function generateMetadata({
     const category = categories.find(c => c.slug === cat);
     const catName = category?.name || cat;
     return {
-      title: `${catName} – Insiderwissen | Online Auto Abmelden`,
+      title: `${catName} – Insiderwissen`,
       description: CATEGORY_DESCRIPTIONS[cat] || `Artikel zum Thema ${catName}`,
       robots: 'index, follow',
       alternates: { canonical: 'https://ikfzdigitalzulassung.de/insiderwissen/' },
@@ -46,7 +46,7 @@ export async function generateMetadata({
 
   if (page > 1) {
     return {
-      title: `Insiderwissen – Seite ${page} | Online Auto Abmelden`,
+      title: `Insiderwissen – Seite ${page}`,
       description: 'Expertenwissen rund um KFZ-Zulassung, Abmeldung und Ummeldung.',
       robots: 'noindex, follow',
       alternates: { canonical: `https://ikfzdigitalzulassung.de/insiderwissen/?page=${page}` },
@@ -54,7 +54,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: 'Insiderwissen – Kfz-Zulassung, Abmeldung & mehr | Online Auto Abmelden',
+    title: 'Insiderwissen – Kfz-Zulassung, Abmeldung & mehr',
     description: 'Expertenwissen rund um KFZ-Zulassung, Abmeldung, Ummeldung und alles was Sie über Fahrzeugdokumente wissen müssen.',
     robots: 'index, follow',
     alternates: { canonical: 'https://ikfzdigitalzulassung.de/insiderwissen/' },

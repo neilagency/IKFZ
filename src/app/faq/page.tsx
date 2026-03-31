@@ -5,7 +5,7 @@ import ScrollReveal from '@/components/ScrollReveal';
 import { HelpCircle } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'FAQ – Häufig gestellte Fragen zur IKFZ Digitalzulassung',
+  title: 'FAQ – Häufig gestellte Fragen zur KFZ-Zulassung',
   description:
     'Alles, was Sie über Fahrzeuganmeldung, Ab/Ummeldung, eVB und Kennzeichen wissen müssen – einfach erklärt und übersichtlich dargestellt.',
   alternates: {

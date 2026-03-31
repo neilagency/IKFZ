@@ -5,7 +5,7 @@ import ScrollReveal from '@/components/ScrollReveal';
 import { siteConfig } from '@/lib/config';
 
 export const metadata: Metadata = {
-  title: 'KFZ-Zulassung in deiner Stadt – Deutschlandweit Online | iKFZ',
+  title: 'KFZ-Zulassung in deiner Stadt – Deutschlandweit Online',
   description:
     'Kfz online abmelden – deutschlandweit. Unser digitaler Service ist überall nutzbar und spart Ihnen Zeit, Wege und unnötigen Aufwand.',
   alternates: {

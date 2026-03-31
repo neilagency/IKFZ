@@ -3,10 +3,10 @@ import ScrollReveal from '@/components/ScrollReveal';
 import { FileText } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Allgemeine Geschäftsbedingungen – IKFZ Digital Zulassung',
+  title: 'Allgemeine Geschäftsbedingungen (AGB)',
   description: 'Allgemeine Geschäftsbedingungen (AGB) der iKFZ Digital Zulassung UG.',
   alternates: {
-    canonical: 'https://ikfzdigitalzulassung.de/agb',
+    canonical: 'https://ikfzdigitalzulassung.de/agb/',
   },
 };
 

@@ -5,7 +5,7 @@ import ScrollReveal from '@/components/ScrollReveal';
 import { siteConfig } from '@/lib/config';
 
 export const metadata: Metadata = {
-  title: 'eVB beantragen – Ihre schnelle Lösung | iKFZ Digitalzulassung',
+  title: 'eVB beantragen – Ihre schnelle Lösung',
   description:
     'eVB-Nummer schnell und einfach beantragen. Nutzen Sie unseren eVB Tarifrechner für Auto & Motorrad. In nur 2 Minuten Ihre eVB-Nummer erhalten!',
   alternates: {

@@ -4,10 +4,10 @@ import ScrollReveal from '@/components/ScrollReveal';
 import { Building2 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Impressum – IKFZ Digital Zulassung',
+  title: 'Impressum',
   description: 'Impressum der iKFZ Digital Zulassung UG (haftungsbeschränkt). Angaben gemäß § 5 TMG.',
   alternates: {
-    canonical: 'https://ikfzdigitalzulassung.de/impressum',
+    canonical: 'https://ikfzdigitalzulassung.de/impressum/',
   },
 };
 

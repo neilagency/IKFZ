@@ -63,17 +63,47 @@ export async function generateMetadata({
 }
 
 function isCitySlug(slug: string): boolean {
-  const cityPatterns = ['kfz-zulassung-', 'zulassungsstelle-', 'autoanmeldung-', 'auto-anmelden-', 'kfz-zulassung-in-'];
+  const cityPatterns = ['kfz-zulassung-', 'zulassungsstelle-', 'autoanmeldung-', 'auto-anmelden-', 'kfz-zulassung-in-', 'landkreis-', 'auto-online-anmelden-oder-abmelden-', 'in-'];
   return cityPatterns.some(p => slug.startsWith(p));
 }
 
 function extractCityName(title: string): string {
-  const patterns = [/kfz[- ]zulassung[- ](?:in[- ])?(.+)/i, /zulassungsstelle[- ](.+)/i, /autoanmeldung[- ](.+)/i, /auto[- ]anmelden[- ](?:in[- ])?(.+)/i];
+  const patterns = [
+    /kfz[- ]zulassung[- ](?:in[- ])?(.+)/i,
+    /zulassungsstelle[- ](.+)/i,
+    /autoanmeldung[- ](.+)/i,
+    /auto[- ]anmelden[- ](?:in[- ])?(.+)/i,
+    /auto[- ]online[- ]anmelden[- ]oder[- ]abmelden[- ](?:im|in)[- ](?:landkreis|kreis|stadt)?[- ]?(.+)/i,
+    /landkreis[- ](.+)/i,
+    /^in[- ](.+)/i,
+  ];
   for (const pattern of patterns) {
     const match = title.match(pattern);
     if (match) return match[1].replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()).trim();
   }
   return title;
+}
+
+function buildPageBreadcrumb(title: string, pageType: string | null) {
+  const items: { name: string; item?: string }[] = [
+    { name: 'Start', item: SITE_URL },
+  ];
+  if (pageType === 'city') {
+    items.push({ name: 'KFZ Zulassung in deiner Stadt', item: `${SITE_URL}/kfz-zulassung-in-deiner-stadt/` });
+  } else if (pageType === 'service') {
+    items.push({ name: 'KFZ Dienstleistungen', item: `${SITE_URL}/kfz-services/` });
+  }
+  items.push({ name: title });
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: item.name,
+      ...(item.item ? { item: item.item } : {}),
+    })),
+  };
 }
 
 export default async function DynamicPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -84,13 +114,14 @@ export default async function DynamicPage({ params }: { params: Promise<{ slug: 
     const schemaJson = page.seo?.schemaJson;
     const isCity = isCitySlug(slug) || page.pageType === 'city';
     const cityName = isCity ? extractCityName(page.title) : null;
+    const breadcrumb = buildPageBreadcrumb(page.title, page.pageType);
     if (isCity && cityName) {
-      return (<>{schemaJson && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaJson }} />}<CityLandingPage cityName={cityName} title={page.title} content={page.content} featuredImage={page.featuredImage} /></>);
+      return (<><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />{schemaJson && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaJson }} />}<CityLandingPage cityName={cityName} title={page.title} content={page.content} featuredImage={page.featuredImage} /></>);
     }
     if (page.pageType === 'service') {
-      return (<>{schemaJson && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaJson }} />}<ServicePage slug={slug} title={page.title} content={page.content} featuredImage={page.featuredImage} /></>);
+      return (<><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />{schemaJson && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaJson }} />}<ServicePage slug={slug} title={page.title} content={page.content} featuredImage={page.featuredImage} /></>);
     }
-    return (<>{schemaJson && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaJson }} />}<GenericPage title={page.title} content={page.content} featuredImage={page.featuredImage} /></>);
+    return (<><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />{schemaJson && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaJson }} />}<GenericPage title={page.title} content={page.content} featuredImage={page.featuredImage} /></>);
   }
 
   // Check for blog post
@@ -366,11 +397,11 @@ function BlogPostView({ post, products }: { post: any; products: any[] }) {
     headline: post.title,
     datePublished: post.publishedAt ? new Date(post.publishedAt).toISOString() : undefined,
     dateModified: new Date(post.updatedAt).toISOString(),
-    author: { '@type': 'Organization', name: 'Online Auto Abmelden' },
+    author: { '@type': 'Organization', name: siteConfig.company.name },
     publisher: {
       '@type': 'Organization',
-      name: 'Online Auto Abmelden',
-      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.webp` },
+      name: siteConfig.company.name,
+      logo: { '@type': 'ImageObject', url: siteConfig.ogImage },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': postUrl },
     ...(post.featuredImage ? { image: post.featuredImage } : {}),

@@ -6,7 +6,7 @@ import ScrollReveal from '@/components/ScrollReveal';
 import { siteConfig } from '@/lib/config';
 
 export const metadata: Metadata = {
-  title: 'KFZ Online Abmelden – Schnell & ohne Behördengang | iKFZ Digitalzulassung',
+  title: 'KFZ Online Abmelden – Schnell & ohne Behördengang',
   description:
     'KFZ online abmelden – in wenigen Minuten erledigt. Ohne Termin, ohne Wartezeit. Für nur 24,95 € inkl. Kennzeichenreservierung. Jetzt digital abmelden!',
   alternates: {
