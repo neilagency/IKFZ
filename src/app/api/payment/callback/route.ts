@@ -10,6 +10,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { getMolliePayment } from '@/lib/payments';
+import { triggerInvoiceEmail } from '@/lib/trigger-invoice';
 
 export const dynamic = 'force-dynamic';
 
@@ -68,6 +69,12 @@ export async function GET(request: NextRequest) {
           datePaid: molliePayment.paidAt ? new Date(molliePayment.paidAt) : new Date(),
         },
       });
+
+      // Trigger invoice email (deduplicated)
+      triggerInvoiceEmail(orderId).catch((err) =>
+        console.error('[payment-callback] Invoice email error:', err),
+      );
+
       return NextResponse.redirect(
         new URL(`/bestellung-erfolgreich/?order=${order.id}`, request.url),
       );

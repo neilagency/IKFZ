@@ -7,6 +7,9 @@ import {
   getCheckoutMollieMethod,
 } from '@/lib/payments';
 import { createPayPalOrder } from '@/lib/paypal';
+import { rateLimit, getClientIP } from '@/lib/rate-limit';
+import { paymentLog } from '@/lib/payment-logger';
+import { triggerInvoiceEmail } from '@/lib/trigger-invoice';
 import crypto from 'crypto';
 
 const SITE_URL =
@@ -36,6 +39,16 @@ const PAYMENT_FEES: Record<string, number> = {
 };
 
 export async function POST(request: NextRequest) {
+  // ── Rate Limiting ──
+  const ip = getClientIP(request);
+  const rl = rateLimit(ip, { maxRequests: 8, windowMs: 60_000 });
+  if (!rl.success) {
+    return NextResponse.json(
+      { error: 'Zu viele Anfragen. Bitte versuchen Sie es in einer Minute erneut.' },
+      { status: 429, headers: { 'Retry-After': String(Math.ceil(rl.reset / 1000)) } },
+    );
+  }
+
   try {
     const body = await request.json();
 
@@ -148,6 +161,15 @@ export async function POST(request: NextRequest) {
     // Generate idempotency key to prevent duplicate payments
     const idempotencyKey = crypto.randomUUID();
 
+    paymentLog.checkoutStart({
+      orderId: '',
+      orderNumber: 0,
+      method: paymentMethod,
+      amount: String(serverGrandTotal),
+      email,
+      ip,
+    });
+
     // ── 1. Create Order in DB (status: pending) ──
     const order = await createOrder({
       productName: orderItems.productName,
@@ -167,6 +189,13 @@ export async function POST(request: NextRequest) {
       billingCountry: 'DE',
       customerNote,
       items,
+    });
+
+    paymentLog.orderCreated({
+      orderId: order.id,
+      orderNumber: order.orderNumber || '',
+      total: String(serverGrandTotal),
+      method: paymentMethod,
     });
 
     // ── 2. Create payment with the appropriate gateway ──
@@ -199,8 +228,46 @@ export async function POST(request: NextRequest) {
           orderId: order.id,
           orderNumber: order.orderNumber,
         });
+      } else if (paymentMethod === 'sepa') {
+        // ── SEPA: Mollie Bank Transfer — send invoice immediately ──
+        const mollieMethod = getCheckoutMollieMethod(paymentMethod)!;
+        const mollieResult = await createMolliePayment({
+          orderId: order.id,
+          orderNumber: order.orderNumber!,
+          amount: serverGrandTotal,
+          description: `Bestellung ${order.orderNumber}`,
+          method: mollieMethod,
+          redirectUrl: `${SITE_URL}/api/payment/callback/?orderId=${order.id}`,
+          webhookUrl: `${SITE_URL}/api/webhooks/mollie/`,
+        });
+
+        await prisma.payment.updateMany({
+          where: { orderId: order.id },
+          data: {
+            gateway: 'mollie',
+            externalPaymentId: mollieResult.paymentId,
+            transactionId: mollieResult.paymentId,
+            idempotencyKey,
+          },
+        });
+        await prisma.order.update({
+          where: { id: order.id },
+          data: { status: 'on-hold', transactionId: mollieResult.paymentId },
+        });
+
+        // SEPA: send invoice email immediately (no redirect needed)
+        triggerInvoiceEmail(order.id).catch((err) =>
+          console.error('[checkout] SEPA invoice email failed:', err),
+        );
+
+        return NextResponse.json({
+          success: true,
+          orderId: order.id,
+          orderNumber: order.orderNumber,
+          pendingPayment: true,
+        });
       } else if (isMollieMethod(paymentMethod)) {
-        // ── Mollie Flow (creditcard, applepay, klarna, sepa) ──
+        // ── Mollie Flow (creditcard, applepay, klarna) ──
         const mollieMethod = getCheckoutMollieMethod(paymentMethod)!;
 
         const mollieResult = await createMolliePayment({

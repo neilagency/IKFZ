@@ -10,6 +10,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { capturePayPalOrder } from '@/lib/paypal';
+import { triggerInvoiceEmail } from '@/lib/trigger-invoice';
 
 export const dynamic = 'force-dynamic';
 
@@ -75,6 +76,11 @@ export async function GET(request: NextRequest) {
         captureResult.captureId,
         'Order:',
         payment.orderId,
+      );
+
+      // Trigger invoice email
+      triggerInvoiceEmail(payment.orderId).catch((err) =>
+        console.error('[paypal-capture] Invoice email error:', err),
       );
 
       return NextResponse.redirect(

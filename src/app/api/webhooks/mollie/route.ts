@@ -11,6 +11,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { getMolliePayment } from '@/lib/payments';
+import { triggerInvoiceEmail } from '@/lib/trigger-invoice';
+import { paymentLog } from '@/lib/payment-logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -75,6 +77,11 @@ export async function POST(request: NextRequest) {
         });
       }
       console.log('[mollie-webhook] Payment successful:', paymentId, 'Order:', orderId);
+
+      // Trigger invoice email (deduplicated — safe if callback also triggers)
+      triggerInvoiceEmail(orderId).then((result) => {
+        paymentLog.emailTriggered({ orderId, success: result.success, error: result.error });
+      }).catch((err) => console.error('[mollie-webhook] Invoice email error:', err));
     } else if (
       mollieStatus === 'failed' ||
       mollieStatus === 'canceled' ||
