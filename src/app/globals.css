@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Hero grid pattern — avoid inline styles for better paint performance */
+.hero-grid-pattern {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size: 60px 60px;
+  contain: strict;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;

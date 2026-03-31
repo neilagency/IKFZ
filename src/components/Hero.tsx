@@ -17,19 +17,16 @@ export default function Hero() {
   const { hero } = homepageContent;
 
   return (
-    <section className="relative min-h-[100svh] flex items-center overflow-hidden">
+    <section className="relative min-h-[100svh] flex items-center overflow-hidden" style={{ contain: 'layout style paint' }}>
       {/* Background layers */}
       <div className="absolute inset-0 bg-gradient-to-br from-dark-950 via-dark-900 to-dark-950" />
       
-      {/* Gradient accent orbs */}
-      <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-primary/15 blur-[120px]" />
-      <div className="absolute bottom-[-20%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/10 blur-[100px]" />
+      {/* Gradient accent orbs — reduced blur for better paint performance */}
+      <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-primary/15 blur-[80px] will-change-transform" />
+      <div className="absolute bottom-[-20%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/10 blur-[60px] will-change-transform" />
       
       {/* Grid pattern */}
-      <div className="absolute inset-0 opacity-[0.03]" style={{
-        backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-        backgroundSize: '60px 60px',
-      }} />
+      <div className="absolute inset-0 opacity-[0.03] hero-grid-pattern" />
 
       <div className="relative container-main w-full">
           <div className="flex flex-col lg:flex-row items-center gap-12 py-24 md:py-28">
@@ -112,7 +109,7 @@ export default function Hero() {
             <div className="relative w-[340px] h-[340px]">
               {/* Central KBA badge */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="relative w-[180px] h-[180px] bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 flex items-center justify-center animate-glow">
+                <div className="relative w-[180px] h-[180px] bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 flex items-center justify-center animate-glow">
                   <div className="text-center">
                     <div className="text-4xl mb-2">🦅</div>
                     <div className="text-2xl font-black text-white tracking-wider">KBA</div>
@@ -135,7 +132,7 @@ export default function Hero() {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: item.delay, duration: 0.5 }}
-                  className={`absolute ${item.pos} px-4 py-2.5 bg-white/8 backdrop-blur-lg rounded-xl border border-white/10 text-white text-sm font-medium`}
+                  className={`absolute ${item.pos} px-4 py-2.5 bg-white/8 backdrop-blur-sm rounded-xl border border-white/10 text-white text-sm font-medium`}
                 >
                   {item.label}
                 </motion.div>
@@ -159,7 +156,7 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 + index * 0.1, duration: 0.5 }}
-                className="group bg-white/[0.05] backdrop-blur-xl rounded-2xl p-5 text-center border border-white/[0.08] hover:bg-white/[0.1] hover:border-white/[0.15] hover:-translate-y-1 transition-all duration-300"
+                className="group bg-white/[0.05] backdrop-blur-sm rounded-2xl p-5 text-center border border-white/[0.08] hover:bg-white/[0.1] hover:border-white/[0.15] hover:-translate-y-1 transition-all duration-300"
               >
                 <div className="w-12 h-12 mx-auto mb-3 bg-primary/10 rounded-xl flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                   <Icon className="w-6 h-6 text-primary-400" />
