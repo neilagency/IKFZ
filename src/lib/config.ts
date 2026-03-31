@@ -26,9 +26,8 @@ export const siteConfig = {
       label: 'Zulassungsservices',
       href: '/kfz-service/kfz-online-service/',
       children: [
-        { label: 'Motorrad Online Anmelden', href: '/motorrad-online-anmelden/' },
-        { label: 'Auto Online Anmelden', href: '/product/auto-online-anmelden/' },
-        { label: 'KFZ Online Abmelden', href: '/product/fahrzeugabmeldung/' },
+        { label: 'Ablauf Erklärung KFZ Anmeldung', href: '/auto-online-anmelden/' },
+        { label: 'Ablauf Erklärung Abmeldung', href: '/kfz-online-abmelden/' },
       ],
     },
     {
