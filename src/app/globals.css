@@ -261,7 +261,335 @@
 /* Restyles WordPress content with site identity   */
 /* ═══════════════════════════════════════════════ */
 
-/* ── Wrapper containers ── */
+/* ── Base element styling (handles all templates) ── */
+.wp-content {
+  color: #343a40;
+  line-height: 1.8;
+}
+.wp-content > div {
+  display: contents;
+}
+.wp-content div:not([class]) {
+  display: contents;
+}
+
+/* ── Headings ── */
+.wp-content h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #16191d;
+  margin: 2.5rem 0 1rem;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.wp-content h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #16191d;
+  margin: 3rem 0 1rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  padding-left: 1rem;
+  border-left: 4px solid #00a85a;
+}
+.wp-content h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #00a85a;
+  margin: 1.75rem 0 0.5rem;
+  line-height: 1.3;
+}
+.wp-content h4 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #16191d;
+  margin: 2.5rem 0 0.75rem;
+  line-height: 1.3;
+  padding-left: 1rem;
+  border-left: 4px solid #00a85a;
+}
+.wp-content h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #00a85a;
+  margin: 1.5rem 0 0.5rem;
+}
+
+/* ── Body text ── */
+.wp-content p {
+  margin: 0.5rem 0 1rem;
+  color: #495057;
+  line-height: 1.8;
+  font-size: 0.95rem;
+}
+.wp-content .wp-subtitle {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #6b7280;
+  margin: 0 0 1.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, rgba(0,168,90,0.04), rgba(0,168,90,0.01));
+  border-left: 3px solid rgba(0,168,90,0.3);
+}
+
+/* ── Lists ── */
+.wp-content ul, .wp-content ol {
+  margin: 0.75rem 0 1.25rem;
+  padding-left: 0;
+  list-style: none;
+}
+.wp-content ul li, .wp-content ol li {
+  padding: 0.4rem 0 0.4rem 1.75rem;
+  position: relative;
+  color: #495057;
+  line-height: 1.7;
+}
+.wp-content ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.85rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00a85a;
+}
+.wp-content ol {
+  counter-reset: item;
+}
+.wp-content ol li::before {
+  counter-increment: item;
+  content: counter(item);
+  position: absolute;
+  left: 0;
+  top: 0.35rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 0.5rem;
+  background: rgba(0, 168, 90, 0.08);
+  color: #00a85a;
+  font-weight: 700;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Other elements ── */
+.wp-content strong {
+  color: #16191d;
+  font-weight: 700;
+}
+.wp-content table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1.5rem 0;
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid rgba(0, 168, 90, 0.15);
+  font-size: 0.9rem;
+}
+.wp-content table thead tr {
+  background: linear-gradient(135deg, #0d0f12, #16191d);
+}
+.wp-content table thead th {
+  color: #ffffff;
+  padding: 0.875rem 1rem;
+  font-weight: 700;
+  text-align: left;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+}
+.wp-content table tbody tr {
+  border-bottom: 1px solid #f3f4f6;
+  transition: background 0.2s ease;
+}
+.wp-content table tbody tr:hover {
+  background: rgba(0, 168, 90, 0.03);
+}
+.wp-content table td {
+  padding: 0.75rem 1rem;
+  color: #495057;
+}
+.wp-content table td:first-child {
+  font-weight: 600;
+  color: #16191d;
+}
+.wp-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  margin: 1rem auto;
+  display: block;
+}
+.wp-content a {
+  color: #00a85a;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+.wp-content a:hover {
+  color: #008549;
+}
+
+/* ── Auto-button service links ── */
+.wp-content a[href*="kfz-service"],
+.wp-content a[href*="auto-verkaufen"],
+.wp-content a[href*="/evb"],
+.wp-content a[href*="auto-online-anmelden"],
+.wp-content a[href*="fahrzeugabmeldung"],
+.wp-content a[href*="motorrad-online"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.875rem;
+  background: #00a85a;
+  color: #ffffff !important;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 168, 90, 0.2);
+  transition: all 0.3s ease;
+  margin: 0.25rem;
+  text-decoration: none;
+}
+.wp-content a[href*="kfz-service"]:hover,
+.wp-content a[href*="auto-verkaufen"]:hover,
+.wp-content a[href*="/evb"]:hover,
+.wp-content a[href*="auto-online-anmelden"]:hover,
+.wp-content a[href*="fahrzeugabmeldung"]:hover,
+.wp-content a[href*="motorrad-online"]:hover {
+  background: #008549;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 168, 90, 0.3);
+}
+/* WhatsApp link button */
+.wp-content a[href*="wa.me"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.875rem;
+  background: #25D366;
+  color: #ffffff !important;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.2);
+  transition: all 0.3s ease;
+  margin: 0.25rem;
+  text-decoration: none;
+}
+.wp-content a[href*="wa.me"]:hover {
+  background: #1da851;
+  transform: translateY(-1px);
+}
+
+/* ── Blog article cards ── */
+.wp-content .article-inner {
+  background: #ffffff;
+  border: 1px solid rgba(0, 168, 90, 0.1);
+  border-radius: 1.25rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  display: block !important;
+}
+.wp-content .article-inner:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 8px 32px rgba(0, 0, 0, 0.04);
+}
+.wp-content .entry-header { display: block !important; }
+.wp-content .entry-thumbnail,
+.wp-content .post-img-wrapp { display: block !important; }
+.wp-content .post-img-wrapp img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 0;
+  margin: 0;
+}
+.wp-content .post-image-mask { display: none; }
+.wp-content .post-date-day,
+.wp-content .post-date-month {
+  display: inline !important;
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+.wp-content .article-body-container {
+  display: block !important;
+  padding: 1rem 1.25rem;
+}
+.wp-content .meta-categories-wrapp,
+.wp-content .entry-meta-list {
+  display: block !important;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-bottom: 0.5rem;
+}
+.wp-content .meta-author,
+.wp-content .modified-date,
+.wp-content .meta-reply { display: inline !important; font-size: 0.8rem; color: #9ca3af; }
+.wp-content .vcard { display: inline !important; }
+.wp-content .fn { color: #00a85a; font-weight: 600; display: inline !important; }
+.wp-content .read-more-section { display: block !important; margin-top: 0.5rem; }
+.wp-content .btn-read-more {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.25rem;
+  color: #00a85a;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-decoration: none;
+  padding: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+.wp-content .btn-read-more:hover {
+  color: #008549;
+  background: none;
+  transform: none;
+  box-shadow: none;
+}
+.wp-content .text-center { text-align: center; display: block !important; }
+.wp-content .text-left { text-align: left; display: block !important; }
+
+/* ── Feature cards (sanitizer-added class for h3+p divs) ── */
+.wp-content .wp-card {
+  display: block !important;
+  background: #ffffff;
+  border: 1px solid rgba(0, 168, 90, 0.1);
+  border-radius: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  margin: 0.75rem 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+}
+.wp-content .wp-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 8px 32px rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 168, 90, 0.25);
+}
+.wp-content .wp-card h3 {
+  margin: 0 0 0.5rem;
+}
+.wp-content .wp-card p {
+  margin: 0;
+}
+
+/* ── Responsive ── */
+@media (min-width: 768px) {
+  .wp-content h1 { font-size: 2.25rem; }
+  .wp-content h2 { font-size: 1.75rem; }
+  .wp-content h4 { font-size: 1.25rem; }
+}
+
+/* ── Wrapper containers (semantic template pages) ── */
 .wp-content .ikfz-wrapper,
 .wp-content .city-wrapper {
   max-width: 100%;
@@ -272,10 +600,11 @@
   line-height: inherit;
 }
 
-/* ── Section titles (h2) ── */
+/* ── Section titles (override for semantic template pages) ── */
 .wp-content .title-main,
 .wp-content .ablauf-title,
 .wp-content .highlight-title {
+  display: block !important;
   font-size: 1.75rem;
   font-weight: 800;
   text-align: left;
@@ -802,25 +1131,12 @@
   color: #00a85a;
   font-weight: 700;
   font-size: 1rem;
-}
-
-/* ── Images in content ── */
-.wp-content img {
-  max-width: 100%;
+  top: 0.5rem;
+  width: auto;
   height: auto;
-  border-radius: 1rem;
-  margin: 1rem 0;
-}
-
-/* ── Links in content ── */
-.wp-content a:not(.btn):not(.city-btn):not(.ablauf-button):not(.blog-promo-button) {
-  color: #00a85a;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s ease;
-}
-.wp-content a:not(.btn):not(.city-btn):hover {
-  color: #008549;
+  border-radius: 0;
+  background: none;
+  display: block;
 }
 
 /* ── Icon elements ── */

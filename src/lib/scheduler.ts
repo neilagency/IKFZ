@@ -2,7 +2,7 @@
 // Called via API route with self-invoking mechanism
 
 const CRON_SECRET = process.env.CRON_SECRET || 'ikfz-cron-secret-2024';
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || process.env.SITE_URL || 'https://ikfzdigitalzulassung.de';
 const INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 
 let schedulerRunning = false;
