@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronDown, ArrowRight, UserCircle } from 'lucide-react';
+import { Menu, X, ChevronDown, ArrowRight, UserCircle, MapPin } from 'lucide-react';
 import { siteConfig } from '@/lib/config';
 import { cn } from '@/lib/utils';
 import { useCustomerAuth } from '@/components/CustomerAuthProvider';
@@ -93,18 +93,28 @@ export default function Navbar() {
                       transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
                       className="absolute top-full left-0 mt-2 w-72 bg-white/95 backdrop-blur-2xl rounded-2xl shadow-elevated border border-dark-100/50 overflow-hidden p-2"
                     >
-                      {item.children.map((child) => (
-                        <Link
-                          key={child.label}
-                          href={child.href}
-                          className="flex items-center gap-3 px-4 py-3 text-sm text-dark-600 hover:bg-primary/5 hover:text-primary rounded-xl transition-all duration-150"
-                        >
-                          <div className="w-8 h-8 rounded-lg bg-primary/8 flex items-center justify-center flex-shrink-0">
-                            <ArrowRight className="w-3.5 h-3.5 text-primary" />
-                          </div>
-                          {child.label}
-                        </Link>
-                      ))}
+                      {item.children.map((child, childIdx) => {
+                        const isLast = childIdx === item.children!.length - 1;
+                        const isCities = item.label === 'Städte';
+                        const isViewAll = isCities && isLast;
+                        return (
+                          <Link
+                            key={child.label}
+                            href={child.href}
+                            className={cn(
+                              'flex items-center gap-3 px-4 py-3 text-sm rounded-xl transition-all duration-150',
+                              isViewAll
+                                ? 'text-primary font-semibold bg-primary/5 hover:bg-primary/10 mt-1 border-t border-dark-100/30 pt-3'
+                                : 'text-dark-600 hover:bg-primary/5 hover:text-primary'
+                            )}
+                          >
+                            <div className="w-8 h-8 rounded-lg bg-primary/8 flex items-center justify-center flex-shrink-0">
+                              {isCities ? <MapPin className="w-3.5 h-3.5 text-primary" /> : <ArrowRight className="w-3.5 h-3.5 text-primary" />}
+                            </div>
+                            {child.label}
+                          </Link>
+                        );
+                      })}
                     </motion.div>
                   )}
                 </AnimatePresence>

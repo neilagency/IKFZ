@@ -40,6 +40,17 @@ export const siteConfig = {
         { label: 'Auto verkaufen', href: '/auto-verkaufen/' },
       ],
     },
+    {
+      label: 'Städte',
+      href: '/kfz-zulassung-in-deiner-stadt/',
+      children: [
+        { label: 'Berlin', href: '/kfz-zulassung-berlin/' },
+        { label: 'Hamburg', href: '/zulassungsstelle-hamburg/' },
+        { label: 'Köln', href: '/autoanmeldung-koeln/' },
+        { label: 'Essen', href: '/kfz-zulassung-essen/' },
+        { label: 'Alle Städte anzeigen', href: '/kfz-zulassung-in-deiner-stadt/' },
+      ],
+    },
     { label: 'Insiderwissen', href: '/insiderwissen/' },
     { label: 'Fragen & Antworten', href: '/faq/' },
   ],
