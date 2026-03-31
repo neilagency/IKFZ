@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { siteConfig } from '@/lib/config';
 import { Phone, MessageCircle, Mail, ArrowRight, CreditCard, Building2, CheckCircle2 } from 'lucide-react';
 
@@ -13,9 +14,13 @@ export default function Footer() {
         <div className="container-main py-14">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex items-center gap-5">
-              <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center shadow-lg flex-shrink-0">
-                <span className="text-white font-black text-sm">iK</span>
-              </div>
+              <Image
+                src="/logo-ikfz-white.svg"
+                alt="IKFZ Digital Zulassung"
+                width={160}
+                height={44}
+                className="flex-shrink-0"
+              />
               <div>
                 <p className="text-lg font-semibold">Fahrzeugzulassung online – schnell & bequem!</p>
                 <p className="text-white/40 text-sm mt-0.5">
