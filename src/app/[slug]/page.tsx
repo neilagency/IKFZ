@@ -140,23 +140,23 @@ function CityLandingPage({ cityName, title, content, featuredImage }: { cityName
   return (
     <>
       {/* Dark Hero */}
-      <section className="relative overflow-hidden bg-dark-950">
+      <section className="relative overflow-hidden bg-gradient-to-br from-dark-950 via-dark-900 to-dark-950">
+        <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-primary/15 blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-[-20%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/10 blur-[100px] pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
         <div className="pt-32 pb-16 md:pt-40 md:pb-24 relative">
-          <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
-          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-accent/15 rounded-full blur-[100px] pointer-events-none" />
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
           <div className="container-main relative z-10">
             <ScrollReveal>
-              <div className="flex items-center gap-2 text-white/50 text-sm font-medium mb-4">
-                <MapPin className="w-4 h-4 text-primary" />
-                KFZ Zulassung in {cityName}
+              <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-primary/10 backdrop-blur-sm rounded-full text-sm font-medium text-primary border border-primary/20 mb-8">
+                <MapPin className="w-4 h-4" />
+                <span>KFZ Zulassung in {cityName}</span>
               </div>
               <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-tight">
-                Auto online anmelden<br />
+                KFZ online zulassen<br />
                 <span className="text-primary">in {cityName}</span>
               </h1>
-              <p className="text-lg md:text-xl text-white/50 max-w-2xl mb-8">
-                Kein Besuch bei der Zulassungsstelle nötig. Alle Fahrzeugtypen möglich. Offiziell beim KBA registriert.
+              <p className="text-lg md:text-xl text-white/60 max-w-2xl mb-8">
+                Kein Besuch bei der Zulassungsstelle {cityName} nötig. Alle Fahrzeugtypen – PKW, Motorrad, Anhänger. Offiziell beim KBA registriert.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link href="/kfz-service/kfz-online-service/" className="btn-primary text-lg">Jetzt online starten <ArrowRight className="w-5 h-5" /></Link>
@@ -167,17 +167,17 @@ function CityLandingPage({ cityName, title, content, featuredImage }: { cityName
         </div>
       </section>
 
-      {/* Light Stats Bar */}
+      {/* Stats Bar */}
       <section className="py-10 bg-gray-50 border-b border-dark-100">
         <div className="container-main">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               { icon: Shield, label: 'KBA registriert', desc: 'Offiziell beim Kraftfahrt-Bundesamt' },
-              { icon: FileCheck, label: 'Sofort-PDF', desc: '10 Tage gültige Bestätigung' },
+              { icon: FileCheck, label: 'Sofort-Bestätigung', desc: '10 Tage gültige Bestätigung' },
               { icon: Clock, label: '24/7 verfügbar', desc: 'Auch am Wochenende' },
-              { icon: MapPin, label: cityName, desc: 'Deutschlandweit verfügbar' },
+              { icon: MapPin, label: cityName, desc: 'Lokaler Service verfügbar' },
             ].map((item, i) => (
-              <ScrollReveal key={item.label} delay={i * 0.1}>
+              <ScrollReveal key={item.label} delay={i * 0.08}>
                 <div className="flex items-start gap-3 p-4 rounded-2xl bg-white border border-dark-100 hover:shadow-card transition-all duration-300">
                   <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
                     <item.icon className="w-5 h-5 text-primary" />
@@ -193,15 +193,93 @@ function CityLandingPage({ cityName, title, content, featuredImage }: { cityName
         </div>
       </section>
 
-      {/* Light Content */}
-      <section className="py-16 md:py-24 bg-white">
+      {/* 3-Step Process */}
+      <section className="bg-dark-50/50 py-16 md:py-24">
         <div className="container-main">
           <ScrollReveal>
-            <div className="max-w-4xl mx-auto">
-              {featuredImage && (<div className="mb-12 rounded-2xl overflow-hidden border border-dark-100 shadow-sm"><img src={featuredImage} alt={title} className="w-full h-auto" loading="lazy" /></div>)}
-              <WPContentRenderer html={content} variant="light" />
+            <div className="text-center mb-12 md:mb-16">
+              <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">So funktioniert es</span>
+              <h2 className="text-2xl md:text-4xl font-extrabold text-dark-900 mb-4">Online-Zulassung in {cityName}</h2>
+              <p className="text-dark-400 text-lg max-w-2xl mx-auto">
+                In nur 3 einfachen Schritten zur Zulassung – ohne Wartezeit, ohne Behördengang.
+              </p>
             </div>
           </ScrollReveal>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {[
+              { num: '1', title: 'Antrag online ausfüllen', desc: 'Geben Sie Ihre Fahrzeug- und Halterdaten in unser Formular ein – dauert nur wenige Minuten.' },
+              { num: '2', title: 'Dokumente hochladen', desc: 'Laden Sie Fahrzeugschein, Personalausweis und ggf. eVB-Nummer bequem hoch.' },
+              { num: '3', title: 'Bestätigung erhalten', desc: 'Nach Prüfung erhalten Sie Ihre Zulassungsbestätigung direkt per E-Mail.' },
+            ].map((step, i) => (
+              <ScrollReveal key={step.num} delay={i * 0.1}>
+                <div className="relative bg-white rounded-3xl p-7 border border-dark-100/60 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1 h-full">
+                  <div className="flex items-center gap-4 mb-5">
+                    <div className="w-12 h-12 bg-primary/8 rounded-2xl flex items-center justify-center">
+                      <span className="text-xl font-black text-primary">{step.num}</span>
+                    </div>
+                    <div className="h-px flex-1 bg-gradient-to-r from-primary/20 to-transparent" />
+                  </div>
+                  <h3 className="text-lg font-bold text-dark-900 mb-2.5">{step.title}</h3>
+                  <p className="text-dark-400 leading-relaxed text-[0.95rem]">{step.desc}</p>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Content from WP */}
+      <section className="py-16 md:py-24 bg-white">
+        <div className="container-main">
+          <div className="max-w-4xl mx-auto">
+            {featuredImage && (
+              <ScrollReveal>
+                <div className="mb-12 rounded-2xl overflow-hidden border border-dark-100 shadow-sm">
+                  <img src={featuredImage} alt={title} className="w-full h-auto" loading="lazy" />
+                </div>
+              </ScrollReveal>
+            )}
+            <ScrollReveal>
+              <WPContentRenderer html={content} variant="light" />
+            </ScrollReveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Grid */}
+      <section className="bg-gray-50 py-16 md:py-24">
+        <div className="container-main">
+          <ScrollReveal>
+            <div className="text-center mb-12">
+              <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">Unsere Services</span>
+              <h2 className="text-2xl md:text-3xl font-extrabold text-dark-900">Alle Services für {cityName}</h2>
+            </div>
+          </ScrollReveal>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
+            {[
+              { label: 'Auto online anmelden', href: '/product/auto-online-anmelden/', desc: 'PKW-Neuzulassung oder Ummeldung' },
+              { label: 'KFZ online abmelden', href: '/product/fahrzeugabmeldung/', desc: 'Schnelle Außerbetriebsetzung' },
+              { label: 'Motorrad anmelden', href: '/motorrad-online-anmelden/', desc: 'Motorrad-Zulassung online' },
+              { label: 'eVB-Nummer anfordern', href: '/evb/', desc: 'Kostenlose Versicherungsbestätigung' },
+              { label: 'Versicherung berechnen', href: '/kfz-versicherung-berechnen/', desc: 'Günstige Tarife vergleichen' },
+              { label: 'Alle Städte anzeigen', href: '/kfz-zulassung-in-deiner-stadt/', desc: 'Alle Standorte im Überblick' },
+            ].map((svc, i) => (
+              <ScrollReveal key={i} delay={i * 0.06}>
+                <Link
+                  href={svc.href}
+                  className="group flex items-center gap-4 rounded-2xl bg-white border border-dark-100 p-5 hover:shadow-card hover:border-primary/30 hover:-translate-y-0.5 transition-all duration-300"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-primary/8 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/15 transition-colors">
+                    <ArrowRight className="w-4 h-4 text-primary" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-bold text-dark-900 text-sm group-hover:text-primary transition-colors">{svc.label}</div>
+                    <div className="text-xs text-dark-400">{svc.desc}</div>
+                  </div>
+                </Link>
+              </ScrollReveal>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -211,9 +289,16 @@ function CityLandingPage({ cityName, title, content, featuredImage }: { cityName
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
         <div className="container-main text-center relative z-10">
           <ScrollReveal>
-            <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">Bereit für Ihre Online-Zulassung in <span className="text-primary">{cityName}</span>?</h2>
-            <p className="text-white/50 text-lg mb-8 max-w-xl mx-auto">Starten Sie jetzt und sparen Sie sich den Weg zur Zulassungsstelle.</p>
-            <Link href="/kfz-service/kfz-online-service/" className="btn-primary text-lg">Jetzt Fahrzeug anmelden <ArrowRight className="w-5 h-5" /></Link>
+            <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">
+              Bereit für Ihre Online-Zulassung in <span className="text-primary">{cityName}</span>?
+            </h2>
+            <p className="text-white/50 text-lg mb-8 max-w-xl mx-auto">
+              Starten Sie jetzt und sparen Sie sich den Weg zur Zulassungsstelle.
+            </p>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Link href="/kfz-service/kfz-online-service/" className="btn-primary text-lg">Jetzt Fahrzeug anmelden <ArrowRight className="w-5 h-5" /></Link>
+              <Link href="/evb/" className="btn-outline-white">eVB-Nummer anfordern</Link>
+            </div>
           </ScrollReveal>
         </div>
       </section>
