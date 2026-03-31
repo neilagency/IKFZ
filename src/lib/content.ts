@@ -4,9 +4,9 @@
 export const homepageContent = {
   hero: {
     title: 'KFZ Zulassung online',
-    subtitle: 'Auto online anmelden in wenigen Minuten',
+    subtitle: 'Bestätigung in wenigen Minuten danach direkt fahren',
     badge: 'Ohne Termin bei der Behörde',
-    kbaText: 'Offiziell registrierter i-Kfz Dienstleister beim Kraftfahrt-Bundesamt (KBA)',
+    kbaText: 'KBA registriert',
     features: [
       { icon: 'FileText', label: 'PDF', desc: '10-tägige Zulassungsbestätigung sofort' },
       { icon: 'Zap', label: 'Sofort', desc: 'Nach Freigabe direkt fahren' },

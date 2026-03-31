@@ -93,7 +93,7 @@ export default function Hero() {
               transition={{ delay: 0.6, duration: 0.6 }}
               className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-10 justify-center lg:justify-start"
             >
-              {['KBA registriert', '100% Geld-zurück', '24/7 Support'].map((text) => (
+              {['Persönlicher-Support', '100% Geld-zurück', '24/7 Support'].map((text) => (
                 <span key={text} className="flex items-center gap-2 text-sm text-white/50">
                   <CheckCircle2 className="w-4 h-4 text-primary-400" />
                   {text}
