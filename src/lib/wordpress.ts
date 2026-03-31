@@ -12,6 +12,21 @@ export function sanitizeWPContent(html: string): string {
 
   let cleaned = html;
 
+  // Remove <style> blocks (we apply our own design system)
+  cleaned = cleaned.replace(/<style[\s\S]*?<\/style>/gi, '');
+
+  // Remove <script> blocks (wordcloud, trustindex, etc.)
+  cleaned = cleaned.replace(/<script[\s\S]*?<\/script>/gi, '');
+
+  // Remove Trustindex/review widget markup (all variations)
+  cleaned = cleaned.replace(/<pre[^>]*>[\s\S]*?<\/pre>/gi, '');
+  cleaned = cleaned.replace(/<template[^>]*>[\s\S]*?<\/template>/gi, '');
+  cleaned = cleaned.replace(/<div[^>]*data-src="[^"]*trustindex[^"]*"[^>]*>[\s\S]*?<\/div>/gi, '');
+  cleaned = cleaned.replace(/<canvas[^>]*><\/canvas>/gi, '');
+
+  // Remove <link> tags (external CSS)
+  cleaned = cleaned.replace(/<link[^>]*\/?>/gi, '');
+
   // Remove Elementor data attributes
   cleaned = cleaned.replace(/\s*data-elementor[^=]*="[^"]*"/g, '');
   cleaned = cleaned.replace(/\s*data-id="[^"]*"/g, '');
@@ -27,27 +42,30 @@ export function sanitizeWPContent(html: string): string {
   cleaned = cleaned.replace(/\s*data-wrap="[^"]*"/g, '');
   cleaned = cleaned.replace(/\s*data-autoplay="[^"]*"/g, '');
   cleaned = cleaned.replace(/\s*data-scroll_per_page="[^"]*"/g, '');
+  cleaned = cleaned.replace(/\s*data-[a-z-]*="[^"]*"/g, '');
 
-  // Remove inline styles (Elementor adds tons)
+  // Remove inline styles
   cleaned = cleaned.replace(/\s*style="[^"]*"/g, '');
 
-  // Remove WordPress/Elementor-specific class names but keep semantic ones
+  // Remove fetchpriority/decoding attrs
+  cleaned = cleaned.replace(/\s*fetchpriority="[^"]*"/g, '');
+  cleaned = cleaned.replace(/\s*decoding="[^"]*"/g, '');
+
+  // Remove Elementor/WoodMart wrapper classes but keep semantic classes
   cleaned = cleaned.replace(/\s*class="[^"]*elementor[^"]*"/g, '');
   cleaned = cleaned.replace(/\s*class="[^"]*wd-[^"]*"/g, '');
   cleaned = cleaned.replace(/\s*class="[^"]*e-con[^"]*"/g, '');
+  cleaned = cleaned.replace(/\s*class="[^"]*liner-continer[^"]*"/g, '');
 
-  // Remove link/stylesheet tags (WP themes inject CSS)
-  cleaned = cleaned.replace(/<link[^>]*\/>/g, '');
-
-  // Remove empty divs
+  // Remove empty wrapper divs
   cleaned = cleaned.replace(/<div>\s*<\/div>/g, '');
   cleaned = cleaned.replace(/<div\s*>\s*<\/div>/g, '');
 
-  // Remove srcset (we'll handle images ourselves)
+  // Remove srcset/sizes
   cleaned = cleaned.replace(/\s*srcset="[^"]*"/g, '');
   cleaned = cleaned.replace(/\s*sizes="[^"]*"/g, '');
 
-  // Clean up remaining empty class attributes
+  // Clean empty class attrs
   cleaned = cleaned.replace(/\s*class=""/g, '');
   cleaned = cleaned.replace(/\s*class="\s*"/g, '');
 

@@ -246,3 +246,589 @@
     transform: translateY(-4px);
   }
 }
+
+/* ═══════════════════════════════════════════════ */
+/* City Page Content Design System                 */
+/* Restyles WordPress content with site identity   */
+/* ═══════════════════════════════════════════════ */
+
+/* ── Wrapper containers ── */
+.wp-content .ikfz-wrapper,
+.wp-content .city-wrapper {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: inherit;
+  color: inherit;
+  line-height: inherit;
+}
+
+/* ── Section titles (h2) ── */
+.wp-content .title-main,
+.wp-content .ablauf-title,
+.wp-content .highlight-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  text-align: left;
+  margin: 3rem 0 1rem;
+  color: #16191d;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  position: relative;
+  padding-left: 1rem;
+  border-left: 4px solid #00a85a;
+}
+@media (min-width: 768px) {
+  .wp-content .title-main,
+  .wp-content .ablauf-title,
+  .wp-content .highlight-title {
+    font-size: 2rem;
+  }
+}
+.wp-content .title-main:first-child,
+.wp-content .ablauf-title:first-child {
+  margin-top: 0;
+}
+
+/* ── Subtitle center ── */
+.wp-content .subtitle-center {
+  text-align: left;
+  font-size: 1.05rem;
+  color: #495057;
+  margin: 0 0 1.5rem;
+  line-height: 1.7;
+  padding-left: 1rem;
+}
+
+/* ── Dividers ── */
+.wp-content .ikfz-divider {
+  height: 1px;
+  margin: 2.5rem 0;
+  background: linear-gradient(90deg, transparent, rgba(0, 168, 90, 0.2), transparent);
+}
+
+/* ── Cards (all variants) ── */
+.wp-content .soft-card,
+.wp-content .info-card,
+.wp-content .neutral-card,
+.wp-content .benefit-card,
+.wp-content .info-box,
+.wp-content .ablauf-block,
+.wp-content .ablauf-box,
+.wp-content .comparison-card {
+  padding: 1.5rem;
+  border-radius: 1.25rem;
+  margin-top: 1.25rem;
+  font-size: 0.95rem;
+  line-height: 1.75;
+  background: #ffffff;
+  border: 1px solid rgba(0, 168, 90, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+}
+.wp-content .soft-card:hover,
+.wp-content .benefit-card:hover,
+.wp-content .info-box:hover,
+.wp-content .ablauf-block:hover,
+.wp-content .comparison-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 8px 32px rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+}
+.wp-content .info-card {
+  background: linear-gradient(135deg, rgba(0, 168, 90, 0.04), rgba(0, 168, 90, 0.01));
+  border: 1px solid rgba(0, 168, 90, 0.15);
+}
+.wp-content .soft-card strong,
+.wp-content .info-card strong,
+.wp-content .benefit-card strong {
+  color: #16191d;
+}
+
+/* ── Highlight / Alert cards ── */
+.wp-content .highlight,
+.wp-content .highlight-box,
+.wp-content .highlight-section,
+.wp-content .ablauf-hinweis {
+  background: linear-gradient(135deg, rgba(0, 168, 90, 0.06), rgba(0, 168, 90, 0.02));
+  border: 1px solid rgba(0, 168, 90, 0.2);
+  border-left: 4px solid #00a85a;
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  margin-top: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 168, 90, 0.06);
+}
+.wp-content .highlight h3,
+.wp-content .highlight-box h3,
+.wp-content .highlight-section h3 {
+  margin: 0 0 0.75rem;
+  color: #00a85a;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+.wp-content .ablauf-hinweis-hell {
+  background: #f8fafb;
+  border: 1px solid #e5e7eb;
+  border-left: 4px solid #00a85a;
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  margin-top: 1.25rem;
+}
+
+/* ── Step grids ── */
+.wp-content .steps-grid,
+.wp-content .step-grid,
+.wp-content .ablauf-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+.wp-content .step-box,
+.wp-content .step-item {
+  background: #ffffff;
+  border: 1px solid rgba(0, 168, 90, 0.1);
+  padding: 1.5rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+  position: relative;
+}
+.wp-content .step-box:hover,
+.wp-content .step-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 8px 32px rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 168, 90, 0.25);
+}
+.wp-content .step-box h4,
+.wp-content .step-item h4,
+.wp-content .step-box h3 {
+  margin: 0 0 0.5rem;
+  color: #00a85a;
+  font-size: 1rem;
+  font-weight: 700;
+}
+.wp-content .step-box p,
+.wp-content .step-item p {
+  margin: 0;
+  color: #495057;
+  line-height: 1.7;
+}
+.wp-content .step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background: rgba(0, 168, 90, 0.08);
+  color: #00a85a;
+  font-weight: 800;
+  font-size: 1.125rem;
+  margin-bottom: 0.75rem;
+}
+
+/* ── Two column layout ── */
+.wp-content .two-col,
+.wp-content .comparison-cards,
+.wp-content .highlight-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+@media (max-width: 768px) {
+  .wp-content .two-col,
+  .wp-content .comparison-cards,
+  .wp-content .highlight-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── WhatsApp card ── */
+.wp-content .whatsapp-card {
+  padding: 1.5rem;
+  border-radius: 1.25rem;
+  margin-top: 1.25rem;
+  background: linear-gradient(135deg, rgba(37, 211, 102, 0.06), rgba(37, 211, 102, 0.02));
+  border: 1px solid rgba(37, 211, 102, 0.2);
+  border-left: 4px solid #25D366;
+  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.06);
+}
+.wp-content .whatsapp-card strong {
+  color: #16191d;
+}
+
+/* ── Badge row ── */
+.wp-content .badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+.wp-content .badge-row .badge {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  background: rgba(0, 168, 90, 0.08);
+  border: 1px solid rgba(0, 168, 90, 0.15);
+  font-size: 0.8rem;
+  color: #00a85a;
+  font-weight: 600;
+}
+
+/* ── Price cards ── */
+.wp-content .price-card,
+.wp-content .preis-card {
+  text-align: center;
+  border: 2px solid rgba(0, 168, 90, 0.3);
+  background: #ffffff;
+  padding: 1.75rem;
+  border-radius: 1.25rem;
+  margin-top: 1.25rem;
+  box-shadow: 0 2px 12px rgba(0, 168, 90, 0.08);
+  transition: all 0.3s ease;
+}
+.wp-content .price-card:hover,
+.wp-content .preis-card:hover {
+  border-color: rgba(0, 168, 90, 0.5);
+  box-shadow: 0 4px 24px rgba(0, 168, 90, 0.12);
+  transform: translateY(-2px);
+}
+.wp-content .price-card.alt {
+  border-color: rgba(22, 25, 29, 0.2);
+}
+.wp-content .amount,
+.wp-content .price-tag {
+  display: inline-block;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #00a85a;
+  margin: 0.5rem 0;
+}
+.wp-content .price-card.alt .amount {
+  color: #16191d;
+}
+
+/* ── Buttons ── */
+.wp-content .btn-row,
+.wp-content .button-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+.wp-content .btn,
+.wp-content .city-btn,
+.wp-content .ablauf-button,
+.wp-content .blog-promo-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.875rem;
+  border: 1px solid rgba(0, 168, 90, 0.2);
+  background: #ffffff;
+  color: #16191d;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.wp-content .btn:hover,
+.wp-content .city-btn:hover,
+.wp-content .ablauf-button:hover,
+.wp-content .blog-promo-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.wp-content .btn.primary,
+.wp-content .city-btn {
+  background: #00a85a;
+  color: #ffffff;
+  border: 1px solid rgba(0, 168, 90, 0.6);
+  box-shadow: 0 2px 8px rgba(0, 168, 90, 0.2);
+}
+.wp-content .btn.primary:hover,
+.wp-content .city-btn:hover {
+  background: #008549;
+  box-shadow: 0 4px 16px rgba(0, 168, 90, 0.3);
+}
+.wp-content .btn.secondary {
+  background: #16191d;
+  color: #ffffff;
+  border: 1px solid rgba(22, 25, 29, 0.8);
+}
+.wp-content .btn.secondary:hover {
+  background: #2d3239;
+}
+.wp-content .btn.whatsapp {
+  background: #25D366;
+  color: #ffffff;
+  border: 1px solid rgba(37, 211, 102, 0.6);
+}
+.wp-content .btn.whatsapp:hover {
+  background: #1da851;
+}
+
+/* ── FAQ / Accordion ── */
+.wp-content .mini-faq {
+  margin-top: 1.25rem;
+}
+.wp-content .mini-faq details,
+.wp-content .faq-item {
+  background: #ffffff;
+  border: 1px solid rgba(0, 168, 90, 0.1);
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+  margin-top: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+}
+.wp-content .mini-faq details:hover,
+.wp-content .faq-item:hover {
+  border-color: rgba(0, 168, 90, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+.wp-content .mini-faq details[open] {
+  border-color: rgba(0, 168, 90, 0.3);
+  background: linear-gradient(135deg, rgba(0, 168, 90, 0.03), transparent);
+}
+.wp-content .mini-faq summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: #16191d;
+  outline: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.wp-content .mini-faq summary::before {
+  content: '▸';
+  color: #00a85a;
+  font-size: 1.1rem;
+  transition: transform 0.2s ease;
+}
+.wp-content .mini-faq details[open] summary::before {
+  transform: rotate(90deg);
+}
+.wp-content .mini-faq summary::-webkit-details-marker {
+  display: none;
+}
+.wp-content .mini-faq p {
+  margin: 0.75rem 0 0;
+  color: #495057;
+}
+.wp-content .faq-item strong {
+  color: #16191d;
+  font-size: 0.95rem;
+}
+.wp-content .faq-item p {
+  margin: 0.5rem 0 0;
+  color: #495057;
+}
+
+/* ── Action / CTA box ── */
+.wp-content .action-box {
+  text-align: center;
+  background: linear-gradient(135deg, #0d0f12 0%, #16191d 100%);
+  color: #ffffff;
+  padding: 2.5rem;
+  border-radius: 1.5rem;
+  margin-top: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.wp-content .action-box::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 300px;
+  height: 300px;
+  background: rgba(0, 168, 90, 0.1);
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+.wp-content .action-box h2 {
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0 0 0.75rem;
+  position: relative;
+  border-left: none;
+  padding-left: 0;
+  text-align: center;
+}
+.wp-content .action-box p {
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 1.25rem;
+  position: relative;
+}
+.wp-content .action-box .price-tag {
+  display: inline-block;
+  background: rgba(0, 168, 90, 0.15);
+  color: #00a85a;
+  padding: 0.5rem 1.25rem;
+  border-radius: 9999px;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  font-size: 1rem;
+  position: relative;
+}
+.wp-content .action-box .city-btn {
+  position: relative;
+}
+
+/* ── Portal link / Partner section ── */
+.wp-content .portal-link,
+.wp-content .partner-links {
+  background: #f8fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  margin-top: 1.25rem;
+}
+.wp-content .portal-link a,
+.wp-content .partner-links a {
+  color: #00a85a;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.wp-content .portal-link a:hover,
+.wp-content .partner-links a:hover {
+  color: #008549;
+}
+
+/* ── Blog promo section ── */
+.wp-content .blog-promo-section {
+  background: linear-gradient(135deg, rgba(0, 168, 90, 0.04), rgba(0, 168, 90, 0.01));
+  border: 1px solid rgba(0, 168, 90, 0.12);
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  margin-top: 1.25rem;
+  text-align: center;
+}
+
+/* ── Ablauf section ── */
+.wp-content .ablauf-section {
+  margin-top: 2rem;
+}
+.wp-content .ablauf-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+.wp-content .ablauf-list li {
+  padding: 0.5rem 0 0.5rem 1.75rem;
+  position: relative;
+  color: #495057;
+}
+.wp-content .ablauf-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #00a85a;
+  font-weight: 700;
+}
+
+/* ── Keyword cloud (decorative) ── */
+.wp-content .keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  background: #f8fafb;
+  border-radius: 1.25rem;
+}
+.wp-content .keyword {
+  display: inline-block;
+  padding: 0.375rem 0.875rem;
+  border-radius: 9999px;
+  background: rgba(0, 168, 90, 0.06);
+  border: 1px solid rgba(0, 168, 90, 0.12);
+  color: #495057;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+.wp-content .keyword.xlarge { font-size: 1.1rem; color: #00a85a; font-weight: 700; }
+.wp-content .keyword.large { font-size: 1rem; color: #16191d; font-weight: 600; }
+.wp-content .keyword.medium { font-size: 0.875rem; }
+.wp-content .keyword.small { font-size: 0.8rem; color: #6b7280; }
+.wp-content .keyword.xsmall { font-size: 0.75rem; color: #9ca3af; }
+
+/* ── Legal / small text ── */
+.wp-content .small,
+.wp-content .legal {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-top: 0.75rem;
+}
+
+/* ── Clean lists ── */
+.wp-content ul.clean {
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.wp-content ul.clean li {
+  padding: 0.5rem 0 0.5rem 1.75rem;
+  position: relative;
+  color: #495057;
+  border-bottom: 1px solid #f3f4f6;
+}
+.wp-content ul.clean li:last-child {
+  border-bottom: none;
+}
+.wp-content ul.clean li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #00a85a;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* ── Images in content ── */
+.wp-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  margin: 1rem 0;
+}
+
+/* ── Links in content ── */
+.wp-content a:not(.btn):not(.city-btn):not(.ablauf-button):not(.blog-promo-button) {
+  color: #00a85a;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+.wp-content a:not(.btn):not(.city-btn):hover {
+  color: #008549;
+}
+
+/* ── Icon elements ── */
+.wp-content .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background: rgba(0, 168, 90, 0.08);
+  color: #00a85a;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+}
+
+/* ── Hero (in-content) — hide since page has its own ── */
+.wp-content .hero {
+  display: none;
+}

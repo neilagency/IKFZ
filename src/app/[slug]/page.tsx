@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import prisma, { buildSEOMetadata, getPostBySlug, stripHtml, getActiveProducts } from '@/lib/db';
 import { getPageSEO } from '@/lib/seo';
 import { sanitizeHtml, sanitizeBlogHtml, sanitizeForSchema } from '@/lib/sanitize';
+import { sanitizeWPContent } from '@/lib/wordpress';
 import WPContentRenderer from '@/components/WPContentRenderer';
 import ScrollReveal from '@/components/ScrollReveal';
 import Link from 'next/link';
@@ -115,13 +116,14 @@ export default async function DynamicPage({ params }: { params: Promise<{ slug: 
     const isCity = isCitySlug(slug) || page.pageType === 'city';
     const cityName = isCity ? extractCityName(page.title) : null;
     const breadcrumb = buildPageBreadcrumb(page.title, page.pageType);
+    const cleanContent = sanitizeWPContent(page.content);
     if (isCity && cityName) {
-      return (<><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />{schemaJson && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaJson }} />}<CityLandingPage cityName={cityName} title={page.title} content={page.content} featuredImage={page.featuredImage} /></>);
+      return (<><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />{schemaJson && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaJson }} />}<CityLandingPage cityName={cityName} title={page.title} content={cleanContent} featuredImage={page.featuredImage} /></>);
     }
     if (page.pageType === 'service') {
-      return (<><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />{schemaJson && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaJson }} />}<ServicePage slug={slug} title={page.title} content={page.content} featuredImage={page.featuredImage} /></>);
+      return (<><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />{schemaJson && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaJson }} />}<ServicePage slug={slug} title={page.title} content={cleanContent} featuredImage={page.featuredImage} /></>);
     }
-    return (<><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />{schemaJson && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaJson }} />}<GenericPage title={page.title} content={page.content} featuredImage={page.featuredImage} /></>);
+    return (<><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />{schemaJson && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaJson }} />}<GenericPage title={page.title} content={cleanContent} featuredImage={page.featuredImage} /></>);
   }
 
   // Check for blog post
@@ -229,8 +231,9 @@ function CityLandingPage({ cityName, title, content, featuredImage }: { cityName
       </section>
 
       {/* Content from WP */}
-      <section className="py-16 md:py-24 bg-white">
-        <div className="container-main">
+      <section className="py-16 md:py-24 bg-gradient-to-b from-white via-gray-50/30 to-white relative">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,168,90,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,168,90,0.02)_1px,transparent_1px)] bg-[size:64px_64px] pointer-events-none" />
+        <div className="container-main relative z-10">
           <div className="max-w-4xl mx-auto">
             {featuredImage && (
               <ScrollReveal>
