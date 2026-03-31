@@ -47,9 +47,7 @@
     "tailwindcss": "^3.4.14",
     "typescript": "^5.6.3",
     "eslint": "^8.57.1",
-    "eslint-config-next": "^14.2.15"
-  },
-  "devDependencies": {
+    "eslint-config-next": "^14.2.15",
     "@types/bcryptjs": "^2.4.6",
     "@types/better-sqlite3": "^7.6.13",
     "@types/body-parser": "^1.19.6",
@@ -59,7 +57,9 @@
     "@types/nodemailer": "^7.0.11",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "@types/react-window": "^1.8.8",
+    "@types/react-window": "^1.8.8"
+  },
+  "devDependencies": {
     "cheerio": "^1.0.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0"
