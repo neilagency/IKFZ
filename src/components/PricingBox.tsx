@@ -4,9 +4,26 @@ import { motion } from 'framer-motion';
 import { Euro, Info, Tag, ArrowRight, Check } from 'lucide-react';
 import Link from 'next/link';
 import { homepageContent } from '@/lib/content';
+import { usePriceFeed } from '@/hooks/usePriceFeed';
 
-export default function PricingBox() {
+interface PricingBoxProps {
+  anmeldungMinPrice?: number;
+  abmeldungPrice?: number;
+}
+
+export default function PricingBox({
+  anmeldungMinPrice = 119.70,
+  abmeldungPrice = 19.70,
+}: PricingBoxProps) {
   const { pricing, deregistration } = homepageContent;
+
+  // Subscribe to live price feed; initial values come from server-rendered props
+  const feed = usePriceFeed({
+    'auto-online-anmelden': { price: anmeldungMinPrice, options: null },
+    'fahrzeugabmeldung': { price: abmeldungPrice, options: null },
+  });
+  const liveAnmeldungMinPrice = feed['auto-online-anmelden']?.price ?? anmeldungMinPrice;
+  const liveAbmeldungPrice = feed['fahrzeugabmeldung']?.price ?? abmeldungPrice;
 
   return (
     <section className="py-14 md:py-20 bg-gradient-to-br from-gray-50/80 via-white to-primary-50/20 relative overflow-hidden" id="kosten">
@@ -61,7 +78,7 @@ export default function PricingBox() {
               <div className="mb-6">
                 <div className="flex items-baseline gap-1">
                   <span className="text-sm text-dark-400 font-medium">ab</span>
-                  <span className="text-5xl font-black text-dark-900 tracking-tight">119,70</span>
+                  <span className="text-5xl font-black text-dark-900 tracking-tight">{liveAnmeldungMinPrice.toFixed(2).replace('.', ',')}</span>
                   <span className="text-xl font-bold text-dark-400">€</span>
                 </div>
                 <p className="text-sm text-dark-400 mt-1">Servicegebühr inkl. Behördengebühren</p>
@@ -106,7 +123,7 @@ export default function PricingBox() {
 
               <div className="mb-6">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-5xl font-black text-dark-900 tracking-tight">19,70</span>
+                  <span className="text-5xl font-black text-dark-900 tracking-tight">{liveAbmeldungPrice.toFixed(2).replace('.', ',')}</span>
                   <span className="text-xl font-bold text-dark-400">€</span>
                 </div>
                 <p className="text-sm text-dark-400 mt-1">Einmalige Servicegebühr</p>

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { verifyAuth, unauthorized, requireRole, forbiddenResponse } from '@/lib/auth';
+import { priceEvents } from '@/lib/price-events';
 
 // GET /api/admin/products - List products with pagination
 export async function GET(req: NextRequest) {
@@ -94,8 +95,17 @@ export async function PUT(req: NextRequest) {
         stockStatus: data.stockStatus,
         stockQuantity: data.stockQuantity,
         featured: data.featured,
+        options: data.options !== undefined ? data.options : undefined,
       },
     });
+
+    // Broadcast price/options change to all connected SSE clients
+    priceEvents.emit('price_updated', {
+      slug: product.slug,
+      price: product.price,
+      options: product.options ?? null,
+    });
+
     return NextResponse.json(product);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

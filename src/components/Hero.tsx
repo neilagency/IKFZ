@@ -1,7 +1,4 @@
-'use client';
-
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import { FileText, Zap, Clock, Euro, Shield, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { homepageContent } from '@/lib/content';
 
@@ -20,32 +17,22 @@ export default function Hero() {
     <section className="relative min-h-[100svh] flex items-center overflow-hidden" style={{ contain: 'layout style paint' }}>
       {/* Background layers */}
       <div className="absolute inset-0 bg-gradient-to-br from-dark-950 via-dark-900 to-dark-950" />
-      
-      {/* Gradient accent orbs — reduced blur for better paint performance */}
-      <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-primary/15 blur-[80px] will-change-transform" />
-      <div className="absolute bottom-[-20%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/10 blur-[60px] will-change-transform" />
-      
+
+      {/* Gradient accent orbs — reduced blur radius for better paint performance */}
+      <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-primary/15 blur-[40px]" />
+      <div className="absolute bottom-[-20%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/10 blur-[30px]" />
+
       {/* Grid pattern */}
       <div className="absolute inset-0 opacity-[0.03] hero-grid-pattern" />
 
       <div className="relative container-main w-full">
-          <div className="flex flex-col lg:flex-row items-center gap-12 py-24 md:py-28">
-          {/* Text Content */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="flex-1 text-center lg:text-left max-w-2xl"
-          >
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-              className="inline-flex items-center gap-2.5 px-4 py-2 bg-primary/10 backdrop-blur-sm rounded-full text-sm font-medium text-primary border border-primary/20 mb-8"
-            >
+        <div className="flex flex-col lg:flex-row items-center gap-12 py-24 md:py-28">
+          {/* Text Content — rendered server-side, immediately visible for LCP */}
+          <div className="flex-1 text-center lg:text-left max-w-2xl">
+            <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-primary/10 backdrop-blur-sm rounded-full text-sm font-medium text-primary border border-primary/20 mb-8">
               <Shield className="w-4 h-4" />
               <span>{hero.kbaText}</span>
-            </motion.div>
+            </div>
 
             <h1 className="text-hero-mobile md:text-hero text-white mb-5 text-balance">
               {hero.title.split(' ').map((word, i) => (
@@ -84,28 +71,18 @@ export default function Hero() {
             </div>
 
             {/* Trust indicators */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.6 }}
-              className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-8 justify-center lg:justify-start"
-            >
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-8 justify-center lg:justify-start">
               {['Persönlicher-Support', '100% Geld-zurück', '24/7 Support'].map((text) => (
                 <span key={text} className="flex items-center gap-2 text-sm text-white/50">
                   <CheckCircle2 className="w-4 h-4 text-primary-400" />
                   {text}
                 </span>
               ))}
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
-          {/* Right side - Floating feature cards */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="flex-shrink-0 hidden lg:block"
-          >
+          {/* Right side - Floating feature cards (desktop only) */}
+          <div className="flex-shrink-0 hidden lg:block">
             <div className="relative w-[340px] h-[340px]">
               {/* Central KBA badge */}
               <div className="absolute inset-0 flex items-center justify-center">
@@ -120,42 +97,31 @@ export default function Hero() {
                 </div>
               </div>
 
-              {/* Orbiting cards */}
+              {/* Corner cards */}
               {[
-                { label: 'Ab 119,70 €', pos: 'top-0 left-0', delay: 0.4 },
-                { label: '24/7 Verfügbar', pos: 'top-0 right-0', delay: 0.5 },
-                { label: 'Sofort fahren', pos: 'bottom-0 left-0', delay: 0.6 },
-                { label: 'PDF Bestätigung', pos: 'bottom-0 right-0', delay: 0.7 },
+                { label: 'Ab 119,70 €', pos: 'top-0 left-0' },
+                { label: '24/7 Verfügbar', pos: 'top-0 right-0' },
+                { label: 'Sofort fahren', pos: 'bottom-0 left-0' },
+                { label: 'PDF Bestätigung', pos: 'bottom-0 right-0' },
               ].map((item) => (
-                <motion.div
+                <div
                   key={item.label}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: item.delay, duration: 0.5 }}
                   className={`absolute ${item.pos} px-4 py-2.5 bg-white/8 backdrop-blur-sm rounded-xl border border-white/10 text-white text-sm font-medium`}
                 >
                   {item.label}
-                </motion.div>
+                </div>
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Feature Cards Row */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.5 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 pb-12 relative z-10"
-        >
-          {hero.features.map((feature, index) => {
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pb-12 relative z-10">
+          {hero.features.map((feature) => {
             const Icon = iconMap[feature.icon] || FileText;
             return (
-              <motion.div
+              <div
                 key={feature.label}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 + index * 0.1, duration: 0.5 }}
                 className="group bg-white/[0.05] backdrop-blur-sm rounded-2xl p-5 text-center border border-white/[0.08] hover:bg-white/[0.1] hover:border-white/[0.15] hover:-translate-y-1 transition-all duration-300"
               >
                 <div className="w-12 h-12 mx-auto mb-3 bg-primary/10 rounded-xl flex items-center justify-center group-hover:bg-primary/20 transition-colors">
@@ -163,10 +129,10 @@ export default function Hero() {
                 </div>
                 <div className="text-lg font-bold text-white">{feature.label}</div>
                 <div className="text-sm text-white/40 mt-1">{feature.desc}</div>
-              </motion.div>
+              </div>
             );
           })}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

@@ -19,9 +19,9 @@ set -euo pipefail
 
 # ── Configuration ─────────────────────────────────────────────────
 # UPDATE THESE VALUES for your Hostinger server:
-SSH_HOST="<YOUR_SERVER_IP>"
+SSH_HOST="88.223.85.114"
 SSH_PORT="65002"
-SSH_USER="<YOUR_SSH_USER>"
+SSH_USER="u104276643"
 # Passenger app root — this is where server.js must live
 REMOTE_APP_DIR="/home/${SSH_USER}/domains/ikfzdigitalzulassung.de/nodejs"
 # Persistent env file on the server (set once, never overwritten by deploy)

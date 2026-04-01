@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import { getProductBySlug } from '@/lib/db';
 import RegistrationForm from '@/components/RegistrationForm';
 import { siteConfig } from '@/lib/config';
+
+export const revalidate = 60; // re-fetch prices from DB every 60 seconds
 import {
   Shield,
   Clock,
@@ -61,8 +63,8 @@ export default async function AutoOnlineAnmeldenPage() {
             areaServed: 'DE',
             offers: {
               '@type': 'AggregateOffer',
-              lowPrice: '99.70',
-              highPrice: '124.70',
+              lowPrice: String(Math.min(...((options.services as Array<{price:number}>)?.map(s=>s.price) ?? [product.price]))),
+              highPrice: String(Math.max(...((options.services as Array<{price:number}>)?.map(s=>s.price) ?? [product.price]))),
               priceCurrency: 'EUR',
               availability: 'https://schema.org/InStock',
             },

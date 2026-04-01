@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Car, FileX, Repeat, CreditCard, Sparkles, ShieldCheck, Banknote } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
+import { getProductBySlug } from '@/lib/db';
+
+export const revalidate = 60; // re-fetch prices from DB every 60 seconds
 
 export const metadata: Metadata = {
   title: 'KFZ Dienstleistungen – Online Zulassungsservice',
@@ -12,58 +15,86 @@ export const metadata: Metadata = {
   },
 };
 
-const services = [
+const servicesMeta = [
   {
     icon: Car,
+    key: 'anmelden',
     title: 'Fahrzeug Anmelden',
     description: 'Ihr Fahrzeug schnell und unkompliziert online anmelden – ohne Wartezeiten bei der Zulassungsstelle.',
-    price: 'ab 99,70 €',
     href: '/product/auto-online-anmelden/',
     featured: true,
   },
   {
     icon: FileX,
+    key: 'abmelden',
     title: 'Fahrzeug Abmelden',
     description: 'Die Abmeldung eines Fahrzeugs erfolgt komplett digital. Innerhalb weniger Minuten.',
-    price: '19,70 €',
     href: '/product/fahrzeugabmeldung/',
     featured: false,
   },
   {
     icon: Repeat,
+    key: 'ummelden',
     title: 'Fahrzeug Ummelden',
     description: 'Reibungslose Halterwechsel oder Adressänderungen – schnell und bequem online.',
-    price: 'ab 119,70 €',
     href: '/product/auto-online-anmelden/',
     featured: false,
   },
   {
     icon: CreditCard,
+    key: 'evb',
     title: 'eVB-Nummer anfordern',
     description: 'Die elektronische Versicherungsbestätigung erhalten Sie direkt über unsere Plattform – kostenlos.',
-    price: 'Kostenlos',
     href: '/evb/',
     featured: false,
   },
   {
     icon: ShieldCheck,
+    key: 'versicherung',
     title: 'KFZ-Versicherung berechnen',
     description: 'Vergleichen Sie hunderte Tarife in 2 Minuten und sparen Sie bis zu 850 € pro Jahr.',
-    price: '',
     href: '/kfz-versicherung-berechnen/',
     featured: false,
   },
   {
     icon: Banknote,
+    key: 'verkaufen',
     title: 'Auto verkaufen',
     description: 'Kostenloses und unverbindliches Angebot von geprüften Händlern. Top-Preis sichern.',
-    price: '',
     href: '/auto-verkaufen/',
     featured: false,
   },
 ];
 
-export default function KfzServicesPage() {
+export default async function KfzServicesPage() {
+  // Fetch live prices from DB
+  const [anmeldenProduct, abmeldungProduct] = await Promise.all([
+    getProductBySlug('auto-online-anmelden'),
+    getProductBySlug('fahrzeugabmeldung'),
+  ]);
+
+  const anmeldenOpts = anmeldenProduct?.options ? JSON.parse(anmeldenProduct.options) : {};
+  const anmeldenServices: Array<{ key: string; label: string; price: number }> = anmeldenOpts.services ?? [];
+
+  const anmeldenMinPrice = anmeldenServices.length
+    ? Math.min(...anmeldenServices.map((s) => s.price))
+    : (anmeldenProduct?.price ?? 99.70);
+  const ummeldungService = anmeldenServices.find((s) => s.key === 'ummeldung');
+  const ummeldungPrice = ummeldungService?.price ?? anmeldenProduct?.price ?? 119.70;
+  const abmeldungPrice = abmeldungProduct?.price ?? 19.70;
+
+  const fmt = (n: number) => n.toFixed(2).replace('.', ',');
+
+  const services = servicesMeta.map((s) => ({
+    ...s,
+    price:
+      s.key === 'anmelden'   ? `ab ${fmt(anmeldenMinPrice)} €` :
+      s.key === 'abmelden'   ? `${fmt(abmeldungPrice)} €` :
+      s.key === 'ummelden'   ? `ab ${fmt(ummeldungPrice)} €` :
+      s.key === 'evb'        ? 'Kostenlos' :
+      '',
+  }));
+
   return (
     <>
       {/* ── Dark Hero ── */}

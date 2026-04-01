@@ -10,7 +10,7 @@ import { siteConfig } from '@/lib/config';
 import { CustomerAuthProvider } from '@/components/CustomerAuthProvider';
 
 const inter = Inter({
-  subsets: ['latin', 'latin-ext'],
+  subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
 });
@@ -95,10 +95,6 @@ export default function RootLayout({
   return (
     <html lang="de" className={inter.variable} suppressHydrationWarning>
       <head>
-        {/* DNS prefetch for external resources */}
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* JSON-LD Organization Schema */}
         <script
           type="application/ld+json"

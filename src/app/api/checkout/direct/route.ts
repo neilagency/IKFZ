@@ -15,21 +15,7 @@ import crypto from 'crypto';
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || 'https://ikfzdigitalzulassung.de';
 
-/* ── Server-side price catalogue ────────────────────────────── */
-const SERVICE_PRICES: Record<string, number> = {
-  'Wiederzulassung': 99.70,
-  'Neuwagen Zulassung': 99.70,
-  'Ummeldung (Halterwechsel)': 119.70,
-  'Neuzulassung (Gebrauchtwagen)': 124.70,
-  'Fahrzeugabmeldung': 19.70,
-};
-
-const ADDON_PRICES: Record<string, number> = {
-  'Kennzeichen reserviert': 24.70,
-  'Kennzeichen bestellen': 29.70,
-  'Wunschkennzeichen Reservierung': 4.70,
-};
-
+/* ── Payment surcharges (processor fees, not product prices) ── */
 const PAYMENT_FEES: Record<string, number> = {
   paypal: 0,
   applepay: 0,
@@ -37,6 +23,50 @@ const PAYMENT_FEES: Record<string, number> = {
   klarna: 0,
   sepa: 0,
 };
+
+/* ── Fetch prices from DB (single source of truth) ───────────── */
+async function getPricesFromDB(
+  productSlug: string,
+  selectedService?: string,
+): Promise<{ basePrice: number | null; addonPriceMap: Record<string, number> }> {
+  const product = await prisma.product.findUnique({
+    where: { slug: productSlug, isActive: true },
+    select: { price: true, options: true },
+  });
+  if (!product) return { basePrice: null, addonPriceMap: {} };
+
+  const opts: Record<string, any> = product.options ? JSON.parse(product.options) : {};
+
+  // For Anmeldung: price depends on which service variant was selected
+  let basePrice = product.price;
+  if (selectedService && Array.isArray(opts.services)) {
+    const svc = (opts.services as Array<{ label: string; price: number }>).find(
+      (s) => s.label === selectedService,
+    );
+    if (svc) basePrice = svc.price;
+  }
+
+  // Build addon price map from DB options
+  const addonPriceMap: Record<string, number> = {};
+  if (opts.kennzeichen_reserviert?.price) {
+    const p = opts.kennzeichen_reserviert.price as number;
+    addonPriceMap['Kennzeichen reserviert'] = p;
+    addonPriceMap['Wunschkennzeichen Reservierung'] = p;
+    if (opts.kennzeichen_reserviert.label) addonPriceMap[opts.kennzeichen_reserviert.label] = p;
+  }
+  if (opts.kennzeichen_bestellen?.price) {
+    const p = opts.kennzeichen_bestellen.price as number;
+    addonPriceMap['Kennzeichen bestellen'] = p;
+    if (opts.kennzeichen_bestellen.label) addonPriceMap[opts.kennzeichen_bestellen.label] = p;
+  }
+  if (opts.reservierung?.price) {
+    const p = opts.reservierung.price as number;
+    addonPriceMap['Kennzeichenreservierung (1 Jahr)'] = p;
+    if (opts.reservierung.label) addonPriceMap[opts.reservierung.label] = p;
+  }
+
+  return { basePrice, addonPriceMap };
+}
 
 export async function POST(request: NextRequest) {
   // ── Rate Limiting ──
@@ -63,8 +93,7 @@ export async function POST(request: NextRequest) {
       paymentMethod,
       customerNote,
       orderItems,
-      paymentFee,
-      grandTotal,
+      couponCode: rawCouponCode,
     } = body;
 
     // Validate required fields
@@ -101,20 +130,32 @@ export async function POST(request: NextRequest) {
       sepa: 'SEPA-Lastschrift',
     };
 
-    // ── Server-side price recalculation ──
-    // Never trust prices from frontend
-    const serviceName = orderItems.selectedService ?? orderItems.productName;
-    const serverBasePrice = SERVICE_PRICES[serviceName];
-    if (serverBasePrice === undefined) {
+    // ── Server-side price recalculation via Database ──
+    // Prices are always fetched from DB — never trust frontend values
+    const productSlug = orderItems.productSlug;
+    if (!productSlug) {
       return NextResponse.json(
         { error: 'Unbekannter Service. Bitte versuchen Sie es erneut.' },
         { status: 400 }
       );
     }
 
+    const { basePrice: serverBasePrice, addonPriceMap } = await getPricesFromDB(
+      productSlug,
+      orderItems.selectedService,
+    );
+
+    if (serverBasePrice === null) {
+      return NextResponse.json(
+        { error: 'Unbekannter Service. Bitte versuchen Sie es erneut.' },
+        { status: 400 }
+      );
+    }
+
+    const serviceName = orderItems.selectedService ?? orderItems.productName;
     const serverPaymentFee = PAYMENT_FEES[paymentMethod] ?? 0;
 
-    // Build order items with server-verified prices
+    // Build order items with DB-verified prices
     const items = [
       {
         name: serviceName,
@@ -126,10 +167,10 @@ export async function POST(request: NextRequest) {
 
     let serverSubtotal = serverBasePrice;
 
-    // Validate and price addons from server catalogue
+    // Validate and price addons from DB catalogue
     if (orderItems.addons && Array.isArray(orderItems.addons)) {
       for (const addon of orderItems.addons) {
-        const addonPrice = ADDON_PRICES[addon.label];
+        const addonPrice = addonPriceMap[addon.label];
         if (addonPrice === undefined) {
           return NextResponse.json(
             { error: `Unbekanntes Zusatzprodukt: ${addon.label}` },
@@ -146,6 +187,66 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // ── Server-side coupon validation (matches Project A logic) ──
+    let discountAmount = 0;
+    let validatedCouponId: string | null = null;
+    const couponCode = (rawCouponCode || '').trim().toUpperCase();
+
+    if (couponCode) {
+      const coupon = await prisma.coupon.findUnique({ where: { code: couponCode } });
+      const now = new Date();
+      if (!coupon || !coupon.isActive) {
+        return NextResponse.json({ error: 'Ungültiger oder inaktiver Gutscheincode.' }, { status: 400 });
+      }
+      if (coupon.startDate && now < coupon.startDate) {
+        return NextResponse.json({ error: 'Gutschein ist noch nicht gültig.' }, { status: 400 });
+      }
+      if (coupon.endDate && now > coupon.endDate) {
+        return NextResponse.json({ error: 'Gutschein ist abgelaufen.' }, { status: 400 });
+      }
+      if (coupon.maxUsageTotal > 0 && coupon.usageCount >= coupon.maxUsageTotal) {
+        return NextResponse.json({ error: 'Gutschein wurde bereits vollständig eingelöst.' }, { status: 400 });
+      }
+      if (coupon.maxUsagePerUser > 0 && email) {
+        const userUsage = await prisma.couponUsage.findUnique({
+          where: { couponId_email: { couponId: coupon.id, email } },
+        });
+        if (userUsage) {
+          return NextResponse.json({ error: 'Sie haben diesen Gutschein bereits verwendet.' }, { status: 400 });
+        }
+      }
+      if (coupon.productSlugs) {
+        const allowed = coupon.productSlugs.split(',').map((s: string) => s.trim()).filter(Boolean);
+        const productSlug = orderItems.productSlug || '';
+        if (allowed.length > 0 && productSlug && !allowed.includes(productSlug)) {
+          return NextResponse.json({ error: 'Gutschein gilt nicht für dieses Produkt.' }, { status: 400 });
+        }
+      }
+      if (coupon.minOrderValue > 0 && serverSubtotal < coupon.minOrderValue) {
+        return NextResponse.json({
+          error: `Mindestbestellwert: ${coupon.minOrderValue.toFixed(2).replace('.', ',')} €`,
+        }, { status: 400 });
+      }
+
+      // Calculate discount
+      if (coupon.discountType === 'percentage') {
+        discountAmount = Math.round(serverSubtotal * coupon.discountValue / 100 * 100) / 100;
+      } else {
+        discountAmount = Math.min(coupon.discountValue, serverSubtotal);
+      }
+      validatedCouponId = coupon.id;
+    }
+
+    // Add discount as negative line item if applicable
+    if (discountAmount > 0) {
+      items.push({
+        name: `Gutschein (${couponCode})`,
+        quantity: 1,
+        price: -discountAmount,
+        total: -discountAmount,
+      });
+    }
+
     // Add payment fee as line item if applicable
     if (serverPaymentFee > 0) {
       items.push({
@@ -156,7 +257,10 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const serverGrandTotal = Math.round((serverSubtotal + serverPaymentFee) * 100) / 100;
+    const serverGrandTotal = Math.max(
+      Math.round((serverSubtotal - discountAmount + serverPaymentFee) * 100) / 100,
+      0,
+    );
 
     // Generate idempotency key to prevent duplicate payments
     const idempotencyKey = crypto.randomUUID();
@@ -169,6 +273,28 @@ export async function POST(request: NextRequest) {
       email,
       ip,
     });
+
+    // ── Customer upsert (matches Project A logic) ──
+    const customer = email
+      ? await prisma.customer.upsert({
+          where: { email },
+          update: {
+            totalOrders: { increment: 1 },
+            totalSpent: { increment: serverGrandTotal },
+          },
+          create: {
+            email,
+            firstName: firstName || '',
+            lastName: lastName || '',
+            phone: phone || '',
+            billingCity: city || '',
+            billingPostcode: postcode || '',
+            billingAddress1: address || '',
+            totalOrders: 1,
+            totalSpent: serverGrandTotal,
+          },
+        })
+      : null;
 
     // ── 1. Create Order in DB (status: pending) ──
     const order = await createOrder({
@@ -188,8 +314,34 @@ export async function POST(request: NextRequest) {
       billingPostcode: postcode,
       billingCountry: 'DE',
       customerNote,
-      items,
+      items: items.filter(i => i.price >= 0), // don't store discount as order item
     });
+
+    // Link customer to order
+    if (customer) {
+      await prisma.order.update({
+        where: { id: order.id },
+        data: { customerId: customer.id, discountAmount, couponCode },
+      });
+    } else if (discountAmount > 0 || couponCode) {
+      await prisma.order.update({
+        where: { id: order.id },
+        data: { discountAmount, couponCode },
+      });
+    }
+
+    // Record coupon usage
+    if (validatedCouponId && couponCode && email) {
+      await Promise.all([
+        prisma.couponUsage.create({
+          data: { couponId: validatedCouponId, email, orderId: order.id },
+        }),
+        prisma.coupon.update({
+          where: { id: validatedCouponId },
+          data: { usageCount: { increment: 1 } },
+        }),
+      ]);
+    }
 
     paymentLog.orderCreated({
       orderId: order.id,
@@ -197,6 +349,37 @@ export async function POST(request: NextRequest) {
       total: String(serverGrandTotal),
       method: paymentMethod,
     });
+
+    // ── FREE ORDER (coupon covers full amount) — skip payment gateway ──
+    if (serverGrandTotal <= 0) {
+      console.log(`[checkout] Order ${order.orderNumber} is free (coupon: ${couponCode}), skipping payment gateway`);
+
+      await Promise.all([
+        prisma.order.update({
+          where: { id: order.id },
+          data: { status: 'processing' },
+        }),
+        prisma.payment.updateMany({
+          where: { orderId: order.id },
+          data: {
+            status: 'paid',
+            transactionId: `FREE-${couponCode || 'COUPON'}`,
+          },
+        }),
+      ]);
+
+      // Send invoice email for free order
+      triggerInvoiceEmail(order.id).catch((err) =>
+        console.error('[checkout] Free order invoice email failed:', err),
+      );
+
+      return NextResponse.json({
+        success: true,
+        orderId: order.id,
+        orderNumber: order.orderNumber,
+        total: '0.00',
+      });
+    }
 
     // ── 2. Create payment with the appropriate gateway ──
     try {

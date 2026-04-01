@@ -1,17 +1,35 @@
+import dynamic from 'next/dynamic';
 import Hero from '@/components/Hero';
-import Steps from '@/components/Steps';
-import Requirements from '@/components/Requirements';
 import PricingBox from '@/components/PricingBox';
-import TrustBadges from '@/components/TrustBadges';
-import Support from '@/components/Support';
-import FAQ from '@/components/FAQ';
-import VehicleTypes from '@/components/VehicleTypes';
 import IntroSection from '@/components/IntroSection';
-import InfoCards from '@/components/InfoCards';
+
+// Below-fold components: code-split to keep initial JS bundle small
+const Steps = dynamic(() => import('@/components/Steps'));
+const Requirements = dynamic(() => import('@/components/Requirements'));
+const TrustBadges = dynamic(() => import('@/components/TrustBadges'));
+const Support = dynamic(() => import('@/components/Support'));
+const FAQ = dynamic(() => import('@/components/FAQ'));
+const VehicleTypes = dynamic(() => import('@/components/VehicleTypes'));
+const InfoCards = dynamic(() => import('@/components/InfoCards'));
 import { homepageContent } from '@/lib/content';
 import { siteConfig } from '@/lib/config';
+import { getProductBySlug } from '@/lib/db';
 
-export default function HomePage() {
+export const revalidate = 60; // re-fetch prices from DB every 60 seconds
+
+export default async function HomePage() {
+  // Fetch live prices from DB
+  const [anmeldenProduct, abmeldungProduct] = await Promise.all([
+    getProductBySlug('auto-online-anmelden'),
+    getProductBySlug('fahrzeugabmeldung'),
+  ]);
+
+  const anmeldenOpts = anmeldenProduct?.options ? JSON.parse(anmeldenProduct.options) : {};
+  const anmeldenServices: Array<{ price: number }> = anmeldenOpts.services ?? [];
+  const anmeldungMinPrice = anmeldenServices.length
+    ? Math.min(...anmeldenServices.map((s) => s.price))
+    : (anmeldenProduct?.price ?? 119.70);
+  const abmeldungPrice = abmeldungProduct?.price ?? 19.70;
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
@@ -30,7 +48,7 @@ export default function HomePage() {
       <IntroSection />
       <Steps />
       <Requirements />
-      <PricingBox />
+      <PricingBox anmeldungMinPrice={anmeldungMinPrice} abmeldungPrice={abmeldungPrice} />
       
       {/* Dark/Light transition gradient */}
       <div className="h-16 bg-gradient-to-b from-white to-dark-950" />

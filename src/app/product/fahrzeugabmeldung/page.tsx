@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import { getProductBySlug } from '@/lib/db';
 import AbmeldungForm from '@/components/AbmeldungForm';
 import { siteConfig } from '@/lib/config';
+
+export const revalidate = 60; // re-fetch prices from DB every 60 seconds
 import {
   Shield,
   Clock,

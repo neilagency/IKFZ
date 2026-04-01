@@ -19,6 +19,7 @@ import {
   HelpCircle,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { usePriceFeed } from '@/hooks/usePriceFeed';
 
 // ── Zod Schema for Abmeldung ──
 const abmeldungSchema = z.object({
@@ -69,6 +70,10 @@ export default function ServiceForm({
   const [showCodeHelp, setShowCodeHelp] = useState(false);
   const [showKennzeichenHelp, setShowKennzeichenHelp] = useState(false);
 
+  // Use live price from SSE feed; falls back to server-rendered prop
+  const feed = usePriceFeed({ 'fahrzeugabmeldung': { price: basePrice, options: null } });
+  const liveBasePrice = feed['fahrzeugabmeldung']?.price ?? basePrice;
+
   const {
     register,
     handleSubmit,
@@ -86,12 +91,12 @@ export default function ServiceForm({
   const watchReservierung = watch('reservierung');
 
   const totalPrice = useMemo(() => {
-    let price = basePrice;
+    let price = liveBasePrice;
     if (watchReservierung === 'einJahr') {
       price += reservierungPrice;
     }
     return price;
-  }, [basePrice, reservierungPrice, watchReservierung]);
+  }, [liveBasePrice, reservierungPrice, watchReservierung]);
 
   const nextStep = useCallback(async () => {
     const fields = STEP_FIELDS[currentStep];
@@ -114,7 +119,7 @@ export default function ServiceForm({
         productSlug: 'fahrzeugabmeldung',
         serviceType: 'abmeldung',
         formData: data,
-        basePrice,
+        basePrice: liveBasePrice,
         addons: data.reservierung === 'einJahr'
           ? [{ key: 'reservierung', label: 'Kennzeichenreservierung (1 Jahr)', price: reservierungPrice }]
           : [],
@@ -123,7 +128,7 @@ export default function ServiceForm({
       sessionStorage.setItem('checkout_order', JSON.stringify(orderData));
       router.push('/rechnung/');
     },
-    [productName, basePrice, reservierungPrice, totalPrice, router]
+    [productName, liveBasePrice, reservierungPrice, totalPrice, router]
   );
 
   return (
@@ -648,7 +653,7 @@ export default function ServiceForm({
                     <div className="flex justify-between">
                       <span className="text-dark-600">{productName}</span>
                       <span className="text-dark-800 font-medium">
-                        {basePrice.toFixed(2).replace('.', ',')} €
+                        {liveBasePrice.toFixed(2).replace('.', ',')} €
                       </span>
                     </div>
                     {watchReservierung === 'einJahr' && (
