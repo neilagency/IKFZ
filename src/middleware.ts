@@ -103,7 +103,14 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  return NextResponse.next();
+  // 6. Prevent LiteSpeed from caching page responses.
+  //    Without this, LiteSpeed caches HTML and serves it for RSC payload
+  //    requests (same URL, different headers), causing client-side navigation
+  //    to fail with "Failed to fetch RSC payload".
+  const response = NextResponse.next();
+  response.headers.set('X-LiteSpeed-Cache-Control', 'no-cache');
+  response.headers.set('Vary', 'RSC, Next-Router-State-Tree, Next-Router-Prefetch');
+  return response;
 }
 
 export const config = {

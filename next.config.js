@@ -196,13 +196,16 @@ const nextConfig = {
         ],
       },
       {
-        // All pages — security headers
+        // All pages — security headers + LiteSpeed cache prevention
         source: '/:path*',
         headers: [
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
           { key: 'X-XSS-Protection', value: '1; mode=block' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          // Prevent LiteSpeed from caching HTML and serving it for RSC requests
+          { key: 'X-LiteSpeed-Cache-Control', value: 'no-cache' },
+          { key: 'Vary', value: 'RSC, Next-Router-State-Tree, Next-Router-Prefetch' },
         ],
       },
     ];
