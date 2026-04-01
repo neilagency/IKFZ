@@ -50,10 +50,7 @@ export default async function HomePage() {
       <Requirements />
       <PricingBox anmeldungMinPrice={anmeldungMinPrice} abmeldungPrice={abmeldungPrice} />
       
-      {/* Dark/Light transition gradient */}
-      <div className="h-16 bg-gradient-to-b from-white to-dark-950" />
       <TrustBadges />
-      <div className="h-16 bg-gradient-to-b from-dark-950 to-white" />
       
       <InfoCards />
       <Support />
