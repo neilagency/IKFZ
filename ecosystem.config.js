@@ -18,6 +18,7 @@ module.exports = {
       name: 'ikfz-app',
       script: '.next/standalone/server.js',
       cwd: '/var/www/ikfzdigitalzulassung.de',
+      env_file: '.env',
       env: {
         NODE_ENV: 'production',
         PORT: 3000,

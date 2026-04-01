@@ -15,13 +15,22 @@ function getDbPath(): string {
     return tmpPath;
   }
 
+  if (!fs.existsSync(srcPath)) {
+    console.error(`[DB] Database file not found at ${srcPath} (cwd: ${process.cwd()})`);
+  }
+
   return srcPath;
 }
 
 function createPrismaClient() {
   const dbPath = getDbPath();
-  const adapter = new PrismaBetterSqlite3({ url: `file:${dbPath}` });
-  return new PrismaClient({ adapter });
+  try {
+    const adapter = new PrismaBetterSqlite3({ url: `file:${dbPath}` });
+    return new PrismaClient({ adapter });
+  } catch (error) {
+    console.error(`[DB] Failed to initialize Prisma client (dbPath: ${dbPath}):`, error);
+    throw error;
+  }
 }
 
 const globalForPrisma = globalThis as unknown as {
