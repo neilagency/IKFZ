@@ -69,7 +69,7 @@ export default function TrustBadges() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="group"
               >
-                <div className="bg-white/[0.04] backdrop-blur-sm rounded-3xl p-8 text-center border border-white/[0.06] hover:bg-white/[0.07] hover:border-white/[0.12] transition-all duration-300 h-full">
+                <div className="bg-white/[0.04] rounded-3xl p-8 text-center border border-white/[0.06] hover:bg-white/[0.07] hover:border-white/[0.12] transition-all duration-300 h-full">
                   <div className="w-16 h-16 mx-auto mb-5 bg-primary/10 rounded-2xl flex items-center justify-center group-hover:bg-primary/15 transition-colors">
                     <Icon className="w-8 h-8 text-primary-400" />
                   </div>
