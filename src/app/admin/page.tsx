@@ -1,5 +1,6 @@
 "use client";
 
+import "./admin.css";
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import useSWR, { mutate as globalMutate } from "swr";
 import dynamic from "next/dynamic";
@@ -11,7 +12,7 @@ import {
   Download, Filter, RefreshCw, Zap, Shield, Wallet, Clock,
   ExternalLink, Image as ImageIcon, AlertCircle, FileQuestion,
   Tag, Calendar, Mail, Copy, Send, Percent, ToggleLeft, ToggleRight,
-  Upload, MessageSquare, StickyNote, Paperclip, RotateCcw, FileUp,
+  Upload, MessageSquare, StickyNote, Paperclip, RotateCcw, FileUp, Menu,
 } from "lucide-react";
 import { MediaLibraryTab, ImageField, MediaPicker } from "@/components/admin/MediaLibrary";
 import { ToastProvider, useToast } from "@/components/admin/Toast";
@@ -33,21 +34,21 @@ function formatEuro(n: number) { return new Intl.NumberFormat("de-DE", { style: 
 function formatDate(d: string | null) { if (!d) return "-"; return new Date(d).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" }); }
 
 const statusColors: Record<string, string> = {
-  completed: "bg-green-500/10 text-green-400 border-green-500/20",
-  processing: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-  "on-hold": "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
-  pending: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
-  cancelled: "bg-red-500/10 text-red-400 border-red-500/20",
-  refunded: "bg-orange-500/10 text-orange-400 border-orange-500/20",
-  failed: "bg-red-500/10 text-red-400 border-red-500/20",
-  paid: "bg-green-500/10 text-green-400 border-green-500/20",
-  issued: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-  publish: "bg-green-500/10 text-green-400 border-green-500/20",
-  draft: "bg-gray-500/10 text-gray-400 border-gray-500/20",
-  published: "bg-green-500/10 text-green-400 border-green-500/20",
-  scheduled: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
-  instock: "bg-green-500/10 text-green-400 border-green-500/20",
-  outofstock: "bg-red-500/10 text-red-400 border-red-500/20",
+  completed: "bg-green-100 text-green-700 border-green-300",
+  processing: "bg-blue-100 text-blue-700 border-blue-300",
+  "on-hold": "bg-amber-100 text-amber-700 border-amber-300",
+  pending: "bg-amber-100 text-amber-700 border-amber-300",
+  cancelled: "bg-red-100 text-red-700 border-red-300",
+  refunded: "bg-orange-100 text-orange-700 border-orange-300",
+  failed: "bg-red-100 text-red-700 border-red-300",
+  paid: "bg-green-100 text-green-700 border-green-300",
+  issued: "bg-sky-100 text-sky-700 border-sky-300",
+  publish: "bg-green-100 text-green-700 border-green-300",
+  draft: "bg-gray-100 text-gray-600 border-gray-300",
+  published: "bg-green-100 text-green-700 border-green-300",
+  scheduled: "bg-purple-100 text-purple-700 border-purple-300",
+  instock: "bg-green-100 text-green-700 border-green-300",
+  outofstock: "bg-red-100 text-red-700 border-red-300",
 };
 
 function Badge({ status }: { status: string }) {
@@ -78,13 +79,13 @@ function fetcher(url: string) {
 // ═══════════════════════════════════════════════════════════
 function SkeletonRow() {
   return (
-    <div className="flex items-center gap-4 p-4 rounded-xl bg-dark-900/40 border border-white/[0.03] animate-pulse">
-      <div className="w-12 h-12 rounded-lg bg-white/[0.05]" />
+    <div className="flex items-center gap-4 p-4 rounded-xl bg-white border border-gray-100 animate-pulse">
+      <div className="w-12 h-12 rounded-lg bg-gray-200" />
       <div className="flex-1 space-y-2">
-        <div className="h-4 bg-white/[0.05] rounded w-1/3" />
-        <div className="h-3 bg-white/[0.04] rounded w-1/5" />
+        <div className="h-4 bg-gray-200 rounded w-1/3" />
+        <div className="h-3 bg-gray-100 rounded w-1/5" />
       </div>
-      <div className="h-6 w-16 bg-white/[0.05] rounded" />
+      <div className="h-6 w-16 bg-gray-200 rounded" />
     </div>
   );
 }
@@ -99,9 +100,9 @@ function SkeletonTable({ rows = 5 }: { rows?: number }) {
 function EmptyState({ icon: Icon = FileQuestion, title = "Keine Einträge gefunden", description }: { icon?: any; title?: string; description?: string }) {
   return (
     <div className="text-center py-16">
-      <Icon className="w-10 h-10 text-white/10 mx-auto mb-3" />
-      <p className="text-white/30 text-sm">{title}</p>
-      {description && <p className="text-white/20 text-xs mt-1">{description}</p>}
+      <Icon className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+      <p className="text-gray-400 text-sm">{title}</p>
+      {description && <p className="text-gray-300 text-xs mt-1">{description}</p>}
     </div>
   );
 }
@@ -112,9 +113,9 @@ function EmptyState({ icon: Icon = FileQuestion, title = "Keine Einträge gefund
 function ErrorState({ message = "Fehler beim Laden", onRetry }: { message?: string; onRetry?: () => void }) {
   return (
     <div className="text-center py-16">
-      <AlertCircle className="w-10 h-10 text-red-400/30 mx-auto mb-3" />
-      <p className="text-red-400/70 text-sm">{message}</p>
-      {onRetry && <button onClick={onRetry} className="mt-3 px-4 py-2 rounded-lg bg-red-500/10 text-red-400 text-sm hover:bg-red-500/20 transition-colors">Erneut versuchen</button>}
+      <AlertCircle className="w-10 h-10 text-red-400 mx-auto mb-3 opacity-50" />
+      <p className="text-red-600 text-sm">{message}</p>
+      {onRetry && <button onClick={onRetry} className="mt-3 px-4 py-2 rounded-lg bg-red-50 text-red-600 border border-red-200 text-sm hover:bg-red-100 transition-colors">Erneut versuchen</button>}
     </div>
   );
 }
@@ -141,18 +142,18 @@ function Pagination({ page, totalPages, total, limit, onPageChange }: Pagination
   }
 
   return (
-    <div className="flex items-center justify-between pt-4 border-t border-white/[0.04]">
-      <span className="text-white/40 text-sm">{start}–{end} von {total}</span>
+    <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+      <span className="text-gray-400 text-sm">{start}–{end} von {total}</span>
       <div className="flex items-center gap-1">
-        <button onClick={() => onPageChange(page - 1)} disabled={page === 1} className="p-2 rounded-lg hover:bg-white/5 text-white/40 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"><ChevronLeft className="w-4 h-4" /></button>
+        <button onClick={() => onPageChange(page - 1)} disabled={page === 1} className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"><ChevronLeft className="w-4 h-4" /></button>
         {pages.map((p, i) =>
           p === "..." ? (
-            <span key={`e${i}`} className="px-2 text-white/20 text-sm">...</span>
+            <span key={`e${i}`} className="px-2 text-gray-300 text-sm">...</span>
           ) : (
-            <button key={p} onClick={() => onPageChange(p)} className={`min-w-[32px] h-8 rounded-lg text-sm font-medium transition-colors ${page === p ? "bg-primary text-white" : "text-white/40 hover:bg-white/5 hover:text-white"}`}>{p}</button>
+            <button key={p} onClick={() => onPageChange(p)} className={`min-w-[32px] h-8 rounded-lg text-sm font-medium transition-colors ${page === p ? "bg-primary text-white" : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"}`}>{p}</button>
           )
         )}
-        <button onClick={() => onPageChange(page + 1)} disabled={page === totalPages} className="p-2 rounded-lg hover:bg-white/5 text-white/40 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"><ChevronRight className="w-4 h-4" /></button>
+        <button onClick={() => onPageChange(page + 1)} disabled={page === totalPages} className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"><ChevronRight className="w-4 h-4" /></button>
       </div>
     </div>
   );
@@ -165,10 +166,10 @@ function SearchBar({ value, onChange, placeholder = "Suchen...", count, suffix }
   return (
     <div className="flex items-center gap-3 flex-wrap">
       <div className="flex-1 relative min-w-[200px]">
-        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
-        <input value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none" />
+        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <input value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-gray-200 text-gray-900 text-sm focus:border-primary focus:outline-none shadow-sm" />
       </div>
-      {count !== undefined && <span className="text-white/40 text-sm whitespace-nowrap">{count} Einträge</span>}
+      {count !== undefined && <span className="text-gray-400 text-sm whitespace-nowrap">{count} Einträge</span>}
       {suffix}
     </div>
   );
@@ -256,8 +257,8 @@ function ContentEditor({ item, type, token, onSave, onCancel }: { item: PageData
         </div>
       </div>
       <div className="flex gap-2 mb-4">
-        <button onClick={() => setSeoTab(false)} className={`px-4 py-2 rounded-lg text-sm ${!seoTab ? "bg-primary text-white" : "bg-dark-800 text-white/60"}`}>Inhalt</button>
-        <button onClick={() => setSeoTab(true)} className={`px-4 py-2 rounded-lg text-sm ${seoTab ? "bg-primary text-white" : "bg-dark-800 text-white/60"}`}>SEO</button>
+        <button onClick={() => setSeoTab(false)} className={`px-4 py-2 rounded-lg text-sm ${!seoTab ? "bg-primary text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>Inhalt</button>
+        <button onClick={() => setSeoTab(true)} className={`px-4 py-2 rounded-lg text-sm ${seoTab ? "bg-primary text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>SEO</button>
       </div>
       {!seoTab ? (
         <div className="space-y-4">
@@ -302,17 +303,19 @@ function DashboardTab({ token }: { token: string }) {
     <div className="space-y-6">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: "Umsatz", value: formatEuro(stats.totalRevenue), icon: DollarSign, color: "text-green-400" },
-          { label: "Bestellungen", value: stats.totalOrders, icon: ShoppingCart, color: "text-blue-400" },
-          { label: "Kunden", value: stats.totalCustomers, icon: Users, color: "text-purple-400" },
-          { label: "Produkte", value: stats.totalProducts, icon: Package, color: "text-orange-400" },
+          { label: "Umsatz", value: formatEuro(stats.totalRevenue), icon: DollarSign, color: "text-green-600", bg: "bg-green-50" },
+          { label: "Bestellungen", value: stats.totalOrders, icon: ShoppingCart, color: "text-blue-600", bg: "bg-blue-50" },
+          { label: "Kunden", value: stats.totalCustomers, icon: Users, color: "text-purple-600", bg: "bg-purple-50" },
+          { label: "Produkte", value: stats.totalProducts, icon: Package, color: "text-orange-600", bg: "bg-orange-50" },
         ].map((s, i) => (
-          <div key={i} className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06]">
+          <div key={i} className="p-5 rounded-2xl bg-white border border-gray-200 shadow-sm">
             <div className="flex items-center gap-3 mb-2">
-              <s.icon className={`w-5 h-5 ${s.color}`} />
-              <span className="text-white/50 text-sm">{s.label}</span>
+              <div className={`p-2 rounded-xl ${s.bg}`}>
+                <s.icon className={`w-5 h-5 ${s.color}`} />
+              </div>
+              <span className="text-gray-500 text-sm">{s.label}</span>
             </div>
-            <p className="text-2xl font-bold text-white">{s.value}</p>
+            <p className="text-2xl font-bold text-gray-900">{s.value}</p>
           </div>
         ))}
       </div>
@@ -2223,15 +2226,15 @@ function BlogEditor({
     const status = publishMode === "publish" ? "publish" : publishMode === "schedule" ? "scheduled" : "draft";
     const body: Record<string, unknown> = {
       title, slug: finalSlug, content, excerpt, status,
-      category: category || null,
-      tags: tags || null,
-      featuredImage: featuredImage || null,
-      metaTitle: metaTitle || null,
-      metaDescription: metaDesc || null,
-      focusKeyword: focusKeyword || null,
-      canonical: canonical || null,
-      ogTitle: ogTitle || null,
-      ogDescription: ogDesc || null,
+      category: category || '',
+      tags: tags || '',
+      featuredImage: featuredImage || '',
+      metaTitle: metaTitle || '',
+      metaDescription: metaDesc || '',
+      focusKeyword: focusKeyword || '',
+      canonical: canonical || '',
+      ogTitle: ogTitle || '',
+      ogDescription: ogDesc || '',
     };
 
     if (status === "scheduled") body.scheduledAt = scheduleDate;
@@ -2428,6 +2431,7 @@ function AdminPageInner() {
   const [token, setToken] = useState<string | null>(null);
   const [tab, setTab] = useState<Tab>("dashboard");
   const [checking, setChecking] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -2467,8 +2471,8 @@ function AdminPageInner() {
 
   if (checking) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-dark-950">
-        <RefreshCw className="w-6 h-6 text-white/30 animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <RefreshCw className="w-6 h-6 text-gray-300 animate-spin" />
       </div>
     );
   }
@@ -2499,17 +2503,40 @@ function AdminPageInner() {
   }
 
   return (
-    <div className="min-h-screen bg-dark-950 flex">
-      <aside className="w-64 border-r border-white/[0.06] bg-dark-900/50 flex flex-col">
-        <div className="p-6 border-b border-white/[0.06]">
-          <h1 className="text-lg font-bold text-white">iKFZ Admin</h1>
-          <p className="text-xs text-white/30 mt-1">E-Commerce & CMS</p>
+    <div className="min-h-screen flex bg-gray-50">
+      {/* Mobile overlay — closes sidebar when tapping outside */}
+      {sidebarOpen && (
+        <div
+          className="admin-sidebar-overlay lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Sidebar — stays dark, drawer on mobile */}
+      <aside className={`admin-sidebar w-64 border-r border-white/[0.06] bg-dark-900 flex flex-col${sidebarOpen ? " admin-sidebar-open" : ""}`}>
+        <div className="p-6 border-b border-white/[0.06] flex items-center justify-between">
+          <div>
+            <h1 className="text-lg font-bold text-white">iKFZ Admin</h1>
+            <p className="text-xs text-white/30 mt-1">E-Commerce & CMS</p>
+          </div>
+          {/* Close button (mobile only) */}
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="lg:hidden p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-colors"
+            aria-label="Menü schließen"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
         <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
           {tabs.map((t) => (
             <div key={t.id}>
               {t.section && <p className="text-[10px] uppercase tracking-widest text-white/20 font-semibold mt-4 mb-2 px-3">{t.section}</p>}
-              <button onClick={() => setTab(t.id)} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors ${tab === t.id ? "bg-primary/10 text-primary" : "text-white/50 hover:bg-white/5 hover:text-white/80"}`}>
+              <button
+                onClick={() => { setTab(t.id); setSidebarOpen(false); }}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors ${tab === t.id ? "bg-primary/10 text-primary" : "text-white/50 hover:bg-white/5 hover:text-white/80"}`}
+              >
                 <t.icon className="w-4 h-4" />{t.label}
               </button>
             </div>
@@ -2525,22 +2552,39 @@ function AdminPageInner() {
         </div>
       </aside>
 
-      <main className="flex-1 p-8 overflow-y-auto">
-        <div className="max-w-6xl mx-auto">
-          {tab === "dashboard" && <DashboardTab token={token} />}
-          {tab === "pages" && <CMSListTab type="pages" token={token} />}
-          {tab === "posts" && <BlogTab token={token} />}
-          {tab === "seo" && <SEOTab token={token} />}
-          {tab === "products" && <ProductsTab token={token} />}
-          {tab === "orders" && <OrdersTab token={token} />}
-          {tab === "customers" && <CustomersTab token={token} />}
-          {tab === "payments" && <PaymentsTab token={token} />}
-          {tab === "invoices" && <InvoicesTab token={token} />}
-          {tab === "gateways" && <GatewaysTab token={token} />}
-          {tab === "coupons" && <CouponsTab token={token} />}
-          {tab === "campaigns" && <EmailCampaignsTab token={token} />}
-          {tab === "media" && <MediaLibraryTab token={token} />}
-          {tab === "settings" && <SettingsTab token={token} />}
+      {/* Main content — light mode */}
+      <main className="admin-light flex-1 min-w-0 flex flex-col overflow-y-auto">
+        {/* Mobile top bar with hamburger */}
+        <div className="admin-mobile-header lg:hidden sticky top-0 z-30 flex items-center gap-3 px-4 py-3 bg-white border-b border-gray-200 shadow-sm">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="p-2 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+            aria-label="Menü öffnen"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+          <span className="text-gray-900 text-sm font-semibold">iKFZ Admin</span>
+          <span className="ml-auto text-xs text-gray-400 font-medium capitalize">{tab}</span>
+        </div>
+
+        {/* Content */}
+        <div className="admin-main-content flex-1">
+          <div className="max-w-6xl mx-auto">
+            {tab === "dashboard" && <DashboardTab token={token} />}
+            {tab === "pages" && <CMSListTab type="pages" token={token} />}
+            {tab === "posts" && <BlogTab token={token} />}
+            {tab === "seo" && <SEOTab token={token} />}
+            {tab === "products" && <ProductsTab token={token} />}
+            {tab === "orders" && <OrdersTab token={token} />}
+            {tab === "customers" && <CustomersTab token={token} />}
+            {tab === "payments" && <PaymentsTab token={token} />}
+            {tab === "invoices" && <InvoicesTab token={token} />}
+            {tab === "gateways" && <GatewaysTab token={token} />}
+            {tab === "coupons" && <CouponsTab token={token} />}
+            {tab === "campaigns" && <EmailCampaignsTab token={token} />}
+            {tab === "media" && <MediaLibraryTab token={token} />}
+            {tab === "settings" && <SettingsTab token={token} />}
+          </div>
         </div>
       </main>
     </div>
