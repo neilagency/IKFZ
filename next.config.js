@@ -79,8 +79,15 @@ const nextConfig = {
         destination: '/',
         permanent: true,
       },
+      // NOTE: /wp-content/uploads/* is served via middleware rewrite to /uploads/*
+      // Only redirect non-upload wp-content paths
       {
-        source: '/wp-content/:path*',
+        source: '/wp-content/themes/:path*',
+        destination: '/',
+        permanent: false,
+      },
+      {
+        source: '/wp-content/plugins/:path*',
         destination: '/',
         permanent: false,
       },
@@ -142,7 +149,12 @@ const nextConfig = {
     ];
   },
   async rewrites() {
-    return [];
+    return [
+      {
+        source: '/wp-content/uploads/:path*',
+        destination: '/uploads/:path*',
+      },
+    ];
   },
   async headers() {
     return [

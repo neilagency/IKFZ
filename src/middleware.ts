@@ -47,7 +47,13 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(wpTarget, request.url), 301);
   }
 
-  // Prefix-based WP redirects
+  // Serve old /wp-content/uploads/ URLs from /uploads/
+  if (pathname.startsWith('/wp-content/uploads/')) {
+    const newPath = pathname.replace('/wp-content/uploads/', '/uploads/');
+    return NextResponse.rewrite(new URL(newPath, request.url));
+  }
+
+  // Prefix-based WP redirects (non-upload wp-content, wp-includes, wp-json)
   if (pathname.startsWith('/wp-content/') || pathname.startsWith('/wp-includes/') || pathname.startsWith('/wp-json/')) {
     return NextResponse.redirect(new URL('/', request.url), 301);
   }
