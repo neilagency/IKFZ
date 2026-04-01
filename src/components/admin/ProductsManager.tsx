@@ -303,7 +303,10 @@ export default function ProductsManager({ token }: { token?: string }) {
   const parseJson = (val: string | null | undefined, fallback: any) => {
     if (!val) return fallback;
     try {
-      return JSON.parse(val);
+      const parsed = JSON.parse(val);
+      // Ensure arrays when fallback is an array (e.g. options stored as object in legacy data)
+      if (Array.isArray(fallback) && !Array.isArray(parsed)) return fallback;
+      return parsed;
     } catch {
       return fallback;
     }
