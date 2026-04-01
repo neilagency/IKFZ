@@ -10,9 +10,8 @@ const nextConfig = {
       'better-sqlite3',
       '@prisma/adapter-better-sqlite3',
     ],
-    outputFileTracingIncludes: {
-      '/**': ['./prisma/dev.db'],
-    },
+    // Database is persistent on disk — not bundled into build
+    outputFileTracingIncludes: {},
   },
   images: {
     // AVIF disabled: sharp on Hostinger shared hosting produces corrupt AVIF files

@@ -28,7 +28,12 @@ yarn-error.log*
 # local env files
 .env*.local
 
-# vercel
+# database (production DB must NOT be in git)
+prisma/*.db
+prisma/*.db-journal
+data/
+
+# vercel (no longer used)
 .vercel
 
 # typescript
@@ -36,4 +41,6 @@ yarn-error.log*
 next-env.d.ts
 
 /src/generated/prisma
+
+# backup
 backup/

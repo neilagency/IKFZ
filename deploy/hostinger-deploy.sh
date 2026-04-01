@@ -100,12 +100,9 @@ echo "  Copying public/ → standalone/public..."
 rm -rf "$STANDALONE_DIR/public"
 cp -r "$PUBLIC_DIR" "$STANDALONE_DIR/public"
 
-# Copy SQLite database if it exists
-if [ -f "$PROJECT_ROOT/prisma/dev.db" ]; then
-    echo "  Copying prisma/dev.db → standalone/prisma/dev.db..."
-    mkdir -p "$STANDALONE_DIR/prisma"
-    cp "$PROJECT_ROOT/prisma/dev.db" "$STANDALONE_DIR/prisma/dev.db"
-fi
+# Database is persistent on server — DO NOT include in deploy package
+# On first deploy, seed DB manually: scp prisma/dev.db server:/path/to/data/production.db
+mkdir -p "$STANDALONE_DIR/prisma"
 
 # Ensure tmp/ dir exists for Passenger restart trigger
 mkdir -p "$STANDALONE_DIR/tmp"
@@ -126,6 +123,9 @@ rsync -az --delete --checksum \
     --exclude='console.log' \
     --exclude='stderr.log' \
     --exclude='.env' \
+    --exclude='prisma/*.db' \
+    --exclude='prisma/*.db-journal' \
+    --exclude='data/' \
     --exclude='public/uploads/documents/' \
     --exclude='public/uploads/order-documents/' \
     -e "ssh -o StrictHostKeyChecking=no -p $SSH_PORT" \
@@ -151,6 +151,35 @@ if [ -f "\$REMOTE_ENV_FILE" ]; then
     echo "  ✅ .env copied from \$REMOTE_ENV_FILE"
 else
     echo "  ⚠️  No env file found at \$REMOTE_ENV_FILE"
+fi
+
+# ── Persistent database setup ────────────────────────────────────
+# Database lives OUTSIDE the app directory so rsync --delete can't touch it
+DATA_DIR="/home/${SSH_USER}/data"
+DB_FILE="\$DATA_DIR/production.db"
+mkdir -p "\$DATA_DIR"
+
+if [ ! -f "\$DB_FILE" ]; then
+    # Check if there's an old DB in the app dir from a previous deploy
+    if [ -f "\$REMOTE_APP_DIR/prisma/dev.db" ]; then
+        echo "  📋 Migrating existing dev.db → \$DB_FILE"
+        cp "\$REMOTE_APP_DIR/prisma/dev.db" "\$DB_FILE"
+    else
+        echo "  ⚠️  No production database found. Upload one with:"
+        echo "     scp -P $SSH_PORT prisma/dev.db $SSH_USER@$SSH_HOST:\$DB_FILE"
+    fi
+else
+    echo "  ✅ Production database exists at \$DB_FILE — NOT overwriting"
+fi
+
+# Symlink database into app directory so the app can find it
+mkdir -p "\$REMOTE_APP_DIR/prisma"
+ln -sf "\$DB_FILE" "\$REMOTE_APP_DIR/prisma/production.db"
+echo "  ✅ Database symlinked: prisma/production.db → \$DB_FILE"
+
+# Ensure DB_PATH is set in .env
+if [ -f "\$REMOTE_APP_DIR/.env" ]; then
+    grep -q '^DB_PATH=' "\$REMOTE_APP_DIR/.env" || echo "DB_PATH=\$DB_FILE" >> "\$REMOTE_APP_DIR/.env"
 fi
 
 # ── Fix: Install Linux-native better-sqlite3 binary ──────────────

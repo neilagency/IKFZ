@@ -4,12 +4,19 @@
 # =================================================================
 # Usage: bash deploy/deploy.sh
 # Run this script on the VPS after git pull
+#
+# DATABASE: The production SQLite database lives at a PERSISTENT
+# path outside the build directory and is NEVER overwritten.
 # =================================================================
 
 set -e
 
 APP_DIR="/var/www/ikfzdigitalzulassung.de"
 PM2_APP_NAME="ikfz-app"
+
+# ── Persistent data directory (NEVER deleted on deploy) ──
+DATA_DIR="$APP_DIR/data"
+DB_FILE="$DATA_DIR/production.db"
 
 echo "🚀 Starting deployment..."
 echo "─────────────────────────────────────────"
@@ -37,22 +44,26 @@ echo "📁 Copying static and public files to standalone..."
 cp -r .next/static .next/standalone/.next/static
 cp -r public .next/standalone/public
 
-# 5.1 Copy database to standalone
-if [ -f "prisma/dev.db" ]; then
-    mkdir -p .next/standalone/prisma
-    cp prisma/dev.db .next/standalone/prisma/dev.db
+# 5.1 Ensure persistent data directory exists
+mkdir -p "$DATA_DIR"
+
+# 5.2 Initialize production DB only if it doesn't exist yet
+if [ ! -f "$DB_FILE" ]; then
+    if [ -f "prisma/dev.db" ]; then
+        echo "📋 First deploy: seeding production database from dev.db..."
+        cp prisma/dev.db "$DB_FILE"
+    else
+        echo "⚠️  No database found. Create one with: npx prisma migrate deploy"
+    fi
+else
+    echo "✅ Production database exists at $DB_FILE — NOT overwriting"
 fi
+
+# 5.3 Symlink database into standalone so the app can find it
+mkdir -p .next/standalone/prisma
+ln -sf "$DB_FILE" .next/standalone/prisma/production.db
 
 # 6. Copy .env to standalone directory
-if [ -f ".env.production.local" ]; then
-    cp .env.production.local .next/standalone/.env.production.local
-    echo "✅ Env file copied to standalone"
-fi
-if [ -f ".env" ]; then
-    cp .env .next/standalone/.env
-fi
-
-# 6.1 Verify required env vars exist in .env
 ENV_FILE=".env"
 if [ -f "$ENV_FILE" ]; then
     MISSING=""
@@ -63,7 +74,6 @@ if [ -f "$ENV_FILE" ]; then
     done
     if [ -n "$MISSING" ]; then
         echo "⚠️  Missing env vars in .env:$MISSING"
-        echo "   Set them in .env.production.local or your hosting panel."
     fi
     cp "$ENV_FILE" .next/standalone/.env
 fi
@@ -71,6 +81,11 @@ fi
 ENV_PROD_FILE=".env.production.local"
 if [ -f "$ENV_PROD_FILE" ]; then
     cp "$ENV_PROD_FILE" .next/standalone/.env.production.local
+fi
+
+# Ensure DB_PATH is set in standalone .env
+if [ -f .next/standalone/.env ]; then
+    grep -q '^DB_PATH=' .next/standalone/.env || echo "DB_PATH=$DB_FILE" >> .next/standalone/.env
 fi
 
 # 7. Restart PM2
@@ -84,11 +99,12 @@ echo ""
 echo "📊 Check status:  pm2 status"
 echo "📋 View logs:     pm2 logs $PM2_APP_NAME"
 echo "🌐 Site:          https://ikfzdigitalzulassung.de"
+echo "💾 Database:      $DB_FILE"
 echo ""
 
 # 8. Quick health check
 sleep 3
-HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/ || echo "000")
+HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:3000/ || echo "000")
 if [ "$HTTP_STATUS" = "200" ]; then
     echo "✅ Health check passed (HTTP $HTTP_STATUS)"
 else

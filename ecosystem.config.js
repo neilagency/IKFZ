@@ -23,6 +23,7 @@ module.exports = {
         NODE_ENV: 'production',
         PORT: 3000,
         HOSTNAME: '0.0.0.0',
+        DB_PATH: '/var/www/ikfzdigitalzulassung.de/data/production.db',
       },
       autorestart: true,
       max_restarts: 10,

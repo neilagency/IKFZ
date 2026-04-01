@@ -4,28 +4,31 @@ import path from 'path';
 import fs from 'fs';
 
 function getDbPath(): string {
-  const srcPath = path.join(process.cwd(), 'prisma', 'dev.db');
-
-  // On Vercel (production), copy DB to /tmp so it's writable
-  if (process.env.VERCEL) {
-    const tmpPath = '/tmp/dev.db';
-    if (!fs.existsSync(tmpPath)) {
-      fs.copyFileSync(srcPath, tmpPath);
-    }
-    return tmpPath;
+  // 1. Explicit DB_PATH env var (set in production deploy)
+  if (process.env.DB_PATH) {
+    return process.env.DB_PATH;
   }
 
-  if (!fs.existsSync(srcPath)) {
-    console.error(`[DB] Database file not found at ${srcPath} (cwd: ${process.cwd()})`);
+  // 2. Production: persistent path via symlink in standalone/prisma/
+  const prodPath = path.join(process.cwd(), 'prisma', 'production.db');
+  if (fs.existsSync(prodPath)) {
+    return prodPath;
   }
 
-  return srcPath;
+  // 3. Development fallback: prisma/dev.db
+  const devPath = path.join(process.cwd(), 'prisma', 'dev.db');
+  if (!fs.existsSync(devPath)) {
+    console.error(`[DB] Database file not found. Tried:\n  - DB_PATH env: ${process.env.DB_PATH || '(not set)'}\n  - ${prodPath}\n  - ${devPath}\n  cwd: ${process.cwd()}`);
+  }
+  return devPath;
 }
 
 function createPrismaClient() {
   const dbPath = getDbPath();
   try {
-    const adapter = new PrismaBetterSqlite3({ url: `file:${dbPath}` });
+    const resolvedPath = fs.existsSync(dbPath) ? fs.realpathSync(dbPath) : dbPath;
+    console.log(`[DB] Connecting to database: ${resolvedPath}`);
+    const adapter = new PrismaBetterSqlite3({ url: `file:${resolvedPath}` });
     return new PrismaClient({ adapter });
   } catch (error) {
     console.error(`[DB] Failed to initialize Prisma client (dbPath: ${dbPath}):`, error);
