@@ -18,6 +18,7 @@ import { MediaLibraryTab, ImageField, MediaPicker } from "@/components/admin/Med
 import { ToastProvider, useToast } from "@/components/admin/Toast";
 
 const TiptapEditor = dynamic(() => import("@/components/admin/TiptapEditor"), { ssr: false });
+const ProductsManager = dynamic(() => import("@/components/admin/ProductsManager"), { ssr: false });
 
 const API = "/api/admin";
 
@@ -583,126 +584,6 @@ function SEOTab({ token }: { token: string }) {
                 </div>
               );
             })}
-          </div>
-          <Pagination page={page} totalPages={totalPages} total={total} limit={20} onPageChange={setPage} />
-        </>
-      )}
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════════════════════
-// PRODUCTS TAB — with SWR + Pagination
-// ═══════════════════════════════════════════════════════════
-function ProductsTab({ token }: { token: string }) {
-  const { toast } = useToast();
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
-  const [editing, setEditing] = useState<any>(undefined);
-  const debouncedSearch = useDebounce(search, 300);
-
-  const params = new URLSearchParams({ page: String(page), limit: "20" });
-  if (debouncedSearch) params.set("search", debouncedSearch);
-  const swrKey = `${API}/products?${params}`;
-
-  const { data, error, isLoading, mutate } = useSWR(swrKey, fetcher, { revalidateOnFocus: false, keepPreviousData: true });
-
-  const products = Array.isArray(data?.products) ? data.products : Array.isArray(data) ? data : [];
-  const total = data?.total || products.length;
-  const totalPages = data?.totalPages || 1;
-
-  useEffect(() => { setPage(1); }, [debouncedSearch]);
-
-  const [name, setName] = useState("");
-  const [slug, setSlug] = useState("");
-  const [price, setPrice] = useState("");
-  const [desc, setDesc] = useState("");
-  const [status, setStatus] = useState("publish");
-  const [stockStatus, setStockStatus] = useState("instock");
-  const [saving, setSaving] = useState(false);
-
-  function startEdit(p: any) {
-    setEditing(p); setName(p?.name || ""); setSlug(p?.slug || ""); setPrice(String(p?.price || "")); setDesc(p?.description || ""); setStatus(p?.status || "publish"); setStockStatus(p?.stockStatus || "instock");
-  }
-
-  async function handleSave() {
-    setSaving(true);
-    try {
-      const body: any = { name, slug: slug || name.toLowerCase().replace(/\s+/g, "-"), price, regularPrice: price, description: desc, status, stockStatus };
-      if (editing?.id) body.id = editing.id;
-      await fetch(`${API}/products`, { method: editing?.id ? "PUT" : "POST", headers: { "Content-Type": "application/json" }, credentials: "include", body: JSON.stringify(body) });
-      toast("Produkt erfolgreich gespeichert");
-      setEditing(undefined); mutate();
-    } catch { toast("Fehler beim Speichern", "error"); } finally { setSaving(false); }
-  }
-
-  async function handleDelete(id: string) {
-    if (!confirm("Produkt löschen?")) return;
-    try {
-      await fetch(`${API}/products?id=${id}`, { method: "DELETE", credentials: "include" });
-      toast("Produkt gelöscht");
-      mutate();
-    } catch { toast("Fehler beim Löschen", "error"); }
-  }
-
-  if (editing !== undefined) {
-    return (
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-white">{editing?.id ? "Produkt bearbeiten" : "Neues Produkt"}</h2>
-          <div className="flex gap-2">
-            <button onClick={() => setEditing(undefined)} className="px-4 py-2 rounded-lg border border-white/10 text-white/60 hover:bg-white/5"><X className="w-4 h-4" /></button>
-            <button onClick={handleSave} disabled={saving} className="px-6 py-2 rounded-lg bg-primary text-white font-medium flex items-center gap-2"><Save className="w-4 h-4" />{saving ? "..." : "Speichern"}</button>
-          </div>
-        </div>
-        <div className="grid md:grid-cols-2 gap-4">
-          <div><label className="block text-xs text-white/40 mb-1">Name</label><input value={name} onChange={e => setName(e.target.value)} className="w-full px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none" /></div>
-          <div><label className="block text-xs text-white/40 mb-1">Slug</label><input value={slug} onChange={e => setSlug(e.target.value)} className="w-full px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white/60 text-sm focus:border-primary focus:outline-none" /></div>
-          <div><label className="block text-xs text-white/40 mb-1">Preis (EUR)</label><input type="number" step="0.01" value={price} onChange={e => setPrice(e.target.value)} className="w-full px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none" /></div>
-          <div><label className="block text-xs text-white/40 mb-1">Status</label>
-            <select value={status} onChange={e => setStatus(e.target.value)} className="w-full px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none"><option value="publish">Publish</option><option value="draft">Draft</option></select>
-          </div>
-          <div><label className="block text-xs text-white/40 mb-1">Bestand</label>
-            <select value={stockStatus} onChange={e => setStockStatus(e.target.value)} className="w-full px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white focus:border-primary focus:outline-none"><option value="instock">Auf Lager</option><option value="outofstock">Ausverkauft</option></select>
-          </div>
-        </div>
-        <div><label className="block text-xs text-white/40 mb-1">Beschreibung</label><textarea value={desc} onChange={e => setDesc(e.target.value)} rows={8} className="w-full px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none" /></div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-4">
-      <SearchBar
-        value={search}
-        onChange={setSearch}
-        placeholder="Produkte suchen..."
-        count={total}
-        suffix={<button onClick={() => startEdit(null)} className="px-4 py-2.5 rounded-xl bg-primary text-white font-medium text-sm flex items-center gap-2"><Plus className="w-4 h-4" /> Neu</button>}
-      />
-
-      {error ? <ErrorState onRetry={() => mutate()} /> : isLoading ? <SkeletonTable /> : products.length === 0 ? (
-        <EmptyState icon={Package} title={debouncedSearch ? "Keine Ergebnisse" : "Keine Produkte"} />
-      ) : (
-        <>
-          <div className="space-y-2">
-            {products.map((p: any) => (
-              <div key={p.id} className="flex items-center justify-between p-4 rounded-xl bg-dark-900/60 border border-white/[0.04] hover:border-white/10 transition-colors">
-                <div className="flex items-center gap-4 flex-1">
-                  {p.images?.[0] && <img src={p.images[0].src} alt="" className="w-12 h-12 rounded-lg object-cover border border-white/10" />}
-                  <div className="min-w-0">
-                    <h3 className="text-white font-medium">{p.name}</h3>
-                    <p className="text-white/40 text-xs">SKU: {p.sku || "-"} | Bestellt: {p._count?.orderItems || 0}x</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 ml-4">
-                  <span className="text-white font-semibold">{formatEuro(p.price)}</span>
-                  <Badge status={p.stockStatus} />
-                  <button onClick={() => startEdit(p)} className="p-2 rounded-lg hover:bg-white/5 text-white/40 hover:text-white"><Pencil className="w-4 h-4" /></button>
-                  <button onClick={() => handleDelete(p.id)} className="p-2 rounded-lg hover:bg-red-500/10 text-white/40 hover:text-red-400"><Trash2 className="w-4 h-4" /></button>
-                </div>
-              </div>
-            ))}
           </div>
           <Pagination page={page} totalPages={totalPages} total={total} limit={20} onPageChange={setPage} />
         </>
@@ -2580,7 +2461,7 @@ function AdminPageInner() {
             {tab === "pages" && <CMSListTab type="pages" token={token} />}
             {tab === "posts" && <BlogTab token={token} />}
             {tab === "seo" && <SEOTab token={token} />}
-            {tab === "products" && <ProductsTab token={token} />}
+            {tab === "products" && <ProductsManager token={token || ''} />}
             {tab === "orders" && <OrdersTab token={token} />}
             {tab === "customers" && <CustomersTab token={token} />}
             {tab === "payments" && <PaymentsTab token={token} />}

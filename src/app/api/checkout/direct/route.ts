@@ -3,6 +3,7 @@ import { createOrder } from '@/lib/db';
 import prisma from '@/lib/db';
 import {
   createMolliePayment,
+  createMollieOrder,
   isMollieMethod,
   getCheckoutMollieMethod,
 } from '@/lib/payments';
@@ -10,6 +11,7 @@ import { createPayPalOrder } from '@/lib/paypal';
 import { rateLimit, getClientIP } from '@/lib/rate-limit';
 import { paymentLog } from '@/lib/payment-logger';
 import { triggerInvoiceEmail } from '@/lib/trigger-invoice';
+import { checkoutDirectSchema, formatZodErrors } from '@/lib/validations';
 import crypto from 'crypto';
 
 const SITE_URL =
@@ -80,47 +82,36 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const body = await request.json();
+    const rawBody = await request.json();
+
+    // ── Zod Validation ──
+    const parsed = checkoutDirectSchema.safeParse(rawBody);
+    if (!parsed.success) {
+      return NextResponse.json(formatZodErrors(parsed.error), { status: 400 });
+    }
+    const body = parsed.data;
 
     const {
       firstName,
       lastName,
       email,
       phone,
-      address,
+      street: address,
       city,
       postcode,
       paymentMethod,
       customerNote,
-      orderItems,
       couponCode: rawCouponCode,
     } = body;
 
-    // Validate required fields
-    if (!firstName || !lastName || !email || !phone || !paymentMethod || !orderItems) {
-      return NextResponse.json(
-        { error: 'Pflichtfelder fehlen' },
-        { status: 400 }
-      );
-    }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: 'Ungültige E-Mail-Adresse' },
-        { status: 400 }
-      );
-    }
-
-    // Validate payment method
-    const validMethods = ['paypal', 'applepay', 'creditcard', 'klarna', 'sepa'];
-    if (!validMethods.includes(paymentMethod)) {
-      return NextResponse.json(
-        { error: 'Ungültige Zahlungsmethode' },
-        { status: 400 }
-      );
-    }
+    // Map from Zod schema field names to orderItems
+    const orderItems = {
+      productSlug: body.productId === 'anmeldung' ? 'auto-online-anmelden' : 'fahrzeugabmeldung',
+      productName: body.productName || (body.productId === 'anmeldung' ? 'Fahrzeug online anmelden' : 'Fahrzeugabmeldung'),
+      selectedService: body.serviceData?.serviceLabel,
+      addons: body.addons,
+      formData: body.serviceData,
+    };
 
     const paymentMethodTitles: Record<string, string> = {
       paypal: 'PayPal',
@@ -389,9 +380,8 @@ export async function POST(request: NextRequest) {
           orderId: order.id,
           orderNumber: order.orderNumber!,
           amount: serverGrandTotal,
-          description: `Bestellung ${order.orderNumber}`,
-          returnUrl: `${SITE_URL}/api/paypal/capture/`,
-          cancelUrl: `${SITE_URL}/zahlung-fehlgeschlagen/`,
+          description: serviceName,
+          email,
         });
 
         // Store PayPal order ID and gateway info
@@ -413,15 +403,20 @@ export async function POST(request: NextRequest) {
         });
       } else if (paymentMethod === 'sepa') {
         // ── SEPA: Mollie Bank Transfer — send invoice immediately ──
-        const mollieMethod = getCheckoutMollieMethod(paymentMethod)!;
         const mollieResult = await createMolliePayment({
+          firstName,
+          lastName,
+          street: address,
+          postcode,
+          city,
+          phone,
+          email,
+          paymentMethod: 'sepa',
+          productId: orderItems.productSlug,
+          amount: serverGrandTotal.toFixed(2),
+          description: `Bestellung ${order.orderNumber}`,
           orderId: order.id,
           orderNumber: order.orderNumber!,
-          amount: serverGrandTotal,
-          description: `Bestellung ${order.orderNumber}`,
-          method: mollieMethod,
-          redirectUrl: `${SITE_URL}/api/payment/callback/?orderId=${order.id}`,
-          webhookUrl: `${SITE_URL}/api/webhooks/mollie/`,
         });
 
         await prisma.payment.updateMany({
@@ -451,17 +446,44 @@ export async function POST(request: NextRequest) {
         });
       } else if (isMollieMethod(paymentMethod)) {
         // ── Mollie Flow (creditcard, applepay, klarna) ──
-        const mollieMethod = getCheckoutMollieMethod(paymentMethod)!;
+        const isKlarna = paymentMethod === 'klarna';
 
-        const mollieResult = await createMolliePayment({
-          orderId: order.id,
-          orderNumber: order.orderNumber!,
-          amount: serverGrandTotal,
-          description: `Bestellung ${order.orderNumber}`,
-          method: mollieMethod,
-          redirectUrl: `${SITE_URL}/api/payment/callback/?orderId=${order.id}`,
-          webhookUrl: `${SITE_URL}/api/webhooks/mollie/`,
-        });
+        const mollieResult = isKlarna
+          ? await createMollieOrder({
+              firstName,
+              lastName,
+              street: address,
+              postcode,
+              city,
+              phone,
+              email,
+              paymentMethod,
+              productId: orderItems.productSlug,
+              amount: serverGrandTotal.toFixed(2),
+              description: serviceName,
+              orderId: order.id,
+              orderNumber: order.orderNumber!,
+              productName: serviceName,
+              productPrice: serverSubtotal,
+              paymentFee: serverPaymentFee,
+              discountAmount,
+              couponCode,
+            })
+          : await createMolliePayment({
+              firstName,
+              lastName,
+              street: address,
+              postcode,
+              city,
+              phone,
+              email,
+              paymentMethod,
+              productId: orderItems.productSlug,
+              amount: serverGrandTotal.toFixed(2),
+              description: `Bestellung ${order.orderNumber}`,
+              orderId: order.id,
+              orderNumber: order.orderNumber!,
+            });
 
         // Store Mollie payment ID and gateway info
         await prisma.payment.updateMany({

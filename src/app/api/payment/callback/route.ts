@@ -9,7 +9,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
-import { getMolliePayment } from '@/lib/payments';
+import { getMolliePayment, getMollieOrderStatus } from '@/lib/payments';
 import { triggerInvoiceEmail } from '@/lib/trigger-invoice';
 
 export const dynamic = 'force-dynamic';
@@ -46,11 +46,14 @@ export async function GET(request: NextRequest) {
 
     // Payment still pending — check Mollie API directly
     const transactionId = order.payment.transactionId;
-    if (!transactionId || !transactionId.startsWith('tr_')) {
+    if (!transactionId || (!transactionId.startsWith('tr_') && !transactionId.startsWith('ord_'))) {
       return NextResponse.redirect(new URL('/zahlung-fehlgeschlagen/', request.url));
     }
 
-    const molliePayment = await getMolliePayment(transactionId);
+    const isOrder = transactionId.startsWith('ord_');
+    const molliePayment = isOrder
+      ? await getMollieOrderStatus(transactionId)
+      : await getMolliePayment(transactionId);
 
     if (molliePayment.status === 'paid') {
       // Update DB (webhook might not have fired yet)

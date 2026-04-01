@@ -10,7 +10,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
-import { getMolliePayment } from '@/lib/payments';
+import { getMolliePayment, getMollieOrderStatus } from '@/lib/payments';
 import { triggerInvoiceEmail } from '@/lib/trigger-invoice';
 import { paymentLog } from '@/lib/payment-logger';
 
@@ -30,7 +30,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Fetch actual payment status from Mollie API (secure verification)
-    const molliePayment = await getMolliePayment(paymentId);
+    // Handle both payment IDs (tr_) and order IDs (ord_ for Klarna)
+    const isOrder = paymentId.startsWith('ord_');
+    const molliePayment = isOrder
+      ? await getMollieOrderStatus(paymentId)
+      : await getMolliePayment(paymentId);
 
     // Get orderId from payment metadata
     const orderId = molliePayment.metadata?.orderId;

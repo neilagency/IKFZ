@@ -27,9 +27,15 @@ export const checkoutDirectSchema = z.object({
     .max(255),
   paymentMethod: z.string().min(1, 'Zahlungsmethode ist erforderlich'),
   productId: z.string().min(1).max(100).optional().default('abmeldung'),
+  productName: z.string().max(200).optional().default(''),
   productPrice: z.string().optional(),
   serviceData: z.record(z.any()).optional().default({}),
   couponCode: z.string().max(50).optional().default(''),
+  customerNote: z.string().max(2000).optional().default(''),
+  addons: z.array(z.object({
+    label: z.string().max(200),
+    price: z.number().optional(),
+  })).optional().default([]),
 });
 
 export type CheckoutDirectInput = z.infer<typeof checkoutDirectSchema>;

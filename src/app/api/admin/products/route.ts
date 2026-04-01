@@ -1,7 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import prisma from '@/lib/db';
-import { verifyAuth, unauthorized, requireRole, forbiddenResponse } from '@/lib/auth';
+import { verifyAuth, unauthorized } from '@/lib/auth';
 import { priceEvents } from '@/lib/price-events';
+import { productCreateSchema, productUpdateSchema, formatZodErrors } from '@/lib/validations';
+
+export const dynamic = 'force-dynamic';
+
+function jsonResponse(data: unknown, cacheSecs = 5) {
+  return new NextResponse(JSON.stringify(data), {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': `private, max-age=${cacheSecs}, stale-while-revalidate=${cacheSecs * 6}`,
+    },
+  });
+}
 
 // GET /api/admin/products - List products with pagination
 export async function GET(req: NextRequest) {
@@ -9,28 +23,75 @@ export async function GET(req: NextRequest) {
   if (!user) return unauthorized();
 
   const searchParams = req.nextUrl.searchParams;
+
+  // Single product by ID (for edit form)
+  const id = searchParams.get('id');
+  if (id) {
+    try {
+      const product = await prisma.product.findUnique({ where: { id } });
+      if (!product) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+      return NextResponse.json(product);
+    } catch (error) {
+      console.error('Product fetch error:', error);
+      return NextResponse.json({ error: 'Server error' }, { status: 500 });
+    }
+  }
+
   const search = searchParams.get('search') || '';
   const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
-  const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '30')));
+  const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '20')));
 
-  const where = search ? { name: { contains: search } } : undefined;
+  // If ?all=true, return all products (for dropdowns etc.)
+  const fetchAll = searchParams.get('all') === 'true';
 
-  const [products, total] = await Promise.all([
-    prisma.product.findMany({
-      where,
-      include: {
-        images: { orderBy: { position: 'asc' } },
-        productCategories: { include: { category: true } },
-        _count: { select: { orderItems: true } },
-      },
-      orderBy: { createdAt: 'desc' },
-      skip: (page - 1) * limit,
-      take: limit,
-    }),
-    prisma.product.count({ where }),
-  ]);
+  const where: Record<string, unknown> = {};
+  if (search) {
+    (where as any).OR = [
+      { name: { contains: search } },
+      { slug: { contains: search } },
+      { serviceType: { contains: search } },
+    ];
+  }
 
-  return NextResponse.json({ products, total, page, totalPages: Math.ceil(total / limit) });
+  try {
+    if (fetchAll) {
+      const products = await prisma.product.findMany({
+        select: { id: true, name: true, slug: true, price: true, isActive: true },
+        orderBy: { createdAt: 'desc' },
+        take: 500,
+      });
+      return NextResponse.json(products);
+    }
+
+    const [products, total] = await Promise.all([
+      prisma.product.findMany({
+        where,
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          price: true,
+          isActive: true,
+          serviceType: true,
+          formType: true,
+          featuredImage: true,
+          createdAt: true,
+        },
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+      prisma.product.count({ where }),
+    ]);
+
+    return jsonResponse({
+      products,
+      pagination: { page, limit, total, pages: Math.ceil(total / limit) },
+    });
+  } catch (error) {
+    console.error('Products API error:', error);
+    return NextResponse.json({ error: 'Server error' }, { status: 500 });
+  }
 }
 
 // POST /api/admin/products - Create a product
@@ -39,27 +100,59 @@ export async function POST(req: NextRequest) {
   if (!user) return unauthorized();
 
   try {
-    const data = await req.json();
+    const body = await req.json();
+
+    // Zod validation
+    const parsed = productCreateSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(formatZodErrors(parsed.error), { status: 400 });
+    }
+    const data = parsed.data;
+
+    // Generate slug from name if not provided
+    const slug = data.slug || data.name
+      .toLowerCase()
+      .replace(/[äÄ]/g, 'ae').replace(/[öÖ]/g, 'oe').replace(/[üÜ]/g, 'ue').replace(/ß/g, 'ss')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+
     const product = await prisma.product.create({
       data: {
         name: data.name,
-        slug: data.slug || data.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
-        type: data.type || 'simple',
-        status: data.status || 'publish',
-        description: data.description || null,
-        shortDescription: data.shortDescription || null,
-        sku: data.sku || null,
-        price: parseFloat(data.price) || 0,
-        regularPrice: parseFloat(data.regularPrice) || 0,
-        salePrice: data.salePrice ? parseFloat(data.salePrice) : null,
-        stockStatus: data.stockStatus || 'instock',
-        stockQuantity: data.stockQuantity || null,
-        featured: data.featured || false,
+        slug,
+        price: data.price,
+        description: data.description,
+        options: data.options,
+        isActive: data.isActive,
+        serviceType: data.serviceType,
+        content: data.content,
+        heroTitle: data.heroTitle,
+        heroSubtitle: data.heroSubtitle,
+        featuredImage: data.featuredImage,
+        faqItems: data.faqItems,
+        metaTitle: data.metaTitle,
+        metaDescription: data.metaDescription,
+        canonical: data.canonical,
+        robots: data.robots,
+        ogTitle: data.ogTitle,
+        ogDescription: data.ogDescription,
+        ogImage: data.ogImage,
+        formType: data.formType,
       },
     });
+
+    try {
+      revalidatePath('/');
+      revalidatePath('/sitemap.xml');
+      revalidateTag('products');
+    } catch (e) {
+      console.warn('Revalidation warning:', e);
+    }
+
     return NextResponse.json(product, { status: 201 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    console.error('Product create error:', error);
+    return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
 
@@ -69,8 +162,14 @@ export async function PUT(req: NextRequest) {
   if (!user) return unauthorized();
 
   try {
-    const data = await req.json();
-    if (!data.id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
+    const body = await req.json();
+
+    // Zod validation
+    const parsed = productUpdateSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(formatZodErrors(parsed.error), { status: 400 });
+    }
+    const data = parsed.data;
 
     // Check slug uniqueness
     if (data.slug) {
@@ -85,17 +184,24 @@ export async function PUT(req: NextRequest) {
       data: {
         name: data.name,
         slug: data.slug,
-        status: data.status,
+        price: data.price,
         description: data.description,
-        shortDescription: data.shortDescription,
-        sku: data.sku,
-        price: data.price !== undefined ? parseFloat(data.price) : undefined,
-        regularPrice: data.regularPrice !== undefined ? parseFloat(data.regularPrice) : undefined,
-        salePrice: data.salePrice !== undefined ? parseFloat(data.salePrice) : undefined,
-        stockStatus: data.stockStatus,
-        stockQuantity: data.stockQuantity,
-        featured: data.featured,
-        options: data.options !== undefined ? data.options : undefined,
+        options: data.options,
+        isActive: data.isActive,
+        serviceType: data.serviceType,
+        content: data.content,
+        heroTitle: data.heroTitle,
+        heroSubtitle: data.heroSubtitle,
+        featuredImage: data.featuredImage,
+        faqItems: data.faqItems,
+        metaTitle: data.metaTitle,
+        metaDescription: data.metaDescription,
+        canonical: data.canonical,
+        robots: data.robots,
+        ogTitle: data.ogTitle,
+        ogDescription: data.ogDescription,
+        ogImage: data.ogImage,
+        formType: data.formType,
       },
     });
 
@@ -106,17 +212,26 @@ export async function PUT(req: NextRequest) {
       options: product.options ?? null,
     });
 
+    try {
+      revalidatePath('/');
+      revalidatePath(`/product/${product.slug}`);
+      revalidatePath('/sitemap.xml');
+      revalidateTag('products');
+    } catch (e) {
+      console.warn('Revalidation warning:', e);
+    }
+
     return NextResponse.json(product);
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    console.error('Product update error:', error);
+    return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
 
-// DELETE /api/admin/products - Delete a product (admin only)
+// DELETE /api/admin/products - Delete a product
 export async function DELETE(req: NextRequest) {
   const user = verifyAuth(req);
   if (!user) return unauthorized();
-  if (!requireRole(user, 'admin')) return forbiddenResponse();
 
   const id = req.nextUrl.searchParams.get('id');
   if (!id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
@@ -125,8 +240,18 @@ export async function DELETE(req: NextRequest) {
     await prisma.productImage.deleteMany({ where: { productId: id } });
     await prisma.productProductCategory.deleteMany({ where: { productId: id } });
     await prisma.product.delete({ where: { id } });
+
+    try {
+      revalidatePath('/');
+      revalidatePath('/sitemap.xml');
+      revalidateTag('products');
+    } catch (e) {
+      console.warn('Revalidation warning:', e);
+    }
+
     return NextResponse.json({ success: true });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    console.error('Product delete error:', error);
+    return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }

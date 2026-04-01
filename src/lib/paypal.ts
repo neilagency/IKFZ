@@ -18,6 +18,8 @@ const PAYPAL_BASE_URL =
     ? 'https://api-m.sandbox.paypal.com'
     : 'https://api-m.paypal.com';
 
+const SITE_URL = process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://ikfzdigitalzulassung.de';
+
 /* ── Access Token (cached) ─────────────────────────────────── */
 let _accessToken: string | null = null;
 let _tokenExpiry = 0;
@@ -152,11 +154,10 @@ export async function getPayPalCaptureRefunds(
 /* ── Create PayPal Order ──────────────────────────────────── */
 export interface CreatePayPalOrderParams {
   orderId: string;
-  orderNumber: string;
-  amount: number;
+  orderNumber: number | string;
+  amount: number | string;
   description: string;
-  returnUrl: string;
-  cancelUrl: string;
+  email: string;
 }
 
 export interface PayPalOrderResult {
@@ -169,35 +170,44 @@ export async function createPayPalOrder(
   params: CreatePayPalOrderParams,
 ): Promise<PayPalOrderResult> {
   const token = await getAccessToken();
+  const amountValue = typeof params.amount === 'number' ? params.amount.toFixed(2) : params.amount;
+
+  const body = {
+    intent: 'CAPTURE',
+    purchase_units: [
+      {
+        reference_id: params.orderId,
+        description: `Bestellung #${params.orderNumber} – ${params.description}`.slice(0, 127),
+        amount: {
+          currency_code: 'EUR',
+          value: amountValue,
+        },
+        custom_id: params.orderId,
+        invoice_id: `ORD-${params.orderNumber}`,
+      },
+    ],
+    payment_source: {
+      paypal: {
+        experience_context: {
+          brand_name: 'iKFZ Digital Zulassung',
+          locale: 'de-DE',
+          landing_page: 'LOGIN',
+          user_action: 'PAY_NOW',
+          return_url: `${SITE_URL}/api/paypal/capture?orderId=${params.orderId}`,
+          cancel_url: `${SITE_URL}/zahlung-fehlgeschlagen?order=${params.orderNumber}`,
+        },
+      },
+    },
+  };
 
   const res = await fetch(`${PAYPAL_BASE_URL}/v2/checkout/orders`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
-      'PayPal-Request-Id': params.orderId,
+      Prefer: 'return=representation',
     },
-    body: JSON.stringify({
-      intent: 'CAPTURE',
-      purchase_units: [
-        {
-          reference_id: params.orderId,
-          description: params.description.slice(0, 127),
-          custom_id: params.orderNumber,
-          amount: {
-            currency_code: 'EUR',
-            value: params.amount.toFixed(2),
-          },
-        },
-      ],
-      application_context: {
-        return_url: params.returnUrl,
-        cancel_url: params.cancelUrl,
-        brand_name: 'iKFZ Digital Zulassung',
-        user_action: 'PAY_NOW',
-        shipping_preference: 'NO_SHIPPING',
-      },
-    }),
+    body: JSON.stringify(body),
   });
 
   if (!res.ok) {
@@ -208,20 +218,28 @@ export async function createPayPalOrder(
 
   const data = await res.json();
   const approvalLink = data.links?.find(
+    (l: { rel: string; href: string }) => l.rel === 'payer-action',
+  ) || data.links?.find(
     (l: { rel: string; href: string }) => l.rel === 'approve',
   );
 
+  if (!approvalLink) {
+    throw new Error('PayPal did not return an approval URL');
+  }
+
   return {
     paypalOrderId: data.id,
-    approvalUrl: approvalLink?.href || '',
+    approvalUrl: approvalLink.href,
     status: data.status,
   };
 }
 
 /* ── Capture PayPal Order ─────────────────────────────────── */
 export interface PayPalCaptureResult {
+  paypalOrderId: string;
   captureId: string;
   status: string;
+  payerEmail: string;
   amount: string;
 }
 
@@ -251,8 +269,28 @@ export async function capturePayPalOrder(
   const capture = data.purchase_units?.[0]?.payments?.captures?.[0];
 
   return {
+    paypalOrderId: data.id,
     captureId: capture?.id || data.id || '',
     status: data.status || '',
+    payerEmail: data.payer?.email_address || '',
     amount: capture?.amount?.value || '',
   };
+}
+
+/* ── Get PayPal Order Details ──────────────────────────────── */
+export async function getPayPalOrder(paypalOrderId: string) {
+  const token = await getAccessToken();
+
+  const res = await fetch(
+    `${PAYPAL_BASE_URL}/v2/checkout/orders/${encodeURIComponent(paypalOrderId)}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    },
+  );
+
+  if (!res.ok) {
+    throw new Error(`PayPal get order failed (${res.status})`);
+  }
+
+  return res.json();
 }
