@@ -2139,7 +2139,13 @@ function BlogTab({ token }: { token: string }) {
                 <div className="flex items-center gap-2">
                   <Badge status={post.status} />
                   <a href={`/${post.slug}/`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg hover:bg-white/5 text-white/30 hover:text-white transition-colors"><Eye className="w-4 h-4" /></a>
-                  <button onClick={() => setEditing(post)} className="p-2 rounded-lg hover:bg-white/5 text-white/30 hover:text-white transition-colors"><Pencil className="w-4 h-4" /></button>
+                  <button onClick={async () => {
+                    try {
+                      const res = await fetch(`${API}/blog/${post.id}`, { credentials: 'include' });
+                      if (res.ok) { const full = await res.json(); setEditing(full); }
+                      else { setEditing(post); }
+                    } catch { setEditing(post); }
+                  }} className="p-2 rounded-lg hover:bg-white/5 text-white/30 hover:text-white transition-colors"><Pencil className="w-4 h-4" /></button>
                   <button onClick={() => handleDelete(post.id)} className="p-2 rounded-lg hover:bg-red-500/10 text-white/30 hover:text-red-400 transition-colors"><Trash2 className="w-4 h-4" /></button>
                 </div>
               </div>

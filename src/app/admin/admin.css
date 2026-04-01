@@ -78,6 +78,10 @@
   color: #111827;
 }
 
+.admin-light .text-white\/80 {
+  color: #1f2937;
+}
+
 .admin-light .text-white\/70 {
   color: #374151;
 }
@@ -292,6 +296,25 @@
 
 .admin-light p.text-white\/80 {
   color: #1f2937;
+}
+
+/* ══ TIPTAP / PROSEMIRROR EDITOR ═══════════════════════════ */
+
+.admin-light .ProseMirror {
+  color: #111827 !important;
+}
+
+.admin-light .ProseMirror p,
+.admin-light .ProseMirror h2,
+.admin-light .ProseMirror h3,
+.admin-light .ProseMirror h4,
+.admin-light .ProseMirror li,
+.admin-light .ProseMirror blockquote {
+  color: #111827;
+}
+
+.admin-light .ProseMirror p.is-editor-empty:first-child::before {
+  color: #9ca3af;
 }
 
 /* ══ SCROLLBAR (subtle in light mode) ═════════════════════ */
