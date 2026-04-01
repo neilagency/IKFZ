@@ -38,11 +38,13 @@ const badges: { icon: typeof RefreshCcw; getContent: (content: typeof homepageCo
 export default function TrustBadges() {
   return (
     <section className="py-14 md:py-20 bg-dark-950 relative overflow-hidden">
-      {/* Top transition gradient */}
-      <div className="absolute top-0 inset-x-0 h-16 bg-gradient-to-b from-dark-900/50 to-transparent" />
-      {/* Decorative gradient orbs */}
-      <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-primary/8 rounded-full blur-[120px]" />
-      <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-primary/5 rounded-full blur-[100px]" />
+      {/* Background gradient - same as Hero */}
+      <div className="absolute inset-0 bg-gradient-to-br from-dark-950 via-dark-900 to-dark-950" />
+      {/* Green accent orbs */}
+      <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-primary/15 blur-[40px]" />
+      <div className="absolute bottom-[-20%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/10 blur-[30px]" />
+      {/* Grid pattern */}
+      <div className="absolute inset-0 opacity-[0.03] hero-grid-pattern" />
 
       <div className="container-main relative">
         <motion.div
