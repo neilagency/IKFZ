@@ -376,8 +376,8 @@ export default function ProductsManager({ token }: { token?: string }) {
       const payload = {
         ...editProduct,
         slug: editProduct.slug || generateSlug(editProduct.name),
-        options: JSON.stringify(editProduct.options),
-        faqItems: JSON.stringify(editProduct.faqItems),
+        options: JSON.stringify(Array.isArray(editProduct.options) ? editProduct.options : []),
+        faqItems: JSON.stringify(Array.isArray(editProduct.faqItems) ? editProduct.faqItems : []),
       };
       const res = await fetch(`${API}/products`, {
         method: isNew ? 'POST' : 'PUT',
@@ -432,16 +432,19 @@ export default function ProductsManager({ token }: { token?: string }) {
   };
 
   /* ── Options helpers ── */
+  const getOptions = (): ProductOption[] =>
+    Array.isArray(editProduct?.options) ? editProduct!.options : [];
+
   const addOption = () => {
     if (editProduct)
       setField('options', [
-        ...editProduct.options,
+        ...getOptions(),
         { name: '', price: 0, key: '' },
       ]);
   };
   const updateOption = (i: number, key: string, val: any) => {
     if (!editProduct) return;
-    const opts = [...editProduct.options];
+    const opts = [...getOptions()];
     opts[i] = {
       ...opts[i],
       [key]: key === 'price' ? parseFloat(val) || 0 : val,
@@ -452,18 +455,21 @@ export default function ProductsManager({ token }: { token?: string }) {
     if (editProduct)
       setField(
         'options',
-        editProduct.options.filter((_, idx) => idx !== i),
+        getOptions().filter((_, idx) => idx !== i),
       );
   };
 
   /* ── FAQ helpers ── */
+  const getFaqs = (): FaqItem[] =>
+    Array.isArray(editProduct?.faqItems) ? editProduct!.faqItems : [];
+
   const addFaq = () => {
     if (editProduct)
-      setField('faqItems', [...editProduct.faqItems, { q: '', a: '' }]);
+      setField('faqItems', [...getFaqs(), { q: '', a: '' }]);
   };
   const updateFaq = (i: number, key: 'q' | 'a', val: string) => {
     if (!editProduct) return;
-    const faqs = [...editProduct.faqItems];
+    const faqs = [...getFaqs()];
     faqs[i] = { ...faqs[i], [key]: val };
     setField('faqItems', faqs);
   };
@@ -471,7 +477,7 @@ export default function ProductsManager({ token }: { token?: string }) {
     if (editProduct)
       setField(
         'faqItems',
-        editProduct.faqItems.filter((_, idx) => idx !== i),
+        getFaqs().filter((_, idx) => idx !== i),
       );
   };
 
@@ -695,11 +701,11 @@ export default function ProductsManager({ token }: { token?: string }) {
                   <Plus className="w-3.5 h-3.5" /> Option hinzufügen
                 </button>
               </div>
-              {editProduct.options.length === 0 && (
+              {getOptions().length === 0 && (
                 <p className="text-xs text-gray-400">Keine Optionen.</p>
               )}
               <div className="space-y-2">
-                {editProduct.options.map((opt, i) => (
+                {getOptions().map((opt, i) => (
                   <div
                     key={i}
                     className="flex gap-2 items-center bg-gray-50 p-3 rounded-lg border border-gray-100"
@@ -991,14 +997,14 @@ export default function ProductsManager({ token }: { token?: string }) {
                 <Plus className="w-3.5 h-3.5" /> FAQ hinzufügen
               </button>
             </div>
-            {editProduct.faqItems.length === 0 && (
+            {getFaqs().length === 0 && (
               <div className="text-center py-10">
                 <MessageSquare className="w-10 h-10 text-gray-300 mx-auto mb-3" />
                 <p className="text-sm text-gray-400">Keine FAQ-Einträge.</p>
               </div>
             )}
             <div className="space-y-4">
-              {editProduct.faqItems.map((faq, i) => (
+              {getFaqs().map((faq, i) => (
                 <div
                   key={i}
                   className="bg-gray-50 rounded-xl p-4 relative border border-gray-100"
