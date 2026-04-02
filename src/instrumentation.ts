@@ -7,18 +7,18 @@ export async function register() {
     // ── Database Connection Verification ──
     console.log('[STARTUP] ════════════════════════════════════════');
     console.log('[STARTUP] NODE_ENV:', process.env.NODE_ENV);
-    console.log('[STARTUP] DB_PATH:', process.env.DB_PATH || '(not set — will use fallback)');
+    console.log('[STARTUP] DB_PATH:', process.env.DB_PATH || '(not set)');
     console.log('[STARTUP] CWD:', process.cwd());
 
     try {
       const { default: prisma } = await import('@/lib/db');
-      const productCount = await prisma.$queryRawUnsafe('SELECT count(*) as c FROM Product');
-      const orderCount = await prisma.$queryRawUnsafe('SELECT count(*) as c FROM "Order"');
-      const settingCount = await prisma.$queryRawUnsafe('SELECT count(*) as c FROM SiteSetting');
+      const products = await prisma.product.count();
+      const orders = await prisma.order.count();
+      const settings = await prisma.siteSetting.count();
       console.log('[STARTUP] ✅ Database verified:',
-        `Products=${(productCount as any)?.[0]?.c ?? '?'}`,
-        `Orders=${(orderCount as any)?.[0]?.c ?? '?'}`,
-        `Settings=${(settingCount as any)?.[0]?.c ?? '?'}`
+        `Products=${products}`,
+        `Orders=${orders}`,
+        `Settings=${settings}`
       );
     } catch (error) {
       console.error('[STARTUP] ❌ DATABASE CONNECTION FAILED:', error);

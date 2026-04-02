@@ -5,87 +5,52 @@ import fs from 'fs';
 
 /* ── Single Source of Truth: Database Resolution ──────────────────
  *
- * PRODUCTION RUNTIME:
- *   DB_PATH env var is REQUIRED. It must point to the persistent
- *   production.db on the server. If not set or file missing → crash.
- *   Fallback: prisma/production.db symlink (set by deploy scripts).
+ * PRODUCTION (Hostinger / VPS):
+ *   DB_PATH env var → persistent production database.
+ *   Set automatically by scripts/setup-production-db.js (Hostinger)
+ *   or deploy/deploy.sh (VPS). No fallbacks — crash if not set.
  *
- * BUILD TIME (next build):
- *   DB_PATH should point to the database used for page pre-rendering.
- *   On VPS: export DB_PATH=production.db before build.
- *   On local→remote (Hostinger): DB_PATH=dev.db for pre-render,
- *   ISR (revalidate=60) refreshes from production DB at runtime.
+ * DEVELOPMENT (local machine only):
+ *   DB_PATH env var OR prisma/dev.db.
  *
- * DEVELOPMENT:
- *   DB_PATH env var OR prisma/dev.db (local development only).
- *
- * There is NO silent fallback from production RUNTIME → dev.db.
  * ────────────────────────────────────────────────────────────────── */
 
 function getDbPath(): string {
   const isProduction = process.env.NODE_ENV === 'production';
-  // next build sets NEXT_PHASE=phase-production-build
-  const isBuildPhase = process.env.NEXT_PHASE === 'phase-production-build';
 
-  // 1. Explicit DB_PATH env var (set in production deploy & build scripts)
+  // 1. DB_PATH env var — the ONLY path in production
   if (process.env.DB_PATH) {
     if (!fs.existsSync(process.env.DB_PATH)) {
       const msg = `[DB] ❌ DB_PATH is set but file does not exist: ${process.env.DB_PATH}`;
       console.error(msg);
-      if (isProduction && !isBuildPhase) throw new Error(msg);
+      if (isProduction) throw new Error(msg);
     }
     return process.env.DB_PATH;
   }
 
-  // 2. Production fallback: symlink at prisma/production.db (created by deploy scripts)
-  const prodPath = path.join(process.cwd(), 'prisma', 'production.db');
-  if (fs.existsSync(prodPath)) {
-    return prodPath;
-  }
-
-  // 3. Fallback: prisma/dev.db
-  const devPath = path.join(process.cwd(), 'prisma', 'dev.db');
-
-  if (fs.existsSync(devPath)) {
-    if (isProduction) {
-      console.warn('[DB] ⚠ PRODUCTION: using dev.db as fallback. Set DB_PATH for explicit production database.');
-    } else if (isBuildPhase) {
-      console.warn('[DB] ⚠ Build phase: using dev.db for pre-rendering.');
-    }
-    return devPath;
-  }
-
-  // No database found at all
+  // 2. Production WITHOUT DB_PATH → fatal error
   if (isProduction) {
-    const msg = `[DB] ❌ PRODUCTION ERROR: No database found!\n` +
-      `  DB_PATH env: (not set)\n` +
-      `  Symlink: ${prodPath} (not found)\n` +
-      `  dev.db: ${devPath} (not found)\n` +
+    const msg = `[DB] ❌ FATAL: DB_PATH is not set in production!\n` +
       `  cwd: ${process.cwd()}\n` +
-      `  ⚠ Set DB_PATH or copy the database to one of the above paths.`;
+      `  Ensure scripts/setup-production-db.js ran before build,\n` +
+      `  or set DB_PATH manually in your environment.`;
     console.error(msg);
     throw new Error(msg);
   }
 
-  console.error(`[DB] ⚠ Dev database not found at ${devPath}. Run: npx prisma migrate dev`);
+  // 3. Development only: prisma/dev.db
+  const devPath = path.join(process.cwd(), 'prisma', 'dev.db');
+  if (!fs.existsSync(devPath)) {
+    console.error(`[DB] ⚠ Dev database not found at ${devPath}. Run: npx prisma migrate dev`);
+  }
   return devPath;
 }
 
 function createPrismaClient() {
   const dbPath = getDbPath();
-  const isProduction = process.env.NODE_ENV === 'production';
   try {
     const resolvedPath = fs.existsSync(dbPath) ? fs.realpathSync(dbPath) : dbPath;
-
-    // Log which database is actually being used
-    const dbType = resolvedPath.includes('production.db') ? '🟢 PRODUCTION' :
-                   resolvedPath.includes('dev.db') ? '🟡 DEVELOPMENT' : '⚪ UNKNOWN';
-    console.log(`[DB] ${dbType} → ${resolvedPath}`);
-
-    // Safety: warn loudly if production code is hitting dev.db
-    if (isProduction && resolvedPath.includes('dev.db')) {
-      console.error('[DB] ❌ CRITICAL: Production is using dev.db! Set DB_PATH to production.db');
-    }
+    console.log(`[DB] 🟢 → ${resolvedPath}`);
 
     const adapter = new PrismaBetterSqlite3({ url: `file:${resolvedPath}` });
     return new PrismaClient({ adapter });
