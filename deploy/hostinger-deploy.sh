@@ -77,6 +77,16 @@ if [ "$SKIP_BUILD" = false ]; then
     echo "  Generating Prisma client..."
     npx prisma generate
 
+    # For Hostinger deploy: build happens locally, production DB is on the remote server.
+    # Use local dev.db for build-time page pre-rendering. ISR (revalidate=60) will
+    # replace this data with production DB data within 60s of the first request.
+    if [ -f "$PROJECT_ROOT/prisma/dev.db" ]; then
+        export DB_PATH="$PROJECT_ROOT/prisma/dev.db"
+        echo "  ℹ DB_PATH=$DB_PATH (build-time only; ISR fetches from production DB at runtime)"
+    else
+        echo "  ⚠️  No local dev.db found — build pages may fail to pre-render"
+    fi
+
     echo "  Building Next.js (standalone mode)..."
     npm run build
 

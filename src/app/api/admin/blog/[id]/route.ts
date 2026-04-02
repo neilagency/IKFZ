@@ -4,6 +4,8 @@ import { verifyAuth, unauthorized, requireRole, forbiddenResponse } from '@/lib/
 import { blogPostUpdateSchema } from '@/lib/validations';
 import { revalidatePath, revalidateTag } from 'next/cache';
 
+export const dynamic = 'force-dynamic';
+
 function revalidateBlog(slug?: string) {
   if (slug) revalidatePath(`/${slug}`);
   revalidatePath('/insiderwissen');

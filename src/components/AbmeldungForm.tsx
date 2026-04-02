@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { usePriceFeed } from '@/hooks/usePriceFeed';
+import KennzeichenInput from '@/components/KennzeichenInput';
 
 // ── Zod Schema for Abmeldung ──
 const abmeldungSchema = z.object({
@@ -80,6 +81,7 @@ export default function ServiceForm({
     watch,
     trigger,
     getValues,
+    setValue,
     formState: { errors },
   } = useForm<AbmeldungFormData>({
     resolver: zodResolver(abmeldungSchema),
@@ -113,6 +115,9 @@ export default function ServiceForm({
 
   const onSubmit = useCallback(
     (data: AbmeldungFormData) => {
+      // Safety: only allow submission from the final step
+      if (currentStep !== 4) return;
+
       // Save to sessionStorage for checkout page
       const orderData = {
         productName,
@@ -128,7 +133,7 @@ export default function ServiceForm({
       sessionStorage.setItem('checkout_order', JSON.stringify(orderData));
       router.push('/rechnung/');
     },
-    [productName, liveBasePrice, reservierungPrice, totalPrice, router]
+    [currentStep, productName, liveBasePrice, reservierungPrice, totalPrice, router]
   );
 
   return (
@@ -229,27 +234,11 @@ export default function ServiceForm({
                 </div>
 
                 <div className="rounded-2xl bg-white border border-dark-100 shadow-sm p-6 space-y-5">
-                  <div>
-                    <label className="block text-sm font-semibold text-dark-800 mb-2">
-                      Aktuelles Kennzeichen{' '}
-                      <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      {...register('kennzeichen')}
-                      placeholder="z.B. E-AB 1234"
-                      className={cn(
-                        'input-field uppercase',
-                        errors.kennzeichen &&
-                          'border-red-400 focus:ring-red-400 focus:border-red-400'
-                      )}
-                    />
-                    {errors.kennzeichen && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.kennzeichen.message}
-                      </p>
-                    )}
-                  </div>
+                  <KennzeichenInput
+                    value={watch('kennzeichen') || ''}
+                    onChange={(v) => setValue('kennzeichen', v, { shouldValidate: !!errors.kennzeichen })}
+                    error={errors.kennzeichen?.message}
+                  />
 
                   <div>
                     <label className="block text-sm font-semibold text-dark-800 mb-2">
@@ -385,7 +374,7 @@ export default function ServiceForm({
                     Sicherheitscode schnell zu finden.
                   </p>
                   <a
-                    href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                    href="https://www.youtube.com/watch?v=u38keaF1QKU"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 mt-3 text-sm text-primary font-semibold hover:underline"
@@ -520,6 +509,34 @@ export default function ServiceForm({
                     )}
                   </div>
                 </button>
+
+                {/* YouTube reference */}
+                <div className="rounded-2xl bg-primary/[0.04] border border-primary/10 p-5">
+                  <p className="text-sm font-semibold text-dark-700 mb-2">
+                    📹 Video-Anleitung
+                  </p>
+                  <p className="text-xs text-dark-500">
+                    In diesem Video zeigen wir Ihnen, wo Sie die Codes unter den
+                    Stempelplaketten finden.
+                  </p>
+                  <a
+                    href="https://www.youtube.com/watch?v=3nsdJSvKAtE"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 mt-3 text-sm text-primary font-semibold hover:underline"
+                  >
+                    Video ansehen →
+                  </a>
+                </div>
+
+                {/* Motorcycle note */}
+                <div className="rounded-xl bg-amber-50 border border-amber-200 p-4">
+                  <p className="text-xs text-amber-700">
+                    <strong>Hinweis für Motorräder und Anhänger:</strong> Wenn nur
+                    ein Kennzeichen vorhanden ist, geben Sie bitte denselben Code
+                    für vorne und hinten ein.
+                  </p>
+                </div>
               </div>
             )}
 
@@ -706,6 +723,7 @@ export default function ServiceForm({
 
           {currentStep < 4 ? (
             <button
+              key="next-step"
               type="button"
               onClick={nextStep}
               className="btn-primary py-3 px-8"
@@ -713,7 +731,7 @@ export default function ServiceForm({
               Weiter <ArrowRight className="w-4 h-4" />
             </button>
           ) : (
-            <button type="submit" className="btn-primary py-3 px-8">
+            <button key="submit-order" type="submit" className="btn-primary py-3 px-8">
               Weiter zur Kasse <ArrowRight className="w-4 h-4" />
             </button>
           )}

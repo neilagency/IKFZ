@@ -1,8 +1,24 @@
+/**
+ * Seed Products
+ * =============
+ * Run: npx tsx scripts/seed-products.ts
+ *
+ * Uses DB_PATH env var if set (production), otherwise falls back to prisma/dev.db.
+ * To seed production: DB_PATH=/path/to/production.db npx tsx scripts/seed-products.ts
+ */
+
 import { PrismaClient } from '../src/generated/prisma/client';
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 import path from 'path';
+import fs from 'fs';
 
-const dbPath = path.join(process.cwd(), 'prisma', 'dev.db');
+const dbPath = process.env.DB_PATH || path.join(process.cwd(), 'prisma', 'dev.db');
+if (!fs.existsSync(dbPath)) {
+  console.error(`❌ Database not found: ${dbPath}`);
+  console.error('   Set DB_PATH env var or ensure prisma/dev.db exists');
+  process.exit(1);
+}
+console.log(`📦 Seeding products in: ${fs.realpathSync(dbPath)}`);
 const adapter = new PrismaBetterSqlite3({ url: `file:${dbPath}` });
 const prisma = new PrismaClient({ adapter });
 

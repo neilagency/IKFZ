@@ -19,6 +19,10 @@ import {
   X,
   HelpCircle,
   Eye,
+  ChevronDown,
+  AlertTriangle,
+  MessageCircle,
+  Mail,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -33,7 +37,80 @@ const SERVICE_OPTIONS = [
 const AUSWEIS_OPTIONS = [
   { key: 'personalausweis', label: 'Personalausweis (eID)' },
   { key: 'aufenthaltstitel', label: 'Aufenthaltstitel (eAT)' },
+  { key: 'reisepass', label: 'Reisepass' },
 ];
+
+// ── Document requirements per service / ausweis ──
+interface DocConfig {
+  id: string;
+  label: string;
+  exampleImage?: string;
+}
+
+function getVehicleDocs(service: string): DocConfig[] {
+  switch (service) {
+    case 'neuwagen':
+      return [
+        { id: 'fahrzeugbriefVorne', label: 'Fahrzeugbrief (Teil II) – Vorderseite', exampleImage: '/uploads/2025/02/Fahrzeugbrief-800x800.webp' },
+      ];
+    case 'wiederzulassung':
+      return [
+        { id: 'fahrzeugscheinVorne', label: 'Fahrzeugschein (Teil I) – Vorderseite', exampleImage: '/uploads/2025/02/fahrzeugschein-800x800.webp' },
+        { id: 'fahrzeugscheinHinten', label: 'Fahrzeugschein (Teil I) – Rückseite mit Sicherheitscode' },
+      ];
+    default: // neuzulassung, ummeldung
+      return [
+        { id: 'fahrzeugscheinVorne', label: 'Fahrzeugschein (Teil I) – Vorderseite', exampleImage: '/uploads/2025/02/fahrzeugschein-800x800.webp' },
+        { id: 'fahrzeugscheinHinten', label: 'Fahrzeugschein (Teil I) – Rückseite mit Sicherheitscode' },
+        { id: 'fahrzeugbriefVorne', label: 'Fahrzeugbrief (Teil II) – Vorderseite', exampleImage: '/uploads/2025/02/Fahrzeugbrief-800x800.webp' },
+      ];
+  }
+}
+
+function getVerificationDocs(ausweis: string): DocConfig[] {
+  switch (ausweis) {
+    case 'aufenthaltstitel':
+      return [
+        { id: 'aufenthaltstitelVorne', label: 'Aufenthaltstitel – Vorderseite' },
+        { id: 'aufenthaltstitelHinten', label: 'Aufenthaltstitel – Rückseite' },
+      ];
+    case 'reisepass':
+      return [
+        { id: 'reisepassVorne', label: 'Reisepass – Seite mit Foto' },
+        { id: 'meldebescheinigung', label: 'Meldebescheinigung' },
+      ];
+    default: // personalausweis
+      return [
+        { id: 'personalausweisVorne', label: 'Personalausweis – Vorderseite' },
+        { id: 'personalausweisHinten', label: 'Personalausweis – Rückseite' },
+      ];
+  }
+}
+
+// ── Client-side image compression ──
+async function compressImage(file: File, maxBytes = 3.5 * 1024 * 1024): Promise<File> {
+  if (!file.type.startsWith('image/') || file.size <= maxBytes) return file;
+  const img = new window.Image();
+  const url = URL.createObjectURL(file);
+  await new Promise<void>((res, rej) => { img.onload = () => res(); img.onerror = rej; img.src = url; });
+  URL.revokeObjectURL(url);
+  let quality = 0.85;
+  let scale = 1;
+  for (let i = 0; i < 5; i++) {
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width * scale;
+    canvas.height = img.height * scale;
+    const ctx = canvas.getContext('2d')!;
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    const blob = await new Promise<Blob | null>((r) => canvas.toBlob(r, 'image/jpeg', quality));
+    if (blob && blob.size <= maxBytes) {
+      return new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' });
+    }
+    quality = Math.max(quality - 0.1, 0.5);
+    scale = Math.max(scale - 0.15, 0.4);
+  }
+  return file;
+}
 
 // ── Zod Schema ──
 const anmeldungSchema = z.object({
@@ -84,24 +161,13 @@ export default function RegistrationForm({
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Document uploads
-  const [documents, setDocuments] = useState<{
-    fahrzeugschein: DocumentFile | null;
-    fahrzeugbrief: DocumentFile | null;
-    ausweis: DocumentFile | null;
-  }>({
-    fahrzeugschein: null,
-    fahrzeugbrief: null,
-    ausweis: null,
-  });
+  // Document uploads — dynamic keys
+  const [documents, setDocuments] = useState<Record<string, DocumentFile | null>>({});
   const [uploadErrors, setUploadErrors] = useState<Record<string, string>>({});
   const [exampleModal, setExampleModal] = useState<string | null>(null);
+  const [showWichtig, setShowWichtig] = useState(false);
 
-  const fileInputRefs = {
-    fahrzeugschein: useRef<HTMLInputElement>(null),
-    fahrzeugbrief: useRef<HTMLInputElement>(null),
-    ausweis: useRef<HTMLInputElement>(null),
-  };
+  const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   const services = options?.services ?? SERVICE_OPTIONS;
   const reserviertPrice = options?.kennzeichen_reserviert?.price ?? 24.70;
@@ -141,7 +207,7 @@ export default function RegistrationForm({
 
   // ── File handling ──
   const handleFileChange = useCallback(
-    (key: 'fahrzeugschein' | 'fahrzeugbrief' | 'ausweis', e: React.ChangeEvent<HTMLInputElement>) => {
+    (key: string, e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       if (!file) return;
 
@@ -178,7 +244,7 @@ export default function RegistrationForm({
   );
 
   const removeFile = useCallback(
-    (key: 'fahrzeugschein' | 'fahrzeugbrief' | 'ausweis') => {
+    (key: string) => {
       if (documents[key]?.preview) {
         URL.revokeObjectURL(documents[key]!.preview);
       }
@@ -202,18 +268,19 @@ export default function RegistrationForm({
 
   const onSubmit = useCallback(
     async (data: AnmeldungFormData) => {
-      // Validate documents
-      const missingDocs: string[] = [];
-      if (!documents.fahrzeugschein) missingDocs.push('Fahrzeugschein');
-      if (!documents.fahrzeugbrief) missingDocs.push('Fahrzeugbrief');
-      if (!documents.ausweis) missingDocs.push('Ausweisdokument');
+      // Determine required docs
+      const vehicleDocs = getVehicleDocs(data.service);
+      const verifyDocs = getVerificationDocs(data.ausweis);
+      const allRequired = [...vehicleDocs, ...verifyDocs];
 
-      if (missingDocs.length > 0) {
-        const newErrors: Record<string, string> = {};
-        missingDocs.forEach((doc) => {
-          const key = doc === 'Fahrzeugschein' ? 'fahrzeugschein' : doc === 'Fahrzeugbrief' ? 'fahrzeugbrief' : 'ausweis';
-          newErrors[key] = `${doc} ist erforderlich`;
-        });
+      // Validate all required documents are uploaded
+      const newErrors: Record<string, string> = {};
+      for (const doc of allRequired) {
+        if (!documents[doc.id]) {
+          newErrors[doc.id] = `Bitte ${doc.label} hochladen`;
+        }
+      }
+      if (Object.keys(newErrors).length > 0) {
         setUploadErrors(newErrors);
         return;
       }
@@ -221,11 +288,13 @@ export default function RegistrationForm({
       setIsSubmitting(true);
 
       try {
-        // Upload documents
+        // Compress & upload documents
         const formData = new FormData();
-        formData.append('fahrzeugschein', documents.fahrzeugschein!.file);
-        formData.append('fahrzeugbrief', documents.fahrzeugbrief!.file);
-        formData.append('ausweis', documents.ausweis!.file);
+        for (const doc of allRequired) {
+          const docFile = documents[doc.id]!.file;
+          const compressed = await compressImage(docFile);
+          formData.append(doc.id, compressed);
+        }
 
         const uploadRes = await fetch('/api/upload/documents/', {
           method: 'POST',
@@ -286,7 +355,7 @@ export default function RegistrationForm({
     exampleImage,
   }: {
     label: string;
-    docKey: 'fahrzeugschein' | 'fahrzeugbrief' | 'ausweis';
+    docKey: string;
     exampleImage?: string;
   }) => (
     <div className="rounded-xl border border-dark-100 p-4">
@@ -340,12 +409,12 @@ export default function RegistrationForm({
       ) : (
         <button
           type="button"
-          onClick={() => fileInputRefs[docKey].current?.click()}
+          onClick={() => fileInputRefs.current[docKey]?.click()}
           className="w-full p-6 border-2 border-dashed border-dark-200 rounded-xl hover:border-primary/40 hover:bg-primary/[0.02] transition-all flex flex-col items-center gap-2"
         >
           <Upload className="w-6 h-6 text-dark-400" />
           <span className="text-sm text-dark-500">
-            Klicken um hochzuladen
+            Foto aufnehmen oder Datei wählen
           </span>
           <span className="text-xs text-dark-400">
             JPG, PNG, WebP oder PDF (max. 10 MB)
@@ -353,7 +422,7 @@ export default function RegistrationForm({
         </button>
       )}
       <input
-        ref={fileInputRefs[docKey]}
+        ref={(el) => { fileInputRefs.current[docKey] = el; }}
         type="file"
         accept="image/jpeg,image/png,image/webp,application/pdf"
         onChange={(e) => handleFileChange(docKey, e)}
@@ -813,34 +882,89 @@ export default function RegistrationForm({
                   </div>
                 </div>
 
-                {/* Document Uploads */}
+                {/* Document Uploads — Vehicle */}
                 <div className="rounded-2xl bg-white border border-dark-100 shadow-sm p-6 space-y-4">
                   <h3 className="text-sm font-bold text-dark-800 uppercase tracking-wider">
-                    Erforderliche Dokumente
+                    Fahrzeugdokumente
                   </h3>
                   <p className="text-xs text-dark-500">
                     Bitte laden Sie gut lesbare Fotos oder Scans der folgenden
                     Dokumente hoch.
                   </p>
 
-                  <DocumentUpload
-                    label="Fahrzeugschein (ZB Teil I)"
-                    docKey="fahrzeugschein"
-                    exampleImage="/uploads/2025/02/fahrzeugschein-800x800.webp"
-                  />
-                  <DocumentUpload
-                    label="Fahrzeugbrief (ZB Teil II)"
-                    docKey="fahrzeugbrief"
-                    exampleImage="/uploads/2025/02/Fahrzeugbrief-800x800.webp"
-                  />
-                  <DocumentUpload
-                    label="Ausweisdokument (Vorder- & Rückseite)"
-                    docKey="ausweis"
-                  />
+                  {getVehicleDocs(watchService).map((doc) => (
+                    <DocumentUpload
+                      key={doc.id}
+                      label={doc.label}
+                      docKey={doc.id}
+                      exampleImage={doc.exampleImage}
+                    />
+                  ))}
                 </div>
 
+                {/* Document Uploads — Verification */}
+                <div className="rounded-2xl bg-white border border-dark-100 shadow-sm p-6 space-y-4">
+                  <h3 className="text-sm font-bold text-dark-800 uppercase tracking-wider">
+                    Ausweis / Identifikation
+                  </h3>
+
+                  {getVerificationDocs(watch('ausweis')).map((doc) => (
+                    <DocumentUpload
+                      key={doc.id}
+                      label={doc.label}
+                      docKey={doc.id}
+                      exampleImage={doc.exampleImage}
+                    />
+                  ))}
+                </div>
+
+                {/* Contact help box */}
+                <div className="rounded-xl bg-gray-50 border border-gray-200 p-4">
+                  <p className="text-sm text-dark-600 mb-3">
+                    Probleme beim Hochladen? Senden Sie uns die Fotos alternativ
+                    per WhatsApp oder E-Mail.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <a
+                      href="https://wa.me/4915224999190"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#25D366] text-white text-xs font-semibold hover:opacity-90 transition-opacity"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5" /> WhatsApp
+                    </a>
+                    <a
+                      href="mailto:info@ikfzdigitalzulassung.de"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-white text-xs font-semibold hover:opacity-90 transition-opacity"
+                    >
+                      <Mail className="w-3.5 h-3.5" /> E-Mail
+                    </a>
+                  </div>
+                </div>
+
+                {/* Wichtige Informationen */}
+                <details
+                  open={showWichtig}
+                  onToggle={(e) => setShowWichtig((e.target as HTMLDetailsElement).open)}
+                  className="rounded-xl bg-amber-50 border border-amber-200 overflow-hidden"
+                >
+                  <summary className="flex items-center justify-between p-4 cursor-pointer list-none">
+                    <span className="flex items-center gap-2 text-sm font-semibold text-amber-800">
+                      <AlertTriangle className="w-4 h-4" /> Wichtige Informationen
+                    </span>
+                    <ChevronDown className={cn('w-4 h-4 text-amber-600 transition-transform', showWichtig && 'rotate-180')} />
+                  </summary>
+                  <div className="px-4 pb-4 text-sm text-amber-700 space-y-2">
+                    <p>Bitte achten Sie darauf, dass alle Angaben exakt mit Ihren Dokumenten übereinstimmen.</p>
+                    <p className="font-medium">Besonders wichtig: eVB-Nummer, Name laut Ausweis, reservierte Kennzeichen, PIN, Bankdaten.</p>
+                    <p>Sind die Daten nicht korrekt, kann der Antrag abgelehnt werden (kostenpflichtig).</p>
+                    <p>Kontaktieren Sie uns vor dem Absenden bei Unsicherheit.</p>
+                    <p>Stellen Sie sicher, dass keine offenen Steuerrückstände bei der Zulassungsstelle bestehen.</p>
+                  </div>
+                </details>
+
                 {/* Price summary */}
-                <div className="rounded-2xl bg-primary/[0.04] border-2 border-primary/20 p-6">
+                <div className="rounded-2xl bg-gradient-to-r from-primary/5 to-accent/5 border border-primary/10 p-6">
                   <h3 className="font-bold text-dark-800 mb-4">
                     Kostenübersicht
                   </h3>

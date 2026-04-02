@@ -1,6 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/db';
 import { verifyAuth, unauthorized, requireRole, forbiddenResponse } from '@/lib/auth';
+
+export const dynamic = 'force-dynamic';
+
+function revalidateSettings() {
+  try {
+    revalidatePath('/', 'layout');
+    revalidatePath('/sitemap.xml');
+  } catch (e) {
+    console.warn('Settings revalidation warning:', e);
+  }
+}
 
 // GET /api/admin/settings - List all settings
 export async function GET(req: NextRequest) {
@@ -26,6 +38,7 @@ export async function POST(req: NextRequest) {
       update: { value: value || '' },
       create: { key, value: value || '' },
     });
+    revalidateSettings();
     return NextResponse.json(setting);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -52,6 +65,7 @@ export async function PUT(req: NextRequest) {
       });
       results.push(s);
     }
+    revalidateSettings();
     return NextResponse.json({ settings: results });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -69,6 +83,7 @@ export async function DELETE(req: NextRequest) {
 
   try {
     await prisma.siteSetting.delete({ where: { key } });
+    revalidateSettings();
     return NextResponse.json({ success: true });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

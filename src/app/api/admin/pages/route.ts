@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/db';
 import { verifyAuth, unauthorized, requireRole, forbiddenResponse } from '@/lib/auth';
+
+export const dynamic = 'force-dynamic';
 
 // GET /api/admin/pages - List pages with pagination
 export async function GET(req: NextRequest) {
@@ -84,6 +87,7 @@ export async function POST(req: NextRequest) {
       include: { seo: true },
     });
 
+    try { revalidatePath(`/${slug}`); revalidatePath('/sitemap.xml'); } catch (e) { console.warn('Revalidation:', e); }
     return NextResponse.json({ page }, { status: 201 });
   } catch (error) {
     console.error('Create page error:', error);
@@ -148,6 +152,7 @@ export async function PUT(req: NextRequest) {
     }
 
     const updated = await prisma.page.findUnique({ where: { id }, include: { seo: true } });
+    try { if (updated?.slug) revalidatePath(`/${updated.slug}`); revalidatePath('/sitemap.xml'); } catch (e) { console.warn('Revalidation:', e); }
     return NextResponse.json({ page: updated });
   } catch (error) {
     console.error('Update page error:', error);
@@ -169,6 +174,7 @@ export async function DELETE(req: NextRequest) {
   try {
     await prisma.sEO.deleteMany({ where: { pageId: id } });
     await prisma.page.delete({ where: { id } });
+    try { revalidatePath('/sitemap.xml'); } catch (e) { console.warn('Revalidation:', e); }
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Delete page error:', error);

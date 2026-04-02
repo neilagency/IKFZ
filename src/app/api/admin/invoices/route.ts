@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { verifyAuth, unauthorized } from '@/lib/auth';
 
+export const dynamic = 'force-dynamic';
+
 // GET /api/admin/invoices - List all invoices
 export async function GET(req: NextRequest) {
   const user = verifyAuth(req);

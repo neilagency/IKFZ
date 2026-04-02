@@ -7,12 +7,12 @@ import { productCreateSchema, productUpdateSchema, formatZodErrors } from '@/lib
 
 export const dynamic = 'force-dynamic';
 
-function jsonResponse(data: unknown, cacheSecs = 5) {
+function jsonResponse(data: unknown) {
   return new NextResponse(JSON.stringify(data), {
     status: 200,
     headers: {
       'Content-Type': 'application/json',
-      'Cache-Control': `private, max-age=${cacheSecs}, stale-while-revalidate=${cacheSecs * 6}`,
+      'Cache-Control': 'no-store, must-revalidate',
     },
   });
 }
@@ -143,6 +143,8 @@ export async function POST(req: NextRequest) {
 
     try {
       revalidatePath('/');
+      revalidatePath('/kfz-services');
+      revalidatePath(`/product/${product.slug}`);
       revalidatePath('/sitemap.xml');
       revalidateTag('products');
     } catch (e) {
@@ -214,6 +216,7 @@ export async function PUT(req: NextRequest) {
 
     try {
       revalidatePath('/');
+      revalidatePath('/kfz-services');
       revalidatePath(`/product/${product.slug}`);
       revalidatePath('/sitemap.xml');
       revalidateTag('products');
@@ -243,6 +246,7 @@ export async function DELETE(req: NextRequest) {
 
     try {
       revalidatePath('/');
+      revalidatePath('/kfz-services');
       revalidatePath('/sitemap.xml');
       revalidateTag('products');
     } catch (e) {

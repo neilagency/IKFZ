@@ -3,13 +3,41 @@ import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 import path from 'path';
 import fs from 'fs';
 
+/* ── Single Source of Truth: Database Resolution ──────────────────
+ *
+ * PRODUCTION RUNTIME:
+ *   DB_PATH env var is REQUIRED. It must point to the persistent
+ *   production.db on the server. If not set or file missing → crash.
+ *   Fallback: prisma/production.db symlink (set by deploy scripts).
+ *
+ * BUILD TIME (next build):
+ *   DB_PATH should point to the database used for page pre-rendering.
+ *   On VPS: export DB_PATH=production.db before build.
+ *   On local→remote (Hostinger): DB_PATH=dev.db for pre-render,
+ *   ISR (revalidate=60) refreshes from production DB at runtime.
+ *
+ * DEVELOPMENT:
+ *   DB_PATH env var OR prisma/dev.db (local development only).
+ *
+ * There is NO silent fallback from production RUNTIME → dev.db.
+ * ────────────────────────────────────────────────────────────────── */
+
 function getDbPath(): string {
-  // 1. Explicit DB_PATH env var (set in production deploy)
+  const isProduction = process.env.NODE_ENV === 'production';
+  // next build sets NEXT_PHASE=phase-production-build
+  const isBuildPhase = process.env.NEXT_PHASE === 'phase-production-build';
+
+  // 1. Explicit DB_PATH env var (set in production deploy & build scripts)
   if (process.env.DB_PATH) {
+    if (!fs.existsSync(process.env.DB_PATH)) {
+      const msg = `[DB] ❌ DB_PATH is set but file does not exist: ${process.env.DB_PATH}`;
+      console.error(msg);
+      if (isProduction && !isBuildPhase) throw new Error(msg);
+    }
     return process.env.DB_PATH;
   }
 
-  // 2. Production: persistent path via symlink in standalone/prisma/
+  // 2. Production fallback: symlink at prisma/production.db (created by deploy scripts)
   const prodPath = path.join(process.cwd(), 'prisma', 'production.db');
   if (fs.existsSync(prodPath)) {
     return prodPath;
@@ -17,17 +45,47 @@ function getDbPath(): string {
 
   // 3. Development fallback: prisma/dev.db
   const devPath = path.join(process.cwd(), 'prisma', 'dev.db');
+
+  // During build: allow dev.db as fallback (ISR will refresh from production at runtime)
+  if (isBuildPhase && fs.existsSync(devPath)) {
+    console.warn('[DB] ⚠ Build phase: using dev.db for pre-rendering. ISR will refresh from production DB at runtime.');
+    return devPath;
+  }
+
+  // In production RUNTIME, DB_PATH MUST be set — never fall through to dev.db
+  if (isProduction && !isBuildPhase) {
+    const msg = `[DB] ❌ PRODUCTION ERROR: No database found!\n` +
+      `  DB_PATH env: (not set)\n` +
+      `  Symlink: ${prodPath} (not found)\n` +
+      `  cwd: ${process.cwd()}\n` +
+      `  ⚠ Set DB_PATH in .env or ecosystem.config.js to fix this.`;
+    console.error(msg);
+    throw new Error(msg);
+  }
+
+  // Development: prisma/dev.db
   if (!fs.existsSync(devPath)) {
-    console.error(`[DB] Database file not found. Tried:\n  - DB_PATH env: ${process.env.DB_PATH || '(not set)'}\n  - ${prodPath}\n  - ${devPath}\n  cwd: ${process.cwd()}`);
+    console.error(`[DB] ⚠ Dev database not found at ${devPath}. Run: npx prisma migrate dev`);
   }
   return devPath;
 }
 
 function createPrismaClient() {
   const dbPath = getDbPath();
+  const isProduction = process.env.NODE_ENV === 'production';
   try {
     const resolvedPath = fs.existsSync(dbPath) ? fs.realpathSync(dbPath) : dbPath;
-    console.log(`[DB] Connecting to database: ${resolvedPath}`);
+
+    // Log which database is actually being used
+    const dbType = resolvedPath.includes('production.db') ? '🟢 PRODUCTION' :
+                   resolvedPath.includes('dev.db') ? '🟡 DEVELOPMENT' : '⚪ UNKNOWN';
+    console.log(`[DB] ${dbType} → ${resolvedPath}`);
+
+    // Safety: warn loudly if production code is hitting dev.db
+    if (isProduction && resolvedPath.includes('dev.db')) {
+      console.error('[DB] ❌ CRITICAL: Production is using dev.db! Set DB_PATH to production.db');
+    }
+
     const adapter = new PrismaBetterSqlite3({ url: `file:${resolvedPath}` });
     return new PrismaClient({ adapter });
   } catch (error) {
@@ -42,7 +100,8 @@ const globalForPrisma = globalThis as unknown as {
 
 export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+// Cache in all environments to prevent multiple DB connections
+globalForPrisma.prisma = prisma;
 
 export default prisma;
 

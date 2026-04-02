@@ -1,20 +1,21 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { motion } from 'framer-motion';
 import {
-  ShoppingCart,
   Shield,
   Lock,
-  AlertTriangle,
-  ArrowLeft,
+  CheckCircle2,
+  Clock,
+  Phone,
+  ChevronRight,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PaymentMethodSelector } from '@/components/PaymentMethodSelector';
+import { OrderSummary } from '@/components/checkout/OrderSummary';
 import type { PaymentMethodDef } from '@/components/PaymentMethodSelector';
 
 // ── Checkout form schema with Klarna conditional validation ──
@@ -32,7 +33,6 @@ const checkoutSchema = z.object({
   }),
   customerNote: z.string().optional().default(''),
 }).superRefine((data, ctx) => {
-  // Klarna requires full billing address
   if (data.paymentMethod === 'klarna') {
     if (!data.address || data.address.trim().length === 0) {
       ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Straße ist für Klarna erforderlich', path: ['address'] });
@@ -61,6 +61,21 @@ interface OrderData {
   total: number;
 }
 
+interface CouponData {
+  code: string;
+  discountAmount: number;
+  discountType: string;
+  discountValue: number;
+}
+
+/* ── Trust features shown below hero ─────────────────────────────── */
+const TRUST_FEATURES = [
+  { icon: Lock, title: 'SSL-Verschlüsselung', desc: '256-Bit gesicherte Datenübertragung' },
+  { icon: Shield, title: 'DSGVO-konform', desc: 'Ihre Daten sind sicher & geschützt' },
+  { icon: CheckCircle2, title: 'Offizielle Bearbeitung', desc: 'Sicher und korrekt übermittelt' },
+  { icon: Clock, title: 'Sofort-Prüfung', desc: 'Direkte Bearbeitung Ihres Auftrags' },
+];
+
 export default function CheckoutPage() {
   const router = useRouter();
   const [orderData, setOrderData] = useState<OrderData | null>(null);
@@ -68,6 +83,7 @@ export default function CheckoutPage() {
   const [error, setError] = useState<string | null>(null);
   const [applePayAvailable, setApplePayAvailable] = useState(false);
   const [dbMethods, setDbMethods] = useState<PaymentMethodDef[]>([]);
+  const [coupon, setCoupon] = useState<CouponData | null>(null);
 
   useEffect(() => {
     const stored = sessionStorage.getItem('checkout_order');
@@ -88,7 +104,6 @@ export default function CheckoutPage() {
       .then((r) => r.json())
       .then((data) => setDbMethods(data.methods || []))
       .catch(() => {
-        // Fallback if API fails
         setDbMethods([
           { id: 'paypal', label: 'PayPal', description: '', fee: 0, icon: '' },
           { id: 'creditcard', label: 'Kreditkarte', description: '', fee: 0.50, icon: '' },
@@ -107,11 +122,10 @@ export default function CheckoutPage() {
         }
       }
     } catch {
-      // Not available on this device/browser
+      // Not available
     }
   }, []);
 
-  // Filter payment methods: hide Apple Pay on non-Apple devices
   const PAYMENT_METHODS = useMemo(
     () => dbMethods.filter((m) => m.id !== 'applepay' || applePayAvailable),
     [dbMethods, applePayAvailable],
@@ -134,12 +148,46 @@ export default function CheckoutPage() {
 
   const selectedMethod = PAYMENT_METHODS.find((m) => m.id === watchPayment);
   const paymentFee = selectedMethod?.fee ?? 0;
+  const discountAmount = coupon?.discountAmount ?? 0;
 
   const grandTotal = useMemo(() => {
     if (!orderData) return 0;
-    return orderData.total + paymentFee;
-  }, [orderData, paymentFee]);
+    return Math.max(orderData.total - discountAmount + paymentFee, 0);
+  }, [orderData, paymentFee, discountAmount]);
 
+  /* ── Coupon handlers ── */
+  const handleApplyCoupon = useCallback(async (code: string): Promise<string | null> => {
+    if (!orderData) return 'Keine Bestellung vorhanden.';
+    try {
+      const res = await fetch('/api/apply-coupon/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code,
+          email: watch('email') || '',
+          productSlug: orderData.serviceType || orderData.productSlug || '',
+          subtotal: orderData.total,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) return data.error || 'Ungültiger Gutscheincode.';
+      setCoupon({
+        code: data.code,
+        discountAmount: data.discountAmount,
+        discountType: data.discountType,
+        discountValue: data.discountValue,
+      });
+      return null;
+    } catch {
+      return 'Serverfehler. Bitte versuchen Sie es erneut.';
+    }
+  }, [orderData, watch]);
+
+  const handleRemoveCoupon = useCallback(() => {
+    setCoupon(null);
+  }, []);
+
+  /* ── Submit ── */
   const onSubmit = async (data: CheckoutFormData) => {
     if (!orderData) return;
     setIsSubmitting(true);
@@ -163,7 +211,7 @@ export default function CheckoutPage() {
           productName: orderData.selectedService || orderData.productName,
           serviceData: orderData.formData || {},
           addons: orderData.addons?.map((a) => ({ label: a.label, price: a.price })) || [],
-          couponCode: '',
+          couponCode: coupon?.code || '',
         }),
       });
 
@@ -175,14 +223,11 @@ export default function CheckoutPage() {
         return;
       }
 
-      // Gateway redirect (Mollie / PayPal)
       if (result.checkoutUrl) {
-        // Keep sessionStorage until payment is confirmed on success page
         window.location.href = result.checkoutUrl;
         return;
       }
 
-      // No checkout URL (e.g. bank transfer — instructions sent by email)
       sessionStorage.removeItem('checkout_order');
       if (result.pendingPayment) {
         router.push(`/bestellung-erfolgreich/?order=${result.orderId}&pending=1`);
@@ -195,10 +240,11 @@ export default function CheckoutPage() {
     }
   };
 
+  /* ── Loading state ── */
   if (!orderData) {
     return (
       <div className="min-h-screen bg-white">
-        <div className="bg-dark-950 pt-24 pb-8 md:pt-32 md:pb-12 relative overflow-hidden">
+        <div className="bg-gradient-to-b from-dark-950 via-primary-900/20 to-dark-950 pt-24 pb-16 md:pt-32 md:pb-20 relative overflow-hidden">
           <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-primary/15 rounded-full blur-[120px] pointer-events-none" />
         </div>
         <div className="container-main py-20 text-center">
@@ -209,336 +255,116 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-50">
       {/* ── Dark Hero Band ── */}
       <div className="bg-dark-950 pt-24 pb-8 md:pt-32 md:pb-12 relative overflow-hidden">
         <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-primary/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-accent/10 rounded-full blur-[100px] pointer-events-none" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
+
+        <div className="container-main relative z-10">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-sm text-white/50 mb-6">
+            <a href="/" className="hover:text-white/80 transition-colors">Startseite</a>
+            <ChevronRight className="w-3.5 h-3.5" />
+            <span className="text-white/80">Kasse</span>
+          </div>
+
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/30 text-green-400 px-4 py-1.5 rounded-full text-sm font-medium mb-4">
+            <Shield className="w-4 h-4" />
+            SICHERE BEZAHLUNG
+          </div>
+
+          {/* Title */}
+          <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-3">
+            Kasse
+          </h1>
+          <p className="text-lg text-white/60 max-w-xl">
+            Schließen Sie Ihren Auftrag sicher ab. Alle Zahlungen werden verschlüsselt übertragen.
+          </p>
+        </div>
       </div>
 
-      <div className="container-main py-10 md:py-16">
-        <div className="max-w-5xl mx-auto">
-          {/* Back link */}
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-2 text-sm text-dark-500 hover:text-primary mb-6 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" /> Zurück zum Formular
-          </button>
-
-          <h1 className="text-3xl font-bold text-dark-900 mb-8">
-            Bestellung abschließen
-          </h1>
-
-          <div className="grid lg:grid-cols-5 gap-8">
-            {/* ── Left Column: Checkout Form ── */}
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="lg:col-span-3 space-y-6"
+      {/* ── Trust Features Bar ── */}
+      <div className="container-main -mt-6 relative z-20 mb-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {TRUST_FEATURES.map((feature) => (
+            <div
+              key={feature.title}
+              className="bg-white rounded-xl border border-dark-100 shadow-sm p-4 flex items-center gap-3"
             >
-              {/* Billing / Contact */}
-              <div className="rounded-2xl bg-white border border-dark-100 shadow-sm p-6 space-y-5">
-                <h2 className="text-lg font-bold text-dark-900">
-                  Rechnungsadresse & Kontakt
-                </h2>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-dark-800 mb-2">
-                      Vorname <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      {...register('firstName')}
-                      placeholder="Max"
-                      className={cn(
-                        'input-field',
-                        errors.firstName && 'border-red-400'
-                      )}
-                    />
-                    {errors.firstName && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors.firstName.message}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-dark-800 mb-2">
-                      Nachname <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      {...register('lastName')}
-                      placeholder="Mustermann"
-                      className={cn(
-                        'input-field',
-                        errors.lastName && 'border-red-400'
-                      )}
-                    />
-                    {errors.lastName && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors.lastName.message}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-dark-800 mb-2">
-                    E-Mail <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    {...register('email')}
-                    placeholder="max@beispiel.de"
-                    className={cn(
-                      'input-field',
-                      errors.email && 'border-red-400'
-                    )}
-                  />
-                  {errors.email && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.email.message}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-dark-800 mb-2">
-                    Telefonnummer <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="tel"
-                    {...register('phone')}
-                    placeholder="+49 152 1234567"
-                    className={cn(
-                      'input-field',
-                      errors.phone && 'border-red-400'
-                    )}
-                  />
-                  {errors.phone && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.phone.message}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-dark-800 mb-2">
-                    Straße & Hausnummer
-                  </label>
-                  <input
-                    type="text"
-                    {...register('address')}
-                    placeholder="Musterstraße 1"
-                    className="input-field"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-dark-800 mb-2">
-                      PLZ
-                    </label>
-                    <input
-                      type="text"
-                      {...register('postcode')}
-                      placeholder="45141"
-                      maxLength={5}
-                      className="input-field"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-dark-800 mb-2">
-                      Stadt
-                    </label>
-                    <input
-                      type="text"
-                      {...register('city')}
-                      placeholder="Essen"
-                      className="input-field"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-dark-800 mb-2">
-                    Anmerkungen (optional)
-                  </label>
-                  <textarea
-                    {...register('customerNote')}
-                    placeholder="Besondere Hinweise zu Ihrer Bestellung..."
-                    rows={3}
-                    className="input-field resize-none"
-                  />
-                </div>
+              <feature.icon className="w-5 h-5 text-primary flex-shrink-0" />
+              <div>
+                <p className="text-sm font-bold text-dark-800">{feature.title}</p>
+                <p className="text-xs text-dark-400">{feature.desc}</p>
               </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
-              {/* Payment Method */}
+      {/* ── Main Content ── */}
+      <div className="container-main pb-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-5 gap-8">
+            {/* ── Left Column (3/5): Payment Method Selector ── */}
+            <div className="lg:col-span-3">
               <PaymentMethodSelector
                 methods={PAYMENT_METHODS}
                 register={register}
+                errors={errors}
                 selectedMethod={watchPayment}
                 error={errors.paymentMethod?.message}
               />
+            </div>
 
-              {/* AGB Checkbox */}
-              <div className="rounded-2xl bg-white border border-dark-100 shadow-sm p-6">
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    {...register('agbAccepted')}
-                    className="accent-primary w-4 h-4 mt-0.5"
-                  />
-                  <span className="text-sm text-dark-600">
-                    Ich habe die{' '}
-                    <a
-                      href="/agb/"
-                      target="_blank"
-                      className="text-primary hover:underline font-medium"
-                    >
-                      Allgemeinen Geschäftsbedingungen
-                    </a>{' '}
-                    und die{' '}
-                    <a
-                      href="/datenschutzerklarung/"
-                      target="_blank"
-                      className="text-primary hover:underline font-medium"
-                    >
-                      Datenschutzerklärung
-                    </a>{' '}
-                    gelesen und akzeptiere diese.{' '}
-                    <span className="text-red-500">*</span>
-                  </span>
-                </label>
-                {errors.agbAccepted && (
-                  <p className="text-red-500 text-sm mt-2 ml-7">
-                    {errors.agbAccepted.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Error */}
-              {error && (
-                <div className="rounded-2xl bg-red-50 border border-red-200 p-4 flex items-start gap-3">
-                  <AlertTriangle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-red-700">{error}</p>
-                </div>
-              )}
-
-              {/* Submit (mobile) */}
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className={cn(
-                  'w-full btn-primary py-4 text-lg lg:hidden',
-                  isSubmitting && 'opacity-60 cursor-not-allowed'
-                )}
-              >
-                {isSubmitting ? (
-                  <>
-                    <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Wird verarbeitet...
-                  </>
-                ) : (
-                  <>
-                    <Lock className="w-5 h-5" /> Jetzt kostenpflichtig bestellen
-                  </>
-                )}
-              </button>
-            </form>
-
-            {/* ── Right Column: Order Summary (sticky) ── */}
+            {/* ── Right Column (2/5): Order Summary ── */}
             <div className="lg:col-span-2">
-              <div className="lg:sticky lg:top-28 space-y-6">
-                <div className="rounded-2xl bg-white border border-dark-100 shadow-sm p-6">
-                  <h2 className="text-lg font-bold text-dark-900 mb-4 flex items-center gap-2">
-                    <ShoppingCart className="w-5 h-5" /> Bestellübersicht
-                  </h2>
+              <OrderSummary
+                orderData={orderData}
+                paymentFee={paymentFee}
+                paymentMethodLabel={selectedMethod?.label}
+                paymentMethodId={watchPayment || 'creditcard'}
+                grandTotal={grandTotal}
+                isSubmitting={isSubmitting}
+                error={error}
+                agbError={errors.agbAccepted?.message}
+                agbRegister={register('agbAccepted')}
+                onSubmit={handleSubmit(onSubmit)}
+                coupon={coupon}
+                onApplyCoupon={handleApplyCoupon}
+                onRemoveCoupon={handleRemoveCoupon}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
 
-                  <div className="space-y-3 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-dark-600">
-                        {orderData.selectedService ?? orderData.productName}
-                      </span>
-                      <span className="text-dark-800 font-medium">
-                        {orderData.basePrice.toFixed(2).replace('.', ',')} €
-                      </span>
-                    </div>
-
-                    {orderData.addons.map((addon) => (
-                      <div key={addon.key} className="flex justify-between">
-                        <span className="text-dark-600">{addon.label}</span>
-                        <span className="text-dark-800 font-medium">
-                          {addon.price.toFixed(2).replace('.', ',')} €
-                        </span>
-                      </div>
-                    ))}
-
-                    {paymentFee > 0 && (
-                      <div className="flex justify-between">
-                        <span className="text-dark-600">
-                          Zahlungsgebühr ({selectedMethod?.label})
-                        </span>
-                        <span className="text-dark-800 font-medium">
-                          {paymentFee.toFixed(2).replace('.', ',')} €
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex items-center justify-between mt-4 pt-4 border-t border-dark-100">
-                    <span className="text-lg font-bold text-dark-900">
-                      Gesamt
-                    </span>
-                    <span className="text-2xl font-black text-primary">
-                      {grandTotal.toFixed(2).replace('.', ',')} €
-                    </span>
-                  </div>
-
-                  <p className="text-xs text-dark-400 mt-2">
-                    inkl. MwSt. (soweit anwendbar)
-                  </p>
-                </div>
-
-                {/* Submit (desktop) */}
-                <button
-                  type="submit"
-                  form="checkout-form-fallback"
-                  disabled={isSubmitting}
-                  onClick={handleSubmit(onSubmit)}
-                  className={cn(
-                    'w-full btn-primary py-4 text-lg hidden lg:flex',
-                    isSubmitting && 'opacity-60 cursor-not-allowed'
-                  )}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Wird verarbeitet...
-                    </>
-                  ) : (
-                    <>
-                      <Lock className="w-5 h-5" /> Jetzt kostenpflichtig
-                      bestellen
-                    </>
-                  )}
-                </button>
-
-                {/* Trust badges */}
-                <div className="flex items-center justify-center gap-4 text-xs text-dark-400">
-                  <div className="flex items-center gap-1.5">
-                    <Shield className="w-4 h-4" />
-                    <span>SSL-verschlüsselt</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Lock className="w-4 h-4" />
-                    <span>Sichere Zahlung</span>
-                  </div>
-                </div>
+      {/* ── Support Bar ── */}
+      <div className="bg-white border-t border-dark-100">
+        <div className="container-main py-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 max-w-4xl mx-auto">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <Phone className="w-6 h-6 text-primary" />
+              </div>
+              <div>
+                <p className="font-bold text-dark-800">
+                  Brauchen Sie Hilfe bei der Bestellung?
+                </p>
+                <p className="text-sm text-dark-500">
+                  Unser Support-Team ist für Sie per Telefon, WhatsApp und E-Mail erreichbar.
+                </p>
               </div>
             </div>
+            <a
+              href="tel:+4920147389573"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-white font-medium hover:bg-primary/90 transition-colors whitespace-nowrap"
+            >
+              <Phone className="w-4 h-4" />
+              Jetzt anrufen
+            </a>
           </div>
         </div>
       </div>

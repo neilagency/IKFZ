@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { verifyAuth, unauthorized } from '@/lib/auth';
 
+export const dynamic = 'force-dynamic';
+
 // GET /api/admin/seo - List SEO records with pagination
 export async function GET(req: NextRequest) {
   const user = verifyAuth(req);

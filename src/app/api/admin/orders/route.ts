@@ -3,6 +3,8 @@ import prisma from '@/lib/db';
 import { verifyAuth, unauthorized } from '@/lib/auth';
 import { sendCompletionEmail } from '@/lib/completion-email';
 
+export const dynamic = 'force-dynamic';
+
 // GET /api/admin/orders - List all orders
 export async function GET(req: NextRequest) {
   const user = verifyAuth(req);

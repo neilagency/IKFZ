@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { verifyAuth, unauthorized } from '@/lib/auth';
 
+export const dynamic = 'force-dynamic';
+
 // Simple 60-second cache for dashboard data
 let dashboardCache: { data: any; timestamp: number } | null = null;
 const CACHE_TTL = 60 * 1000; // 60 seconds

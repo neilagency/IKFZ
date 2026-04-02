@@ -20,9 +20,16 @@ export async function POST(request: NextRequest) {
     // Ensure upload directory exists
     await mkdir(UPLOAD_DIR, { recursive: true });
 
-    const fields = ['fahrzeugschein', 'fahrzeugbrief', 'ausweis'];
+    // Accept any document field name dynamically
+    const allowedKeys = [
+      'fahrzeugschein', 'fahrzeugbrief', 'ausweis',
+      'fahrzeugscheinVorne', 'fahrzeugscheinHinten', 'fahrzeugbriefVorne',
+      'personalausweisVorne', 'personalausweisHinten',
+      'aufenthaltstitelVorne', 'aufenthaltstitelHinten',
+      'reisepassVorne', 'meldebescheinigung',
+    ];
 
-    for (const key of fields) {
+    for (const key of allowedKeys) {
       const value = formData.get(key);
       if (!value || !(value instanceof File)) continue;
       if (value.size === 0) continue;

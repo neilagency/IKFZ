@@ -23,6 +23,25 @@ echo "────────────────────────�
 
 cd "$APP_DIR"
 
+# 0. Ensure persistent data directory exists BEFORE build
+mkdir -p "$DATA_DIR"
+
+# 0.1 Initialize production DB only if it doesn't exist yet
+if [ ! -f "$DB_FILE" ]; then
+    if [ -f "prisma/dev.db" ]; then
+        echo "📋 First deploy: seeding production database from dev.db..."
+        cp prisma/dev.db "$DB_FILE"
+    else
+        echo "⚠️  No database found. Create one with: npx prisma migrate deploy"
+    fi
+else
+    echo "✅ Production database exists at $DB_FILE — NOT overwriting"
+fi
+
+# 0.2 Export DB_PATH so next build pre-renders pages from production DB
+export DB_PATH="$DB_FILE"
+echo "📍 DB_PATH=$DB_PATH (used for build-time page rendering)"
+
 # 1. Pull latest code
 echo "📥 Pulling latest code..."
 git pull origin main
@@ -35,8 +54,12 @@ npm ci --production=false
 echo "🔧 Generating Prisma client..."
 npx prisma generate
 
-# 4. Build Next.js (standalone mode)
-echo "🏗️  Building Next.js..."
+# 3.1 Apply any pending migrations to production DB
+echo "🔄 Applying pending migrations to production database..."
+DB_PATH="$DB_FILE" npx prisma migrate deploy 2>&1 || echo "⚠️  Migration warning (may be OK if no pending migrations)"
+
+# 4. Build Next.js (standalone mode) — reads from production DB via DB_PATH
+echo "🏗️  Building Next.js with DB_PATH=$DB_PATH ..."
 npm run build
 
 # 5. Copy static files & public to standalone
@@ -44,22 +67,7 @@ echo "📁 Copying static and public files to standalone..."
 cp -r .next/static .next/standalone/.next/static
 cp -r public .next/standalone/public
 
-# 5.1 Ensure persistent data directory exists
-mkdir -p "$DATA_DIR"
-
-# 5.2 Initialize production DB only if it doesn't exist yet
-if [ ! -f "$DB_FILE" ]; then
-    if [ -f "prisma/dev.db" ]; then
-        echo "📋 First deploy: seeding production database from dev.db..."
-        cp prisma/dev.db "$DB_FILE"
-    else
-        echo "⚠️  No database found. Create one with: npx prisma migrate deploy"
-    fi
-else
-    echo "✅ Production database exists at $DB_FILE — NOT overwriting"
-fi
-
-# 5.3 Symlink database into standalone so the app can find it
+# 5.1 Symlink database into standalone so the app can find it
 mkdir -p .next/standalone/prisma
 ln -sf "$DB_FILE" .next/standalone/prisma/production.db
 
