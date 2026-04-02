@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/db';
-import bcrypt from 'bcryptjs';
 import { signToken, setAuthCookie, clearAuthCookie, verifyAuth } from '@/lib/auth';
 
 // Simple in-memory rate limiter (per IP, 5 attempts per minute)
@@ -43,6 +41,10 @@ export async function POST(req: NextRequest) {
     if (!email || !password) {
       return NextResponse.json({ error: 'Email und Passwort erforderlich' }, { status: 400 });
     }
+
+    const prisma = (await import('@/lib/db')).default;
+    const bcrypt = (await import('bcryptjs')).default;
+
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
       return NextResponse.json({ error: 'Ungültige Anmeldedaten' }, { status: 401 });
