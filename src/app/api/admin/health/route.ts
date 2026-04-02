@@ -34,14 +34,27 @@ export async function GET(req: NextRequest) {
     checks['BETTER_SQLITE3'] = `FAILED: ${e.message}`;
   }
 
-  // 4. Check prisma
+  // 4. Check prisma with regular query (not raw — avoids BigInt issue)
   try {
     const { default: prisma } = await import('@/lib/db');
-    const result = await prisma.$queryRawUnsafe('SELECT 1 as ok');
-    checks['PRISMA'] = `connected OK (result: ${JSON.stringify(result)})`;
+    const product = await prisma.product.findFirst({ select: { id: true, slug: true, price: true } });
+    checks['PRISMA'] = product ? `OK (found: ${product.slug}, price=${product.price})` : 'OK (no products)';
   } catch (e: any) {
     checks['PRISMA'] = `FAILED: ${e.message}`;
+    checks['PRISMA_STACK'] = (e.stack || '').split('\n').slice(0, 5).join(' | ');
   }
+
+  // 5. Test the exact query the homepage uses
+  try {
+    const { getProductBySlug } = await import('@/lib/db');
+    const p = await getProductBySlug('auto-online-anmelden');
+    checks['HOMEPAGE_QUERY'] = p ? `OK (${p.slug}, price=${p.price})` : 'OK (product not found)';
+  } catch (e: any) {
+    checks['HOMEPAGE_QUERY'] = `FAILED: ${e.message}`;
+  }
+
+  // 6. Node version
+  checks['NODE_VERSION'] = process.version;
 
   return NextResponse.json(checks, { status: 200 });
 }
