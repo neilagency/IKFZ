@@ -229,6 +229,12 @@ export default function CheckoutPage() {
       }
 
       sessionStorage.removeItem('checkout_order');
+
+      if (result.invoiceUrl) {
+        window.location.href = result.invoiceUrl;
+        return;
+      }
+
       if (result.pendingPayment) {
         router.push(`/bestellung-erfolgreich/?order=${result.orderId}&pending=1`);
       } else {

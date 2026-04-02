@@ -11,6 +11,7 @@ import { createPayPalOrder } from '@/lib/paypal';
 import { rateLimit, getClientIP } from '@/lib/rate-limit';
 import { paymentLog } from '@/lib/payment-logger';
 import { triggerInvoiceEmail } from '@/lib/trigger-invoice';
+import { generateInvoiceToken } from '@/lib/invoice-token';
 import { checkoutDirectSchema, formatZodErrors } from '@/lib/validations';
 import crypto from 'crypto';
 
@@ -432,11 +433,22 @@ export async function POST(request: NextRequest) {
           console.error('[checkout] SEPA invoice email failed:', err),
         );
 
+        // Get invoice number for redirect URL
+        const sepaInvoice = await prisma.invoice.findFirst({
+          where: { orderId: order.id },
+          select: { invoiceNumber: true },
+        });
+
+        const invoiceUrl = sepaInvoice
+          ? `/rechnung/${encodeURIComponent(sepaInvoice.invoiceNumber)}?order=${order.orderNumber}&token=${generateInvoiceToken(sepaInvoice.invoiceNumber)}`
+          : undefined;
+
         return NextResponse.json({
           success: true,
           orderId: order.id,
           orderNumber: order.orderNumber,
           pendingPayment: true,
+          invoiceUrl,
         });
       } else if (isMollieMethod(paymentMethod)) {
         // ── Mollie Flow (creditcard, applepay, klarna) ──
