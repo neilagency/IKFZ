@@ -60,6 +60,9 @@ export async function PATCH(request: NextRequest, ctx: RouteCtx) {
       if (body.status === 'completed') {
         updateData.dateCompleted = new Date();
       }
+      if (body.status === 'completed' || body.status === 'processing') {
+        updateData.datePaid = new Date();
+      }
     }
 
     // Other updatable fields
@@ -79,7 +82,19 @@ export async function PATCH(request: NextRequest, ctx: RouteCtx) {
         body.status === 'cancelled' ? 'cancelled' : order.payment.status;
       await prisma.payment.update({
         where: { id: order.payment.id },
-        data: { status: paymentStatus },
+        data: { status: paymentStatus, ...(paymentStatus === 'paid' && !order.payment.paidAt ? { paidAt: new Date() } : {}) },
+      });
+    }
+
+    // Sync invoice status
+    if (body.status && order.invoice) {
+      const invoiceStatus =
+        body.status === 'completed' || body.status === 'processing' ? 'paid' :
+        body.status === 'refunded' ? 'refunded' :
+        body.status === 'cancelled' ? 'cancelled' : order.invoice.status;
+      await prisma.invoice.update({
+        where: { id: order.invoice.id },
+        data: { status: invoiceStatus },
       });
     }
 
@@ -118,9 +133,26 @@ export async function DELETE(_request: NextRequest, ctx: RouteCtx) {
   const { id } = await ctx.params;
 
   try {
+    const order = await prisma.order.findUnique({
+      where: { id },
+      select: { status: true, deletedAt: true },
+    });
+
+    if (!order || order.deletedAt) {
+      return NextResponse.json({ error: 'Bestellung nicht gefunden oder bereits gelöscht' }, { status: 404 });
+    }
+
     await prisma.order.update({
       where: { id },
-      data: { deletedAt: new Date() },
+      data: { deletedAt: new Date(), status: 'deleted' },
+    });
+
+    await prisma.orderNote.create({
+      data: {
+        orderId: id,
+        note: `Order gelöscht (soft delete). Vorheriger Status: ${order.status}`,
+        author: 'System',
+      },
     });
 
     return NextResponse.json({ success: true });

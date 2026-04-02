@@ -149,7 +149,7 @@ export function MediaPicker({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={onClose}>
-      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-4xl max-h-[85vh] rounded-2xl bg-white border border-gray-200 flex flex-col shadow-2xl">
+      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-4xl max-h-[85vh] rounded-2xl bg-white border border-gray-200 flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-gray-200">
           <h2 className="text-lg font-bold text-white">Medienbibliothek</h2>
@@ -766,7 +766,7 @@ export function MediaLibraryTab({ token }: { token: string }) {
       {/* Delete Warning Modal */}
       {deleteWarning && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => setDeleteWarning(null)}>
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 p-6" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-white rounded-2xl max-w-md w-full mx-4 p-6" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
                 <AlertTriangle className="w-5 h-5 text-orange-600" />
@@ -801,7 +801,7 @@ export function MediaLibraryTab({ token }: { token: string }) {
           {/* Preview */}
           <div className="relative bg-gray-50 aspect-video flex items-center justify-center">
             <MediaThumb src={getMediumUrl(selected)} alt={selected.altText || selected.title || ""} className="max-w-full max-h-full object-contain" />
-            <button onClick={() => setSelected(null)} className="absolute top-2 right-2 p-1 bg-white rounded-full shadow hover:bg-gray-100 transition">
+            <button onClick={() => setSelected(null)} className="absolute top-2 right-2 p-1 bg-white rounded-full hover:bg-gray-100 transition">
               <X className="w-4 h-4 text-gray-600" />
             </button>
           </div>

@@ -125,7 +125,7 @@ function ConfirmModal({
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl">
+      <div className="bg-white rounded-2xl p-6 max-w-md w-full">
         <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
         <p className="text-sm text-gray-500 mb-6">{description}</p>
         <div className="flex justify-end gap-3">
@@ -167,7 +167,7 @@ function Toast({
 
   return (
     <div
-      className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-xl shadow-lg text-sm font-medium flex items-center gap-2 ${
+      className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-xl text-sm font-medium flex items-center gap-2 ${
         type === 'success'
           ? 'bg-green-600 text-white'
           : 'bg-red-600 text-white'
@@ -589,7 +589,7 @@ export default function ProductsManager({ token }: { token?: string }) {
               onClick={() => setActiveTab(tab.key)}
               className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-xl transition flex items-center justify-center gap-2 whitespace-nowrap ${
                 activeTab === tab.key
-                  ? 'bg-white text-primary shadow-sm'
+                  ? 'bg-white text-primary'
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
@@ -1107,7 +1107,7 @@ export default function ProductsManager({ token }: { token?: string }) {
             value={search}
             onChange={(e) => handleSearchChange(e.target.value)}
             placeholder="Produkt suchen..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-gray-200 text-gray-900 text-sm focus:border-primary focus:outline-none shadow-sm"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-gray-200 text-gray-900 text-sm focus:border-primary focus:outline-none"
           />
         </div>
       </div>

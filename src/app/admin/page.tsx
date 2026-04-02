@@ -169,7 +169,7 @@ function SearchBar({ value, onChange, placeholder = "Suchen...", count, suffix }
     <div className="flex items-center gap-3 flex-wrap">
       <div className="flex-1 relative min-w-[200px]">
         <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-        <input value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-gray-200 text-gray-900 text-sm focus:border-primary focus:outline-none shadow-sm" />
+        <input value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-gray-200 text-gray-900 text-sm focus:border-primary focus:outline-none" />
       </div>
       {count !== undefined && <span className="text-gray-400 text-sm whitespace-nowrap">{count} Einträge</span>}
       {suffix}
@@ -203,7 +203,7 @@ function LoginScreen({ onLogin }: { onLogin: (token: string) => void }) {
           <h1 className="text-3xl font-bold text-gray-900">Admin Panel</h1>
           <p className="text-gray-400 mt-2">iKFZ Digital Zulassung</p>
         </div>
-        <form onSubmit={handleSubmit} className="space-y-4 p-8 rounded-2xl bg-white border border-gray-200 shadow-sm">
+        <form onSubmit={handleSubmit} className="space-y-4 p-8 rounded-2xl bg-white border border-gray-200">
           {error && <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">{error}</div>}
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">E-Mail</label>
@@ -310,7 +310,7 @@ function DashboardTab({ token }: { token: string }) {
           { label: "Kunden", value: stats.totalCustomers, icon: Users, color: "text-purple-600", bg: "bg-purple-50" },
           { label: "Produkte", value: stats.totalProducts, icon: Package, color: "text-orange-600", bg: "bg-orange-50" },
         ].map((s, i) => (
-          <div key={i} className="p-5 rounded-2xl bg-white border border-gray-200 shadow-sm">
+          <div key={i} className="p-5 rounded-2xl bg-white border border-gray-200">
             <div className="flex items-center gap-3 mb-2">
               <div className={`p-2 rounded-xl ${s.bg}`}>
                 <s.icon className={`w-5 h-5 ${s.color}`} />
@@ -1560,7 +1560,7 @@ function GatewaysTab({ token }: { token: string }) {
                   className={`relative w-12 h-6 rounded-full transition-colors ${gw.isEnabled ? "bg-green-500" : "bg-gray-200"}`}
                   disabled={saving === gw.id}
                 >
-                  <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${gw.isEnabled ? "left-6" : "left-0.5"}`} />
+                  <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white transition-transform ${gw.isEnabled ? "left-6" : "left-0.5"}`} />
                 </button>
               </div>
             </div>
@@ -2538,7 +2538,7 @@ function AdminPageInner() {
       {/* Main content — light mode */}
       <main className="admin-light flex-1 min-w-0 flex flex-col overflow-y-auto">
         {/* Mobile top bar with hamburger */}
-        <div className="admin-mobile-header lg:hidden sticky top-0 z-30 flex items-center gap-3 px-4 py-3 bg-white border-b border-gray-200 shadow-sm">
+        <div className="admin-mobile-header lg:hidden sticky top-0 z-30 flex items-center gap-3 px-4 py-3 bg-white border-b border-gray-200">
           <button
             onClick={() => setSidebarOpen(true)}
             className="p-2 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors"

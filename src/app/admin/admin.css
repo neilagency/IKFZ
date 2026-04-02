@@ -32,14 +32,14 @@
    CARD & PANEL POLISH
    ═══════════════════════════════════════════════════════════ */
 
-/* White cards — add subtle professional shadow */
+/* White cards — no shadow */
 .admin-light .rounded-2xl.bg-white {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  box-shadow: none;
 }
 
-/* List item cards — lighter shadow */
+/* List item cards — no shadow */
 .admin-light .rounded-xl.bg-white {
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  box-shadow: none;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -257,7 +257,7 @@
 
   .admin-sidebar.admin-sidebar-open {
     transform: translateX(0);
-    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
+    box-shadow: none;
   }
 }
 
@@ -331,7 +331,7 @@
     background: #ffffff;
     border: 1px solid #e5e7eb !important;
     border-radius: 0.75rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    box-shadow: none;
   }
 
   .admin-light table tbody tr:nth-child(even) {

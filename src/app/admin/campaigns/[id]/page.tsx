@@ -58,7 +58,7 @@ function Toast({ toast, onClose }: { toast: NonNullable<ToastType>; onClose: () 
   return (
     <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top">
       <div
-        className={`flex items-center gap-2 px-4 py-3 rounded-lg shadow-lg text-sm font-medium ${
+        className={`flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium ${
           toast.type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
         }`}
       >
@@ -336,7 +336,7 @@ export default function CampaignEditorPage() {
               <button
                 key={tpl.id}
                 onClick={() => handleSelectTemplate(tpl.id)}
-                className="bg-white rounded-xl border border-gray-200 p-5 text-left hover:border-blue-300 hover:shadow-md transition-all group"
+                className="bg-white rounded-xl border border-gray-200 p-5 text-left hover:border-blue-300 transition-all group"
               >
                 <div className="text-3xl mb-3">{tpl.icon}</div>
                 <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
@@ -423,7 +423,7 @@ export default function CampaignEditorPage() {
         {/* Form */}
         <div className="space-y-6">
           {/* Basic Info */}
-          <section className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+          <section className="bg-white rounded-xl border border-gray-200 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Mail className="w-5 h-5 text-gray-400" />
               Grunddaten
@@ -472,7 +472,7 @@ export default function CampaignEditorPage() {
           </section>
 
           {/* Content */}
-          <section className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+          <section className="bg-white rounded-xl border border-gray-200 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-gray-400" />
               Inhalt
@@ -485,7 +485,7 @@ export default function CampaignEditorPage() {
           </section>
 
           {/* Image & CTA */}
-          <section className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+          <section className="bg-white rounded-xl border border-gray-200 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Bild & Call-to-Action</h2>
             <div className="space-y-4">
               <div>
@@ -533,7 +533,7 @@ export default function CampaignEditorPage() {
           </section>
 
           {/* Targeting */}
-          <section className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+          <section className="bg-white rounded-xl border border-gray-200 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Users className="w-5 h-5 text-gray-400" />
               Empfänger
@@ -606,7 +606,7 @@ export default function CampaignEditorPage() {
           </section>
 
           {/* Scheduling */}
-          <section className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+          <section className="bg-white rounded-xl border border-gray-200 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Clock className="w-5 h-5 text-gray-400" />
               Planung (optional)
@@ -664,7 +664,7 @@ export default function CampaignEditorPage() {
       {/* Test Email Dialog */}
       {showTestEmail && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-sm w-full p-6">
+          <div className="bg-white rounded-xl max-w-sm w-full p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-1">Test-E-Mail senden</h3>
             <p className="text-sm text-gray-500 mb-4">
               Die Kampagne wird gespeichert und eine Vorschau an die angegebene Adresse gesendet.
@@ -707,7 +707,7 @@ export default function CampaignEditorPage() {
       {/* Send Confirmation Dialog */}
       {showSendConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-sm w-full p-6">
+          <div className="bg-white rounded-xl max-w-sm w-full p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-green-50 rounded-full">
                 <Send className="w-5 h-5 text-green-600" />

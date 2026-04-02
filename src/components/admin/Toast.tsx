@@ -43,9 +43,15 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   };
 
   const colors = {
-    success: "border-green-500/20 bg-green-500/10",
-    error: "border-red-500/20 bg-red-500/10",
-    info: "border-blue-500/20 bg-blue-500/10",
+    success: "border-green-600 bg-green-50",
+    error: "border-red-600 bg-red-50",
+    info: "border-blue-600 bg-blue-50",
+  };
+
+  const textColors = {
+    success: "text-green-900",
+    error: "text-red-900",
+    info: "text-blue-900",
   };
 
   return (
@@ -55,11 +61,11 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         {toasts.map((t) => (
           <div
             key={t.id}
-            className={`pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl border ${colors[t.type]} backdrop-blur-sm shadow-lg animate-slide-in max-w-sm`}
+            className={`pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl border ${colors[t.type]} backdrop-blur-sm animate-slide-in max-w-sm`}
           >
             {icons[t.type]}
-            <span className="text-white text-sm flex-1">{t.message}</span>
-            <button onClick={() => removeToast(t.id)} className="text-white/30 hover:text-white/60">
+            <span className={`${textColors[t.type]} text-sm flex-1`}>{t.message}</span>
+            <button onClick={() => removeToast(t.id)} className="text-gray-400 hover:text-gray-600">
               <X className="w-3.5 h-3.5" />
             </button>
           </div>

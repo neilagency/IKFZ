@@ -146,7 +146,7 @@ export default function CampaignsPage() {
           </div>
           <Link
             href="/admin/campaigns/new"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
             Neue Kampagne
@@ -161,7 +161,7 @@ export default function CampaignsPage() {
               onClick={() => setStatusFilter(tab.key)}
               className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
                 statusFilter === tab.key
-                  ? 'bg-blue-600 text-white shadow-sm'
+                  ? 'bg-blue-600 text-white'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
             >
@@ -191,7 +191,7 @@ export default function CampaignsPage() {
         )}
 
         {/* Desktop Table */}
-        <div className="hidden sm:block bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="hidden sm:block bg-white rounded-xl border border-gray-200 overflow-hidden">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-100 bg-gray-50">
@@ -352,7 +352,7 @@ export default function CampaignsPage() {
       {/* Delete Confirmation Dialog */}
       {deleteId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-sm w-full p-6">
+          <div className="bg-white rounded-xl max-w-sm w-full p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-red-50 rounded-full">
                 <Trash2 className="w-5 h-5 text-red-500" />

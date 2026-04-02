@@ -50,7 +50,7 @@ function Toast({ toast, onClose }: { toast: NonNullable<ToastData>; onClose: () 
   return (
     <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top">
       <div
-        className={`flex items-center gap-2 px-4 py-3 rounded-lg shadow-lg text-sm font-medium ${
+        className={`flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium ${
           toast.type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
         }`}
       >
@@ -288,7 +288,7 @@ export default function CouponEditorPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             {saving ? 'Speichern…' : 'Speichern'}
@@ -304,7 +304,7 @@ export default function CouponEditorPage() {
           {/* ══════ Main Content (2 cols) ══════ */}
           <div className="lg:col-span-2 space-y-6">
             {/* ── Section: Gutschein-Details ── */}
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
               <h2 className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-5">
                 <Tag className="w-5 h-5 text-blue-600" />
                 Gutschein-Details
@@ -400,7 +400,7 @@ export default function CouponEditorPage() {
             </div>
 
             {/* ── Section: Produkt-Zuordnung ── */}
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
               <h2 className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-4">
                 <Package className="w-5 h-5 text-blue-600" />
                 Produkt-Zuordnung
@@ -482,7 +482,7 @@ export default function CouponEditorPage() {
 
             {/* ── Section: Nutzungsverlauf (editing only) ── */}
             {!isNew && usages.length > 0 && (
-              <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+              <div className="bg-white rounded-xl border border-gray-200 p-6">
                 <h2 className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-4">
                   <BarChart3 className="w-5 h-5 text-blue-600" />
                   Nutzungsverlauf
@@ -523,7 +523,7 @@ export default function CouponEditorPage() {
           {/* ══════ Sidebar (1 col) ══════ */}
           <div className="space-y-6">
             {/* ── Einschränkungen ── */}
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
               <h2 className="flex items-center gap-2 text-base font-semibold text-gray-900 mb-4">
                 <ShieldCheck className="w-5 h-5 text-blue-600" />
                 Einschränkungen
@@ -574,7 +574,7 @@ export default function CouponEditorPage() {
             </div>
 
             {/* ── Zeitraum ── */}
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
               <h2 className="flex items-center gap-2 text-base font-semibold text-gray-900 mb-4">
                 <Calendar className="w-5 h-5 text-blue-600" />
                 Zeitraum
@@ -607,7 +607,7 @@ export default function CouponEditorPage() {
             </div>
 
             {/* ── Status & Banner ── */}
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
               <h2 className="flex items-center gap-2 text-base font-semibold text-gray-900 mb-4">
                 <Settings2 className="w-5 h-5 text-blue-600" />
                 Status &amp; Banner
@@ -627,7 +627,7 @@ export default function CouponEditorPage() {
                     }`}
                   >
                     <span
-                      className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                      className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white ring-0 transition duration-200 ease-in-out ${
                         isActive ? 'translate-x-5' : 'translate-x-0'
                       }`}
                     />
@@ -647,7 +647,7 @@ export default function CouponEditorPage() {
                     }`}
                   >
                     <span
-                      className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                      className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white ring-0 transition duration-200 ease-in-out ${
                         showBanner ? 'translate-x-5' : 'translate-x-0'
                       }`}
                     />
@@ -675,7 +675,7 @@ export default function CouponEditorPage() {
 
             {/* ── Statistiken (editing only) ── */}
             {!isNew && couponData && (
-              <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+              <div className="bg-white rounded-xl border border-gray-200 p-6">
                 <h2 className="flex items-center gap-2 text-base font-semibold text-gray-900 mb-4">
                   <BarChart3 className="w-5 h-5 text-blue-600" />
                   Statistiken

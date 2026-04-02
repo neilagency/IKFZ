@@ -204,7 +204,7 @@ export default function CouponsPage() {
           </div>
           <Link
             href="/admin/coupons/new"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
             Neuer Gutschein
@@ -219,7 +219,7 @@ export default function CouponsPage() {
               onClick={() => setStatusFilter(tab.key)}
               className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
                 statusFilter === tab.key
-                  ? 'bg-blue-600 text-white shadow-sm'
+                  ? 'bg-blue-600 text-white'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
             >
@@ -249,7 +249,7 @@ export default function CouponsPage() {
         )}
 
         {/* ──── Desktop Table ──── */}
-        <div className="hidden sm:block bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="hidden sm:block bg-white rounded-xl border border-gray-200 overflow-hidden">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-100 bg-gray-50">
@@ -377,7 +377,7 @@ export default function CouponsPage() {
               return (
                 <div
                   key={coupon.id}
-                  className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"
+                  className="bg-white rounded-xl border border-gray-200 p-4"
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">
@@ -447,7 +447,7 @@ export default function CouponsPage() {
 
         {/* ──── Pagination ──── */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-between mt-6 bg-white rounded-xl border border-gray-200 px-4 py-3 shadow-sm">
+          <div className="flex items-center justify-between mt-6 bg-white rounded-xl border border-gray-200 px-4 py-3">
             <p className="text-sm text-gray-500">
               Seite {page} von {totalPages} ({total} Gutscheine)
             </p>
@@ -476,7 +476,7 @@ export default function CouponsPage() {
                     onClick={() => setPage(pageNum)}
                     className={`w-8 h-8 rounded-md text-sm font-medium transition-colors ${
                       page === pageNum
-                        ? 'bg-blue-600 text-white shadow-sm'
+                        ? 'bg-blue-600 text-white'
                         : 'text-gray-600 hover:bg-gray-50'
                     }`}
                   >
@@ -499,7 +499,7 @@ export default function CouponsPage() {
       {/* ──── Delete Confirmation Modal ──── */}
       {deleteTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-          <div className="bg-white rounded-xl shadow-xl max-w-sm w-full mx-4 p-6">
+          <div className="bg-white rounded-xl max-w-sm w-full mx-4 p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
                 <Trash2 className="w-5 h-5 text-red-600" />

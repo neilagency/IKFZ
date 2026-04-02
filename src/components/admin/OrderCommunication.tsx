@@ -214,7 +214,7 @@ export default function OrderCommunication({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+      <div className="bg-white rounded-xl p-6 border border-gray-100">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
             <MessageSquare className="w-5 h-5 text-blue-600" />
@@ -227,7 +227,7 @@ export default function OrderCommunication({
       </div>
 
       {/* Compose Area */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+      <div className="bg-white rounded-xl p-6 border border-gray-100">
         <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
           <Send className="w-4 h-4" />
           Neue Nachricht
@@ -363,7 +363,7 @@ export default function OrderCommunication({
       </div>
 
       {/* Message History */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+      <div className="bg-white rounded-xl p-6 border border-gray-100">
         <h3 className="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2">
           <Clock className="w-4 h-4" />
           Nachrichtenverlauf
