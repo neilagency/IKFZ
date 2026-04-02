@@ -13,6 +13,7 @@ import {
   ExternalLink, Image as ImageIcon, AlertCircle, FileQuestion,
   Tag, Calendar, Mail, Copy, Send, Percent, ToggleLeft, ToggleRight,
   Upload, MessageSquare, StickyNote, Paperclip, RotateCcw, FileUp, Menu,
+  Landmark, Apple, type LucideIcon,
 } from "lucide-react";
 import { MediaLibraryTab, ImageField, MediaPicker } from "@/components/admin/MediaLibrary";
 import { ToastProvider, useToast } from "@/components/admin/Toast";
@@ -1382,6 +1383,14 @@ function GatewaysTab({ token }: { token: string }) {
   const { data, isLoading, mutate } = useSWR(`${API}/gateways`, fetcher, { revalidateOnFocus: false });
   const [saving, setSaving] = useState<string | null>(null);
 
+  const GATEWAY_ICONS: Record<string, LucideIcon> = {
+    paypal: Wallet,
+    mollie_creditcard: CreditCard,
+    mollie_applepay: Apple,
+    sepa: Landmark,
+    mollie_klarna: ShoppingCart,
+  };
+
   const gateways: any[] = data?.gateways || [];
   const paymentStats: any[] = data?.paymentStats || [];
   const summary = data?.summary || {};
@@ -1505,7 +1514,7 @@ function GatewaysTab({ token }: { token: string }) {
           <div key={gw.id} className={`p-5 rounded-2xl border transition-colors ${gw.isEnabled ? "bg-dark-900/80 border-white/[0.06]" : "bg-dark-950/50 border-white/[0.03] opacity-60"}`}>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-4">
-                <span className="text-2xl">{gw.gatewayId.startsWith("mollie_") ? "💳" : gw.gatewayId === "paypal" ? "💳" : "🏦"}</span>
+                {(() => { const Icon = GATEWAY_ICONS[gw.gatewayId] || CreditCard; return <Icon className="w-6 h-6 text-white/50" />; })()}
                 <div>
                   <h3 className="text-white font-medium">{gw.name}</h3>
                   <p className="text-white/40 text-xs mt-0.5">{gw.description}</p>
