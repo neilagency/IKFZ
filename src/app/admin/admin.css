@@ -1,198 +1,50 @@
 /* ═══════════════════════════════════════════════════════════
-   Admin Panel – Light Content Theme + Mobile Responsive
-   Sidebar stays dark, content area is light.
+   Admin Panel – Professional Light Theme
+   Sidebar stays dark (bg-dark-900), content area is light.
    Scoped under .admin-light to avoid affecting public pages.
    ═══════════════════════════════════════════════════════════ */
 
 /* ── Content Area Base ── */
 .admin-light {
-  background-color: #f4f6f8;
+  background-color: #f8f9fb;
   color: #111827;
 }
 
-/* ══ BACKGROUND OVERRIDES ══════════════════════════════════ */
-
-/* Cards & Panels: bg-dark-900/80 → white card */
-.admin-light .bg-dark-900\/80 {
-  background-color: #ffffff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04);
-}
-
-/* List items & row cards: bg-dark-900/60 → white */
-.admin-light .bg-dark-900\/60 {
-  background-color: #ffffff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-}
-
-/* Light panels */
-.admin-light .bg-dark-900\/50,
-.admin-light .bg-dark-900\/40 {
-  background-color: #f9fafb;
-}
-
-/* Input / code / select backgrounds: bg-dark-950 → near-white */
-.admin-light .bg-dark-950 {
-  background-color: #f9fafb;
-}
-
-.admin-light .bg-dark-950\/50 {
-  background-color: #f1f4f6;
-}
-
-/* Tab bar selected state: bg-white/10 → light gray */
-.admin-light .bg-white\/10 {
-  background-color: #e5e7eb;
-}
-
-/* Secondary backgrounds */
-.admin-light .bg-white\/\[0\.02\],
-.admin-light .bg-white\/\[0\.03\] {
-  background-color: #f9fafb;
-}
-
-.admin-light .bg-white\/\[0\.04\],
-.admin-light .bg-white\/5 {
-  background-color: #f3f4f6;
-}
-
-.admin-light .bg-white\/\[0\.05\] {
-  background-color: #e9ecef;
-}
-
-.admin-light .bg-white\/\[0\.08\] {
-  background-color: #e5e7eb;
-}
-
-.admin-light .bg-white\/20 {
-  background-color: #d1d5db;
-}
-
-/* Dark-800 (used in some secondary button states) */
-.admin-light .bg-dark-800 {
-  background-color: #e9ecef;
-}
-
-/* ══ TEXT COLOR OVERRIDES ══════════════════════════════════ */
-
+/* ═══════════════════════════════════════════════════════════
+   TEXT-WHITE OVERRIDE (bare text-white still in JSX)
+   ═══════════════════════════════════════════════════════════ */
 .admin-light .text-white {
   color: #111827;
 }
 
-.admin-light .text-white\/80 {
-  color: #1f2937;
-}
-
-.admin-light .text-white\/70 {
-  color: #374151;
-}
-
-.admin-light .text-white\/60 {
-  color: #4b5563;
-}
-
-.admin-light .text-white\/50 {
-  color: #6b7280;
-}
-
-.admin-light .text-white\/40 {
-  color: #9ca3af;
-}
-
-.admin-light .text-white\/30 {
-  color: #9ca3af;
-}
-
-.admin-light .text-white\/20 {
-  color: #d1d5db;
-}
-
-.admin-light .text-white\/10 {
-  color: #e5e7eb;
-}
-
-/* ── Protect white text on primary (green) button backgrounds ── */
-/* These are declared AFTER the text-white override so they win */
-.admin-light .bg-primary {
-  color: #ffffff;
-}
-
-.admin-light .bg-primary\/90 {
-  color: #ffffff;
-}
-
+/* Protect white text on colored button backgrounds */
+.admin-light .bg-primary,
+.admin-light .bg-primary\/90,
 .admin-light .bg-primary\/80 {
   color: #ffffff;
-}
-
-/* ══ HOVER STATE OVERRIDES ══════════════════════════════════ */
-
-.admin-light .hover\:bg-white\/5:hover {
-  background-color: #f9fafb;
-}
-
-.admin-light .hover\:bg-white\/\[0\.02\]:hover {
-  background-color: #f9fafb;
-}
-
-.admin-light .hover\:bg-white\/\[0\.05\]:hover {
-  background-color: #f3f4f6;
-}
-
-.admin-light .hover\:bg-white\/\[0\.08\]:hover {
-  background-color: #e9ecef;
-}
-
-.admin-light .hover\:bg-white\/10:hover {
-  background-color: #f3f4f6;
 }
 
 .admin-light .hover\:text-white:hover {
   color: #111827;
 }
 
-.admin-light .hover\:text-white\/80:hover {
-  color: #374151;
+/* ═══════════════════════════════════════════════════════════
+   CARD & PANEL POLISH
+   ═══════════════════════════════════════════════════════════ */
+
+/* White cards — add subtle professional shadow */
+.admin-light .rounded-2xl.bg-white {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
-.admin-light .hover\:text-white\/60:hover {
-  color: #4b5563;
+/* List item cards — lighter shadow */
+.admin-light .rounded-xl.bg-white {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
-.admin-light .hover\:border-white\/10:hover {
-  border-color: #d1d5db;
-}
-
-/* Focus ring on inputs */
-.admin-light .focus\:border-primary:focus {
-  border-color: #00a85a;
-  box-shadow: 0 0 0 3px rgba(0, 168, 90, 0.12);
-}
-
-/* ══ BORDER OVERRIDES ══════════════════════════════════════ */
-
-.admin-light .border-white\/\[0\.06\] {
-  border-color: #e5e7eb;
-}
-
-.admin-light .border-white\/\[0\.04\] {
-  border-color: #f3f4f6;
-}
-
-.admin-light .border-white\/\[0\.03\] {
-  border-color: #f3f4f6;
-}
-
-.admin-light .border-white\/10 {
-  border-color: #e5e7eb;
-}
-
-/* Pagination border-top */
-.admin-light .border-t.border-white\/\[0\.04\] {
-  border-top-color: #e5e7eb;
-}
-
-/* ══ INPUTS, SELECTS, TEXTAREAS ════════════════════════════ */
-
+/* ═══════════════════════════════════════════════════════════
+   INPUTS, SELECTS, TEXTAREAS
+   ═══════════════════════════════════════════════════════════ */
 .admin-light input,
 .admin-light select,
 .admin-light textarea {
@@ -214,9 +66,9 @@
   outline: none !important;
 }
 
-/* ══ TABLE IMPROVEMENTS ════════════════════════════════════ */
-
-/* Table header rows */
+/* ═══════════════════════════════════════════════════════════
+   TABLE STYLING
+   ═══════════════════════════════════════════════════════════ */
 .admin-light table thead tr {
   border-bottom: 2px solid #e5e7eb;
 }
@@ -230,76 +82,25 @@
   padding: 0.625rem 0.75rem;
 }
 
-/* Zebra rows */
 .admin-light table tbody tr:nth-child(even) {
   background-color: #f9fafb;
 }
 
-/* Row borders */
 .admin-light table tbody tr {
   border-top: 1px solid #f3f4f6;
 }
 
-/* Row hover = soft green tint */
 .admin-light table tbody tr:hover {
   background-color: #f0fdf4 !important;
 }
 
-/* Table text cells */
 .admin-light table td {
   color: #374151;
 }
 
-/* ══ SKELETON LOADER ════════════════════════════════════════ */
-
-.admin-light .animate-pulse .bg-white\/\[0\.05\],
-.admin-light .animate-pulse .bg-white\/\[0\.04\] {
-  background-color: #e5e7eb;
-}
-
-/* ══ CHART / BAR in Dashboard ══════════════════════════════ */
-
-.admin-light .bg-primary\/20 {
-  background-color: rgba(0, 168, 90, 0.12);
-}
-
-/* ══ SEARCH BAR ICON ════════════════════════════════════════ */
-
-.admin-light .text-white\/30 svg {
-  color: #9ca3af;
-}
-
-/* ══ PAGINATION ═════════════════════════════════════════════ */
-
-.admin-light .pt-4.border-t {
-  border-top-color: #e5e7eb;
-}
-
-/* Pagination inactive page number */
-.admin-light .hover\:bg-white\/5.hover\:text-white {
-  color: #6b7280;
-}
-
-/* ══ CARD ROW HOVER ════════════════════════════════════════ */
-
-.admin-light .hover\:border-white\/10:hover {
-  border-color: #d1d5db;
-}
-
-/* ══ STATUS CHANGE BUTTONS (in order detail) ══════════════ */
-
-.admin-light .hover\:bg-white\/5 {
-  background-color: transparent;
-}
-
-/* ══ MESSAGE BUBBLES ════════════════════════════════════════ */
-
-.admin-light p.text-white\/80 {
-  color: #1f2937;
-}
-
-/* ══ TIPTAP / PROSEMIRROR EDITOR ═══════════════════════════ */
-
+/* ═══════════════════════════════════════════════════════════
+   TIPTAP / PROSEMIRROR EDITOR
+   ═══════════════════════════════════════════════════════════ */
 .admin-light .ProseMirror {
   color: #111827 !important;
 }
@@ -317,8 +118,74 @@
   color: #9ca3af;
 }
 
-/* ══ SCROLLBAR (subtle in light mode) ═════════════════════ */
+/* ═══════════════════════════════════════════════════════════
+   TYPOGRAPHY
+   ═══════════════════════════════════════════════════════════ */
+.admin-light h2,
+.admin-light h3,
+.admin-light h4 {
+  color: #111827;
+}
 
+.admin-light label {
+  color: #374151;
+  font-weight: 500;
+}
+
+.admin-light .font-mono {
+  color: #374151;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FORMS
+   ═══════════════════════════════════════════════════════════ */
+.admin-light input[type="checkbox"] {
+  background-color: #ffffff !important;
+  border-color: #d1d5db !important;
+  border-width: 1.5px;
+  border-radius: 4px;
+  min-height: unset !important;
+  min-width: unset !important;
+  width: 1rem;
+  height: 1rem;
+}
+
+.admin-light input[type="checkbox"]:checked {
+  background-color: #00a85a !important;
+  border-color: #00a85a !important;
+}
+
+/* Drag-and-drop upload zone */
+.admin-light .border-2.border-dashed {
+  border-color: #d1d5db;
+  background-color: #f9fafb;
+}
+
+.admin-light .border-2.border-dashed:hover {
+  border-color: #00a85a;
+  background-color: #f0fdf4;
+}
+
+/* Select options */
+.admin-light select option {
+  background-color: #ffffff;
+  color: #111827;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CHART BAR
+   ═══════════════════════════════════════════════════════════ */
+.admin-light .bg-primary\/20 {
+  background-color: rgba(0, 168, 90, 0.12);
+}
+
+.admin-light .bg-primary\/60 {
+  background-color: rgba(0, 168, 90, 0.7);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════════════════════ */
 .admin-light::-webkit-scrollbar {
   width: 6px;
 }
@@ -336,38 +203,9 @@
   background: #9ca3af;
 }
 
-/* ══ DRAG & DROP UPLOAD AREA ════════════════════════════════ */
-
-.admin-light .border-white\/10.border-dashed:hover {
-  border-color: #9ca3af;
-  background-color: #f9fafb;
-}
-
-/* ══ TOGGLE SWITCH (Gateway) ════════════════════════════════ */
-
-.admin-light .bg-white\/10 {
-  background-color: #d1d5db;
-}
-
-/* ══ TYPOGRAPHY IMPROVEMENTS ════════════════════════════════ */
-
-.admin-light h2,
-.admin-light h3,
-.admin-light h4 {
-  color: #111827;
-}
-
-/* Section sub-labels (text-white/30 uppercase) */
-.admin-light .text-white\/20.uppercase,
-.admin-light .text-white\/30.uppercase {
-  color: #9ca3af;
-}
-
 /* ═══════════════════════════════════════════════════════════
    MOBILE SIDEBAR DRAWER
    ═══════════════════════════════════════════════════════════ */
-
-/* Overlay behind sidebar on mobile */
 .admin-sidebar-overlay {
   position: fixed;
   inset: 0;
@@ -383,14 +221,12 @@
   to { opacity: 1; }
 }
 
-/* Sidebar base styles */
 .admin-sidebar {
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
               box-shadow 0.3s ease;
   flex-shrink: 0;
 }
 
-/* Desktop: always visible */
 @media (min-width: 1024px) {
   .admin-sidebar {
     position: relative !important;
@@ -407,7 +243,6 @@
   }
 }
 
-/* Mobile: drawer behaviour */
 @media (max-width: 1023px) {
   .admin-sidebar {
     position: fixed;
@@ -427,9 +262,8 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   MOBILE CONTENT AREA ADJUSTMENTS
+   MOBILE CONTENT AREA
    ═══════════════════════════════════════════════════════════ */
-
 @media (max-width: 1023px) {
   .admin-main-content {
     padding: 1rem;
@@ -443,23 +277,19 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   TOUCH-FRIENDLY BUTTON SIZING
+   TOUCH-FRIENDLY & MOBILE RESPONSIVE
    ═══════════════════════════════════════════════════════════ */
-
 @media (max-width: 767px) {
-  /* Ensure all icon buttons have minimum 44px touch target */
   .admin-light button:not([class*="w-full"]) {
     min-height: 36px;
     min-width: 36px;
   }
 
-  /* Make tab buttons larger on mobile */
   .admin-light .rounded-xl.text-sm {
     padding-top: 0.625rem;
     padding-bottom: 0.625rem;
   }
 
-  /* Stack filter/search bar on mobile */
   .admin-light .flex.items-center.gap-3.flex-wrap {
     flex-direction: column;
     align-items: stretch;
@@ -472,11 +302,8 @@
 
 /* ═══════════════════════════════════════════════════════════
    MOBILE TABLE → CARD LAYOUT
-   Converts <table> rows into stacked cards on small screens
    ═══════════════════════════════════════════════════════════ */
-
 @media (max-width: 639px) {
-  /* Wrap overflow-x-auto tables */
   .admin-light .overflow-x-auto {
     overflow-x: visible;
   }
@@ -487,7 +314,7 @@
   }
 
   .admin-light table thead {
-    display: none; /* hide column headers on mobile */
+    display: none;
   }
 
   .admin-light table tbody {
@@ -508,7 +335,7 @@
   }
 
   .admin-light table tbody tr:nth-child(even) {
-    background-color: #ffffff !important; /* no zebra on card layout */
+    background-color: #ffffff !important;
   }
 
   .admin-light table tbody tr:hover {
@@ -524,7 +351,6 @@
     font-size: 0.8125rem;
   }
 
-  /* First cell (usually order number) spans full width */
   .admin-light table tbody td:first-child {
     grid-column: 1 / -1;
     font-weight: 600;
@@ -535,7 +361,6 @@
     margin-bottom: 0.25rem;
   }
 
-  /* Last cell (action buttons) spans full width */
   .admin-light table tbody td:last-child {
     grid-column: 1 / -1;
     flex-direction: row;
@@ -545,7 +370,6 @@
     border-top: 1px dashed #f3f4f6 !important;
   }
 
-  /* Action buttons in table rows */
   .admin-light table tbody td button,
   .admin-light table tbody td a {
     padding: 0.375rem 0.75rem !important;
@@ -554,16 +378,13 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   DASHBOARD STATS CARDS — MOBILE
+   DASHBOARD STATS — MOBILE
    ═══════════════════════════════════════════════════════════ */
-
 @media (max-width: 479px) {
-  /* 2-column stats grid instead of 4 */
   .admin-light .grid.grid-cols-2.md\:grid-cols-4 {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  /* Smaller revenue chart on tiny screens */
   .admin-light .flex.items-end.gap-2.h-48 {
     height: 8rem;
   }
@@ -572,9 +393,7 @@
 /* ═══════════════════════════════════════════════════════════
    ORDER DETAIL TABS — MOBILE SCROLLABLE
    ═══════════════════════════════════════════════════════════ */
-
 @media (max-width: 767px) {
-  /* Order detail tab bar becomes horizontally scrollable */
   .admin-light .flex.gap-1.p-1.rounded-xl {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -592,17 +411,14 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   MODAL / EDITOR PANELS — MOBILE FULL WIDTH
+   EDITOR PANELS — MOBILE
    ═══════════════════════════════════════════════════════════ */
-
 @media (max-width: 767px) {
-  /* Blog/Product editor — stack columns */
   .admin-light .grid.lg\:grid-cols-3,
   .admin-light .grid.md\:grid-cols-2 {
     grid-template-columns: 1fr;
   }
 
-  /* Reduce p-8 padding inside panels */
   .admin-light .p-8 {
     padding: 1.25rem;
   }
@@ -614,93 +430,4 @@
   .admin-light .p-5 {
     padding: 0.875rem;
   }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   FORM IMPROVEMENTS (LIGHT THEME)
-   ═══════════════════════════════════════════════════════════ */
-
-/* Label styling */
-.admin-light label {
-  color: #374151;
-  font-weight: 500;
-}
-
-/* Checkbox */
-.admin-light input[type="checkbox"] {
-  background-color: #ffffff !important;
-  border-color: #d1d5db !important;
-  border-width: 1.5px;
-  border-radius: 4px;
-  min-height: unset !important;
-  min-width: unset !important;
-  width: 1rem;
-  height: 1rem;
-}
-
-.admin-light input[type="checkbox"]:checked {
-  background-color: #00a85a !important;
-  border-color: #00a85a !important;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   MISC OVERRIDES
-   ═══════════════════════════════════════════════════════════ */
-
-/* Drag-and-drop upload zone */
-.admin-light .border-2.border-dashed {
-  border-color: #d1d5db;
-  background-color: #f9fafb;
-}
-
-.admin-light .border-2.border-dashed:hover {
-  border-color: #00a85a;
-  background-color: #f0fdf4;
-}
-
-/* Google Preview box in SEO editor */
-.admin-light .p-4.rounded-xl,
-.admin-light .p-5.rounded-2xl {
-  /* already handled by bg-dark-950 → #f9fafb and bg-dark-900/80 → white */
-}
-
-/* Badge tags in blog editor */
-.admin-light .px-2.py-0\.5.rounded.bg-white\/5 {
-  background-color: #f3f4f6;
-  color: #6b7280;
-}
-
-/* Code-style slug text */
-.admin-light .font-mono {
-  color: #374151;
-}
-
-/* Section headers (text like "Letzte Bestellungen") */
-.admin-light h3.text-white {
-  color: #111827;
-}
-
-/* Disabled/muted opacity preserved */
-.admin-light .opacity-60 {
-  opacity: 0.6;
-}
-
-/* Chart bar background */
-.admin-light .bg-primary\/60 {
-  background-color: rgba(0, 168, 90, 0.7);
-}
-
-/* ── Information/Notice Boxes (unchanged semantic colors) ── */
-/* Keep: bg-blue-500/5, bg-orange-500/5, bg-primary/5 etc. as they are */
-/* These are semantic info boxes and look fine on light backgrounds */
-
-/* ── Toggle Buttons (ON state keeps green) ── */
-.admin-light .bg-green-500 {
-  background-color: #22c55e;
-}
-
-/* ── Ensure select options are readable ── */
-.admin-light select option {
-  background-color: #ffffff;
-  color: #111827;
 }

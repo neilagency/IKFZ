@@ -36,7 +36,7 @@ function ToolbarButton({
       className={`p-1.5 rounded text-xs font-medium transition-colors ${
         active
           ? "bg-primary text-white"
-          : "text-white/50 hover:text-white hover:bg-white/10"
+          : "text-gray-500 hover:text-white hover:bg-gray-100"
       }`}
     >
       {children}
@@ -61,7 +61,7 @@ export default function TiptapEditor({ content, onChange, placeholder = "Schreib
     content,
     editorProps: {
       attributes: {
-        class: "prose prose-sm max-w-none min-h-[400px] p-4 focus:outline-none text-white/80",
+        class: "prose prose-sm max-w-none min-h-[400px] p-4 focus:outline-none text-gray-700",
       },
     },
     onUpdate({ editor }) {
@@ -80,9 +80,9 @@ export default function TiptapEditor({ content, onChange, placeholder = "Schreib
   if (!editor) return null;
 
   return (
-    <div className="rounded-xl border border-white/10 bg-dark-950 overflow-hidden">
+    <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-0.5 p-3 border-b border-white/[0.06] bg-dark-900/80">
+      <div className="flex flex-wrap items-center gap-0.5 p-3 border-b border-gray-200 bg-white">
         {/* Text Formatting */}
         <ToolbarButton onClick={() => editor.chain().focus().toggleBold().run()} active={editor.isActive("bold")} title="Fett">
           <strong>B</strong>

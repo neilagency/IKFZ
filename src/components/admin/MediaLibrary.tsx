@@ -149,24 +149,24 @@ export function MediaPicker({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={onClose}>
-      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-4xl max-h-[85vh] rounded-2xl bg-dark-900 border border-white/[0.08] flex flex-col shadow-2xl">
+      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-4xl max-h-[85vh] rounded-2xl bg-white border border-gray-200 flex flex-col shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-white/[0.06]">
+        <div className="flex items-center justify-between p-5 border-b border-gray-200">
           <h2 className="text-lg font-bold text-white">Medienbibliothek</h2>
-          <button onClick={onClose} className="p-2 rounded-lg hover:bg-white/5 text-white/40 hover:text-white">
+          <button onClick={onClose} className="p-2 rounded-lg hover:bg-gray-50 text-gray-400 hover:text-white">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Toolbar */}
-        <div className="flex items-center gap-3 p-4 border-b border-white/[0.04]">
+        <div className="flex items-center gap-3 p-4 border-b border-gray-100">
           <div className="flex-1 relative">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               value={search}
               onChange={(e) => { setSearch(e.target.value); setPage(1); }}
               placeholder="Suchen..."
-              className="w-full pl-10 pr-4 py-2 rounded-xl bg-dark-950 border border-white/10 text-white text-sm focus:border-primary focus:outline-none"
+              className="w-full pl-10 pr-4 py-2 rounded-xl bg-white border border-gray-200 text-white text-sm focus:border-primary focus:outline-none"
             />
           </div>
           <input ref={fileRef} type="file" multiple accept="image/*" className="hidden" onChange={(e) => e.target.files && handleUpload(e.target.files)} />
@@ -190,13 +190,13 @@ export function MediaPicker({
         >
           {loading ? (
             <div className="flex items-center justify-center py-20">
-              <Loader2 className="w-6 h-6 text-white/40 animate-spin" />
+              <Loader2 className="w-6 h-6 text-gray-400 animate-spin" />
             </div>
           ) : media.length === 0 ? (
             <div className="text-center py-20">
-              <ImageIcon className="w-12 h-12 text-white/10 mx-auto mb-3" />
-              <p className="text-white/30">Keine Medien gefunden</p>
-              <p className="text-white/20 text-sm mt-1">Bilder per Drag & Drop hierher ziehen</p>
+              <ImageIcon className="w-12 h-12 text-gray-200 mx-auto mb-3" />
+              <p className="text-gray-400">Keine Medien gefunden</p>
+              <p className="text-gray-300 text-sm mt-1">Bilder per Drag & Drop hierher ziehen</p>
             </div>
           ) : (
             <div className="grid grid-cols-4 sm:grid-cols-6 gap-3">
@@ -207,14 +207,14 @@ export function MediaPicker({
                   className={`group relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${
                     selected === m.url
                       ? "border-primary ring-2 ring-primary/30"
-                      : "border-white/[0.06] hover:border-white/20"
+                      : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
                   {m.mimeType.startsWith("image/") ? (
                     <img src={m.url} alt={m.filename} className="w-full h-full object-cover" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-dark-800">
-                      <ImageIcon className="w-6 h-6 text-white/20" />
+                    <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                      <ImageIcon className="w-6 h-6 text-gray-300" />
                     </div>
                   )}
                   {selected === m.url && (
@@ -233,20 +233,20 @@ export function MediaPicker({
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 p-3 border-t border-white/[0.04]">
-            <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1} className="px-3 py-1 rounded-lg text-xs text-white/40 hover:bg-white/5 disabled:opacity-20">
+          <div className="flex items-center justify-center gap-2 p-3 border-t border-gray-100">
+            <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1} className="px-3 py-1 rounded-lg text-xs text-gray-400 hover:bg-gray-50 disabled:opacity-20">
               Zurück
             </button>
-            <span className="text-white/40 text-xs">Seite {page} von {totalPages}</span>
-            <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="px-3 py-1 rounded-lg text-xs text-white/40 hover:bg-white/5 disabled:opacity-20">
+            <span className="text-gray-400 text-xs">Seite {page} von {totalPages}</span>
+            <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="px-3 py-1 rounded-lg text-xs text-gray-400 hover:bg-gray-50 disabled:opacity-20">
               Weiter
             </button>
           </div>
         )}
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 p-4 border-t border-white/[0.06]">
-          <button onClick={onClose} className="px-4 py-2 rounded-xl border border-white/10 text-white/60 text-sm hover:bg-white/5">
+        <div className="flex items-center justify-end gap-3 p-4 border-t border-gray-200">
+          <button onClick={onClose} className="px-4 py-2 rounded-xl border border-gray-200 text-gray-500 text-sm hover:bg-gray-50">
             Abbrechen
           </button>
           <button
@@ -960,10 +960,10 @@ export function ImageField({
 
   return (
     <div>
-      <label className="block text-xs text-white/40 mb-1.5">{label}</label>
+      <label className="block text-xs text-gray-400 mb-1.5">{label}</label>
       <div className="flex items-center gap-3">
         {value ? (
-          <div className="relative group w-16 h-16 rounded-lg overflow-hidden border border-white/[0.06] shrink-0">
+          <div className="relative group w-16 h-16 rounded-lg overflow-hidden border border-gray-200 shrink-0">
             <img src={value} alt="" className="w-full h-full object-cover" />
             <button
               onClick={() => onChange("")}
@@ -975,7 +975,7 @@ export function ImageField({
         ) : null}
         <button
           onClick={() => setPickerOpen(true)}
-          className="flex-1 px-4 py-3 rounded-xl bg-dark-950 border border-white/10 text-white/40 text-sm hover:border-primary/30 hover:text-white/60 transition-colors flex items-center gap-2"
+          className="flex-1 px-4 py-3 rounded-xl bg-white border border-gray-200 text-gray-400 text-sm hover:border-primary/30 hover:text-gray-600 transition-colors flex items-center gap-2"
         >
           <ImageIcon className="w-4 h-4" />
           {value ? "Bild ändern" : "Bild auswählen"}
