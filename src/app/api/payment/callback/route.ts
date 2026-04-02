@@ -55,13 +55,15 @@ export async function GET(request: NextRequest) {
       ? await getMollieOrderStatus(transactionId)
       : await getMolliePayment(transactionId);
 
-    if (molliePayment.status === 'paid') {
+    if (molliePayment.status === 'paid' || molliePayment.status === 'authorized' || molliePayment.status === 'completed') {
+      const paidAt = molliePayment.paidAt ? new Date(molliePayment.paidAt) : new Date();
+
       // Update DB (webhook might not have fired yet)
       await prisma.payment.update({
         where: { id: order.payment.id },
         data: {
           status: 'paid',
-          paidAt: molliePayment.paidAt ? new Date(molliePayment.paidAt) : new Date(),
+          paidAt,
           gatewayResponse: JSON.stringify(molliePayment),
         },
       });
@@ -69,7 +71,22 @@ export async function GET(request: NextRequest) {
         where: { id: orderId },
         data: {
           status: 'processing',
-          datePaid: molliePayment.paidAt ? new Date(molliePayment.paidAt) : new Date(),
+          datePaid: paidAt,
+        },
+      });
+
+      // Update invoice status to paid
+      await prisma.invoice.updateMany({
+        where: { orderId, status: { not: 'paid' } },
+        data: { status: 'paid', paidAt },
+      });
+
+      // Create audit trail OrderNote
+      await prisma.orderNote.create({
+        data: {
+          orderId,
+          note: `Zahlung bestätigt via Mollie Callback: ${transactionId} (${molliePayment.status})`,
+          author: 'system',
         },
       });
 
@@ -101,6 +118,15 @@ export async function GET(request: NextRequest) {
     await prisma.order.update({
       where: { id: orderId },
       data: { status: 'failed' },
+    });
+
+    // Create audit trail OrderNote for failure
+    await prisma.orderNote.create({
+      data: {
+        orderId,
+        note: `Zahlung fehlgeschlagen via Mollie Callback: ${transactionId} (${molliePayment.status})`,
+        author: 'system',
+      },
     });
 
     return NextResponse.redirect(new URL('/zahlung-fehlgeschlagen/', request.url));

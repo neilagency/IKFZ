@@ -18,8 +18,8 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-// ── Payment methods ──
-const PAYMENT_METHODS = [
+// ── All payment methods (Apple Pay filtered at runtime) ──
+const ALL_PAYMENT_METHODS = [
   { key: 'paypal', label: 'PayPal', icon: Smartphone, fee: 0 },
   { key: 'applepay', label: 'Apple Pay', icon: Smartphone, fee: 0 },
   { key: 'creditcard', label: 'Kreditkarte', icon: CreditCard, fee: 0.50 },
@@ -27,20 +27,35 @@ const PAYMENT_METHODS = [
   { key: 'sepa', label: 'SEPA-Lastschrift', icon: Banknote, fee: 0 },
 ];
 
-// ── Checkout form schema ──
+// ── Checkout form schema with Klarna conditional validation ──
 const checkoutSchema = z.object({
   firstName: z.string().min(1, 'Vorname ist erforderlich'),
   lastName: z.string().min(1, 'Nachname ist erforderlich'),
   email: z.string().email('Ungültige E-Mail-Adresse'),
   phone: z.string().min(5, 'Telefonnummer ist erforderlich'),
-  address: z.string().optional(),
-  city: z.string().optional(),
-  postcode: z.string().optional(),
+  address: z.string().optional().default(''),
+  city: z.string().optional().default(''),
+  postcode: z.string().optional().default(''),
   paymentMethod: z.string().min(1, 'Bitte wählen Sie eine Zahlungsmethode'),
   agbAccepted: z.literal(true, {
     errorMap: () => ({ message: 'Sie müssen die AGB akzeptieren' }),
   }),
-  customerNote: z.string().optional(),
+  customerNote: z.string().optional().default(''),
+}).superRefine((data, ctx) => {
+  // Klarna requires full billing address
+  if (data.paymentMethod === 'klarna') {
+    if (!data.address || data.address.trim().length === 0) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Straße ist für Klarna erforderlich', path: ['address'] });
+    }
+    if (!data.postcode || data.postcode.trim().length === 0) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'PLZ ist für Klarna erforderlich', path: ['postcode'] });
+    } else if (!/^\d{5}$/.test(data.postcode.trim())) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'PLZ muss 5 Ziffern haben', path: ['postcode'] });
+    }
+    if (!data.city || data.city.trim().length === 0) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Stadt ist für Klarna erforderlich', path: ['city'] });
+    }
+  }
 });
 
 type CheckoutFormData = z.infer<typeof checkoutSchema>;
@@ -61,6 +76,7 @@ export default function CheckoutPage() {
   const [orderData, setOrderData] = useState<OrderData | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [applePayAvailable, setApplePayAvailable] = useState(false);
 
   useEffect(() => {
     const stored = sessionStorage.getItem('checkout_order');
@@ -74,6 +90,26 @@ export default function CheckoutPage() {
       router.replace('/kfz-services/');
     }
   }, [router]);
+
+  // Apple Pay availability detection
+  useEffect(() => {
+    try {
+      if (typeof window !== 'undefined' && 'ApplePaySession' in window) {
+        const session = (window as unknown as { ApplePaySession: { canMakePayments(): boolean } }).ApplePaySession;
+        if (session.canMakePayments()) {
+          setApplePayAvailable(true);
+        }
+      }
+    } catch {
+      // Not available on this device/browser
+    }
+  }, []);
+
+  // Filter payment methods: hide Apple Pay on non-Apple devices
+  const PAYMENT_METHODS = useMemo(
+    () => ALL_PAYMENT_METHODS.filter((m) => m.key !== 'applepay' || applePayAvailable),
+    [applePayAvailable],
+  );
 
   const {
     register,
@@ -104,14 +140,24 @@ export default function CheckoutPage() {
     setError(null);
 
     try {
-      const res = await fetch('/api/checkout/direct/', {
+      const res = await fetch('/api/payment/checkout/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...data,
-          orderItems: orderData,
-          paymentFee,
-          grandTotal,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          phone: data.phone,
+          street: data.address || '',
+          city: data.city || '',
+          postcode: data.postcode || '',
+          paymentMethod: data.paymentMethod,
+          customerNote: data.customerNote || '',
+          productId: orderData.serviceType || 'abmeldung',
+          productName: orderData.selectedService || orderData.productName,
+          serviceData: orderData.formData || {},
+          addons: orderData.addons?.map((a) => ({ label: a.label, price: a.price })) || [],
+          couponCode: '',
         }),
       });
 

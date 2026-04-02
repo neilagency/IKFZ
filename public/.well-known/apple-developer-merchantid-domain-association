@@ -1,0 +1,10 @@
+Apple Pay domain verification placeholder.
+
+To enable Apple Pay via Mollie:
+1. Go to Mollie Dashboard → Settings → Apple Pay
+2. Download the domain verification file
+3. Replace THIS file's contents with the downloaded file contents
+4. Deploy and verify in the Mollie Dashboard
+
+The file must be accessible at:
+  https://ikfzdigitalzulassung.de/.well-known/apple-developer-merchantid-domain-association

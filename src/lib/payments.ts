@@ -18,7 +18,9 @@ const SITE_URL = process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || 'ht
 const MOLLIE_METHOD_MAP: Record<string, PaymentMethod> = {
   paypal: PaymentMethod.paypal,
   credit_card: PaymentMethod.creditcard,
+  creditcard: PaymentMethod.creditcard,
   apple_pay: PaymentMethod.applepay,
+  applepay: PaymentMethod.applepay,
   sepa: PaymentMethod.banktransfer,
   klarna: PaymentMethod.klarna,
 };
@@ -126,7 +128,7 @@ export async function createMolliePayment(payload: CreatePaymentPayload): Promis
   }
 
   if (!isTestMode) {
-    paymentParams.webhookUrl = `${SITE_URL}/api/webhooks/mollie`;
+    paymentParams.webhookUrl = `${SITE_URL}/api/payment/webhook`;
   }
 
   if (payload.street && payload.postcode && payload.city) {
@@ -291,7 +293,7 @@ export async function createMollieOrder(payload: CreateMollieOrderPayload): Prom
   };
 
   if (!MOLLIE_API_KEY.startsWith('test_')) {
-    orderParams.webhookUrl = `${SITE_URL}/api/webhooks/mollie`;
+    orderParams.webhookUrl = `${SITE_URL}/api/payment/webhook`;
   }
 
   paymentLog.mollieRequestPayload(orderParams);

@@ -193,7 +193,7 @@ export async function createPayPalOrder(
           locale: 'de-DE',
           landing_page: 'LOGIN',
           user_action: 'PAY_NOW',
-          return_url: `${SITE_URL}/api/paypal/capture?orderId=${params.orderId}`,
+          return_url: `${SITE_URL}/api/payment/paypal/capture?orderId=${params.orderId}`,
           cancel_url: `${SITE_URL}/zahlung-fehlgeschlagen?order=${params.orderNumber}`,
         },
       },
