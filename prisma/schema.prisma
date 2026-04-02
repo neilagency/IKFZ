@@ -554,3 +554,21 @@ model CouponUsage {
   @@index([email])
   @@index([couponId])
 }
+
+model PaymentGateway {
+  id          String   @id @default(cuid())
+  gatewayId   String   @unique
+  name        String
+  description String   @default("")
+  isEnabled   Boolean  @default(false)
+  fee         Float    @default(0)
+  icon        String   @default("")
+  sortOrder   Int      @default(0)
+  mode        String   @default("live")
+  settings    String   @default("{}")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isEnabled])
+  @@index([sortOrder])
+}

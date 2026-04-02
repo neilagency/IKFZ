@@ -8,24 +8,14 @@ import { z } from 'zod';
 import { motion } from 'framer-motion';
 import {
   ShoppingCart,
-  CreditCard,
-  Smartphone,
-  Banknote,
   Shield,
   Lock,
   AlertTriangle,
   ArrowLeft,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-// ── All payment methods (Apple Pay filtered at runtime) ──
-const ALL_PAYMENT_METHODS = [
-  { key: 'paypal', label: 'PayPal', icon: Smartphone, fee: 0 },
-  { key: 'applepay', label: 'Apple Pay', icon: Smartphone, fee: 0 },
-  { key: 'creditcard', label: 'Kreditkarte', icon: CreditCard, fee: 0.50 },
-  { key: 'klarna', label: 'Klarna', icon: CreditCard, fee: 0 },
-  { key: 'sepa', label: 'SEPA-Lastschrift', icon: Banknote, fee: 0 },
-];
+import { PaymentMethodSelector } from '@/components/PaymentMethodSelector';
+import type { PaymentMethodDef } from '@/components/PaymentMethodSelector';
 
 // ── Checkout form schema with Klarna conditional validation ──
 const checkoutSchema = z.object({
@@ -77,6 +67,7 @@ export default function CheckoutPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [applePayAvailable, setApplePayAvailable] = useState(false);
+  const [dbMethods, setDbMethods] = useState<PaymentMethodDef[]>([]);
 
   useEffect(() => {
     const stored = sessionStorage.getItem('checkout_order');
@@ -90,6 +81,21 @@ export default function CheckoutPage() {
       router.replace('/kfz-services/');
     }
   }, [router]);
+
+  // Fetch enabled payment methods from DB
+  useEffect(() => {
+    fetch('/api/payment/methods/')
+      .then((r) => r.json())
+      .then((data) => setDbMethods(data.methods || []))
+      .catch(() => {
+        // Fallback if API fails
+        setDbMethods([
+          { id: 'paypal', label: 'PayPal', description: '', fee: 0, icon: '' },
+          { id: 'creditcard', label: 'Kreditkarte', description: '', fee: 0.50, icon: '' },
+          { id: 'sepa', label: 'SEPA-Überweisung', description: '', fee: 0, icon: '' },
+        ]);
+      });
+  }, []);
 
   // Apple Pay availability detection
   useEffect(() => {
@@ -107,8 +113,8 @@ export default function CheckoutPage() {
 
   // Filter payment methods: hide Apple Pay on non-Apple devices
   const PAYMENT_METHODS = useMemo(
-    () => ALL_PAYMENT_METHODS.filter((m) => m.key !== 'applepay' || applePayAvailable),
-    [applePayAvailable],
+    () => dbMethods.filter((m) => m.id !== 'applepay' || applePayAvailable),
+    [dbMethods, applePayAvailable],
   );
 
   const {
@@ -126,7 +132,7 @@ export default function CheckoutPage() {
 
   const watchPayment = watch('paymentMethod');
 
-  const selectedMethod = PAYMENT_METHODS.find((m) => m.key === watchPayment);
+  const selectedMethod = PAYMENT_METHODS.find((m) => m.id === watchPayment);
   const paymentFee = selectedMethod?.fee ?? 0;
 
   const grandTotal = useMemo(() => {
@@ -370,54 +376,12 @@ export default function CheckoutPage() {
               </div>
 
               {/* Payment Method */}
-              <div className="rounded-2xl bg-white border border-dark-100 shadow-sm p-6">
-                <h2 className="text-lg font-bold text-dark-900 mb-4">
-                  Zahlungsmethode
-                </h2>
-                <div className="space-y-3">
-                  {PAYMENT_METHODS.map((method) => {
-                    const Icon = method.icon;
-                    return (
-                      <label
-                        key={method.key}
-                        className={cn(
-                          'flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer transition-all',
-                          watchPayment === method.key
-                            ? 'border-primary bg-primary/[0.04]'
-                            : 'border-dark-100 hover:border-dark-200'
-                        )}
-                      >
-                        <div className="flex items-center gap-3">
-                          <input
-                            type="radio"
-                            value={method.key}
-                            {...register('paymentMethod')}
-                            className="accent-primary w-4 h-4"
-                          />
-                          <Icon className="w-5 h-5 text-dark-500" />
-                          <span className="font-medium text-dark-700">
-                            {method.label}
-                          </span>
-                        </div>
-                        {method.fee > 0 ? (
-                          <span className="text-xs text-dark-400">
-                            + {method.fee.toFixed(2).replace('.', ',')} €
-                          </span>
-                        ) : (
-                          <span className="text-xs text-primary font-medium">
-                            Kostenlos
-                          </span>
-                        )}
-                      </label>
-                    );
-                  })}
-                </div>
-                {errors.paymentMethod && (
-                  <p className="text-red-500 text-sm mt-2">
-                    {errors.paymentMethod.message}
-                  </p>
-                )}
-              </div>
+              <PaymentMethodSelector
+                methods={PAYMENT_METHODS}
+                register={register}
+                selectedMethod={watchPayment}
+                error={errors.paymentMethod?.message}
+              />
 
               {/* AGB Checkbox */}
               <div className="rounded-2xl bg-white border border-dark-100 shadow-sm p-6">

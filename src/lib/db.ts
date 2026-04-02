@@ -48,6 +48,66 @@ export default prisma;
 
 // ── Helper functions ──
 
+/* ── Payment Gateway ID maps ──────────────────────────────── */
+// DB stores gatewayId (e.g. mollie_creditcard), checkout uses checkoutId (e.g. creditcard)
+const GATEWAY_ID_MAP: Record<string, string> = {
+  mollie_creditcard: 'creditcard',
+  mollie_applepay: 'applepay',
+  mollie_klarna: 'klarna',
+  paypal: 'paypal',
+  sepa: 'sepa',
+};
+
+const REVERSE_GATEWAY_MAP: Record<string, string> = Object.fromEntries(
+  Object.entries(GATEWAY_ID_MAP).map(([k, v]) => [v, k]),
+);
+
+export function getCheckoutIdForGateway(gatewayId: string): string {
+  return GATEWAY_ID_MAP[gatewayId] || gatewayId;
+}
+
+export function getDbGatewayId(checkoutId: string): string {
+  return REVERSE_GATEWAY_MAP[checkoutId] || checkoutId;
+}
+
+/**
+ * Returns all enabled payment gateways, mapped to checkout-friendly shape.
+ * Used by the checkout page (visitor-facing).
+ */
+export async function getEnabledPaymentMethods() {
+  const gateways = await prisma.paymentGateway.findMany({
+    where: { isEnabled: true },
+    orderBy: { sortOrder: 'asc' },
+    select: {
+      gatewayId: true,
+      name: true,
+      description: true,
+      fee: true,
+      icon: true,
+    },
+  });
+
+  return gateways.map((g) => ({
+    id: GATEWAY_ID_MAP[g.gatewayId] || g.gatewayId,
+    label: g.name,
+    description: g.description,
+    fee: g.fee,
+    icon: g.icon,
+  }));
+}
+
+/**
+ * Find a gateway by checkout ID (e.g. "creditcard", "paypal").
+ * Returns null if the method is not enabled.
+ */
+export async function getPaymentGatewayByCheckoutId(checkoutId: string) {
+  const dbId = REVERSE_GATEWAY_MAP[checkoutId] || checkoutId;
+
+  return prisma.paymentGateway.findFirst({
+    where: { gatewayId: dbId, isEnabled: true },
+  });
+}
+
 export async function getProductBySlug(slug: string) {
   return prisma.product.findUnique({
     where: { slug },

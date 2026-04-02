@@ -1375,75 +1375,122 @@ function InvoicesTab({ token }: { token: string }) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// PAYMENT GATEWAYS TAB
+// PAYMENT GATEWAYS TAB (DB-backed via PaymentGateway table)
 // ═══════════════════════════════════════════════════════════
 function GatewaysTab({ token }: { token: string }) {
-  const [gateways, setGateways] = useState<any[]>([]);
-  const [paymentStats, setPaymentStats] = useState<any[]>([]);
+  const { toast } = useToast();
+  const { data, isLoading, mutate } = useSWR(`${API}/gateways`, fetcher, { revalidateOnFocus: false });
+  const [saving, setSaving] = useState<string | null>(null);
 
-  const { data: settingsData } = useSWR(`${API}/settings`, fetcher, { revalidateOnFocus: false });
-  const { data: dashData } = useSWR(`${API}/dashboard`, fetcher, { revalidateOnFocus: false, dedupingInterval: 60000 });
+  const gateways: any[] = data?.gateways || [];
+  const paymentStats: any[] = data?.paymentStats || [];
+  const summary = data?.summary || {};
 
-  useEffect(() => {
-    if (!settingsData || !dashData) return;
-    const methods = dashData.paymentMethods || [];
-    setPaymentStats(methods);
-
-    const settings = settingsData.settings || [];
-    const gwSettings = settings.filter((s: any) => s.key.startsWith("gateway_"));
-
-    const knownGateways = [
-      { id: "ppcp-gateway", name: "PayPal", icon: "💳", description: "PayPal Standard & Pay Later", enabled: true },
-      { id: "mollie_wc_gateway_creditcard", name: "Kreditkarte (Mollie)", icon: "💳", description: "Visa, Mastercard via Mollie", enabled: true },
-      { id: "mollie_wc_gateway_applepay", name: "Apple Pay (Mollie)", icon: "🍎", description: "Apple Pay via Mollie", enabled: true },
-      { id: "mollie_wc_gateway_banktransfer", name: "Banküberweisung (Mollie)", icon: "🏦", description: "SEPA Banküberweisung via Mollie", enabled: true },
-      { id: "mollie_wc_gateway_billie", name: "Billie (Mollie)", icon: "📄", description: "Rechnungskauf für Unternehmen", enabled: true },
-      { id: "mollie_wc_gateway_trustly", name: "Trustly (Mollie)", icon: "🔒", description: "Sofortüberweisung via Trustly", enabled: true },
-      { id: "mollie_wc_gateway_riverty", name: "Riverty (Mollie)", icon: "📋", description: "Riverty Rechnung", enabled: true },
-      { id: "bacs", name: "Banküberweisung (Direkt)", icon: "🏦", description: "Direkte Banküberweisung (BACS)", enabled: true },
-    ];
-
-    for (const gw of knownGateways) {
-      const setting = gwSettings.find((s: any) => s.key === `gateway_${gw.id}_enabled`);
-      if (setting) gw.enabled = setting.value === "true";
+  async function toggleGateway(gw: any) {
+    setSaving(gw.id);
+    try {
+      const res = await fetch(`${API}/gateways`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ id: gw.id, isEnabled: !gw.isEnabled }),
+      });
+      if (res.ok) {
+        mutate();
+        toast(`${gw.name} ${!gw.isEnabled ? "aktiviert" : "deaktiviert"}`);
+      }
+    } catch {
+      toast("Fehler beim Aktualisieren");
+    } finally {
+      setSaving(null);
     }
-
-    setGateways(knownGateways);
-  }, [settingsData, dashData]);
-
-  async function toggleGateway(id: string, enabled: boolean) {
-    setGateways(prev => prev.map(g => g.id === id ? { ...g, enabled } : g));
-    await fetch(`${API}/settings`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ key: `gateway_${id}_enabled`, value: String(enabled) }),
-    });
   }
 
-  if (!settingsData || !dashData) return <SkeletonTable rows={4} />;
+  async function updateFee(gw: any, fee: number) {
+    setSaving(gw.id);
+    try {
+      const res = await fetch(`${API}/gateways`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ id: gw.id, fee }),
+      });
+      if (res.ok) {
+        mutate();
+        toast("Gebühr aktualisiert");
+      }
+    } catch {
+      toast("Fehler beim Speichern");
+    } finally {
+      setSaving(null);
+    }
+  }
+
+  async function updateMode(gw: any, mode: string) {
+    setSaving(gw.id);
+    try {
+      const res = await fetch(`${API}/gateways`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ id: gw.id, mode }),
+      });
+      if (res.ok) {
+        mutate();
+        toast(`${gw.name}: ${mode === "live" ? "Live" : "Test"}-Modus`);
+      }
+    } catch {
+      toast("Fehler beim Speichern");
+    } finally {
+      setSaving(null);
+    }
+  }
+
+  if (isLoading) return <SkeletonTable rows={5} />;
 
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div>
         <h2 className="text-lg font-semibold text-white mb-1">Zahlungs-Gateways</h2>
-        <p className="text-white/40 text-sm">Konfiguration der aktiven Zahlungsmethoden (migriert von WooCommerce)</p>
+        <p className="text-white/40 text-sm">Benutzerdefinierte Zahlungskonfiguration — Änderungen werden sofort auf der Checkout-Seite angezeigt</p>
       </div>
 
+      {/* Summary cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="p-4 rounded-2xl bg-dark-900/80 border border-white/[0.06]">
+          <p className="text-white/40 text-xs mb-1">Gesamtumsatz</p>
+          <p className="text-white font-semibold text-lg">{formatEuro(summary.totalRevenue || 0)}</p>
+        </div>
+        <div className="p-4 rounded-2xl bg-dark-900/80 border border-white/[0.06]">
+          <p className="text-white/40 text-xs mb-1">Transaktionen</p>
+          <p className="text-white font-semibold text-lg">{summary.totalTransactions || 0}</p>
+        </div>
+        <div className="p-4 rounded-2xl bg-dark-900/80 border border-white/[0.06]">
+          <p className="text-white/40 text-xs mb-1">Aktive Gateways</p>
+          <p className="text-green-400 font-semibold text-lg">{summary.activeGateways || 0}</p>
+        </div>
+        <div className="p-4 rounded-2xl bg-dark-900/80 border border-white/[0.06]">
+          <p className="text-white/40 text-xs mb-1">Inaktive Gateways</p>
+          <p className="text-white/60 font-semibold text-lg">{summary.inactiveGateways || 0}</p>
+        </div>
+      </div>
+
+      {/* Revenue per gateway */}
       {paymentStats.length > 0 && (
         <div className="p-5 rounded-2xl bg-dark-900/80 border border-white/[0.06]">
-          <h3 className="text-white font-semibold mb-4 flex items-center gap-2"><TrendingUp className="w-4 h-4 text-primary" /> Nutzungsstatistiken</h3>
+          <h3 className="text-white font-semibold mb-4 flex items-center gap-2"><TrendingUp className="w-4 h-4 text-primary" /> Umsatz je Gateway</h3>
           <div className="space-y-3">
-            {paymentStats.map((pm: any) => {
-              const maxCount = Math.max(...paymentStats.map((p: any) => p.count));
+            {paymentStats.map((ps: any) => {
+              const maxCount = Math.max(...paymentStats.map((p: any) => p._count));
               return (
-                <div key={pm.method}>
+                <div key={ps.gateway || "unknown"}>
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-white/70 text-sm">{pm.method || "Sonstige"}</span>
-                    <span className="text-white text-sm font-medium">{pm.count}x — {formatEuro(pm.total)}</span>
+                    <span className="text-white/70 text-sm">{ps.gateway || "Sonstige"}</span>
+                    <span className="text-white text-sm font-medium">{ps._count}x — {formatEuro(ps._sum?.amount || 0)}</span>
                   </div>
                   <div className="w-full h-2 rounded-full bg-white/5">
-                    <div className="h-full rounded-full bg-primary/60" style={{ width: `${(pm.count / maxCount) * 100}%` }} />
+                    <div className="h-full rounded-full bg-primary/60" style={{ width: `${(ps._count / (maxCount || 1)) * 100}%` }} />
                   </div>
                 </div>
               );
@@ -1452,22 +1499,59 @@ function GatewaysTab({ token }: { token: string }) {
         </div>
       )}
 
+      {/* Gateway cards */}
       <div className="space-y-3">
-        {gateways.map(gw => (
-          <div key={gw.id} className={`p-5 rounded-2xl border transition-colors ${gw.enabled ? "bg-dark-900/80 border-white/[0.06]" : "bg-dark-950/50 border-white/[0.03] opacity-60"}`}>
-            <div className="flex items-center justify-between">
+        {gateways.map((gw: any) => (
+          <div key={gw.id} className={`p-5 rounded-2xl border transition-colors ${gw.isEnabled ? "bg-dark-900/80 border-white/[0.06]" : "bg-dark-950/50 border-white/[0.03] opacity-60"}`}>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-4">
-                <span className="text-2xl">{gw.icon}</span>
+                <span className="text-2xl">{gw.gatewayId.startsWith("mollie_") ? "💳" : gw.gatewayId === "paypal" ? "💳" : "🏦"}</span>
                 <div>
                   <h3 className="text-white font-medium">{gw.name}</h3>
                   <p className="text-white/40 text-xs mt-0.5">{gw.description}</p>
-                  <p className="text-white/20 text-[10px] font-mono mt-1">{gw.id}</p>
+                  <p className="text-white/20 text-[10px] font-mono mt-1">{gw.gatewayId}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <Badge status={gw.enabled ? "completed" : "cancelled"} />
-                <button onClick={() => toggleGateway(gw.id, !gw.enabled)} className={`relative w-12 h-6 rounded-full transition-colors ${gw.enabled ? "bg-green-500" : "bg-white/10"}`}>
-                  <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${gw.enabled ? "left-6" : "left-0.5"}`} />
+
+              <div className="flex items-center gap-4">
+                {/* Fee input */}
+                <div className="flex items-center gap-1.5">
+                  <span className="text-white/40 text-xs">Gebühr:</span>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    defaultValue={gw.fee}
+                    className="w-20 px-2 py-1 text-sm rounded-lg bg-white/5 border border-white/10 text-white focus:border-primary/50 focus:outline-none"
+                    onBlur={(e) => {
+                      const val = parseFloat(e.target.value);
+                      if (!isNaN(val) && val !== gw.fee) updateFee(gw, val);
+                    }}
+                    disabled={saving === gw.id}
+                  />
+                  <span className="text-white/40 text-xs">€</span>
+                </div>
+
+                {/* Mode toggle */}
+                <button
+                  onClick={() => updateMode(gw, gw.mode === "live" ? "test" : "live")}
+                  className={`px-2.5 py-1 text-xs rounded-full font-medium transition-colors ${
+                    gw.mode === "live"
+                      ? "bg-green-500/10 text-green-400 border border-green-500/20"
+                      : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                  }`}
+                  disabled={saving === gw.id}
+                >
+                  {gw.mode === "live" ? "Live" : "Test"}
+                </button>
+
+                {/* Enable/disable toggle */}
+                <button
+                  onClick={() => toggleGateway(gw)}
+                  className={`relative w-12 h-6 rounded-full transition-colors ${gw.isEnabled ? "bg-green-500" : "bg-white/10"}`}
+                  disabled={saving === gw.id}
+                >
+                  <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${gw.isEnabled ? "left-6" : "left-0.5"}`} />
                 </button>
               </div>
             </div>
@@ -1476,7 +1560,10 @@ function GatewaysTab({ token }: { token: string }) {
       </div>
 
       <div className="p-4 rounded-xl bg-blue-500/5 border border-blue-500/10">
-        <p className="text-blue-400 text-sm flex items-center gap-2"><Shield className="w-4 h-4" /> Die tatsächliche Payment-Integration (Stripe, PayPal, Mollie) wird über Environment Variables und Webhooks konfiguriert.</p>
+        <p className="text-blue-400 text-sm flex items-center gap-2">
+          <Shield className="w-4 h-4" />
+          Änderungen hier beeinflussen sofort die aktive Checkout-Seite. Deaktivierte Gateways werden den Besuchern nicht angezeigt.
+        </p>
       </div>
     </div>
   );

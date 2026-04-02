@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createOrder } from '@/lib/db';
+import { createOrder, getPaymentGatewayByCheckoutId } from '@/lib/db';
 import prisma from '@/lib/db';
 import {
   createMolliePayment,
@@ -17,14 +17,7 @@ import crypto from 'crypto';
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || 'https://ikfzdigitalzulassung.de';
 
-/* ── Payment surcharges (processor fees, not product prices) ── */
-const PAYMENT_FEES: Record<string, number> = {
-  paypal: 0,
-  applepay: 0,
-  creditcard: 0.50,
-  klarna: 0,
-  sepa: 0,
-};
+/* ── Payment surcharges — fetched from DB at runtime ── */
 
 /* ── Fetch prices from DB (single source of truth) ───────────── */
 async function getPricesFromDB(
@@ -113,14 +106,6 @@ export async function POST(request: NextRequest) {
       formData: body.serviceData,
     };
 
-    const paymentMethodTitles: Record<string, string> = {
-      paypal: 'PayPal',
-      applepay: 'Apple Pay',
-      creditcard: 'Kreditkarte',
-      klarna: 'Klarna',
-      sepa: 'SEPA-Lastschrift',
-    };
-
     // ── Server-side price recalculation via Database ──
     // Prices are always fetched from DB — never trust frontend values
     const productSlug = orderItems.productSlug;
@@ -144,7 +129,16 @@ export async function POST(request: NextRequest) {
     }
 
     const serviceName = orderItems.selectedService ?? orderItems.productName;
-    const serverPaymentFee = PAYMENT_FEES[paymentMethod] ?? 0;
+
+    // ── Validate payment method against DB ──
+    const gateway = await getPaymentGatewayByCheckoutId(paymentMethod);
+    if (!gateway) {
+      return NextResponse.json(
+        { error: 'Ungültige oder deaktivierte Zahlungsmethode.' },
+        { status: 400 }
+      );
+    }
+    const serverPaymentFee = gateway.fee;
 
     // Build order items with DB-verified prices
     const items = [
@@ -241,7 +235,7 @@ export async function POST(request: NextRequest) {
     // Add payment fee as line item if applicable
     if (serverPaymentFee > 0) {
       items.push({
-        name: `Zahlungsgebühr (${paymentMethodTitles[paymentMethod] ?? paymentMethod})`,
+        name: `Zahlungsgebühr (${gateway.name})`,
         quantity: 1,
         price: serverPaymentFee,
         total: serverPaymentFee,
@@ -294,7 +288,7 @@ export async function POST(request: NextRequest) {
       total: serverGrandTotal,
       subtotal: serverSubtotal,
       paymentMethod,
-      paymentMethodTitle: paymentMethodTitles[paymentMethod] ?? paymentMethod,
+      paymentMethodTitle: gateway.name,
       paymentFee: serverPaymentFee,
       billingFirstName: firstName,
       billingLastName: lastName,
