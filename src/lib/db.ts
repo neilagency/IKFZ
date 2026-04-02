@@ -43,30 +43,31 @@ function getDbPath(): string {
     return prodPath;
   }
 
-  // 3. Development fallback: prisma/dev.db
+  // 3. Fallback: prisma/dev.db
   const devPath = path.join(process.cwd(), 'prisma', 'dev.db');
 
-  // During build: allow dev.db as fallback (ISR will refresh from production at runtime)
-  if (isBuildPhase && fs.existsSync(devPath)) {
-    console.warn('[DB] ⚠ Build phase: using dev.db for pre-rendering. ISR will refresh from production DB at runtime.');
+  if (fs.existsSync(devPath)) {
+    if (isProduction) {
+      console.warn('[DB] ⚠ PRODUCTION: using dev.db as fallback. Set DB_PATH for explicit production database.');
+    } else if (isBuildPhase) {
+      console.warn('[DB] ⚠ Build phase: using dev.db for pre-rendering.');
+    }
     return devPath;
   }
 
-  // In production RUNTIME, DB_PATH MUST be set — never fall through to dev.db
-  if (isProduction && !isBuildPhase) {
+  // No database found at all
+  if (isProduction) {
     const msg = `[DB] ❌ PRODUCTION ERROR: No database found!\n` +
       `  DB_PATH env: (not set)\n` +
       `  Symlink: ${prodPath} (not found)\n` +
+      `  dev.db: ${devPath} (not found)\n` +
       `  cwd: ${process.cwd()}\n` +
-      `  ⚠ Set DB_PATH in .env or ecosystem.config.js to fix this.`;
+      `  ⚠ Set DB_PATH or copy the database to one of the above paths.`;
     console.error(msg);
     throw new Error(msg);
   }
 
-  // Development: prisma/dev.db
-  if (!fs.existsSync(devPath)) {
-    console.error(`[DB] ⚠ Dev database not found at ${devPath}. Run: npx prisma migrate dev`);
-  }
+  console.error(`[DB] ⚠ Dev database not found at ${devPath}. Run: npx prisma migrate dev`);
   return devPath;
 }
 
