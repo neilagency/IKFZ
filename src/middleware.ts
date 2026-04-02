@@ -76,8 +76,9 @@ export function middleware(request: NextRequest) {
   // 3. Admin API protection — lightweight cookie check
   const isAdminApi = pathname.startsWith('/api/admin');
   const isAdminAuthApi = pathname === '/api/admin/auth' || pathname === '/api/admin/auth/';
+  const isAdminHealthApi = pathname === '/api/admin/health' || pathname === '/api/admin/health/';
 
-  if (isAdminApi && !isAdminAuthApi) {
+  if (isAdminApi && !isAdminAuthApi && !isAdminHealthApi) {
     if (!request.cookies.has(ADMIN_TOKEN)) {
       return new NextResponse(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401,
