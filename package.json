@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/setup-production-db.js && prisma generate && prisma db push --accept-data-loss && next build",
+    "build": "node scripts/setup-production-db.js && prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "migrate": "ts-node --project tsconfig.migrate.json scripts/migrate-wp.ts"
