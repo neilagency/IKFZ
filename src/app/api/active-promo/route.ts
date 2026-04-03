@@ -3,7 +3,9 @@ import prisma from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
-/** GET /api/active-promo – get active coupon with banner enabled */
+const NO_CACHE = { 'Cache-Control': 'no-store, no-cache, must-revalidate' };
+
+/** GET /api/active-promo/ – get active coupon with banner enabled */
 export async function GET() {
   try {
     const now = new Date();
@@ -16,29 +18,27 @@ export async function GET() {
           { startDate: null },
           { startDate: { lte: now } },
         ],
+        AND: [
+          {
+            OR: [
+              { endDate: null },
+              { endDate: { gte: now } },
+            ],
+          },
+        ],
       },
       select: {
         code: true,
         discountType: true,
         discountValue: true,
         bannerText: true,
-        productSlugs: true,
-        endDate: true,
       },
       orderBy: { createdAt: 'desc' },
     });
 
-    if (promo && promo.endDate && now > promo.endDate) {
-      return NextResponse.json({ promo: null }, {
-        headers: { 'Cache-Control': 'public, max-age=60, stale-while-revalidate=300' },
-      });
-    }
-
-    return NextResponse.json({ promo: promo || null }, {
-      headers: { 'Cache-Control': 'public, max-age=60, stale-while-revalidate=300' },
-    });
+    return NextResponse.json({ promo: promo || null }, { headers: NO_CACHE });
   } catch (error) {
     console.error('Active promo error:', error);
-    return NextResponse.json({ promo: null });
+    return NextResponse.json({ promo: null }, { headers: NO_CACHE });
   }
 }
