@@ -988,7 +988,7 @@ function InvoicesTab({ token }: { token: string }) {
   }
 
   function downloadPdf(inv: any) {
-    window.open(`${API}/invoices/${inv.id}/pdf`, "_blank");
+    window.open(`${API}/invoices/${inv.id}/pdf/`, "_blank");
   }
 
   function handleStatusChange(status: string) {

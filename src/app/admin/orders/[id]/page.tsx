@@ -785,10 +785,10 @@ export default function OrderDetailPage() {
                 </div>
                 <div className="flex flex-col gap-2">
                   <a
-                    href={`/api/admin/invoices/${order.id}/pdf`}
+                    href={`/api/admin/invoices/${order.invoice.id}/pdf/`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 font-medium"
+                    className="flex items-center gap-2 text-sm text-primary hover:text-primary-700 font-medium"
                   >
                     <Download className="w-4 h-4" />
                     PDF herunterladen
@@ -796,7 +796,7 @@ export default function OrderDetailPage() {
                   <button
                     onClick={resendInvoice}
                     disabled={resending}
-                    className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 font-medium disabled:opacity-50"
+                    className="flex items-center gap-2 text-sm text-primary hover:text-primary-700 font-medium disabled:opacity-50"
                   >
                     {resending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Mail className="w-4 h-4" />}
                     Rechnung erneut senden
