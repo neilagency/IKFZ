@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { getCustomerSession } from '@/lib/customer-auth';
+import { generateInvoiceToken } from '@/lib/invoice-token';
 
 export async function GET(
   request: NextRequest,
@@ -37,7 +38,12 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({ order });
+    // Attach pdfToken so the customer can download the invoice PDF
+    const invoice = order.invoice
+      ? { ...order.invoice, pdfToken: generateInvoiceToken(order.invoice.invoiceNumber) }
+      : null;
+
+    return NextResponse.json({ order: { ...order, invoice } });
   } catch (error) {
     console.error('Customer order detail error:', error);
     return NextResponse.json(
