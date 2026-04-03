@@ -73,17 +73,22 @@ if (!fs.existsSync(dbFile)) {
   console.log(`[DB-SETUP] ✅ Production DB exists (${sizeMB} MB) — NOT overwriting`);
 }
 
-// 3. Write DB_PATH to .env.local so next build and runtime pick it up
-const envLocalPath = path.join(cwd, '.env.local');
-let envContent = '';
-if (fs.existsSync(envLocalPath)) {
-  envContent = fs.readFileSync(envLocalPath, 'utf-8');
+// 3. Write DB_PATH to .env.local (build-time) AND .env (runtime)
+// Next.js standalone runs from a DIFFERENT directory than the build.
+// .env.local is read at build time, .env is copied to the runtime dir.
+const dbPathLine = `DB_PATH=${dbFile}`;
+
+for (const envFile of ['.env.local', '.env']) {
+  const envPath = path.join(cwd, envFile);
+  let envContent = '';
+  if (fs.existsSync(envPath)) {
+    envContent = fs.readFileSync(envPath, 'utf-8');
+  }
+  // Remove any existing DB_PATH line, then append
+  envContent = envContent.replace(/^DB_PATH=.*\n?/gm, '').trim();
+  envContent += `\n${dbPathLine}\n`;
+  fs.writeFileSync(envPath, envContent.trim() + '\n');
+  console.log(`[DB-SETUP] ✅ Wrote DB_PATH to ${envFile}`);
 }
 
-// Remove any existing DB_PATH line
-envContent = envContent.replace(/^DB_PATH=.*\n?/gm, '').trim();
-envContent += `\nDB_PATH=${dbFile}\n`;
-fs.writeFileSync(envLocalPath, envContent.trim() + '\n');
-
-console.log('[DB-SETUP] ✅ Wrote DB_PATH to .env.local');
 console.log('[DB-SETUP] ════════════════════════════════════════');

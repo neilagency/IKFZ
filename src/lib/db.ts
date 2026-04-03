@@ -18,7 +18,7 @@ import fs from 'fs';
 function getDbPath(): string {
   const isProduction = process.env.NODE_ENV === 'production';
 
-  // 1. DB_PATH env var — the ONLY path in production
+  // 1. DB_PATH env var — the primary path
   if (process.env.DB_PATH) {
     if (!fs.existsSync(process.env.DB_PATH)) {
       const msg = `[DB] ❌ DB_PATH is set but file does not exist: ${process.env.DB_PATH}`;
@@ -28,10 +28,32 @@ function getDbPath(): string {
     return process.env.DB_PATH;
   }
 
-  // 2. Production WITHOUT DB_PATH → fatal error
+  // 2. Production auto-detect: Hostinger persistent database
+  //    Runtime CWD may differ from build CWD, so detect by home dir pattern
   if (isProduction) {
+    const homeMatch = (process.env.HOME || process.cwd()).match(/\/home\/(u\d+)\//)
+      || process.cwd().match(/\/home\/(u\d+)\//);
+    if (homeMatch) {
+      // Scan for the domain database directory
+      const userHome = `/home/${homeMatch[1]}`;
+      const domainsDir = path.join(userHome, 'domains');
+      if (fs.existsSync(domainsDir)) {
+        try {
+          const domains = fs.readdirSync(domainsDir);
+          for (const domain of domains) {
+            const dbFile = path.join(domainsDir, domain, 'database', 'production.db');
+            if (fs.existsSync(dbFile)) {
+              console.log(`[DB] Auto-detected Hostinger DB: ${dbFile}`);
+              return dbFile;
+            }
+          }
+        } catch { /* ignore readdir errors */ }
+      }
+    }
+
     const msg = `[DB] ❌ FATAL: DB_PATH is not set in production!\n` +
       `  cwd: ${process.cwd()}\n` +
+      `  HOME: ${process.env.HOME}\n` +
       `  Ensure scripts/setup-production-db.js ran before build,\n` +
       `  or set DB_PATH manually in your environment.`;
     console.error(msg);
