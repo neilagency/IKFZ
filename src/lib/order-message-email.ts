@@ -5,8 +5,8 @@
  */
 
 import {
-  siteUrl, contact, company, emailColors, emailFrom,
-  createEmailTransporterSync, emailFromField,
+  siteUrl, contact, company, emailColors,
+  createEmailTransporterSync, buildMailOptions,
 } from '@/lib/email-config';
 
 function escapeHtml(str: string): string {
@@ -109,17 +109,19 @@ export async function sendOrderMessageEmail(
     const transporter = createEmailTransporterSync();
     const html = buildMessageHtml(opts);
 
-    const mailOpts: Record<string, unknown> = {
-      from: emailFromField(),
-      replyTo: emailFrom,
+    const mailOpts = buildMailOptions({
       to: opts.to,
       subject: `Nachricht zu Ihrer Bestellung #${opts.orderNumber}`,
       html,
-    };
+      attachments: opts.attachments?.map((a) => ({
+        filename: a.filename,
+        content: a.path as unknown as string,
+      })),
+    });
 
-    // Add attachments if present
+    // Override attachments to use path format for file attachments
     if (opts.attachments && opts.attachments.length > 0) {
-      mailOpts.attachments = opts.attachments.map((a) => ({
+      (mailOpts as Record<string, unknown>).attachments = opts.attachments.map((a) => ({
         filename: a.filename,
         path: a.path,
       }));

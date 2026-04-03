@@ -6,7 +6,7 @@
 
 import {
   siteUrl as SITE_URL, company, contact,
-  createEmailTransporterSync, emailFromField,
+  createEmailTransporterSync, buildMailOptions,
 } from '@/lib/email-config';
 
 function escapeHtml(str: string): string {
@@ -119,12 +119,11 @@ export async function sendCampaignEmail(opts: {
 }): Promise<{ success: boolean; error?: string }> {
   try {
     const transporter = createEmailTransporterSync();
-    await transporter.sendMail({
-      from: emailFromField(),
+    await transporter.sendMail(buildMailOptions({
       to: opts.to,
       subject: opts.subject,
       html: opts.html,
-    });
+    }));
     return { success: true };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);

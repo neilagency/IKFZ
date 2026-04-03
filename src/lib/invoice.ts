@@ -14,7 +14,7 @@ import prisma from '@/lib/db';
 import { type InvoiceData } from '@/lib/invoice-template';
 import {
   siteUrl as SITE_URL, smtp, contact, company, emailColors,
-  adminEmail, createEmailTransporter, emailFromField,
+  adminEmail, createEmailTransporter, buildMailOptions,
 } from '@/lib/email-config';
 
 function formatDateDE(date: Date | string): string {
@@ -436,8 +436,7 @@ E-Mail: <a href="mailto:${contact.email}" style="color:#0D5581;font-weight:600;"
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
-      await transporter.sendMail({
-        from: emailFromField(),
+      await transporter.sendMail(buildMailOptions({
         to: opts.to,
         subject:
           'Ihre Bestellung #' +
@@ -452,7 +451,7 @@ E-Mail: <a href="mailto:${contact.email}" style="color:#0D5581;font-weight:600;"
             contentType: 'application/pdf',
           },
         ],
-      });
+      }));
       console.log(
         `[email] Invoice email sent to ${opts.to} for order #${opts.orderNumber}`,
       );
@@ -485,8 +484,7 @@ E-Mail: <a href="mailto:${contact.email}" style="color:#0D5581;font-weight:600;"
 <p>${company.nameFull} · ${company.address}</p></div></body></html>`;
 
         try {
-          await transporter.sendMail({
-            from: emailFromField(),
+          await transporter.sendMail(buildMailOptions({
             to: adminEmail,
             subject:
               '[Admin] Neue Bestellung #' +
@@ -501,7 +499,7 @@ E-Mail: <a href="mailto:${contact.email}" style="color:#0D5581;font-weight:600;"
                 contentType: 'application/pdf',
               },
             ],
-          });
+          }));
           console.log('[email] Admin copy sent to ' + adminEmail);
         } catch (adminErr) {
           console.error(

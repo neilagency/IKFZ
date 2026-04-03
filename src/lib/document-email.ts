@@ -5,7 +5,7 @@
 
 import {
   siteUrl as SITE_URL, smtp, contact, company, emailColors,
-  createEmailTransporter, emailFromField,
+  createEmailTransporter, buildMailOptions,
 } from '@/lib/email-config';
 
 function escapeHtml(str: string): string {
@@ -119,13 +119,12 @@ export async function sendDocumentEmail(opts: {
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
-      await transporter.sendMail({
-        from: emailFromField(),
+      await transporter.sendMail(buildMailOptions({
         to: opts.to,
         subject: `Ihr Dokument zu Bestellung #${opts.orderNumber} ist verfügbar`,
         html: emailHTML,
         attachments,
-      });
+      }));
       console.log(`[document-email] Sent to ${opts.to} for order #${opts.orderNumber}`);
       return { success: true };
     } catch (err) {

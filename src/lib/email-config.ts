@@ -138,3 +138,66 @@ export function emailHeaderHtml(title: string): string {
 export function emailFromField(): string {
   return `"${emailFromName}" <${emailFrom}>`;
 }
+
+// ── Standard mail options for better deliverability ──
+
+/**
+ * Build standard mail options with proper headers to avoid spam.
+ * Always includes: from, replyTo, List-Unsubscribe (for campaigns), and MIME headers.
+ */
+export function buildMailOptions(opts: {
+  to: string;
+  subject: string;
+  html: string;
+  text?: string;
+  attachments?: Array<{ filename: string; content: Buffer | string; contentType?: string }>;
+  unsubscribeUrl?: string;
+  replyTo?: string;
+}) {
+  const headers: Record<string, string> = {
+    'X-Mailer': `${company.name} Mailer`,
+    'X-Priority': '3',
+    'Precedence': 'bulk',
+  };
+
+  if (opts.unsubscribeUrl) {
+    headers['List-Unsubscribe'] = `<${opts.unsubscribeUrl}>`;
+    headers['List-Unsubscribe-Post'] = 'List-Unsubscribe=One-Click';
+  }
+
+  return {
+    from: emailFromField(),
+    to: opts.to,
+    replyTo: opts.replyTo || emailFrom,
+    subject: opts.subject,
+    html: opts.html,
+    text: opts.text || stripHtml(opts.html),
+    ...(opts.attachments?.length ? { attachments: opts.attachments } : {}),
+    headers,
+  };
+}
+
+/**
+ * Strip HTML tags to produce a plain-text version of the email.
+ * Spam filters prefer emails that include both HTML and plain text.
+ */
+function stripHtml(html: string): string {
+  return html
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/p>/gi, '\n\n')
+    .replace(/<\/div>/gi, '\n')
+    .replace(/<\/tr>/gi, '\n')
+    .replace(/<\/li>/gi, '\n')
+    .replace(/<li[^>]*>/gi, '  • ')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/&euro;/gi, '€')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}

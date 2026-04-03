@@ -9,7 +9,7 @@ import prisma from '@/lib/db';
 import { getAdminSession, unauthorized } from '@/lib/auth';
 import {
   smtp, siteUrl as SITE_URL, company, contact,
-  createEmailTransporter, emailFromField,
+  createEmailTransporter, buildMailOptions,
 } from '@/lib/email-config';
 
 export const dynamic = 'force-dynamic';
@@ -83,12 +83,11 @@ export async function POST(_request: NextRequest, ctx: RouteCtx) {
 </div>
 </body></html>`;
 
-    await transporter.sendMail({
-      from: emailFromField(),
+    await transporter.sendMail(buildMailOptions({
       to: order.billingEmail,
       subject: `Rechnung #${order.invoice.invoiceNumber} – ${company.name}`,
       html,
-    });
+    }));
 
     // Add note
     await prisma.orderNote.create({
