@@ -53,7 +53,36 @@ export async function GET(req: NextRequest) {
     checks['HOMEPAGE_QUERY'] = `FAILED: ${e.message}`;
   }
 
-  // 6. Node version
+  // 6. Test static-like module eval (simulates what failing pages do)
+  try {
+    const dbModule = await import('@/lib/db');
+    const exportNames = Object.keys(dbModule);
+    checks['DB_MODULE_EXPORTS'] = exportNames.join(', ');
+    // Test if the default export (prisma) is usable
+    const testCount = await dbModule.default.product.count();
+    checks['STATIC_PRISMA_TEST'] = `OK (${testCount} products)`;
+  } catch (e: any) {
+    checks['STATIC_PRISMA_TEST'] = `FAILED: ${e.message}`;
+    checks['STATIC_PRISMA_STACK'] = (e.stack || '').split('\n').slice(0, 8).join(' | ');
+  }
+
+  // 7. List files in CWD to check if .env.local exists at runtime
+  try {
+    const fs = await import('fs');
+    const envLocalExists = fs.existsSync('.env.local');
+    const envExists = fs.existsSync('.env');
+    checks['ENV_LOCAL_EXISTS'] = envLocalExists ? 'YES' : 'NO';
+    checks['ENV_EXISTS'] = envExists ? 'YES' : 'NO';
+    if (envLocalExists) {
+      const content = fs.readFileSync('.env.local', 'utf-8');
+      const dbLine = content.split('\n').find((l: string) => l.startsWith('DB_PATH='));
+      checks['ENV_LOCAL_DB_PATH'] = dbLine || '(not found in file)';
+    }
+  } catch (e: any) {
+    checks['ENV_FILES_ERROR'] = e.message;
+  }
+
+  // 8. Node version
   checks['NODE_VERSION'] = process.version;
 
   return NextResponse.json(checks, { status: 200 });
