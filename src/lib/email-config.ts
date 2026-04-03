@@ -153,16 +153,17 @@ export function buildMailOptions(opts: {
   attachments?: Array<{ filename: string; content: Buffer | string; contentType?: string }>;
   unsubscribeUrl?: string;
   replyTo?: string;
+  isBulk?: boolean;
 }) {
-  const headers: Record<string, string> = {
-    'X-Mailer': `${company.name} Mailer`,
-    'X-Priority': '3',
-    'Precedence': 'bulk',
-  };
+  const headers: Record<string, string> = {};
 
-  if (opts.unsubscribeUrl) {
-    headers['List-Unsubscribe'] = `<${opts.unsubscribeUrl}>`;
-    headers['List-Unsubscribe-Post'] = 'List-Unsubscribe=One-Click';
+  // Only add bulk headers for campaign/marketing emails
+  if (opts.isBulk) {
+    headers['Precedence'] = 'bulk';
+    if (opts.unsubscribeUrl) {
+      headers['List-Unsubscribe'] = `<${opts.unsubscribeUrl}>`;
+      headers['List-Unsubscribe-Post'] = 'List-Unsubscribe=One-Click';
+    }
   }
 
   return {
