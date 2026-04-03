@@ -122,7 +122,7 @@ export async function generateInvoicePDF(orderId: string): Promise<{
     let y = 15;
 
     // Header bar
-    doc.setFillColor(13, 85, 129);
+    doc.setFillColor(0, 168, 90);
     doc.rect(0, 0, pw, 35, 'F');
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(18);
@@ -224,7 +224,7 @@ export async function generateInvoicePDF(orderId: string): Promise<{
     y += 14;
 
     // Table header
-    doc.setFillColor(13, 85, 129);
+    doc.setFillColor(0, 168, 90);
     doc.rect(m, y, cw, 8, 'F');
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(9);
@@ -278,7 +278,7 @@ export async function generateInvoicePDF(orderId: string): Promise<{
     y += 6;
 
     // Total row
-    doc.setFillColor(13, 85, 129);
+    doc.setFillColor(0, 168, 90);
     doc.rect(pw - m - 70, y - 1, 70, 9, 'F');
     doc.setTextColor(255, 255, 255);
     doc.setFont('helvetica', 'bold');
