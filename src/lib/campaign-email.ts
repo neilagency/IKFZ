@@ -132,9 +132,9 @@ export async function sendCampaignEmail(opts: {
 }
 
 /**
- * Send campaign to a batch of recipients with delay between each.
- * Updates DB progress after each batch.
- * Supports per-recipient HTML personalization (unsubscribe token).
+ * Send campaign to a batch of recipients with rate limiting.
+ * Titan Mail allows 50 emails/hour, so we send 40/hour (safe margin)
+ * and pause automatically when nearing the limit.
  */
 export async function sendCampaignBatch(opts: {
   campaignId: string;
@@ -143,48 +143,89 @@ export async function sendCampaignBatch(opts: {
   html: string;
   onProgress: (sent: number, failed: number, errors: string[]) => Promise<void>;
 }): Promise<{ sent: number; failed: number; errors: string[] }> {
-  const BATCH_SIZE = 50;
-  const DELAY_BETWEEN_EMAILS_MS = 500;
-  const DELAY_BETWEEN_BATCHES_MS = 3000;
+  const HOURLY_LIMIT = 40; // Titan allows 50, keep 10 buffer for transactional emails
+  const DELAY_BETWEEN_EMAILS_MS = 2000; // 2 seconds between each email
+  const HOURLY_PAUSE_MS = 65 * 60 * 1000; // 65 minutes pause when limit reached
+  const PROGRESS_INTERVAL = 5; // Report progress every N emails
 
   let sent = 0;
   let failed = 0;
+  let hourlySent = 0;
+  let hourStart = Date.now();
   const errors: string[] = [];
 
-  for (let i = 0; i < opts.recipients.length; i += BATCH_SIZE) {
-    const batch = opts.recipients.slice(i, i + BATCH_SIZE);
+  for (let i = 0; i < opts.recipients.length; i++) {
+    const recipient = opts.recipients[i];
 
-    for (const recipient of batch) {
-      // Personalize HTML with recipient's unsubscribe token
-      const personalHtml = personalizeHtml(opts.html, recipient.unsubscribeToken);
+    // Check if we've hit the hourly limit
+    const elapsed = Date.now() - hourStart;
+    if (hourlySent >= HOURLY_LIMIT) {
+      const waitTime = Math.max(HOURLY_PAUSE_MS - elapsed, 60_000);
+      const waitMinutes = Math.ceil(waitTime / 60_000);
+      console.log(`[campaign] Hourly limit reached (${hourlySent}/${HOURLY_LIMIT}). Pausing ${waitMinutes} min...`);
 
-      const result = await sendCampaignEmail({
-        to: recipient.email,
-        subject: opts.subject,
-        html: personalHtml,
-      });
+      // Report progress before pausing
+      await opts.onProgress(sent, failed, errors);
 
-      if (result.success) {
-        sent++;
-      } else {
-        failed++;
-        errors.push(`${recipient.email}: ${result.error}`);
-      }
+      await new Promise((r) => setTimeout(r, waitTime));
 
-      // Small delay between emails to avoid rate limiting
-      if (DELAY_BETWEEN_EMAILS_MS > 0) {
-        await new Promise((r) => setTimeout(r, DELAY_BETWEEN_EMAILS_MS));
+      // Reset hourly counter
+      hourlySent = 0;
+      hourStart = Date.now();
+    }
+
+    // Personalize HTML with recipient's unsubscribe token
+    const personalHtml = personalizeHtml(opts.html, recipient.unsubscribeToken);
+
+    const result = await sendCampaignEmail({
+      to: recipient.email,
+      subject: opts.subject,
+      html: personalHtml,
+    });
+
+    if (result.success) {
+      sent++;
+      hourlySent++;
+    } else {
+      failed++;
+      errors.push(`${recipient.email}: ${result.error}`);
+
+      // If quota exceeded error, pause immediately
+      if (result.error && /quota|limit|exceeded|too many/i.test(result.error)) {
+        console.log(`[campaign] Quota error detected. Pausing 65 min...`);
+        await opts.onProgress(sent, failed, errors);
+        await new Promise((r) => setTimeout(r, HOURLY_PAUSE_MS));
+        hourlySent = 0;
+        hourStart = Date.now();
+
+        // Retry this recipient
+        const retry = await sendCampaignEmail({
+          to: recipient.email,
+          subject: opts.subject,
+          html: personalHtml,
+        });
+        if (retry.success) {
+          sent++;
+          hourlySent++;
+          failed--; // undo the failure count
+          errors.pop();
+        }
       }
     }
 
-    // Report progress after each batch
-    await opts.onProgress(sent, failed, errors);
+    // Report progress periodically
+    if ((sent + failed) % PROGRESS_INTERVAL === 0 || i === opts.recipients.length - 1) {
+      await opts.onProgress(sent, failed, errors);
+    }
 
-    // Longer delay between batches
-    if (i + BATCH_SIZE < opts.recipients.length) {
-      await new Promise((r) => setTimeout(r, DELAY_BETWEEN_BATCHES_MS));
+    // Delay between emails
+    if (i < opts.recipients.length - 1) {
+      await new Promise((r) => setTimeout(r, DELAY_BETWEEN_EMAILS_MS));
     }
   }
+
+  // Final progress report
+  await opts.onProgress(sent, failed, errors);
 
   return { sent, failed, errors };
 }
