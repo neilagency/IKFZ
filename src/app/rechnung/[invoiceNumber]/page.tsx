@@ -288,7 +288,7 @@ export default async function InvoicePage({ params, searchParams }: PageProps) {
 
         {/* ── Action Buttons ── */}
         <div className="flex flex-col sm:flex-row gap-3 print:hidden">
-          <PrintButton invoiceNumber={decodeURIComponent(invoiceNumber)} />
+          <PrintButton invoiceNumber={decodeURIComponent(invoiceNumber)} token={token} />
           <Link
             href="/"
             className="flex-1 inline-flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-6 py-4 rounded-xl transition-colors"

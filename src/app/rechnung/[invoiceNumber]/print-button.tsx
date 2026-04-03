@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Download, Loader2 } from 'lucide-react';
 
-export default function PrintButton({ invoiceNumber }: { invoiceNumber: string }) {
+export default function PrintButton({ invoiceNumber, token }: { invoiceNumber: string; token?: string }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -11,7 +11,8 @@ export default function PrintButton({ invoiceNumber }: { invoiceNumber: string }
     setLoading(true);
     setError('');
     try {
-      const res = await fetch(`/api/invoice/${encodeURIComponent(invoiceNumber)}/pdf`);
+      const tokenParam = token ? `?token=${encodeURIComponent(token)}` : '';
+      const res = await fetch(`/api/invoice/${encodeURIComponent(invoiceNumber)}/pdf/${tokenParam}`);
       if (!res.ok) throw new Error('PDF konnte nicht heruntergeladen werden.');
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);

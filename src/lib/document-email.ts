@@ -42,7 +42,7 @@ export async function sendDocumentEmail(opts: {
     return { success: false, error: 'SMTP connection failed: ' + msg };
   }
 
-  const downloadUrl = `${SITE_URL}/api/documents/${opts.documentId}/download?token=${opts.downloadToken}`;
+  const downloadUrl = `${SITE_URL}/api/documents/${opts.documentId}/download/?token=${opts.downloadToken}`;
 
   const emailHTML = emailTemplate({
     title: 'Ihr Dokument ist verfügbar',

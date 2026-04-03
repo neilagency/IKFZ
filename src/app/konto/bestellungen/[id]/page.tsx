@@ -138,7 +138,7 @@ function CustomerOrderDocuments({ orderId }: { orderId: string }) {
             </div>
             <div className="flex items-center gap-2">
               <a
-                href={`/api/documents/${doc.id}/download?token=${encodeURIComponent(doc.token)}`}
+                href={`/api/documents/${doc.id}/download/?token=${encodeURIComponent(doc.token)}`}
                 className="inline-flex items-center gap-1.5 px-3 py-2 bg-white rounded-xl border border-gray-200 text-sm text-gray-600 hover:text-primary hover:border-primary/30 hover:shadow-sm transition"
               >
                 <Download className="w-4 h-4" />
@@ -238,7 +238,7 @@ export default function OrderDetailPage() {
         {/* Quick invoice download */}
         {order.invoice && order.invoice.pdfToken && (
           <a
-            href={`/api/invoice/${order.invoice.invoiceNumber}/pdf?token=${encodeURIComponent(order.invoice.pdfToken)}`}
+            href={`/api/invoice/${order.invoice.invoiceNumber}/pdf/?token=${encodeURIComponent(order.invoice.pdfToken)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-primary text-white font-medium px-4 py-2 rounded-xl hover:bg-primary-700 transition text-sm sm:self-start"
@@ -433,7 +433,7 @@ export default function OrderDetailPage() {
               </div>
               {order.invoice.pdfToken && (
                 <a
-                  href={`/api/invoice/${order.invoice.invoiceNumber}/pdf?token=${encodeURIComponent(order.invoice.pdfToken)}`}
+                  href={`/api/invoice/${order.invoice.invoiceNumber}/pdf/?token=${encodeURIComponent(order.invoice.pdfToken)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2.5 bg-white rounded-xl border border-gray-200 text-gray-500 hover:text-primary hover:border-primary/30 hover:shadow-sm transition"
