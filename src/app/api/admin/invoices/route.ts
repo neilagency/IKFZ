@@ -30,14 +30,24 @@ export async function GET(req: NextRequest) {
       select: {
         id: true,
         invoiceNumber: true,
+        customerId: true,
         status: true,
         amount: true,
         currency: true,
+        subtotal: true,
+        taxRate: true,
+        taxAmount: true,
+        paymentMethod: true,
+        transactionId: true,
         issuedAt: true,
         paidAt: true,
         billingName: true,
         billingEmail: true,
         billingAddress: true,
+        billingCity: true,
+        billingPostcode: true,
+        billingCountry: true,
+        companyName: true,
         orderId: true,
         createdAt: true,
         order: {
@@ -104,16 +114,29 @@ export async function POST(req: NextRequest) {
       items.push({ name: `Zahlungsgebühr (${order.paymentMethodTitle || 'Sonstige'})`, quantity: 1, price: order.paymentFee, total: order.paymentFee });
     }
 
+    const invSubtotal = order.subtotal > 0 ? order.subtotal : order.total / 1.19;
+    const invTaxAmount = parseFloat((order.total - invSubtotal).toFixed(2));
+
     const invoice = await prisma.invoice.create({
       data: {
         orderId,
         invoiceNumber,
+        customerId: order.customerId || undefined,
         status: 'issued',
         amount: order.total,
         currency: 'EUR',
         billingName,
         billingEmail: order.billingEmail || '',
         billingAddress: [order.billingAddress1, order.billingPostcode, order.billingCity].filter(Boolean).join(', '),
+        billingCity: order.billingCity || '',
+        billingPostcode: order.billingPostcode || '',
+        billingCountry: order.billingCountry || 'DE',
+        companyName: order.billingCompany || '',
+        subtotal: parseFloat(invSubtotal.toFixed(2)),
+        taxRate: 19,
+        taxAmount: invTaxAmount,
+        paymentMethod: order.paymentMethod || '',
+        transactionId: order.transactionId || '',
         items: JSON.stringify(items),
       },
     });

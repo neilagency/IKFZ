@@ -17,6 +17,8 @@ export async function POST(req: NextRequest) {
         id: true,
         orderNumber: true,
         total: true,
+        subtotal: true,
+        customerId: true,
         billingFirstName: true,
         billingLastName: true,
         billingEmail: true,
@@ -73,16 +75,28 @@ export async function POST(req: NextRequest) {
         });
       }
 
+      const invSubtotal = (order.subtotal && order.subtotal > 0) ? order.subtotal : order.total / 1.19;
+      const invTaxAmount = parseFloat((order.total - invSubtotal).toFixed(2));
+
       await prisma.invoice.create({
         data: {
           orderId: order.id,
           invoiceNumber,
+          customerId: order.customerId || undefined,
           status: 'issued',
           amount: order.total,
           currency: 'EUR',
           billingName,
           billingEmail: order.billingEmail || '',
           billingAddress: [order.billingAddress1, order.billingPostcode, order.billingCity].filter(Boolean).join(', '),
+          billingCity: order.billingCity || '',
+          billingPostcode: order.billingPostcode || '',
+          billingCountry: order.billingCountry || 'DE',
+          subtotal: parseFloat(invSubtotal.toFixed(2)),
+          taxRate: 19,
+          taxAmount: invTaxAmount,
+          paymentMethod: order.paymentMethod || '',
+          transactionId: '',
           items: JSON.stringify(items),
         },
       });

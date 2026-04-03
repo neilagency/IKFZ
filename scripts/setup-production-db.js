@@ -91,4 +91,56 @@ for (const envFile of ['.env.local', '.env']) {
   console.log(`[DB-SETUP] ✅ Wrote DB_PATH to ${envFile}`);
 }
 
+// 4. Run schema migrations (add missing columns/indexes)
+try {
+  const Database = require('better-sqlite3');
+  const db = new Database(dbFile);
+
+  const addCol = (table, col, type, def) => {
+    const cols = db.pragma(`table_info(${table})`).map(c => c.name);
+    if (!cols.includes(col)) {
+      const defaultClause = def !== undefined ? ` DEFAULT ${typeof def === 'string' ? `'${def}'` : def}` : '';
+      db.exec(`ALTER TABLE "${table}" ADD COLUMN "${col}" ${type}${defaultClause}`);
+      console.log(`[DB-SETUP] ✅ Added ${table}.${col}`);
+    }
+  };
+
+  // Invoice enrichment
+  addCol('Invoice', 'customerId', 'TEXT', undefined);
+  addCol('Invoice', 'billingCity', 'TEXT', '');
+  addCol('Invoice', 'billingPostcode', 'TEXT', '');
+  addCol('Invoice', 'billingCountry', 'TEXT', 'DE');
+  addCol('Invoice', 'companyName', 'TEXT', '');
+  addCol('Invoice', 'companyTaxId', 'TEXT', '');
+  addCol('Invoice', 'subtotal', 'REAL', 0);
+  addCol('Invoice', 'taxRate', 'REAL', 19);
+  addCol('Invoice', 'taxAmount', 'REAL', 0);
+  addCol('Invoice', 'paymentMethod', 'TEXT', '');
+  addCol('Invoice', 'transactionId', 'TEXT', '');
+  addCol('Invoice', 'pdfUrl', 'TEXT', '');
+  addCol('Invoice', 'updatedAt', 'TEXT', undefined);
+
+  const createIdx = (name, table, cols) => {
+    try { db.exec(`CREATE INDEX IF NOT EXISTS "${name}" ON "${table}"(${cols})`); } catch (e) { /* ignore */ }
+  };
+
+  createIdx('idx_order_status', 'Order', '"status"');
+  createIdx('idx_order_billing_email', 'Order', '"billingEmail"');
+  createIdx('idx_order_created_at', 'Order', '"createdAt"');
+  createIdx('idx_order_deleted_at', 'Order', '"deletedAt"');
+  createIdx('idx_order_deleted_status', 'Order', '"deletedAt","status"');
+  createIdx('idx_order_deleted_created', 'Order', '"deletedAt","createdAt"');
+
+  createIdx('idx_invoice_customer_id', 'Invoice', '"customerId"');
+  createIdx('idx_invoice_issued_at', 'Invoice', '"issuedAt"');
+  createIdx('idx_invoice_status', 'Invoice', '"status"');
+  createIdx('idx_invoice_billing_email', 'Invoice', '"billingEmail"');
+  createIdx('idx_invoice_created_at', 'Invoice', '"createdAt"');
+
+  db.close();
+  console.log('[DB-SETUP] ✅ Schema migration complete');
+} catch (migErr) {
+  console.log('[DB-SETUP] ⚠ Schema migration skipped:', migErr.message);
+}
+
 console.log('[DB-SETUP] ════════════════════════════════════════');

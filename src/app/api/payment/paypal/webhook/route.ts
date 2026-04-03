@@ -248,7 +248,7 @@ async function handleCaptureCompleted(resource: { id?: string; custom_id?: strin
 
   await prisma.invoice.updateMany({
     where: { orderId: payment.orderId, status: { not: 'paid' } },
-    data: { status: 'paid', paidAt: new Date() },
+    data: { status: 'paid', paidAt: new Date(), transactionId: captureId || '', paymentMethod: 'paypal' },
   });
 
   await prisma.orderNote.create({

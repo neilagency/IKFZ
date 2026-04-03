@@ -243,6 +243,9 @@ export async function createOrder(data: {
 
   // Create invoice
   const invoiceNumber = `INV-${Date.now().toString(36).toUpperCase()}`;
+  const invoiceSubtotal = data.subtotal > 0 ? data.subtotal : data.total / 1.19;
+  const invoiceTaxAmount = parseFloat((data.total - invoiceSubtotal).toFixed(2));
+
   await prisma.invoice.create({
     data: {
       orderId: order.id,
@@ -253,6 +256,13 @@ export async function createOrder(data: {
       billingName: `${data.billingFirstName} ${data.billingLastName}`,
       billingEmail: data.billingEmail,
       billingAddress: [data.billingAddress1, data.billingPostcode, data.billingCity].filter(Boolean).join(', '),
+      billingCity: data.billingCity || '',
+      billingPostcode: data.billingPostcode || '',
+      billingCountry: data.billingCountry || 'DE',
+      subtotal: parseFloat(invoiceSubtotal.toFixed(2)),
+      taxRate: 19,
+      taxAmount: invoiceTaxAmount,
+      paymentMethod: data.paymentMethod || '',
       items: JSON.stringify(data.items),
     },
   });

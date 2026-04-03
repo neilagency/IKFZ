@@ -351,14 +351,21 @@ export async function generateInvoicePDF(orderId: string): Promise<{
     );
   }
 
-  // Update pdfUrl to mark as generated
+  // Persist computed values + mark as generated
   try {
     await prisma.invoice.update({
       where: { id: invoice.id },
-      data: { status: 'issued' },
+      data: {
+        status: 'issued',
+        subtotal: parseFloat(subtotal.toFixed(2)),
+        taxRate,
+        taxAmount,
+        paymentMethod,
+        transactionId,
+      },
     });
   } catch (e) {
-    console.warn('[invoice] Could not update invoice status:', e);
+    console.warn('[invoice] Could not update invoice:', e);
   }
 
   return { pdfBuffer, invoiceData, invoiceNumber: invoice.invoiceNumber };

@@ -360,6 +360,13 @@ model Order {
   deletedAt         DateTime?
   createdAt         DateTime    @default(now())
   updatedAt         DateTime    @updatedAt
+
+  @@index([status])
+  @@index([billingEmail])
+  @@index([createdAt])
+  @@index([deletedAt])
+  @@index([deletedAt, status])
+  @@index([deletedAt, createdAt])
 }
 
 // Order Line Items
@@ -404,22 +411,49 @@ model Payment {
 
 // Invoices
 model Invoice {
-  id            String   @id @default(cuid())
-  orderId       String   @unique
-  invoiceNumber String   @unique
-  status        String   @default("issued")
-  amount        Float    @default(0)
-  currency      String   @default("EUR")
-  issuedAt      DateTime @default(now())
-  dueAt         DateTime?
-  paidAt        DateTime?
-  billingName   String?
-  billingEmail  String?
-  billingAddress String?
-  items         String?
-  notes         String?
-  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  createdAt     DateTime @default(now())
+  id              String    @id @default(cuid())
+  orderId         String    @unique
+  invoiceNumber   String    @unique
+  customerId      String?
+  // Billing Snapshot
+  billingName     String    @default("")
+  billingEmail    String    @default("")
+  billingAddress  String    @default("")
+  billingCity     String    @default("")
+  billingPostcode String    @default("")
+  billingCountry  String    @default("DE")
+  // Company (B2B)
+  companyName     String    @default("")
+  companyTaxId    String    @default("")
+  // Items
+  items           String    @default("[]")
+  // Amounts
+  subtotal        Float     @default(0)
+  taxRate         Float     @default(19)
+  taxAmount       Float     @default(0)
+  amount          Float     @default(0)
+  currency        String    @default("EUR")
+  // Payment
+  paymentMethod   String    @default("")
+  status          String    @default("pending")
+  transactionId   String    @default("")
+  // PDF
+  pdfUrl          String    @default("")
+  // Dates
+  issuedAt        DateTime  @default(now())
+  dueAt           DateTime?
+  paidAt          DateTime?
+  notes           String?
+  order           Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([orderId])
+  @@index([customerId])
+  @@index([issuedAt])
+  @@index([status])
+  @@index([billingEmail])
+  @@index([createdAt])
 }
 
 // ═══════════════════════════════════════════════

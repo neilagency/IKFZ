@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
       // Update invoice status to paid
       await prisma.invoice.updateMany({
         where: { orderId, status: { not: 'paid' } },
-        data: { status: 'paid', paidAt },
+        data: { status: 'paid', paidAt, transactionId: paymentId, paymentMethod: mollieMethod || 'mollie' },
       });
 
       // Create audit trail OrderNote
