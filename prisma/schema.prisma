@@ -304,7 +304,7 @@ model Customer {
 model Order {
   id                String      @id @default(cuid())
   wcId              Int?        @unique
-  orderNumber       String?
+  orderNumber       String?     @unique
   status            String      @default("pending")
   currency          String      @default("EUR")
   total             Float       @default(0)

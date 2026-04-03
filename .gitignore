@@ -44,3 +44,4 @@ next-env.d.ts
 
 # backup (root-level only, not src/ paths)
 /backup/
+dev.db

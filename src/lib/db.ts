@@ -193,7 +193,20 @@ export async function createOrder(data: {
   customerNote?: string;
   items: { name: string; quantity: number; price: number; total: number }[];
 }) {
-  const orderNumber = `IKFZ-${Date.now().toString(36).toUpperCase()}`;
+  // Sequential order numbering: find the highest numeric orderNumber and increment.
+  // We fetch top 100 by string-desc to handle digit-length boundaries (e.g. "99999" → "100000")
+  // where string sort would incorrectly put shorter numbers last.
+  const recentOrders = await prisma.order.findMany({
+    orderBy: { orderNumber: 'desc' },
+    take: 100,
+    select: { orderNumber: true },
+  });
+  let maxNum = 0;
+  for (const o of recentOrders) {
+    const n = parseInt(o.orderNumber ?? '0', 10);
+    if (!isNaN(n) && n > maxNum) maxNum = n;
+  }
+  const orderNumber = String(maxNum + 1);
 
   const order = await prisma.order.create({
     data: {
