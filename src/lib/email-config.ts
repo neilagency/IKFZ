@@ -88,7 +88,7 @@ export async function createEmailTransporter() {
 }
 
 export function createEmailTransporterSync() {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  // eslint-disable-next-line
   const nodemailer = require('nodemailer');
   return nodemailer.createTransport({
     host: smtp.host,
