@@ -4,20 +4,10 @@ import { verifyAuth, unauthorized } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
-// Simple 60-second cache for dashboard data
-let dashboardCache: { data: any; timestamp: number } | null = null;
-const CACHE_TTL = 60 * 1000; // 60 seconds
-
-// GET /api/admin/dashboard - Dashboard statistics (cached)
+// GET /api/admin/dashboard - Dashboard statistics (live from DB, no cache)
 export async function GET(req: NextRequest) {
   const user = verifyAuth(req);
   if (!user) return unauthorized();
-
-  // Return cached data if fresh
-  const now = Date.now();
-  if (dashboardCache && now - dashboardCache.timestamp < CACHE_TTL) {
-    return NextResponse.json(dashboardCache.data);
-  }
 
   try {
     const [
@@ -128,9 +118,6 @@ export async function GET(req: NextRequest) {
       monthlyRevenue,
       statusBreakdown,
     };
-
-    // Cache the result
-    dashboardCache = { data: responseData, timestamp: now };
 
     return NextResponse.json(responseData);
   } catch (error) {

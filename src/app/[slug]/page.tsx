@@ -24,7 +24,7 @@ const RESERVED_SLUGS = new Set([
   'kfz-zulassung-in-deiner-stadt', 'bestellung-erfolgreich', 'zahlung-fehlgeschlagen',
 ]);
 
-export const revalidate = 60;
+export const revalidate = 0; // DEBUG: force fresh DB reads
 export const dynamicParams = true;
 
 export async function generateStaticParams() {

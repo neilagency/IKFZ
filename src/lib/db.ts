@@ -5,66 +5,59 @@ import fs from 'fs';
 
 /* ── Single Source of Truth: Database Resolution ──────────────────
  *
- * PRODUCTION (Hostinger / VPS):
- *   DB_PATH env var → persistent production database.
- *   Set automatically by scripts/setup-production-db.js (Hostinger)
- *   or deploy/deploy.sh (VPS). No fallbacks — crash if not set.
+ * PRODUCTION: DB_PATH → required (auto-detected on Hostinger)
+ *   NO fallback. NO dev.db. NO auto-creation. CRASH if missing.
  *
- * DEVELOPMENT (local machine only):
- *   DB_PATH env var OR prisma/dev.db.
- *
+ * DEVELOPMENT: DB_PATH env var OR prisma/dev.db.
  * ────────────────────────────────────────────────────────────────── */
 
 function getDbPath(): string {
   const isProduction = process.env.NODE_ENV === 'production';
 
-  // 1. DB_PATH env var — the primary path
+  // 1. DB_PATH env var → always use if set
   if (process.env.DB_PATH) {
     if (!fs.existsSync(process.env.DB_PATH)) {
-      const msg = `[DB] ❌ DB_PATH is set but file does not exist: ${process.env.DB_PATH}`;
+      const msg = `[DB] FATAL: DB_PATH set but file missing: ${process.env.DB_PATH}`;
       console.error(msg);
-      if (isProduction) throw new Error(msg);
+      throw new Error(msg);
     }
+    console.log(`[DB] Using DB_PATH: ${process.env.DB_PATH}`);
     return process.env.DB_PATH;
   }
 
-  // 2. Production auto-detect: Hostinger persistent database
-  //    Runtime CWD may differ from build CWD, so detect by home dir pattern
+  // 2. Production: auto-detect Hostinger persistent database
   if (isProduction) {
     const homeMatch = (process.env.HOME || process.cwd()).match(/\/home\/(u\d+)\//)
       || process.cwd().match(/\/home\/(u\d+)\//);
     if (homeMatch) {
-      // Scan for the domain database directory
-      const userHome = `/home/${homeMatch[1]}`;
-      const domainsDir = path.join(userHome, 'domains');
+      const domainsDir = `/home/${homeMatch[1]}/domains`;
       if (fs.existsSync(domainsDir)) {
         try {
-          const domains = fs.readdirSync(domainsDir);
-          for (const domain of domains) {
+          for (const domain of fs.readdirSync(domainsDir)) {
             const dbFile = path.join(domainsDir, domain, 'database', 'production.db');
             if (fs.existsSync(dbFile)) {
-              console.log(`[DB] Auto-detected Hostinger DB: ${dbFile}`);
+              console.log(`[DB] Auto-detected: ${dbFile}`);
               return dbFile;
             }
           }
-        } catch { /* ignore readdir errors */ }
+        } catch { /* ignore */ }
       }
     }
 
-    const msg = `[DB] ❌ FATAL: DB_PATH is not set in production!\n` +
-      `  cwd: ${process.cwd()}\n` +
-      `  HOME: ${process.env.HOME}\n` +
-      `  Ensure scripts/setup-production-db.js ran before build,\n` +
-      `  or set DB_PATH manually in your environment.`;
+    // No DB found in production → CRASH. No fallback ever.
+    const msg = `[DB] FATAL: No production database found!\n` +
+      `  DB_PATH: (not set)\n  CWD: ${process.cwd()}\n  HOME: ${process.env.HOME}\n` +
+      `  Expected: /home/uXXX/domains/*/database/production.db`;
     console.error(msg);
     throw new Error(msg);
   }
 
-  // 3. Development only: prisma/dev.db
+  // 3. Development ONLY: prisma/dev.db
   const devPath = path.join(process.cwd(), 'prisma', 'dev.db');
   if (!fs.existsSync(devPath)) {
-    console.error(`[DB] ⚠ Dev database not found at ${devPath}. Run: npx prisma migrate dev`);
+    console.error(`[DB] Dev DB not found: ${devPath}. Run: npx prisma migrate dev`);
   }
+  console.log(`[DB] Dev mode: ${devPath}`);
   return devPath;
 }
 

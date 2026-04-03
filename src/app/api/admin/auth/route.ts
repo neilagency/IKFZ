@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { signToken, setAuthCookie, clearAuthCookie, verifyAuth } from '@/lib/auth';
 
+export const dynamic = 'force-dynamic';
+
 // Simple in-memory rate limiter (per IP, 5 attempts per minute)
 const loginAttempts = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT = 5;
@@ -63,8 +65,7 @@ export async function POST(req: NextRequest) {
     return setAuthCookie(response, token);
   } catch (error) {
     console.error('Auth error:', error);
-    const msg = error instanceof Error ? error.message : String(error);
-    return NextResponse.json({ error: 'Server-Fehler', debug: msg }, { status: 500 });
+    return NextResponse.json({ error: 'Server-Fehler' }, { status: 500 });
   }
 }
 

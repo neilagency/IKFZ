@@ -4,7 +4,7 @@ import { ArrowRight, Car, FileX, Repeat, CreditCard, Sparkles, ShieldCheck, Bank
 import ScrollReveal from '@/components/ScrollReveal';
 import { getProductBySlug } from '@/lib/db';
 
-export const revalidate = 60; // re-fetch prices from DB every 60 seconds
+export const revalidate = 0; // DEBUG: force fresh DB reads (restore to 60 after verification)
 
 export const metadata: Metadata = {
   title: 'KFZ Dienstleistungen – Online Zulassungsservice',
