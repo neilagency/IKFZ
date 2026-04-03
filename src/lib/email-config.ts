@@ -61,15 +61,29 @@ export const siteUrl = process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL 
 // ── Design Tokens ──
 
 export const emailColors = {
-  primary: '#0D5581',
+  primary: '#00a85a',       // Brand green (matches website)
+  primaryDark: '#008a4a',   // Darker green for borders/accents
+  headerBg: '#16191d',      // Dark header (dark-900)
+  headerAccent: '#00a85a',  // Green accent stripe on header
   white: '#ffffff',
-  lightGray: '#f8fafc',
-  lightGreen: '#f0fdf4',
-  greenBorder: '#bbf7d0',
-  textDark: '#1a1a1a',
-  textGray: '#64748b',
-  footerGray: '#999',
-  bodyBg: '#f4f6f9',
+  bodyBg: '#f7f8fa',        // Outer page bg
+  cardBg: '#ffffff',        // Content card bg
+  lightGray: '#f8fafc',     // Table/section bg
+  border: '#e5e7eb',        // Standard border
+  lightGreen: '#f0fdf4',    // Help box bg
+  greenBorder: '#bbf7d0',   // Help box border
+  greenText: '#166534',     // Help box text
+  textDark: '#1a1a1a',      // Primary text
+  textBody: '#333333',      // Body text
+  textGray: '#64748b',      // Secondary text
+  textMuted: '#777777',     // Muted labels
+  footerGray: '#999999',    // Footer text
+  yellowBg: '#fefce8',      // Review box bg
+  yellowBorder: '#fde68a',  // Review box border
+  yellowText: '#854d0e',    // Review box text
+  blueBg: '#eff6ff',        // Info box bg
+  blueBorder: '#bfdbfe',    // Info box border
+  blueText: '#1e40af',      // Info box text
 } as const;
 
 // ── Transporter Factory ──
@@ -103,11 +117,12 @@ export function createEmailTransporterSync() {
 
 export function emailFooterHtml(includeUnsubscribe = false, unsubscribeUrl?: string): string {
   return `
-    <div style="text-align:center;padding:20px;color:${emailColors.footerGray};font-size:12px;">
-      <p>${company.nameFull}</p>
-      <p>${company.address}</p>
-      <p>Tel.: ${contact.phoneDisplay} · E-Mail: ${contact.email} · Web: ${company.website}</p>
-      ${includeUnsubscribe && unsubscribeUrl ? `<p style="margin-top:12px;"><a href="${unsubscribeUrl}" style="color:${emailColors.footerGray};">Vom Newsletter abmelden</a></p>` : ''}
+    <div style="text-align:center;padding:25px 20px;color:${emailColors.footerGray};font-size:12px;line-height:1.6;">
+      <p style="margin:0 0 4px;">${company.nameFull}</p>
+      <p style="margin:0 0 4px;">${company.address}</p>
+      <p style="margin:0;">Tel.: ${contact.phoneDisplay} · E-Mail: ${contact.email}</p>
+      <p style="margin:8px 0 0;"><a href="https://${company.website}" style="color:${emailColors.primary};text-decoration:none;font-weight:600;">${company.website}</a></p>
+      ${includeUnsubscribe && unsubscribeUrl ? `<p style="margin-top:12px;"><a href="${unsubscribeUrl}" style="color:${emailColors.footerGray};text-decoration:underline;">Vom Newsletter abmelden</a></p>` : ''}
     </div>`;
 }
 
@@ -115,11 +130,11 @@ export function emailFooterHtml(includeUnsubscribe = false, unsubscribeUrl?: str
 
 export function emailHelpBoxHtml(): string {
   return `
-    <div style="background:${emailColors.lightGreen};border:1px solid ${emailColors.greenBorder};border-radius:12px;padding:20px;margin:20px 0;">
-      <p style="margin:0 0 8px;font-weight:600;color:#166534;">Brauchen Sie Hilfe?</p>
-      <p style="margin:4px 0;color:#333;font-size:14px;">📞 <a href="tel:+49${contact.phone}" style="color:${emailColors.primary};text-decoration:none;">${contact.phoneDisplay}</a></p>
-      <p style="margin:4px 0;color:#333;font-size:14px;">💬 <a href="https://wa.me/${contact.whatsapp}" style="color:${emailColors.primary};text-decoration:none;">WhatsApp</a></p>
-      <p style="margin:4px 0;color:#333;font-size:14px;">✉️ <a href="mailto:${contact.email}" style="color:${emailColors.primary};text-decoration:none;">${contact.email}</a></p>
+    <div style="background:${emailColors.lightGreen};border:1px solid ${emailColors.greenBorder};border-radius:12px;padding:20px;margin:25px 0 0;">
+      <p style="margin:0 0 10px;font-weight:700;color:${emailColors.greenText};font-size:14px;">Brauchen Sie Hilfe?</p>
+      <p style="margin:4px 0;color:${emailColors.textBody};font-size:14px;">📞 <a href="tel:+49${contact.phone}" style="color:${emailColors.primary};text-decoration:none;font-weight:600;">${contact.phoneDisplay}</a></p>
+      <p style="margin:4px 0;color:${emailColors.textBody};font-size:14px;">💬 <a href="https://wa.me/${contact.whatsapp}" style="color:${emailColors.primary};text-decoration:none;font-weight:600;">WhatsApp Chat starten</a></p>
+      <p style="margin:4px 0;color:${emailColors.textBody};font-size:14px;">✉️ <a href="mailto:${contact.email}" style="color:${emailColors.primary};text-decoration:none;font-weight:600;">${contact.email}</a></p>
     </div>`;
 }
 
@@ -127,10 +142,70 @@ export function emailHelpBoxHtml(): string {
 
 export function emailHeaderHtml(title: string): string {
   return `
-    <div style="background:${emailColors.primary};border-radius:12px 12px 0 0;padding:30px;text-align:center;">
-      <img src="${siteUrl}/logo.webp" alt="${company.name}" style="max-height:40px;margin-bottom:12px;" />
-      <h1 style="color:#fff;font-size:20px;margin:0;">${title}</h1>
+    <div style="background:${emailColors.headerBg};border-radius:12px 12px 0 0;padding:0;overflow:hidden;">
+      <div style="height:4px;background:${emailColors.primary};"></div>
+      <div style="padding:30px;text-align:center;">
+        <img src="${siteUrl}/logo.webp" alt="${company.name}" style="max-height:40px;margin-bottom:14px;" />
+        <h1 style="color:#fff;font-size:20px;margin:0;font-weight:700;letter-spacing:-0.3px;">${title}</h1>
+      </div>
     </div>`;
+}
+
+// ── CTA Button HTML ──
+
+export function emailButtonHtml(text: string, href: string): string {
+  return `
+    <div style="text-align:center;margin:30px 0;">
+      <a href="${href}" style="display:inline-block;background:${emailColors.primary};color:#fff;font-weight:700;padding:14px 36px;border-radius:8px;text-decoration:none;font-size:15px;">${text}</a>
+    </div>`;
+}
+
+// ── Detail Table Row HTML ──
+
+export function emailTableRow(label: string, value: string, isTotal = false): string {
+  if (isTotal) {
+    return `<tr style="border-top:2px solid ${emailColors.primary};">
+      <td style="padding:12px 0 6px;font-size:16px;font-weight:800;color:${emailColors.primary};">${label}</td>
+      <td style="padding:12px 0 6px;font-size:16px;font-weight:800;color:${emailColors.primary};text-align:right;">${value}</td>
+    </tr>`;
+  }
+  return `<tr>
+    <td style="padding:6px 0;color:${emailColors.textMuted};font-size:13px;">${label}</td>
+    <td style="padding:6px 0;font-weight:600;text-align:right;font-size:13px;">${value}</td>
+  </tr>`;
+}
+
+// ── Master Email Template Wrapper ──
+
+/**
+ * Wraps content in the unified brand template.
+ * All emails should use this wrapper for consistent look & feel.
+ */
+export function emailTemplate(opts: {
+  title: string;
+  body: string;
+  includeUnsubscribe?: boolean;
+  unsubscribeUrl?: string;
+}): string {
+  return `<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>${opts.title}</title>
+</head>
+<body style="font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:${emailColors.textDark};max-width:600px;margin:0 auto;padding:20px;background:${emailColors.bodyBg};">
+
+${emailHeaderHtml(opts.title)}
+
+<div style="background:${emailColors.cardBg};border:1px solid ${emailColors.border};border-top:none;border-radius:0 0 12px 12px;padding:30px;">
+  ${opts.body}
+</div>
+
+${emailFooterHtml(opts.includeUnsubscribe, opts.unsubscribeUrl)}
+
+</body>
+</html>`;
 }
 
 // ── From field ──

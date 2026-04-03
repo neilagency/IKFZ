@@ -15,6 +15,7 @@ import { type InvoiceData } from '@/lib/invoice-template';
 import {
   siteUrl as SITE_URL, smtp, contact, company, emailColors,
   adminEmail, createEmailTransporter, buildMailOptions,
+  emailTemplate, emailHelpBoxHtml, emailButtonHtml, emailTableRow,
 } from '@/lib/email-config';
 
 function formatDateDE(date: Date | string): string {
@@ -412,30 +413,27 @@ export async function sendInvoiceEmail(opts: {
     return { success: false, error: 'SMTP connection failed: ' + msg };
   }
 
-  const emailHTML = `<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"></head>
-<body style="font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#1a1a1a;max-width:600px;margin:0 auto;padding:20px;">
-<div style="background:#0D5581;border-radius:12px 12px 0 0;padding:30px;text-align:center;">
-<img src="${SITE_URL}/logo.webp" alt="${company.name}" style="width:180px;height:auto;margin-bottom:10px;" />
-<h1 style="color:#fff;font-size:22px;margin:0;">Ihre Rechnung &amp; Bestellbestätigung</h1></div>
-<div style="background:#f8fafc;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 12px 12px;padding:30px;">
+  const emailHTML = emailTemplate({
+    title: 'Ihre Rechnung & Bestellbestätigung',
+    body: `
 <p style="font-size:15px;margin-bottom:20px;">Sehr geehrte/r <strong>${escapeHtml(opts.customerName)}</strong>,</p>
-<p style="font-size:14px;color:#333;line-height:1.7;">vielen Dank für Ihre Bestellung bei <strong>${company.name}</strong>! Wir haben Ihren Auftrag erhalten und werden diesen umgehend bearbeiten.</p>
-<div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:20px;margin:20px 0;">
-<table style="width:100%;font-size:13px;">
-<tr><td style="padding:6px 0;color:#777;">Bestellnummer:</td><td style="padding:6px 0;font-weight:700;text-align:right;">#${opts.orderNumber}</td></tr>
-<tr><td style="padding:6px 0;color:#777;">Rechnungsnr.:</td><td style="padding:6px 0;font-weight:700;text-align:right;">${escapeHtml(opts.invoiceNumber)}</td></tr>
-<tr><td style="padding:6px 0;color:#777;">Zahlungsmethode:</td><td style="padding:6px 0;text-align:right;">${escapeHtml(opts.paymentMethod)}</td></tr>
-<tr style="border-top:2px solid #0D5581;"><td style="padding:10px 0 6px;font-size:16px;font-weight:800;color:#0D5581;">Gesamtbetrag:</td><td style="padding:10px 0 6px;font-size:16px;font-weight:800;color:#0D5581;text-align:right;">${escapeHtml(opts.total)} EUR</td></tr>
-</table></div>
-<p style="font-size:14px;color:#333;line-height:1.7;">Ihre detaillierte Rechnung finden Sie als <strong>PDF im Anhang</strong> dieser E-Mail.</p>
-<p style="font-size:14px;color:#333;line-height:1.7;">Sie erhalten alle relevanten Dokumente innerhalb von <strong>24 Stunden</strong> per E-Mail oder WhatsApp.</p>
-<div style="text-align:center;margin:25px 0;"><a href="${SITE_URL}" style="display:inline-block;background:#0D5581;color:#fff;font-weight:700;padding:12px 30px;border-radius:8px;text-decoration:none;font-size:14px;">Zur Website</a></div>
-<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:15px;margin-top:20px;font-size:13px;color:#166534;">
-<strong>Brauchen Sie Hilfe?</strong><br>Telefon: <a href="tel:${contact.phone}" style="color:#0D5581;font-weight:600;">${contact.phoneDisplay}</a><br>
-WhatsApp: <a href="https://wa.me/${contact.whatsapp}" style="color:#0D5581;font-weight:600;">Chat starten</a><br>
-E-Mail: <a href="mailto:${contact.email}" style="color:#0D5581;font-weight:600;">${contact.email}</a></div></div>
-<div style="text-align:center;padding:20px;font-size:11px;color:#999;">
-<p>${company.nameFull} \u00b7 ${company.address}</p></div></body></html>`;
+<p style="font-size:14px;color:${emailColors.textBody};line-height:1.7;">vielen Dank für Ihre Bestellung bei <strong>${company.name}</strong>! Wir haben Ihren Auftrag erhalten und werden diesen umgehend bearbeiten.</p>
+
+<div style="background:${emailColors.lightGray};border:1px solid ${emailColors.border};border-radius:10px;padding:20px;margin:20px 0;">
+<table style="width:100%;border-collapse:collapse;">
+${emailTableRow('Bestellnummer:', `#${opts.orderNumber}`)}
+${emailTableRow('Rechnungsnr.:', escapeHtml(opts.invoiceNumber))}
+${emailTableRow('Zahlungsmethode:', escapeHtml(opts.paymentMethod))}
+${emailTableRow('Gesamtbetrag:', `${escapeHtml(opts.total)} EUR`, true)}
+</table>
+</div>
+
+<p style="font-size:14px;color:${emailColors.textBody};line-height:1.7;">Ihre detaillierte Rechnung finden Sie als <strong>PDF im Anhang</strong> dieser E-Mail.</p>
+<p style="font-size:14px;color:${emailColors.textBody};line-height:1.7;">Sie erhalten alle relevanten Dokumente innerhalb von <strong>24 Stunden</strong> per E-Mail oder WhatsApp.</p>
+
+${emailButtonHtml('Zur Website', SITE_URL)}
+${emailHelpBoxHtml()}`,
+  });
 
   const fileName = 'Rechnung-' + opts.invoiceNumber + '.pdf';
   const MAX_RETRIES = 3;
@@ -469,26 +467,24 @@ E-Mail: <a href="mailto:${contact.email}" style="color:#0D5581;font-weight:600;"
           ? `${SITE_URL}/admin/orders/${opts.orderId}`
           : `${SITE_URL}/admin/orders`;
 
-        const adminHTML = `<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"></head>
-<body style="font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#1a1a1a;max-width:600px;margin:0 auto;padding:20px;">
-<div style="background:#0D5581;border-radius:12px 12px 0 0;padding:30px;text-align:center;">
-<img src="${SITE_URL}/logo.webp" alt="${company.name}" style="width:180px;height:auto;margin-bottom:10px;" />
-<h1 style="color:#fff;font-size:22px;margin:0;">Neue Bestellung eingegangen</h1></div>
-<div style="background:#f8fafc;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 12px 12px;padding:30px;">
+        const adminHTML = emailTemplate({
+          title: 'Neue Bestellung eingegangen',
+          body: `
 <p style="font-size:15px;margin-bottom:20px;">Eine neue Bestellung ist eingegangen:</p>
-<div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:20px;margin:20px 0;">
-<table style="width:100%;font-size:13px;">
-<tr><td style="padding:6px 0;color:#777;">Bestellnummer:</td><td style="padding:6px 0;font-weight:700;text-align:right;">#${opts.orderNumber}</td></tr>
-<tr><td style="padding:6px 0;color:#777;">Rechnungsnr.:</td><td style="padding:6px 0;font-weight:700;text-align:right;">${escapeHtml(opts.invoiceNumber)}</td></tr>
-<tr><td style="padding:6px 0;color:#777;">Kunde:</td><td style="padding:6px 0;text-align:right;">${escapeHtml(opts.customerName)}</td></tr>
-<tr><td style="padding:6px 0;color:#777;">E-Mail:</td><td style="padding:6px 0;text-align:right;">${escapeHtml(opts.to)}</td></tr>
-<tr><td style="padding:6px 0;color:#777;">Zahlungsmethode:</td><td style="padding:6px 0;text-align:right;">${escapeHtml(opts.paymentMethod)}</td></tr>
-<tr style="border-top:2px solid #0D5581;"><td style="padding:10px 0 6px;font-size:16px;font-weight:800;color:#0D5581;">Gesamtbetrag:</td><td style="padding:10px 0 6px;font-size:16px;font-weight:800;color:#0D5581;text-align:right;">${escapeHtml(opts.total)} EUR</td></tr>
-</table></div>
-<div style="text-align:center;margin:25px 0;"><a href="${orderUrl}" style="display:inline-block;background:#0D5581;color:#fff;font-weight:700;padding:14px 36px;border-radius:8px;text-decoration:none;font-size:15px;">Bestellung in Dashboard öffnen</a></div>
+
+<div style="background:${emailColors.lightGray};border:1px solid ${emailColors.border};border-radius:10px;padding:20px;margin:20px 0;">
+<table style="width:100%;border-collapse:collapse;">
+${emailTableRow('Bestellnummer:', `#${opts.orderNumber}`)}
+${emailTableRow('Rechnungsnr.:', escapeHtml(opts.invoiceNumber))}
+${emailTableRow('Kunde:', escapeHtml(opts.customerName))}
+${emailTableRow('E-Mail:', escapeHtml(opts.to))}
+${emailTableRow('Zahlungsmethode:', escapeHtml(opts.paymentMethod))}
+${emailTableRow('Gesamtbetrag:', `${escapeHtml(opts.total)} EUR`, true)}
+</table>
 </div>
-<div style="text-align:center;padding:20px;font-size:11px;color:#999;">
-<p>${company.nameFull} · ${company.address}</p></div></body></html>`;
+
+${emailButtonHtml('Bestellung in Dashboard öffnen', orderUrl)}`,
+        });
 
         try {
           await transporter.sendMail(buildMailOptions({

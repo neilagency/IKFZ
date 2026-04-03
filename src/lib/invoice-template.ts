@@ -193,7 +193,7 @@ export function generateInvoiceHTML(data: InvoiceData): string {
       align-items: flex-start;
       margin-bottom: 35px;
       padding-bottom: 20px;
-      border-bottom: 3px solid #0D5581;
+      border-bottom: 3px solid #00a85a;
     }
     .header-left { max-width: 220px; }
     .header-left img { width: 200px; height: auto; margin-bottom: 8px; }
@@ -202,7 +202,7 @@ export function generateInvoiceHTML(data: InvoiceData): string {
     .invoice-title {
       font-size: 28px;
       font-weight: 800;
-      color: #0D5581;
+      color: #00a85a;
       margin-bottom: 6px;
       letter-spacing: -0.5px;
     }
@@ -221,10 +221,10 @@ export function generateInvoiceHTML(data: InvoiceData): string {
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.8px;
-      color: #0D5581;
+      color: #00a85a;
       margin-bottom: 10px;
       padding-bottom: 6px;
-      border-bottom: 2px solid #0D5581;
+      border-bottom: 2px solid #00a85a;
     }
     .info-box p { font-size: 12px; color: #333; margin-bottom: 3px; }
     .info-box .label { color: #777; font-size: 11px; }
@@ -240,7 +240,7 @@ export function generateInvoiceHTML(data: InvoiceData): string {
     }
     .items-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; }
     .items-table thead th {
-      background: #0D5581;
+      background: #00a85a;
       color: #fff;
       font-size: 11px;
       font-weight: 700;
@@ -268,15 +268,15 @@ export function generateInvoiceHTML(data: InvoiceData): string {
     .totals-table .total-row td {
       font-size: 16px;
       font-weight: 800;
-      color: #0D5581;
+      color: #00a85a;
       padding-top: 10px;
-      border-top: 2px solid #0D5581;
+      border-top: 2px solid #00a85a;
     }
     .section { margin-bottom: 25px; }
     .section h3 {
       font-size: 14px;
       font-weight: 700;
-      color: #0D5581;
+      color: #00a85a;
       margin-bottom: 12px;
       padding-bottom: 6px;
       border-bottom: 2px solid #e2e8f0;
@@ -292,7 +292,7 @@ export function generateInvoiceHTML(data: InvoiceData): string {
     .files-list { padding-left: 5px; }
     .file-item { margin-bottom: 6px; font-size: 12px; }
     .file-label { color: #555; font-weight: 600; }
-    .file-item a { color: #0D5581; text-decoration: none; }
+    .file-item a { color: #00a85a; text-decoration: none; }
     .footer {
       margin-top: 40px;
       padding-top: 20px;

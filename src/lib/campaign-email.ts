@@ -5,8 +5,9 @@
  */
 
 import {
-  siteUrl as SITE_URL, company, contact,
+  siteUrl as SITE_URL, company, contact, emailColors,
   createEmailTransporterSync, buildMailOptions,
+  emailHeaderHtml, emailFooterHtml, emailHelpBoxHtml,
 } from '@/lib/email-config';
 
 function escapeHtml(str: string): string {
@@ -46,7 +47,7 @@ export function buildCampaignHtml(campaign: CampaignContent): string {
   const ctaButton =
     campaign.ctaText && campaign.ctaUrl
       ? `<div style="text-align:center;margin:30px 0;">
-          <a href="${ctaHref}" style="display:inline-block;background:#0D5581;color:#fff;font-weight:700;padding:14px 36px;border-radius:8px;text-decoration:none;font-size:15px;">
+          <a href="${ctaHref}" style="display:inline-block;background:${emailColors.primary};color:#fff;font-weight:700;padding:14px 36px;border-radius:8px;text-decoration:none;font-size:15px;">
             ${escapeHtml(campaign.ctaText)}
           </a>
         </div>`
@@ -57,42 +58,32 @@ export function buildCampaignHtml(campaign: CampaignContent): string {
     ? `<img src="${SITE_URL}/api/track/open/${campaign.campaignId}.png" width="1" height="1" alt="" style="display:block;width:1px;height:1px;border:0;" />`
     : '';
 
-  const helpPhone = contact.phone;
-  const helpPhoneFormatted = contact.phoneDisplay;
-  const helpWhatsApp = contact.whatsapp;
-  const helpEmail = contact.email;
-
   return `<!DOCTYPE html>
 <html lang="de">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
-<body style="font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#1a1a1a;max-width:600px;margin:0 auto;padding:20px;background:#f4f6f9;">
+<body style="font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:${emailColors.textDark};max-width:600px;margin:0 auto;padding:20px;background:${emailColors.bodyBg};">
 
-<div style="background:#0D5581;border-radius:12px 12px 0 0;padding:30px;text-align:center;">
-  <img src="${SITE_URL}/logo.webp" alt="${company.name}" style="width:180px;height:auto;margin-bottom:10px;" />
-  <h1 style="color:#fff;font-size:22px;margin:0;">${escapeHtml(campaign.heading)}</h1>
-</div>
+${emailHeaderHtml(escapeHtml(campaign.heading))}
 
-<div style="background:#ffffff;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 12px 12px;padding:30px;">
+<div style="background:${emailColors.cardBg};border:1px solid ${emailColors.border};border-top:none;border-radius:0 0 12px 12px;padding:30px;">
   ${heroImage}
 
-  <div style="font-size:14px;color:#333;line-height:1.8;">
+  <div style="font-size:14px;color:${emailColors.textBody};line-height:1.8;">
     ${campaign.content}
   </div>
 
   ${ctaButton}
 
-  <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:15px;margin-top:25px;font-size:13px;color:#166534;">
-    <strong>Brauchen Sie Hilfe?</strong><br>
-    Telefon: <a href="tel:${helpPhone}" style="color:#0D5581;font-weight:600;">${helpPhoneFormatted}</a><br>
-    WhatsApp: <a href="https://wa.me/${helpWhatsApp}" style="color:#0D5581;font-weight:600;">Chat starten</a><br>
-    E-Mail: <a href="mailto:${helpEmail}" style="color:#0D5581;font-weight:600;">${helpEmail}</a>
-  </div>
+  ${emailHelpBoxHtml()}
 </div>
 
-<div style="text-align:center;padding:20px;font-size:11px;color:#999;">
-  <p>${company.nameFull} · ${company.address}</p>
-  <p style="margin-top:8px;">
-    <a href="{{UNSUBSCRIBE_URL}}" style="color:#999;text-decoration:underline;">Vom Newsletter abmelden</a>
+<div style="text-align:center;padding:25px 20px;color:${emailColors.footerGray};font-size:12px;line-height:1.6;">
+  <p style="margin:0 0 4px;">${company.nameFull}</p>
+  <p style="margin:0 0 4px;">${company.address}</p>
+  <p style="margin:0;">Tel.: ${contact.phoneDisplay} · E-Mail: ${contact.email}</p>
+  <p style="margin:8px 0 0;"><a href="https://${company.website}" style="color:${emailColors.primary};text-decoration:none;font-weight:600;">${company.website}</a></p>
+  <p style="margin-top:12px;">
+    <a href="{{UNSUBSCRIBE_URL}}" style="color:${emailColors.footerGray};text-decoration:underline;">Vom Newsletter abmelden</a>
   </p>
   ${trackingPixel}
 </div>

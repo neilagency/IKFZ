@@ -8,6 +8,7 @@ import { sendCampaignEmail } from '@/lib/campaign-email';
 import prisma from '@/lib/db';
 import {
   siteUrl as SITE_URL, contact, company, emailColors,
+  emailTemplate, emailHelpBoxHtml, emailButtonHtml,
 } from '@/lib/email-config';
 
 function escapeHtml(str: string): string {
@@ -32,91 +33,64 @@ function buildCompletionHtml(data: CompletionEmailData): string {
   const ctaUrl = data.invoiceUrl || `${SITE_URL}/kontakt`;
   const ctaText = data.invoiceUrl ? 'Rechnung ansehen' : 'Kontakt aufnehmen';
 
-  const helpPhone = contact.phone;
-  const helpPhoneFormatted = contact.phoneDisplay;
-  const helpWhatsApp = contact.whatsapp;
-  const helpEmail = contact.email;
-
   // Service-specific content
   const serviceInfo = data.isAbmeldung
-    ? `<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:15px;margin:20px 0;font-size:14px;color:#166534;">
+    ? `<div style="background:${emailColors.lightGreen};border:1px solid ${emailColors.greenBorder};border-radius:8px;padding:15px;margin:20px 0;font-size:14px;color:${emailColors.greenText};">
         <strong>✅ Abmeldung erfolgreich!</strong><br><br>
         📌 <strong>Wichtig:</strong> Versicherung und Zollamt wurden automatisch informiert. Sie müssen nichts weiter tun!<br>
         📁 <strong>Unterlagen:</strong> Die Abmeldebestätigung finden Sie im Anhang.
       </div>
       
-      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:15px;margin:20px 0;font-size:14px;color:#1e40af;">
+      <div style="background:${emailColors.blueBg};border:1px solid ${emailColors.blueBorder};border-radius:8px;padding:15px;margin:20px 0;font-size:14px;color:${emailColors.blueText};">
         <strong>🚗 Unser Service für Sie:</strong><br><br>
         • <strong>Neuanmeldung:</strong> Direkt hier online erledigen:<br>
-        &nbsp;&nbsp;👉 <a href="${SITE_URL}/service/fahrzeug-zulassung" style="color:#0D5581;font-weight:600;">Fahrzeug online zulassen</a><br><br>
+        &nbsp;&nbsp;👉 <a href="${SITE_URL}/service/fahrzeug-zulassung" style="color:${emailColors.primary};font-weight:600;">Fahrzeug online zulassen</a><br><br>
         • <strong>Auto-Verkauf:</strong> Sie möchten Ihren Wagen verkaufen? Wir machen Ihnen ein faires Angebot!<br><br>
         • <strong>Versicherung:</strong> Sie benötigen eine neue eVB-Nummer? Wir helfen sofort.
       </div>`
     : '';
 
-  return `<!DOCTYPE html>
-<html lang="de">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
-<body style="font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#1a1a1a;max-width:600px;margin:0 auto;padding:20px;background:#f4f6f9;">
+  const body = `
+<p style="font-size:15px;color:${emailColors.textBody};line-height:1.8;">
+  ${data.customerName ? `Hallo ${escapeHtml(data.customerName)},` : 'Hallo,'}
+</p>
 
-<div style="background:#0D5581;border-radius:12px 12px 0 0;padding:30px;text-align:center;">
-  <img src="${SITE_URL}/logo.webp" alt="${company.name}" style="width:180px;height:auto;margin-bottom:10px;" />
-  <h1 style="color:#fff;font-size:22px;margin:0;">Ihre Bestellung wurde erfolgreich abgeschlossen</h1>
+<p style="font-size:14px;color:${emailColors.textBody};line-height:1.8;">
+  Wir freuen uns, Ihnen mitteilen zu können, dass Ihre Bestellung <strong>#${escapeHtml(data.orderNumber)}</strong> erfolgreich bearbeitet und abgeschlossen wurde.
+</p>
+
+<div style="background:${emailColors.lightGray};border:1px solid ${emailColors.border};border-radius:8px;padding:15px;margin:20px 0;">
+  <table style="width:100%;border-collapse:collapse;font-size:14px;">
+    <tr>
+      <td style="padding:6px 0;color:${emailColors.textGray};">Bestellnummer:</td>
+      <td style="padding:6px 0;font-weight:600;text-align:right;">#${escapeHtml(data.orderNumber)}</td>
+    </tr>
+    <tr>
+      <td style="padding:6px 0;color:${emailColors.textGray};">Service:</td>
+      <td style="padding:6px 0;font-weight:600;text-align:right;">${escapeHtml(data.productName)}</td>
+    </tr>
+    <tr>
+      <td style="padding:6px 0;color:${emailColors.textGray};">Status:</td>
+      <td style="padding:6px 0;font-weight:600;text-align:right;color:${emailColors.primary};">✅ Abgeschlossen</td>
+    </tr>
+  </table>
 </div>
 
-<div style="background:#ffffff;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 12px 12px;padding:30px;">
-  <p style="font-size:15px;color:#333;line-height:1.8;">
-    ${data.customerName ? `Hallo ${escapeHtml(data.customerName)},` : 'Hallo,'}
-  </p>
-  
-  <p style="font-size:14px;color:#333;line-height:1.8;">
-    Wir freuen uns, Ihnen mitteilen zu können, dass Ihre Bestellung <strong>#${escapeHtml(data.orderNumber)}</strong> erfolgreich bearbeitet und abgeschlossen wurde.
-  </p>
+${serviceInfo}
 
-  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:15px;margin:20px 0;">
-    <table style="width:100%;border-collapse:collapse;font-size:14px;">
-      <tr>
-        <td style="padding:6px 0;color:#64748b;">Bestellnummer:</td>
-        <td style="padding:6px 0;font-weight:600;text-align:right;">#${escapeHtml(data.orderNumber)}</td>
-      </tr>
-      <tr>
-        <td style="padding:6px 0;color:#64748b;">Service:</td>
-        <td style="padding:6px 0;font-weight:600;text-align:right;">${escapeHtml(data.productName)}</td>
-      </tr>
-      <tr>
-        <td style="padding:6px 0;color:#64748b;">Status:</td>
-        <td style="padding:6px 0;font-weight:600;text-align:right;color:#16a34a;">✅ Abgeschlossen</td>
-      </tr>
-    </table>
-  </div>
+${emailButtonHtml(escapeHtml(ctaText), escapeHtml(ctaUrl))}
 
-  ${serviceInfo}
-
-  <div style="text-align:center;margin:30px 0;">
-    <a href="${escapeHtml(ctaUrl)}" style="display:inline-block;background:#0D5581;color:#fff;font-weight:700;padding:14px 36px;border-radius:8px;text-decoration:none;font-size:15px;">
-      ${escapeHtml(ctaText)}
-    </a>
-  </div>
-
-  <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:15px;margin:20px 0;font-size:13px;color:#854d0e;text-align:center;">
-    <strong>🤝 Zufrieden?</strong> Wir freuen uns sehr über Ihre 5-Sterne-Bewertung!<br>
-    ⭐️ <a href="${company.googleReviewUrl}" style="color:#0D5581;font-weight:600;">Hier bewerten</a>
-  </div>
-
-  <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:15px;margin-top:25px;font-size:13px;color:#166534;">
-    <strong>Brauchen Sie Hilfe?</strong><br>
-    Telefon: <a href="tel:${helpPhone}" style="color:#0D5581;font-weight:600;">${helpPhoneFormatted}</a><br>
-    WhatsApp: <a href="https://wa.me/${helpWhatsApp}" style="color:#0D5581;font-weight:600;">Chat starten</a><br>
-    E-Mail: <a href="mailto:${helpEmail}" style="color:#0D5581;font-weight:600;">${helpEmail}</a>
-  </div>
+<div style="background:${emailColors.yellowBg};border:1px solid ${emailColors.yellowBorder};border-radius:8px;padding:15px;margin:20px 0;font-size:13px;color:${emailColors.yellowText};text-align:center;">
+  <strong>🤝 Zufrieden?</strong> Wir freuen uns sehr über Ihre 5-Sterne-Bewertung!<br>
+  ⭐️ <a href="${company.googleReviewUrl}" style="color:${emailColors.primary};font-weight:600;">Hier bewerten</a>
 </div>
 
-<div style="text-align:center;padding:20px;font-size:11px;color:#999;">
-  <p>${company.nameFull} · ${company.address}</p>
-</div>
+${emailHelpBoxHtml()}`;
 
-</body>
-</html>`;
+  return emailTemplate({
+    title: 'Ihre Bestellung wurde erfolgreich abgeschlossen',
+    body,
+  });
 }
 
 /**
