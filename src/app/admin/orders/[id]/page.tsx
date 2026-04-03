@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import OrderDocuments from '@/components/admin/OrderDocuments';
 import OrderCommunication from '@/components/admin/OrderCommunication';
+import AdminShell from '@/components/admin/AdminShell';
 
 /* ── Types ───────────────────────────────────── */
 interface OrderItem {
@@ -323,32 +324,36 @@ export default function OrderDetailPage() {
   // ── Loading ──
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto p-6">
-        <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 rounded w-1/3" />
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 space-y-6">
-              <div className="h-48 bg-gray-200 rounded-xl" />
-              <div className="h-64 bg-gray-200 rounded-xl" />
-            </div>
-            <div className="space-y-6">
-              <div className="h-32 bg-gray-200 rounded-xl" />
-              <div className="h-48 bg-gray-200 rounded-xl" />
+      <AdminShell activeTab="orders" title="Bestellung laden…">
+        <div className="max-w-7xl mx-auto p-6">
+          <div className="animate-pulse space-y-6">
+            <div className="h-8 bg-gray-200 rounded w-1/3" />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2 space-y-6">
+                <div className="h-48 bg-gray-200 rounded-xl" />
+                <div className="h-64 bg-gray-200 rounded-xl" />
+              </div>
+              <div className="space-y-6">
+                <div className="h-32 bg-gray-200 rounded-xl" />
+                <div className="h-48 bg-gray-200 rounded-xl" />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </AdminShell>
     );
   }
 
   if (!order) {
     return (
-      <div className="max-w-7xl mx-auto p-6 text-center">
-        <p className="text-gray-500 text-lg">Bestellung nicht gefunden.</p>
-        <button onClick={() => router.push('/admin')} className="mt-4 text-blue-600 hover:underline">
-          ← Zurück zur Übersicht
-        </button>
-      </div>
+      <AdminShell activeTab="orders" title="Nicht gefunden">
+        <div className="max-w-7xl mx-auto p-6 text-center">
+          <p className="text-gray-500 text-lg">Bestellung nicht gefunden.</p>
+          <button onClick={() => router.push('/admin?tab=orders')} className="mt-4 text-blue-600 hover:underline">
+            ← Zurück zur Übersicht
+          </button>
+        </div>
+      </AdminShell>
     );
   }
 
@@ -357,8 +362,8 @@ export default function OrderDetailPage() {
   const customerName = [order.billingFirstName, order.billingLastName].filter(Boolean).join(' ') || 'Kunde';
 
   return (
+    <AdminShell activeTab="orders" title={`Bestellung ${order.orderNumber || order.id}`}>
     <div className="max-w-7xl mx-auto p-4 sm:p-6">
-      {/* ── Toast ── */}
       {toast && (
         <div className={`fixed top-4 right-4 z-50 px-5 py-3 rounded-lg text-white text-sm font-medium ${TOAST_COLORS[toast.type]}`}>
           {toast.message}
@@ -369,7 +374,7 @@ export default function OrderDetailPage() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
           <button
-            onClick={() => router.push('/admin')}
+            onClick={() => router.push('/admin?tab=orders')}
             className="flex items-center gap-1 text-gray-500 hover:text-gray-700 transition text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -597,7 +602,12 @@ export default function OrderDetailPage() {
                 <div className="mt-6">
                   <h3 className="text-sm font-semibold text-gray-700 mb-3">Hochgeladene Dokumente:</h3>
                   <div className="space-y-2">
-                    {Object.entries(serviceData.uploadedFiles).map(([key, file]: [string, any]) => (
+                    {Object.entries(serviceData.uploadedFiles).map(([key, file]: [string, any]) => {
+                      // Handle both formats: plain string URL or object { url, name, size }
+                      const fileUrl = typeof file === 'string' ? file : file?.url;
+                      const fileName = typeof file === 'string' ? key : (file?.name || key);
+                      const fileSize = typeof file === 'object' && file?.size ? ` (${Math.round(file.size / 1024)} KB)` : '';
+                      return (
                       <div
                         key={key}
                         className="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-3 text-sm"
@@ -607,16 +617,16 @@ export default function OrderDetailPage() {
                           <div>
                             <p className="font-medium text-gray-900">{FILE_LABEL[key] || key}</p>
                             <p className="text-xs text-gray-500">
-                              {file.name}
-                              {file.size ? ` (${Math.round(file.size / 1024)} KB)` : ''}
+                              {fileName}{fileSize}
                             </p>
                           </div>
                         </div>
-                        {file.url && (
+                        {fileUrl && (
                           <a
-                            href={file.url}
+                            href={fileUrl}
                             target="_blank"
                             rel="noopener noreferrer"
+                            download
                             className="flex items-center gap-1 text-blue-600 hover:text-blue-800 text-xs font-medium"
                           >
                             <Download className="w-3.5 h-3.5" />
@@ -624,7 +634,8 @@ export default function OrderDetailPage() {
                           </a>
                         )}
                       </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -880,5 +891,6 @@ export default function OrderDetailPage() {
         </div>
       </div>
     </div>
+    </AdminShell>
   );
 }
