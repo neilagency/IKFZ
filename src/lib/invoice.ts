@@ -17,6 +17,9 @@ import {
   adminEmail, createEmailTransporter, buildMailOptions,
   emailTemplate, emailHelpBoxHtml, emailButtonHtml, emailTableRow,
 } from '@/lib/email-config';
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
 
 function formatDateDE(date: Date | string): string {
   const d = typeof date === 'string' ? new Date(date) : date;
@@ -551,6 +554,30 @@ export async function generateAndSendInvoice(orderId: string): Promise<{
       sendAdminCopy: true,
       orderId,
     });
+
+    // Save invoice PDF as an OrderDocument so it appears in "Ihre Unterlagen"
+    try {
+      const existing = await prisma.orderDocument.findFirst({
+        where: { orderId, fileName: { startsWith: 'Rechnung' } },
+      });
+      if (!existing) {
+        const uploadsDir = path.join(process.cwd(), 'public', 'uploads', 'documents');
+        if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+        const filename = `${crypto.randomBytes(8).toString('hex')}-Rechnung_${invoiceNumber}.pdf`;
+        fs.writeFileSync(path.join(uploadsDir, filename), pdfBuffer);
+        await prisma.orderDocument.create({
+          data: {
+            orderId,
+            fileName: `Rechnung ${invoiceNumber}.pdf`,
+            fileUrl: `/uploads/documents/${filename}`,
+            fileSize: pdfBuffer.length,
+            token: crypto.randomBytes(32).toString('hex'),
+          },
+        });
+      }
+    } catch (e) {
+      console.warn('[invoice] Could not save invoice as OrderDocument:', e);
+    }
 
     // Create an order note
     try {

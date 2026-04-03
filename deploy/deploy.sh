@@ -67,7 +67,20 @@ echo "📁 Copying static and public files to standalone..."
 cp -r .next/static .next/standalone/.next/static
 cp -r public .next/standalone/public
 
-# 5.1 Symlink database into standalone so the app can find it
+# 5.1 Persist uploads directory across deployments
+UPLOADS_DIR="$DATA_DIR/uploads"
+mkdir -p "$UPLOADS_DIR/documents"
+# If standalone already has uploaded files, move them to persistent dir
+if [ -d ".next/standalone/public/uploads/documents" ] && [ "$(ls -A .next/standalone/public/uploads/documents 2>/dev/null)" ]; then
+    cp -rn .next/standalone/public/uploads/documents/* "$UPLOADS_DIR/documents/" 2>/dev/null || true
+fi
+# Remove the build copy and symlink to persistent storage
+rm -rf .next/standalone/public/uploads/documents
+mkdir -p .next/standalone/public/uploads
+ln -sf "$UPLOADS_DIR/documents" .next/standalone/public/uploads/documents
+echo "✅ Uploads symlinked to persistent $UPLOADS_DIR"
+
+# 5.2 Symlink database into standalone so the app can find it
 mkdir -p .next/standalone/prisma
 ln -sf "$DB_FILE" .next/standalone/prisma/production.db
 
