@@ -878,8 +878,8 @@ function OrdersTab({ token }: { token: string }) {
               <div className="p-5 rounded-2xl bg-white border border-gray-200 space-y-3">
                 <h3 className="text-white font-semibold">Zahlungsdetails</h3>
                 <p className="text-gray-600 text-sm">Methode: {o.paymentMethodTitle || o.paymentMethod || "-"}</p>
-                <p className="text-gray-600 text-sm">Transaktion: {o.transactionId || "-"}</p>
-                <p className="text-gray-600 text-sm">Bezahlt am: {formatDate(o.datePaid)}</p>
+                <p className="text-gray-600 text-sm">Transaktion: {o.transactionId || (o.total === 0 ? "Kostenlos" : "-")}</p>
+                <p className="text-gray-600 text-sm">Bezahlt am: {o.datePaid ? formatDate(o.datePaid) : (o.total === 0 ? "Sofort (kostenlos)" : "-")}</p>
                 <p className="text-gray-600 text-sm">Betrag: <span className="text-white font-bold">{formatEuro(o.total)}</span></p>
                 {o.payment && <p className="text-gray-500 text-sm">Zahlungsstatus: <Badge status={o.payment.status} /></p>}
               </div>

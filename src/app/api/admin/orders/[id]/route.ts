@@ -60,8 +60,16 @@ export async function PATCH(request: NextRequest, ctx: RouteCtx) {
       if (body.status === 'completed') {
         updateData.dateCompleted = new Date();
       }
+      // Only set datePaid if not already set
       if (body.status === 'completed' || body.status === 'processing') {
-        updateData.datePaid = new Date();
+        const existing = await prisma.order.findUnique({ where: { id }, select: { datePaid: true, transactionId: true, total: true } });
+        if (!existing?.datePaid) {
+          updateData.datePaid = new Date();
+        }
+        // For free orders without a transactionId, set one
+        if (!existing?.transactionId && existing?.total === 0) {
+          updateData.transactionId = 'FREE-ADMIN';
+        }
       }
     }
 
