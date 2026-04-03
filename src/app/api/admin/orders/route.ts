@@ -30,10 +30,9 @@ export async function GET(req: NextRequest) {
     prisma.order.findMany({
       where,
       include: {
-        items: true,
-        payment: true,
-        invoice: true,
-        customer: true,
+        items: { select: { id: true, name: true, quantity: true, price: true, total: true } },
+        payment: { select: { id: true, status: true } },
+        invoice: { select: { id: true, invoiceNumber: true, status: true, issuedAt: true, createdAt: true } },
       },
       orderBy: { createdAt: 'desc' },
       skip: (page - 1) * limit,
@@ -64,7 +63,11 @@ export async function PUT(req: NextRequest) {
     const order = await prisma.order.update({
       where: { id: data.id },
       data: updateData,
-      include: { items: true, payment: true, invoice: true, customer: true },
+      include: {
+        items: { select: { id: true, name: true, quantity: true, price: true, total: true } },
+        payment: { select: { id: true, status: true } },
+        invoice: { select: { id: true, invoiceNumber: true, status: true, issuedAt: true, createdAt: true } },
+      },
     });
 
     // Update payment status if order status changed

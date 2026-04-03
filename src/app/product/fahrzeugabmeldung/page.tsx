@@ -4,7 +4,7 @@ import { getProductBySlug } from '@/lib/db';
 import AbmeldungForm from '@/components/AbmeldungForm';
 import { siteConfig } from '@/lib/config';
 
-export const revalidate = 0; // DEBUG: force fresh DB reads
+export const revalidate = 60;
 import {
   Shield,
   Clock,

@@ -15,7 +15,7 @@ import { homepageContent } from '@/lib/content';
 import { siteConfig } from '@/lib/config';
 import { getProductBySlug } from '@/lib/db';
 
-export const revalidate = 0; // DEBUG: force fresh DB reads (restore to 60 after verification)
+export const revalidate = 60;
 
 export default async function HomePage() {
   // Fetch live prices from DB

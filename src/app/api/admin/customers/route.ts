@@ -28,11 +28,6 @@ export async function GET(req: NextRequest) {
       where,
       include: {
         _count: { select: { orders: true } },
-        orders: {
-          select: { total: true, status: true },
-          orderBy: { createdAt: 'desc' },
-          take: 5,
-        },
       },
       orderBy: { createdAt: 'desc' },
       skip: (page - 1) * limit,
@@ -41,10 +36,23 @@ export async function GET(req: NextRequest) {
     prisma.customer.count({ where }),
   ]);
 
-  // Add total spent
+  // Batch-fetch totalSpent for listed customers (single query, no N+1)
+  const customerIds = customers.map((c: any) => c.id);
+  const spentByCustomer = customerIds.length > 0
+    ? await prisma.order.groupBy({
+        by: ['customerId'],
+        where: {
+          customerId: { in: customerIds },
+          status: { notIn: ['cancelled', 'refunded'] },
+        },
+        _sum: { total: true },
+      })
+    : [];
+  const spentMap = new Map(spentByCustomer.map((s: any) => [s.customerId, s._sum.total || 0]));
+
   const enriched = customers.map((c: any) => ({
     ...c,
-    totalSpent: c.orders.reduce((sum: number, o: any) => sum + (o.status !== 'cancelled' && o.status !== 'refunded' ? o.total : 0), 0),
+    totalSpent: spentMap.get(c.id) || 0,
     orderCount: c._count.orders,
   }));
 

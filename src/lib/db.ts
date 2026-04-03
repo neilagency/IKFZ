@@ -299,6 +299,18 @@ export const getAllPosts = unstable_cache(
     const [posts, total] = await Promise.all([
       prisma.blogPost.findMany({
         where,
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          excerpt: true,
+          featuredImage: true,
+          category: true,
+          publishedAt: true,
+          createdAt: true,
+          metaTitle: true,
+          metaDescription: true,
+        },
         orderBy: { publishedAt: 'desc' },
         skip: (page - 1) * perPage,
         take: perPage,

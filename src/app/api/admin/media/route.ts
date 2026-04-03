@@ -94,6 +94,20 @@ export async function GET(req: NextRequest) {
     const [media, total] = await Promise.all([
       prisma.media.findMany({
         where,
+        select: {
+          id: true,
+          fileName: true,
+          originalName: true,
+          mimeType: true,
+          fileSize: true,
+          sourceUrl: true,
+          localPath: true,
+          thumbnailUrl: true,
+          title: true,
+          altText: true,
+          useCount: true,
+          createdAt: true,
+        },
         orderBy: { createdAt: 'desc' },
         skip,
         take: limit,

@@ -4,7 +4,7 @@ import BlogCard from '@/components/BlogCard';
 import { BookOpen, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Metadata } from 'next';
 
-export const revalidate = 0; // DEBUG: force fresh DB reads
+export const revalidate = 300;
 
 const POSTS_PER_PAGE = 9;
 

@@ -26,7 +26,18 @@ export async function GET(req: NextRequest) {
   const [pages, total] = await Promise.all([
     prisma.page.findMany({
       where,
-      include: { seo: true },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        excerpt: true,
+        status: true,
+        pageType: true,
+        featuredImage: true,
+        createdAt: true,
+        updatedAt: true,
+        seo: { select: { metaTitle: true, metaDescription: true } },
+      },
       orderBy: { updatedAt: 'desc' },
       skip: (page - 1) * limit,
       take: limit,
