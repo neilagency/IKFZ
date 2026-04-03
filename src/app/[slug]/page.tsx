@@ -28,21 +28,26 @@ export const revalidate = 3600;
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  const [pages, posts] = await Promise.all([
-    prisma.page.findMany({
-      where: { status: 'published' },
-      select: { slug: true },
-    }),
-    prisma.blogPost.findMany({
-      where: { status: 'publish' },
-      select: { slug: true },
-    }),
-  ]);
-  const all = [
-    ...pages.map(p => ({ slug: p.slug })),
-    ...posts.map(p => ({ slug: p.slug })),
-  ];
-  return all.filter(p => !RESERVED_SLUGS.has(p.slug));
+  try {
+    const [pages, posts] = await Promise.all([
+      prisma.page.findMany({
+        where: { status: 'published' },
+        select: { slug: true },
+      }),
+      prisma.blogPost.findMany({
+        where: { status: 'publish' },
+        select: { slug: true },
+      }),
+    ]);
+    const all = [
+      ...pages.map(p => ({ slug: p.slug })),
+      ...posts.map(p => ({ slug: p.slug })),
+    ];
+    return all.filter(p => !RESERVED_SLUGS.has(p.slug));
+  } catch (e) {
+    console.warn('[slug] generateStaticParams failed (DB not available at build time):', (e as Error).message);
+    return [];
+  }
 }
 
 export async function generateMetadata({

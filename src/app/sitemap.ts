@@ -4,6 +4,7 @@ import prisma from '@/lib/db';
 const SITE_URL = 'https://ikfzdigitalzulassung.de';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  try {
   // Fetch all published pages with SEO data to check robots directives
   const pages = await prisma.page.findMany({
     where: { status: 'published' },
@@ -105,4 +106,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   return [...staticRoutes, ...pageRoutes, ...productRoutes, ...blogRoute, ...postRoutes];
+  } catch (e) {
+    console.warn('[sitemap] DB not available:', (e as Error).message);
+    return [{ url: `${SITE_URL}/`, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 }];
+  }
 }
