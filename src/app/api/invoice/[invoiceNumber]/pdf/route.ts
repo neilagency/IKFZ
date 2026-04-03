@@ -11,17 +11,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { generateInvoicePDF } from '@/lib/invoice';
+import { verifyInvoiceToken } from '@/lib/invoice-token';
 
 export const dynamic = 'force-dynamic';
 
 type RouteCtx = { params: Promise<{ invoiceNumber: string }> };
 
-export async function GET(_request: NextRequest, ctx: RouteCtx) {
+export async function GET(request: NextRequest, ctx: RouteCtx) {
   const { invoiceNumber } = await ctx.params;
   const decoded = decodeURIComponent(invoiceNumber);
 
   if (!decoded || decoded.length < 3) {
     return NextResponse.json({ error: 'Ungültige Rechnungsnummer' }, { status: 400 });
+  }
+
+  // Verify HMAC token
+  const token = request.nextUrl.searchParams.get('token');
+  if (!token || !verifyInvoiceToken(decoded, token)) {
+    return NextResponse.json({ error: 'Ungültiger oder fehlender Token' }, { status: 403 });
   }
 
   try {

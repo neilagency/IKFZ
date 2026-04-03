@@ -1445,70 +1445,337 @@ function PaymentsTab({ token }: { token: string }) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// INVOICES TAB — with SWR + Pagination
+// INVOICES TAB — with SWR + Pagination + Search + Status Tabs + PDF Download + Detail View
 // ═══════════════════════════════════════════════════════════
 function InvoicesTab({ token }: { token: string }) {
-  const [statusFilter, setStatusFilter] = useState("");
+  const { toast } = useToast();
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [searchInput, setSearchInput] = useState("");
+  const search = useDebounce(searchInput, 300);
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(20);
+  const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
+  const [generating, setGenerating] = useState(false);
 
-  const params = new URLSearchParams({ page: String(page), limit: "30" });
-  if (statusFilter) params.set("status", statusFilter);
+  const params = new URLSearchParams({ page: String(page), limit: String(limit) });
+  if (statusFilter && statusFilter !== "all") params.set("status", statusFilter);
+  if (search) params.set("search", search);
   const swrKey = `${API}/invoices?${params}`;
 
-  const { data, error, isLoading, mutate } = useSWR(swrKey, fetcher, { revalidateOnFocus: false, keepPreviousData: true });
+  const { data, error, isLoading, mutate } = useSWR(swrKey, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    keepPreviousData: true,
+    dedupingInterval: 10000,
+    errorRetryCount: 2,
+  });
 
-  function printInvoice(inv: any) {
-    const w = window.open("", "_blank");
-    if (!w) return;
-    w.document.write(`<!DOCTYPE html><html><head><title>Rechnung ${inv.invoiceNumber}</title><style>
-      body{font-family:Arial,sans-serif;max-width:700px;margin:40px auto;color:#333}
-      h1{font-size:24px;margin-bottom:4px} .header{display:flex;justify-content:space-between;margin-bottom:30px}
-      table{width:100%;border-collapse:collapse;margin:20px 0} th,td{padding:8px 12px;text-align:left;border-bottom:1px solid #ddd}
-      th{background:#f5f5f5;font-size:12px;text-transform:uppercase;color:#666}
-      .total{font-size:20px;font-weight:bold;text-align:right;margin-top:20px}
-      .footer{margin-top:40px;padding-top:20px;border-top:1px solid #ddd;font-size:12px;color:#888}
-    </style></head><body>
-    <div class="header"><div><h1>RECHNUNG</h1><p style="color:#666">${inv.invoiceNumber}</p></div><div style="text-align:right"><strong>iKFZ Digital Zulassung</strong><br>Datum: ${formatDate(inv.issuedAt)}</div></div>
-    <div style="margin-bottom:20px"><strong>Rechnungsempfänger:</strong><br>${inv.billingName || "-"}<br>${inv.billingAddress || ""}<br>${inv.billingEmail || ""}</div>
-    <table><thead><tr><th>Position</th><th style="text-align:right">Betrag</th></tr></thead>
-    <tbody>${(inv.items || "").split("\n").map((line: string) => `<tr><td>${line}</td><td style="text-align:right"></td></tr>`).join("")}</tbody></table>
-    <div class="total">Gesamtbetrag: ${formatEuro(inv.amount)}</div>
-    <div class="footer">Status: ${inv.status === "paid" ? "Bezahlt" : "Offen"} ${inv.paidAt ? "| Bezahlt am: " + formatDate(inv.paidAt) : ""}</div>
-    </body></html>`);
-    w.document.close();
-    w.print();
+  // Detail fetch
+  const { data: detailData, isLoading: detailLoading } = useSWR(
+    selectedInvoice ? `${API}/invoices/${selectedInvoice.id}` : null,
+    fetcher,
+    { revalidateOnFocus: false }
+  );
+  const detail = detailData?.invoice;
+
+  const statusTabs = [
+    { key: "all", label: "Alle", count: data?.total },
+    { key: "paid", label: "Bezahlt" },
+    { key: "issued", label: "Ausstehend" },
+    { key: "refunded", label: "Erstattet" },
+    { key: "cancelled", label: "Storniert" },
+  ];
+
+  async function generateAll() {
+    setGenerating(true);
+    try {
+      const res = await fetch(`${API}/invoices/generate-all`, {
+        method: "POST",
+        credentials: "include",
+      });
+      const result = await res.json();
+      if (res.ok) {
+        toast(result.message || `${result.created} Rechnungen erstellt`, "success");
+        mutate();
+      } else {
+        toast(result.error || "Fehler", "error");
+      }
+    } catch {
+      toast("Fehler beim Generieren", "error");
+    } finally {
+      setGenerating(false);
+    }
   }
 
+  function downloadPdf(inv: any) {
+    window.open(`${API}/invoices/${inv.id}/pdf`, "_blank");
+  }
+
+  function handleStatusChange(status: string) {
+    setStatusFilter(status);
+    setPage(1);
+  }
+
+  // ── Invoice Detail View ──
+  if (selectedInvoice) {
+    const inv = detail || selectedInvoice;
+    const items: any[] = (() => { try { return JSON.parse(inv.items || "[]"); } catch { return []; } })();
+    const total = inv.amount || 0;
+    const taxAmount = parseFloat((total - total / 1.19).toFixed(2));
+    const netAmount = parseFloat((total / 1.19).toFixed(2));
+
+    return (
+      <div className="space-y-4">
+        <button onClick={() => setSelectedInvoice(null)} className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition-colors">
+          <ChevronLeft className="w-4 h-4" /> Zurück zur Liste
+        </button>
+
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <h2 className="text-xl font-bold text-white">Rechnung {inv.invoiceNumber}</h2>
+            <Badge status={inv.status} />
+          </div>
+          <div className="flex items-center gap-2">
+            <button onClick={() => downloadPdf(inv)} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white text-sm hover:bg-primary/80 transition-colors">
+              <Download className="w-4 h-4" /> PDF
+            </button>
+          </div>
+        </div>
+
+        {detailLoading ? <SkeletonTable rows={4} /> : (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            {/* Invoice Preview */}
+            <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 overflow-hidden">
+              {/* Header bar */}
+              <div className="bg-[#0D5581] px-6 py-5 text-white">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs uppercase tracking-wider opacity-70">RECHNUNG</p>
+                    <p className="text-lg font-bold">{inv.invoiceNumber}</p>
+                  </div>
+                  <div className="text-right text-sm">
+                    <p className="font-medium">iKFZ Digital Zulassung</p>
+                    <p className="opacity-70">ikfzdigitalzulassung.de</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-6 space-y-6">
+                {/* Info grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <p className="text-xs uppercase text-gray-400 mb-2">Rechnungsadresse</p>
+                    <p className="text-gray-900 font-medium">{inv.billingName || "-"}</p>
+                    {inv.billingAddress && <p className="text-gray-600 text-sm">{inv.billingAddress}</p>}
+                    <p className="text-gray-600 text-sm">{inv.billingEmail || inv.order?.billingEmail || "-"}</p>
+                    {(detail?.order?.billingPhone) && <p className="text-gray-500 text-sm">Tel: {detail.order.billingPhone}</p>}
+                  </div>
+                  <div className="text-right">
+                    <div className="space-y-1 text-sm">
+                      <p className="text-gray-400">Rechnungsdatum</p>
+                      <p className="text-gray-900 font-medium">{formatDate(inv.issuedAt)}</p>
+                      <p className="text-gray-400 mt-2">Bestellnr.</p>
+                      <p className="text-gray-900 font-medium">#{inv.order?.orderNumber || "-"}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Items table */}
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-gray-200 text-gray-400 text-xs uppercase">
+                      <th className="text-left py-2 w-12">Pos.</th>
+                      <th className="text-left py-2">Beschreibung</th>
+                      <th className="text-center py-2 w-16">Menge</th>
+                      <th className="text-right py-2 w-24">Preis</th>
+                      <th className="text-right py-2 w-24">Gesamt</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {items.map((item: any, i: number) => (
+                      <tr key={i} className="border-b border-gray-100">
+                        <td className="py-3 text-gray-500">{i + 1}</td>
+                        <td className="py-3 text-gray-900">{item.name}</td>
+                        <td className="py-3 text-center text-gray-600">{item.quantity}</td>
+                        <td className="py-3 text-right text-gray-600">{formatEuro(item.price)}</td>
+                        <td className="py-3 text-right text-gray-900 font-medium">{formatEuro(item.total)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                {/* Totals */}
+                <div className="flex justify-end">
+                  <div className="w-64 space-y-2 text-sm">
+                    <div className="flex justify-between text-gray-600">
+                      <span>Nettobetrag</span>
+                      <span>{formatEuro(netAmount)}</span>
+                    </div>
+                    <div className="flex justify-between text-gray-600">
+                      <span>USt. 19%</span>
+                      <span>{formatEuro(taxAmount)}</span>
+                    </div>
+                    <div className="flex justify-between text-gray-900 font-bold text-base pt-2 border-t border-gray-200">
+                      <span>Gesamtbetrag</span>
+                      <span className="text-[#0D5581]">{formatEuro(total)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Payment status banner */}
+                {inv.status === "paid" && (
+                  <div className="flex items-center gap-3 p-4 rounded-xl bg-green-50 border border-green-200">
+                    <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white font-bold text-sm">✓</div>
+                    <div className="text-sm">
+                      <p className="text-green-800 font-medium">Bezahlt{detail?.order?.paymentMethodTitle ? ` via ${detail.order.paymentMethodTitle}` : ""}</p>
+                      {(detail?.order?.transactionId) && <p className="text-green-600 text-xs">Transaktions-ID: {detail.order.transactionId}</p>}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Sidebar actions */}
+            <div className="space-y-4">
+              <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-4">
+                <h3 className="text-sm font-semibold text-gray-900">Aktionen</h3>
+                <button onClick={() => downloadPdf(inv)} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#0D5581] text-white text-sm font-medium hover:bg-[#0D5581]/80 transition-colors">
+                  <Download className="w-4 h-4" /> PDF herunterladen
+                </button>
+                {inv.orderId && (
+                  <button onClick={async () => {
+                    try {
+                      const res = await fetch(`${API}/orders/${inv.orderId}/resend-invoice`, { method: "POST", credentials: "include" });
+                      const r = await res.json();
+                      if (res.ok) toast("Rechnung per E-Mail gesendet", "success");
+                      else toast(r.error || "Fehler", "error");
+                    } catch { toast("Fehler beim Senden", "error"); }
+                  }} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-green-600 text-white text-sm font-medium hover:bg-green-500 transition-colors">
+                    <Mail className="w-4 h-4" /> Rechnung senden
+                  </button>
+                )}
+              </div>
+              <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-3">
+                <h3 className="text-sm font-semibold text-gray-900">Details</h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between"><span className="text-gray-400">Status</span><Badge status={inv.status} /></div>
+                  <div className="flex justify-between"><span className="text-gray-400">Betrag</span><span className="text-gray-900 font-medium">{formatEuro(total)}</span></div>
+                  <div className="flex justify-between"><span className="text-gray-400">Erstellt</span><span className="text-gray-600">{formatDate(inv.createdAt)}</span></div>
+                  {inv.paidAt && <div className="flex justify-between"><span className="text-gray-400">Bezahlt am</span><span className="text-gray-600">{formatDate(inv.paidAt)}</span></div>}
+                  {detail?.order?.productName && <div className="flex justify-between"><span className="text-gray-400">Produkt</span><span className="text-gray-600">{detail.order.productName}</span></div>}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // ── List View ──
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-3">
-        <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setPage(1); }} className="px-4 py-2.5 rounded-xl bg-white border border-gray-200 text-white text-sm"><option value="">Alle</option><option value="paid">Bezahlt</option><option value="issued">Offen</option></select>
+      {/* Status Tabs */}
+      <div className="flex items-center gap-1 flex-wrap">
+        {statusTabs.map(tab => (
+          <button key={tab.key} onClick={() => handleStatusChange(tab.key)} className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${statusFilter === tab.key ? "bg-primary text-white" : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"}`}>
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Search + Actions bar */}
+      <div className="flex items-center gap-3 flex-wrap">
+        <div className="relative flex-1 min-w-[200px]">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
+          <input value={searchInput} onChange={e => { setSearchInput(e.target.value); setPage(1); }} placeholder="Rechnungsnr., Kunde oder E-Mail..." className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-gray-200 text-gray-900 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+        </div>
+        <select value={limit} onChange={e => { setLimit(Number(e.target.value)); setPage(1); }} className="px-4 py-2.5 rounded-xl bg-white border border-gray-200 text-gray-700 text-sm">
+          <option value={20}>20 pro Seite</option>
+          <option value={50}>50 pro Seite</option>
+          <option value={100}>100 pro Seite</option>
+          <option value={200}>200 pro Seite</option>
+        </select>
+        <button onClick={generateAll} disabled={generating} className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-medium hover:bg-primary/80 transition-colors disabled:opacity-50">
+          {generating ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />}
+          Alle generieren
+        </button>
         <span className="text-gray-400 text-sm">{data?.total || 0} Rechnungen</span>
       </div>
 
       {error ? <ErrorState onRetry={() => mutate()} /> : isLoading ? <SkeletonTable /> : (data?.invoices || []).length === 0 ? (
-        <EmptyState icon={Receipt} title="Keine Rechnungen" />
+        <EmptyState icon={Receipt} title="Keine Rechnungen" description={search ? "Keine Ergebnisse für diese Suche" : undefined} />
       ) : (
         <>
-          <div className="overflow-x-auto">
+          {/* Desktop Table */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-sm">
-              <thead><tr className="text-gray-400 text-xs uppercase"><th className="text-left py-2 px-3">Nr.</th><th className="text-left py-2 px-3">Bestellung</th><th className="text-left py-2 px-3">Kunde</th><th className="text-left py-2 px-3">Status</th><th className="text-right py-2 px-3">Betrag</th><th className="text-left py-2 px-3">Datum</th><th className="py-2 px-3"></th></tr></thead>
+              <thead>
+                <tr className="text-gray-400 text-xs uppercase">
+                  <th className="text-left py-2 px-3" style={{ width: "14%" }}>Rechnungsnr.</th>
+                  <th className="text-left py-2 px-3" style={{ width: "12%" }}>Bestellung</th>
+                  <th className="text-left py-2 px-3" style={{ width: "22%" }}>Kunde</th>
+                  <th className="text-left py-2 px-3" style={{ width: "14%" }}>Datum</th>
+                  <th className="text-right py-2 px-3" style={{ width: "12%" }}>Betrag</th>
+                  <th className="text-left py-2 px-3" style={{ width: "14%" }}>Status</th>
+                  <th className="text-center py-2 px-3" style={{ width: "12%" }}>Aktionen</th>
+                </tr>
+              </thead>
               <tbody>
                 {(data.invoices || []).map((inv: any) => (
-                  <tr key={inv.id} className="border-t border-gray-100 hover:bg-gray-50">
-                    <td className="py-3 px-3 text-white font-medium">{inv.invoiceNumber}</td>
-                    <td className="py-3 px-3 text-gray-500">#{inv.order?.orderNumber}</td>
-                    <td className="py-3 px-3 text-gray-600">{inv.billingName}</td>
+                  <tr key={inv.id} className="border-t border-gray-100 hover:bg-gray-50 transition-colors">
+                    <td className="py-3 px-3">
+                      <button onClick={() => setSelectedInvoice(inv)} className="text-primary font-medium hover:underline text-left">{inv.invoiceNumber}</button>
+                    </td>
+                    <td className="py-3 px-3 text-gray-500">#{inv.order?.orderNumber || "-"}</td>
+                    <td className="py-3 px-3">
+                      <div className="text-gray-900">{inv.billingName || "-"}</div>
+                      <div className="text-gray-400 text-xs">{inv.billingEmail || "-"}</div>
+                    </td>
+                    <td className="py-3 px-3 text-gray-500">{formatDate(inv.issuedAt)}</td>
+                    <td className="py-3 px-3 text-right text-gray-900 font-medium">{formatEuro(inv.amount)}</td>
                     <td className="py-3 px-3"><Badge status={inv.status} /></td>
-                    <td className="py-3 px-3 text-right text-white font-medium">{formatEuro(inv.amount)}</td>
-                    <td className="py-3 px-3 text-gray-400">{formatDate(inv.issuedAt)}</td>
-                    <td className="py-3 px-3"><button onClick={() => printInvoice(inv)} className="p-1.5 rounded-lg hover:bg-gray-50 text-gray-400 hover:text-white" title="Drucken"><Download className="w-4 h-4" /></button></td>
+                    <td className="py-3 px-3">
+                      <div className="flex items-center justify-center gap-1">
+                        <button onClick={() => setSelectedInvoice(inv)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-900 transition-colors" title="Ansehen"><Eye className="w-4 h-4" /></button>
+                        <button onClick={() => downloadPdf(inv)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-900 transition-colors" title="PDF"><Download className="w-4 h-4" /></button>
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <Pagination page={page} totalPages={data.totalPages || 1} total={data.total || 0} limit={30} onPageChange={setPage} />
+
+          {/* Mobile Card View */}
+          <div className="md:hidden space-y-3">
+            {(data.invoices || []).map((inv: any) => (
+              <div key={inv.id} className="bg-white rounded-2xl border border-gray-100 p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <button onClick={() => setSelectedInvoice(inv)} className="text-primary font-medium text-sm hover:underline">{inv.invoiceNumber}</button>
+                  <Badge status={inv.status} />
+                </div>
+                <div className="space-y-1 text-sm">
+                  <p className="text-gray-900">{inv.billingName || "-"}</p>
+                  <p className="text-gray-400 text-xs">{inv.billingEmail || "-"}</p>
+                  <div className="flex items-center justify-between pt-1">
+                    <span className="text-gray-400">{formatDate(inv.issuedAt)}</span>
+                    <span className="text-gray-900 font-bold">{formatEuro(inv.amount)}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 pt-1 border-t border-gray-100">
+                  <button onClick={() => setSelectedInvoice(inv)} className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-gray-50 text-gray-700 text-sm hover:bg-gray-100 transition-colors">
+                    <Eye className="w-3.5 h-3.5" /> Ansehen
+                  </button>
+                  <button onClick={() => downloadPdf(inv)} className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-primary/10 text-primary text-sm hover:bg-primary/20 transition-colors">
+                    <Download className="w-3.5 h-3.5" /> PDF
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <Pagination page={page} totalPages={data.totalPages || 1} total={data.total || 0} limit={limit} onPageChange={setPage} />
         </>
       )}
     </div>
