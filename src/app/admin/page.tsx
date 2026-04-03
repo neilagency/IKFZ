@@ -1027,7 +1027,7 @@ function InvoicesTab({ token }: { token: string }) {
             {/* Invoice Preview */}
             <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 overflow-hidden">
               {/* Header bar */}
-              <div className="invoice-preview-header bg-[#0D5581] px-6 py-5" style={{ color: '#fff' }}>
+              <div className="invoice-preview-header bg-dark-900 px-6 py-5" style={{ color: '#fff' }}>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs uppercase tracking-wider opacity-70">RECHNUNG</p>

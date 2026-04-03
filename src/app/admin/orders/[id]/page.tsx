@@ -84,7 +84,7 @@ interface Order {
   items: OrderItem[];
   payment?: Payment | null;
   invoice?: Invoice | null;
-  notes: OrderNote[];
+  notes?: OrderNote[];
   customer?: Customer | null;
 }
 
@@ -671,7 +671,7 @@ export default function OrderDetailPage() {
 
             {/* Notes List */}
             <div className="space-y-3 max-h-96 overflow-y-auto">
-              {order.notes.map((n) => (
+              {(order.notes || []).map((n) => (
                 <div key={n.id} className="border-l-2 border-gray-200 pl-3 py-1">
                   <p className="text-sm text-gray-700">{n.note}</p>
                   <p className="text-xs text-gray-400 mt-1">
@@ -679,7 +679,7 @@ export default function OrderDetailPage() {
                   </p>
                 </div>
               ))}
-              {order.notes.length === 0 && (
+              {(!order.notes || order.notes.length === 0) && (
                 <p className="text-sm text-gray-400">Keine Notizen vorhanden.</p>
               )}
             </div>

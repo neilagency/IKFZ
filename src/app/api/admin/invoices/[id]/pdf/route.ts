@@ -4,12 +4,13 @@
  * GET /api/admin/invoices/[id]/pdf/
  *
  * Generates and returns an invoice PDF for download.
- * [id] is the orderId.
+ * [id] is the invoice ID — we look up the orderId from it.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAuth, unauthorized } from '@/lib/auth';
 import { generateInvoicePDF } from '@/lib/invoice';
+import { prisma } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,14 +21,24 @@ export async function GET(
   const user = verifyAuth(req);
   if (!user) return unauthorized();
 
-  const { id: orderId } = await params;
+  const { id } = await params;
 
-  if (!orderId) {
-    return NextResponse.json({ error: 'Order ID is required' }, { status: 400 });
+  if (!id) {
+    return NextResponse.json({ error: 'Invoice ID is required' }, { status: 400 });
   }
 
   try {
-    const { pdfBuffer, invoiceNumber } = await generateInvoicePDF(orderId);
+    // Look up invoice to get the orderId
+    const invoice = await prisma.invoice.findUnique({
+      where: { id },
+      select: { orderId: true },
+    });
+
+    if (!invoice) {
+      return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
+    }
+
+    const { pdfBuffer, invoiceNumber } = await generateInvoicePDF(invoice.orderId);
 
     return new NextResponse(new Uint8Array(pdfBuffer), {
       status: 200,
