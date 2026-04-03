@@ -63,7 +63,8 @@ export async function POST(req: NextRequest) {
     return setAuthCookie(response, token);
   } catch (error) {
     console.error('Auth error:', error);
-    return NextResponse.json({ error: 'Server-Fehler' }, { status: 500 });
+    const msg = error instanceof Error ? error.message : String(error);
+    return NextResponse.json({ error: 'Server-Fehler', debug: msg }, { status: 500 });
   }
 }
 
