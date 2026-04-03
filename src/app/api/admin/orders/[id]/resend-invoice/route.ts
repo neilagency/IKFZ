@@ -116,7 +116,8 @@ export async function POST(_request: NextRequest, ctx: RouteCtx) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Resend invoice error:', error);
-    return NextResponse.json({ error: 'Fehler beim Senden der Rechnung' }, { status: 500 });
+    const errMsg = error instanceof Error ? error.message : String(error);
+    console.error('Resend invoice error:', errMsg);
+    return NextResponse.json({ error: `Fehler beim Senden: ${errMsg}` }, { status: 500 });
   }
 }
