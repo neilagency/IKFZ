@@ -5,10 +5,11 @@
  * All amounts in EUR, German locale, MwSt 19%.
  */
 
-const SITE_URL =
-  process.env.SITE_URL ||
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  'https://ikfzdigitalzulassung.de';
+import {
+  siteUrl, contact, company,
+} from '@/lib/email-config';
+
+const SITE_URL = siteUrl;
 
 /* ── Types ───────────────────────────────────── */
 export interface InvoiceData {
@@ -319,14 +320,14 @@ export function generateInvoiceHTML(data: InvoiceData): string {
   <!-- HEADER -->
   <div class="header">
     <div class="header-left">
-      <img src="${logoUrl}" alt="iKFZ Digital Zulassung" />
+      <img src="${logoUrl}" alt="${company.name}" />
       <div class="company-info">
-        iKFZ Digital Zulassung UG (haftungsbeschränkt)<br>
-        Gerhard-Küchen-Str. 14<br>
-        45141 Essen<br>
-        E-Mail: info@ikfzdigitalzulassung.de<br>
-        Tel.: 01522 4999190<br>
-        Web: www.ikfzdigitalzulassung.de
+        ${company.nameFull}<br>
+        ${company.street}<br>
+        ${company.zip} ${company.city}<br>
+        E-Mail: ${contact.email}<br>
+        Tel.: ${contact.phoneDisplay}<br>
+        Web: ${company.website}
       </div>
     </div>
     <div class="header-right">
@@ -435,8 +436,8 @@ export function generateInvoiceHTML(data: InvoiceData): string {
 
   <!-- FOOTER -->
   <div class="footer">
-    <p><strong>iKFZ Digital Zulassung UG (haftungsbeschränkt)</strong> — Gerhard-Küchen-Str. 14, 45141 Essen</p>
-    <p>Tel.: 01522 4999190 · E-Mail: info@ikfzdigitalzulassung.de · Web: www.ikfzdigitalzulassung.de</p>
+    <p><strong>${company.nameFull}</strong> — ${company.address}</p>
+    <p>Tel.: ${contact.phoneDisplay} · E-Mail: ${contact.email} · Web: ${company.website}</p>
     <p style="margin-top:8px;">Vielen Dank für Ihr Vertrauen! Bei Fragen erreichen Sie uns jederzeit per Telefon oder WhatsApp.</p>
     <p style="margin-top:4px;font-size:9px;color:#bbb;">Diese Rechnung wurde automatisch erstellt und ist ohne Unterschrift gültig.</p>
   </div>

@@ -3,10 +3,10 @@
  * Sends a branded email when a PDF document is uploaded for an order.
  */
 
-const SITE_URL =
-  process.env.SITE_URL ||
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  'https://ikfzdigitalzulassung.de';
+import {
+  siteUrl as SITE_URL, smtp, contact, company, emailColors,
+  createEmailTransporter, emailFromField,
+} from '@/lib/email-config';
 
 function escapeHtml(str: string): string {
   return str
@@ -26,29 +26,12 @@ export async function sendDocumentEmail(opts: {
   documentId: string;
   pdfBuffer?: Buffer;
 }): Promise<{ success: boolean; error?: string }> {
-  const nodemailer = await import('nodemailer');
-
-  const smtpHost = process.env.SMTP_HOST || 'smtp.titan.email';
-  const smtpPort = parseInt(process.env.SMTP_PORT || '465', 10);
-  const smtpUser = process.env.SMTP_USER || 'info@ikfzdigitalzulassung.de';
-  const smtpPass = process.env.SMTP_PASS_B64
-    ? Buffer.from(process.env.SMTP_PASS_B64, 'base64').toString('utf-8')
-    : process.env.SMTP_PASS || '';
-  const fromEmail = process.env.EMAIL_FROM || 'info@ikfzdigitalzulassung.de';
-  const fromName = process.env.EMAIL_FROM_NAME || 'iKFZ Digital Zulassung';
-
-  if (!smtpPass) {
+  if (!smtp.configured) {
     console.error('[document-email] SMTP_PASS not configured');
     return { success: false, error: 'SMTP not configured' };
   }
 
-  const transporter = nodemailer.default.createTransport({
-    host: smtpHost,
-    port: smtpPort,
-    secure: smtpPort === 465,
-    auth: { user: smtpUser, pass: smtpPass },
-    tls: { rejectUnauthorized: false },
-  });
+  const transporter = await createEmailTransporter();
 
   try {
     await transporter.verify();
@@ -60,10 +43,10 @@ export async function sendDocumentEmail(opts: {
 
   const downloadUrl = `${SITE_URL}/api/documents/${opts.documentId}/download?token=${opts.downloadToken}`;
 
-  const helpPhone = process.env.CONTACT_PHONE || '015224999190';
-  const helpPhoneFormatted = process.env.CONTACT_PHONE_DISPLAY || '01522 4999190';
-  const helpWhatsApp = process.env.CONTACT_WHATSAPP || '4915224999190';
-  const helpEmail = process.env.CONTACT_EMAIL || 'info@ikfzdigitalzulassung.de';
+  const helpPhone = contact.phone;
+  const helpPhoneFormatted = contact.phoneDisplay;
+  const helpWhatsApp = contact.whatsapp;
+  const helpEmail = contact.email;
 
   const emailHTML = `<!DOCTYPE html>
 <html lang="de">
@@ -116,7 +99,7 @@ export async function sendDocumentEmail(opts: {
 </div>
 
 <div style="text-align:center;padding:20px;font-size:11px;color:#999;">
-  <p>iKFZ Digital Zulassung UG (haftungsbeschränkt) · Gerhard-Küchen-Str. 14 · 45141 Essen</p>
+  <p>${company.nameFull} · ${company.address}</p>
 </div>
 
 </body>
@@ -137,7 +120,7 @@ export async function sendDocumentEmail(opts: {
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
       await transporter.sendMail({
-        from: `"${fromName}" <${fromEmail}>`,
+        from: emailFromField(),
         to: opts.to,
         subject: `Ihr Dokument zu Bestellung #${opts.orderNumber} ist verfügbar`,
         html: emailHTML,

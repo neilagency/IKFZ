@@ -12,11 +12,10 @@
 
 import prisma from '@/lib/db';
 import { type InvoiceData } from '@/lib/invoice-template';
-
-const SITE_URL =
-  process.env.SITE_URL ||
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  'https://ikfzdigitalzulassung.de';
+import {
+  siteUrl as SITE_URL, smtp, contact, company, emailColors,
+  adminEmail, createEmailTransporter, emailFromField,
+} from '@/lib/email-config';
 
 function formatDateDE(date: Date | string): string {
   const d = typeof date === 'string' ? new Date(date) : date;
@@ -130,8 +129,8 @@ export async function generateInvoicePDF(orderId: string): Promise<{
     doc.text('RECHNUNG', m, 15);
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
-    doc.text('iKFZ Digital Zulassung', m, 22);
-    doc.text('ikfzdigitalzulassung.de', m, 27);
+    doc.text(company.name, m, 22);
+    doc.text(company.website, m, 27);
     doc.text('Nr. ' + invoiceData.invoiceNumber, pw - m, 15, {
       align: 'right',
     });
@@ -189,18 +188,18 @@ export async function generateInvoicePDF(orderId: string): Promise<{
     doc.setFontSize(10);
     doc.setTextColor(0, 0, 0);
     doc.setFont('helvetica', 'bold');
-    doc.text('iKFZ Digital Zulassung UG', cx, cy);
+    doc.text(company.name, cx, cy);
     cy += 5;
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(9);
-    doc.text('(haftungsbeschraenkt)', cx, cy);
+    doc.text(company.nameFullAscii.replace(company.name + ' ', ''), cx, cy);
     cy += 5;
     doc.setFontSize(10);
     for (const line of [
-      'Gerhard-Kuechen-Str. 14',
-      '45141 Essen',
-      'info@ikfzdigitalzulassung.de',
-      'Tel: 01522 4999190',
+      company.streetAscii,
+      `${company.zip} ${company.city}`,
+      contact.email,
+      `Tel: ${contact.phoneDisplay}`,
     ]) {
       doc.text(line, cx, cy);
       cy += 5;
@@ -336,7 +335,7 @@ export async function generateInvoicePDF(orderId: string): Promise<{
     doc.setFontSize(6);
     doc.setTextColor(150, 150, 150);
     doc.text(
-      'iKFZ Digital Zulassung UG (haftungsbeschraenkt) · Gerhard-Kuechen-Str. 14 · 45141 Essen · info@ikfzdigitalzulassung.de · www.ikfzdigitalzulassung.de',
+      `${company.nameFullAscii} · ${company.addressAscii} · ${contact.email} · ${company.website}`,
       pw / 2,
       fy,
       { align: 'center' },
@@ -385,40 +384,16 @@ export async function sendInvoiceEmail(opts: {
   sendAdminCopy?: boolean;
   orderId?: string;
 }): Promise<{ success: boolean; error?: string }> {
-  const nodemailer = await import('nodemailer');
-  const smtpHost = process.env.SMTP_HOST || 'smtp.titan.email';
-  const smtpPort = parseInt(process.env.SMTP_PORT || '465', 10);
-  const smtpUser =
-    process.env.SMTP_USER || 'info@ikfzdigitalzulassung.de';
-  // SMTP_PASS_B64 = Base64-encoded password (avoids dotenv-expand corrupting $ chars)
-  const smtpPass = process.env.SMTP_PASS_B64
-    ? Buffer.from(process.env.SMTP_PASS_B64, 'base64').toString('utf-8')
-    : process.env.SMTP_PASS || '';
-  const fromEmail =
-    process.env.EMAIL_FROM || 'info@ikfzdigitalzulassung.de';
-  const fromName =
-    process.env.EMAIL_FROM_NAME || 'iKFZ Digital Zulassung';
-  const adminEmail =
-    process.env.ADMIN_EMAIL || 'info@ikfzdigitalzulassung.de';
-
-  if (!smtpPass) {
+  if (!smtp.configured) {
     console.error('[email] SMTP_PASS is not configured - skipping email');
     return { success: false, error: 'SMTP not configured' };
   }
 
   console.log(
-    `[email] SMTP: host=${smtpHost} port=${smtpPort} user=${smtpUser} passSource=${process.env.SMTP_PASS_B64 ? 'B64' : 'RAW'} passLen=${smtpPass.length}`,
+    `[email] SMTP: host=${smtp.host} port=${smtp.port} user=${smtp.user} passSource=${process.env.SMTP_PASS_B64 ? 'B64' : 'RAW'} passLen=${smtp.pass.length}`,
   );
 
-  const transporter = nodemailer.default.createTransport({
-    host: smtpHost,
-    port: smtpPort,
-    secure: smtpPort === 465,
-    auth: { user: smtpUser, pass: smtpPass },
-    tls: { rejectUnauthorized: false },
-    logger: process.env.SMTP_DEBUG === 'true',
-    debug: process.env.SMTP_DEBUG === 'true',
-  });
+  const transporter = await createEmailTransporter();
 
   try {
     await transporter.verify();
@@ -433,11 +408,11 @@ export async function sendInvoiceEmail(opts: {
   const emailHTML = `<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"></head>
 <body style="font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#1a1a1a;max-width:600px;margin:0 auto;padding:20px;">
 <div style="background:#0D5581;border-radius:12px 12px 0 0;padding:30px;text-align:center;">
-<img src="${SITE_URL}/logo.webp" alt="iKFZ Digital Zulassung" style="width:180px;height:auto;margin-bottom:10px;" />
+<img src="${SITE_URL}/logo.webp" alt="${company.name}" style="width:180px;height:auto;margin-bottom:10px;" />
 <h1 style="color:#fff;font-size:22px;margin:0;">Ihre Rechnung &amp; Bestellbestätigung</h1></div>
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 12px 12px;padding:30px;">
 <p style="font-size:15px;margin-bottom:20px;">Sehr geehrte/r <strong>${escapeHtml(opts.customerName)}</strong>,</p>
-<p style="font-size:14px;color:#333;line-height:1.7;">vielen Dank für Ihre Bestellung bei <strong>iKFZ Digital Zulassung</strong>! Wir haben Ihren Auftrag erhalten und werden diesen umgehend bearbeiten.</p>
+<p style="font-size:14px;color:#333;line-height:1.7;">vielen Dank für Ihre Bestellung bei <strong>${company.name}</strong>! Wir haben Ihren Auftrag erhalten und werden diesen umgehend bearbeiten.</p>
 <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:20px;margin:20px 0;">
 <table style="width:100%;font-size:13px;">
 <tr><td style="padding:6px 0;color:#777;">Bestellnummer:</td><td style="padding:6px 0;font-weight:700;text-align:right;">#${opts.orderNumber}</td></tr>
@@ -449,11 +424,11 @@ export async function sendInvoiceEmail(opts: {
 <p style="font-size:14px;color:#333;line-height:1.7;">Sie erhalten alle relevanten Dokumente innerhalb von <strong>24 Stunden</strong> per E-Mail oder WhatsApp.</p>
 <div style="text-align:center;margin:25px 0;"><a href="${SITE_URL}" style="display:inline-block;background:#0D5581;color:#fff;font-weight:700;padding:12px 30px;border-radius:8px;text-decoration:none;font-size:14px;">Zur Website</a></div>
 <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:15px;margin-top:20px;font-size:13px;color:#166534;">
-<strong>Brauchen Sie Hilfe?</strong><br>Telefon: <a href="tel:015224999190" style="color:#0D5581;font-weight:600;">01522 4999190</a><br>
-WhatsApp: <a href="https://wa.me/4915224999190" style="color:#0D5581;font-weight:600;">Chat starten</a><br>
-E-Mail: <a href="mailto:info@ikfzdigitalzulassung.de" style="color:#0D5581;font-weight:600;">info@ikfzdigitalzulassung.de</a></div></div>
+<strong>Brauchen Sie Hilfe?</strong><br>Telefon: <a href="tel:${contact.phone}" style="color:#0D5581;font-weight:600;">${contact.phoneDisplay}</a><br>
+WhatsApp: <a href="https://wa.me/${contact.whatsapp}" style="color:#0D5581;font-weight:600;">Chat starten</a><br>
+E-Mail: <a href="mailto:${contact.email}" style="color:#0D5581;font-weight:600;">${contact.email}</a></div></div>
 <div style="text-align:center;padding:20px;font-size:11px;color:#999;">
-<p>iKFZ Digital Zulassung UG (haftungsbeschränkt) · Gerhard-Küchen-Str. 14 · 45141 Essen</p></div></body></html>`;
+<p>${company.nameFull} \u00b7 ${company.address}</p></div></body></html>`;
 
   const fileName = 'Rechnung-' + opts.invoiceNumber + '.pdf';
   const MAX_RETRIES = 3;
@@ -462,7 +437,7 @@ E-Mail: <a href="mailto:info@ikfzdigitalzulassung.de" style="color:#0D5581;font-
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
       await transporter.sendMail({
-        from: '"' + fromName + '" <' + fromEmail + '>',
+        from: emailFromField(),
         to: opts.to,
         subject:
           'Ihre Bestellung #' +
@@ -491,7 +466,7 @@ E-Mail: <a href="mailto:info@ikfzdigitalzulassung.de" style="color:#0D5581;font-
         const adminHTML = `<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"></head>
 <body style="font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#1a1a1a;max-width:600px;margin:0 auto;padding:20px;">
 <div style="background:#0D5581;border-radius:12px 12px 0 0;padding:30px;text-align:center;">
-<img src="${SITE_URL}/logo.webp" alt="iKFZ Digital Zulassung" style="width:180px;height:auto;margin-bottom:10px;" />
+<img src="${SITE_URL}/logo.webp" alt="${company.name}" style="width:180px;height:auto;margin-bottom:10px;" />
 <h1 style="color:#fff;font-size:22px;margin:0;">Neue Bestellung eingegangen</h1></div>
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 12px 12px;padding:30px;">
 <p style="font-size:15px;margin-bottom:20px;">Eine neue Bestellung ist eingegangen:</p>
@@ -507,11 +482,11 @@ E-Mail: <a href="mailto:info@ikfzdigitalzulassung.de" style="color:#0D5581;font-
 <div style="text-align:center;margin:25px 0;"><a href="${orderUrl}" style="display:inline-block;background:#0D5581;color:#fff;font-weight:700;padding:14px 36px;border-radius:8px;text-decoration:none;font-size:15px;">Bestellung in Dashboard öffnen</a></div>
 </div>
 <div style="text-align:center;padding:20px;font-size:11px;color:#999;">
-<p>iKFZ Digital Zulassung UG (haftungsbeschränkt) · Gerhard-Küchen-Str. 14 · 45141 Essen</p></div></body></html>`;
+<p>${company.nameFull} · ${company.address}</p></div></body></html>`;
 
         try {
           await transporter.sendMail({
-            from: '"' + fromName + '" <' + fromEmail + '>',
+            from: emailFromField(),
             to: adminEmail,
             subject:
               '[Admin] Neue Bestellung #' +

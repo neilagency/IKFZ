@@ -7,6 +7,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { getAdminSession, unauthorized } from '@/lib/auth';
+import {
+  smtp, siteUrl as SITE_URL, company, contact,
+  createEmailTransporter, emailFromField,
+} from '@/lib/email-config';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,28 +38,11 @@ export async function POST(_request: NextRequest, ctx: RouteCtx) {
       return NextResponse.json({ error: 'Keine E-Mail-Adresse vorhanden' }, { status: 400 });
     }
 
-    // Send invoice email using nodemailer
-    const nodemailer = await import('nodemailer');
-    const smtpHost = process.env.SMTP_HOST || 'smtp.titan.email';
-    const smtpPort = parseInt(process.env.SMTP_PORT || '465', 10);
-    const smtpUser = process.env.SMTP_USER || 'info@ikfzdigitalzulassung.de';
-    const smtpPass = process.env.SMTP_PASS_B64
-      ? Buffer.from(process.env.SMTP_PASS_B64, 'base64').toString('utf-8')
-      : process.env.SMTP_PASS || '';
-    const fromEmail = process.env.EMAIL_FROM || 'info@ikfzdigitalzulassung.de';
-    const fromName = process.env.EMAIL_FROM_NAME || 'iKFZ Digital Zulassung';
-
-    if (!smtpPass) {
+    if (!smtp.configured) {
       return NextResponse.json({ error: 'SMTP nicht konfiguriert' }, { status: 500 });
     }
 
-    const transporter = nodemailer.default.createTransport({
-      host: smtpHost,
-      port: smtpPort,
-      secure: smtpPort === 465,
-      auth: { user: smtpUser, pass: smtpPass },
-      tls: { rejectUnauthorized: false },
-    });
+    const transporter = await createEmailTransporter();
 
     const customerName = [order.billingFirstName, order.billingLastName].filter(Boolean).join(' ') || 'Kunde';
 
@@ -66,8 +53,6 @@ export async function POST(_request: NextRequest, ctx: RouteCtx) {
         <td style="padding:8px;border-bottom:1px solid #e2e8f0;text-align:right;">€${item.total.toFixed(2)}</td>
       </tr>`
     ).join('');
-
-    const SITE_URL = process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://ikfzdigitalzulassung.de';
 
     const html = `<!DOCTYPE html>
 <html lang="de">
@@ -99,9 +84,9 @@ export async function POST(_request: NextRequest, ctx: RouteCtx) {
 </body></html>`;
 
     await transporter.sendMail({
-      from: `"${fromName}" <${fromEmail}>`,
+      from: emailFromField(),
       to: order.billingEmail,
-      subject: `Rechnung #${order.invoice.invoiceNumber} – iKFZ Digital Zulassung`,
+      subject: `Rechnung #${order.invoice.invoiceNumber} – ${company.name}`,
       html,
     });
 

@@ -4,10 +4,10 @@
  * Supports: unsubscribe links, open tracking, click tracking.
  */
 
-const SITE_URL =
-  process.env.SITE_URL ||
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  'https://ikfzdigitalzulassung.de';
+import {
+  siteUrl as SITE_URL, company, contact,
+  createEmailTransporterSync, emailFromField,
+} from '@/lib/email-config';
 
 function escapeHtml(str: string): string {
   return str
@@ -57,10 +57,10 @@ export function buildCampaignHtml(campaign: CampaignContent): string {
     ? `<img src="${SITE_URL}/api/track/open/${campaign.campaignId}.png" width="1" height="1" alt="" style="display:block;width:1px;height:1px;border:0;" />`
     : '';
 
-  const helpPhone = process.env.CONTACT_PHONE || '015224999190';
-  const helpPhoneFormatted = process.env.CONTACT_PHONE_DISPLAY || '01522 4999190';
-  const helpWhatsApp = process.env.CONTACT_WHATSAPP || '4915224999190';
-  const helpEmail = process.env.CONTACT_EMAIL || 'info@ikfzdigitalzulassung.de';
+  const helpPhone = contact.phone;
+  const helpPhoneFormatted = contact.phoneDisplay;
+  const helpWhatsApp = contact.whatsapp;
+  const helpEmail = contact.email;
 
   return `<!DOCTYPE html>
 <html lang="de">
@@ -68,7 +68,7 @@ export function buildCampaignHtml(campaign: CampaignContent): string {
 <body style="font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#1a1a1a;max-width:600px;margin:0 auto;padding:20px;background:#f4f6f9;">
 
 <div style="background:#0D5581;border-radius:12px 12px 0 0;padding:30px;text-align:center;">
-  <img src="${SITE_URL}/logo.webp" alt="iKFZ Digital Zulassung" style="width:180px;height:auto;margin-bottom:10px;" />
+  <img src="${SITE_URL}/logo.webp" alt="${company.name}" style="width:180px;height:auto;margin-bottom:10px;" />
   <h1 style="color:#fff;font-size:22px;margin:0;">${escapeHtml(campaign.heading)}</h1>
 </div>
 
@@ -90,7 +90,7 @@ export function buildCampaignHtml(campaign: CampaignContent): string {
 </div>
 
 <div style="text-align:center;padding:20px;font-size:11px;color:#999;">
-  <p>iKFZ Digital Zulassung UG (haftungsbeschränkt) · Gerhard-Küchen-Str. 14 · 45141 Essen</p>
+  <p>${company.nameFull} · ${company.address}</p>
   <p style="margin-top:8px;">
     <a href="{{UNSUBSCRIBE_URL}}" style="color:#999;text-decoration:underline;">Vom Newsletter abmelden</a>
   </p>
@@ -109,30 +109,6 @@ export function personalizeHtml(html: string, unsubscribeToken: string): string 
   return html.replace(/\{\{UNSUBSCRIBE_URL\}\}/g, unsubscribeUrl);
 }
 
-/** Create a nodemailer transporter from env vars */
-function createTransporter() {
-  const nodemailer = require('nodemailer'); // eslint-disable-line
-
-  const smtpHost = process.env.SMTP_HOST || 'smtp.titan.email';
-  const smtpPort = parseInt(process.env.SMTP_PORT || '465', 10);
-  const smtpUser = process.env.SMTP_USER || 'info@ikfzdigitalzulassung.de';
-  const smtpPass = process.env.SMTP_PASS_B64
-    ? Buffer.from(process.env.SMTP_PASS_B64, 'base64').toString('utf-8')
-    : process.env.SMTP_PASS || '';
-
-  if (!smtpPass) {
-    throw new Error('SMTP_PASS not configured');
-  }
-
-  return nodemailer.createTransport({
-    host: smtpHost,
-    port: smtpPort,
-    secure: smtpPort === 465,
-    auth: { user: smtpUser, pass: smtpPass },
-    tls: { rejectUnauthorized: false },
-  });
-}
-
 /**
  * Send a single campaign email. Returns success/failure.
  */
@@ -141,13 +117,10 @@ export async function sendCampaignEmail(opts: {
   subject: string;
   html: string;
 }): Promise<{ success: boolean; error?: string }> {
-  const fromEmail = process.env.EMAIL_FROM || 'info@ikfzdigitalzulassung.de';
-  const fromName = process.env.EMAIL_FROM_NAME || 'iKFZ Digital Zulassung';
-
   try {
-    const transporter = createTransporter();
+    const transporter = createEmailTransporterSync();
     await transporter.sendMail({
-      from: `"${fromName}" <${fromEmail}>`,
+      from: emailFromField(),
       to: opts.to,
       subject: opts.subject,
       html: opts.html,

@@ -6,11 +6,9 @@
 
 import { sendCampaignEmail } from '@/lib/campaign-email';
 import prisma from '@/lib/db';
-
-const SITE_URL =
-  process.env.SITE_URL ||
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  'https://ikfzdigitalzulassung.de';
+import {
+  siteUrl as SITE_URL, contact, company, emailColors,
+} from '@/lib/email-config';
 
 function escapeHtml(str: string): string {
   return str
@@ -34,10 +32,10 @@ function buildCompletionHtml(data: CompletionEmailData): string {
   const ctaUrl = data.invoiceUrl || `${SITE_URL}/kontakt`;
   const ctaText = data.invoiceUrl ? 'Rechnung ansehen' : 'Kontakt aufnehmen';
 
-  const helpPhone = process.env.CONTACT_PHONE || '015224999190';
-  const helpPhoneFormatted = process.env.CONTACT_PHONE_DISPLAY || '01522 4999190';
-  const helpWhatsApp = process.env.CONTACT_WHATSAPP || '4915224999190';
-  const helpEmail = process.env.CONTACT_EMAIL || 'info@ikfzdigitalzulassung.de';
+  const helpPhone = contact.phone;
+  const helpPhoneFormatted = contact.phoneDisplay;
+  const helpWhatsApp = contact.whatsapp;
+  const helpEmail = contact.email;
 
   // Service-specific content
   const serviceInfo = data.isAbmeldung
@@ -62,7 +60,7 @@ function buildCompletionHtml(data: CompletionEmailData): string {
 <body style="font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#1a1a1a;max-width:600px;margin:0 auto;padding:20px;background:#f4f6f9;">
 
 <div style="background:#0D5581;border-radius:12px 12px 0 0;padding:30px;text-align:center;">
-  <img src="${SITE_URL}/logo.webp" alt="iKFZ Digital Zulassung" style="width:180px;height:auto;margin-bottom:10px;" />
+  <img src="${SITE_URL}/logo.webp" alt="${company.name}" style="width:180px;height:auto;margin-bottom:10px;" />
   <h1 style="color:#fff;font-size:22px;margin:0;">Ihre Bestellung wurde erfolgreich abgeschlossen</h1>
 </div>
 
@@ -102,7 +100,7 @@ function buildCompletionHtml(data: CompletionEmailData): string {
 
   <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:15px;margin:20px 0;font-size:13px;color:#854d0e;text-align:center;">
     <strong>🤝 Zufrieden?</strong> Wir freuen uns sehr über Ihre 5-Sterne-Bewertung!<br>
-    ⭐️ <a href="https://g.page/r/Cd3tHbWRE-frEAE/review" style="color:#0D5581;font-weight:600;">Hier bewerten</a>
+    ⭐️ <a href="${company.googleReviewUrl}" style="color:#0D5581;font-weight:600;">Hier bewerten</a>
   </div>
 
   <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:15px;margin-top:25px;font-size:13px;color:#166534;">
@@ -114,7 +112,7 @@ function buildCompletionHtml(data: CompletionEmailData): string {
 </div>
 
 <div style="text-align:center;padding:20px;font-size:11px;color:#999;">
-  <p>iKFZ Digital Zulassung UG (haftungsbeschränkt) · Gerhard-Küchen-Str. 14 · 45141 Essen</p>
+  <p>${company.nameFull} · ${company.address}</p>
 </div>
 
 </body>

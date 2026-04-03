@@ -4,10 +4,10 @@
  * Supports file attachments (PDF, images).
  */
 
-const SITE_URL =
-  process.env.SITE_URL ||
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  'https://ikfzdigitalzulassung.de';
+import {
+  siteUrl, contact, company, emailColors, emailFrom,
+  createEmailTransporterSync, emailFromField,
+} from '@/lib/email-config';
 
 function escapeHtml(str: string): string {
   return str
@@ -41,10 +41,10 @@ function buildMessageHtml(opts: OrderMessageEmailOpts): string {
 
   const messageHtml = textToHtml(opts.message);
 
-  const helpPhone = process.env.CONTACT_PHONE || '015224999190';
-  const helpPhoneFormatted = process.env.CONTACT_PHONE_DISPLAY || '01522 4999190';
-  const helpWhatsApp = process.env.CONTACT_WHATSAPP || '4915224999190';
-  const helpEmail = process.env.CONTACT_EMAIL || 'info@ikfzdigitalzulassung.de';
+  const helpPhone = contact.phone;
+  const helpPhoneFormatted = contact.phoneDisplay;
+  const helpWhatsApp = contact.whatsapp;
+  const helpEmail = contact.email;
 
   const attachmentNote =
     opts.attachments && opts.attachments.length > 0
@@ -59,8 +59,8 @@ function buildMessageHtml(opts: OrderMessageEmailOpts): string {
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
 <body style="font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#1a1a1a;max-width:600px;margin:0 auto;padding:20px;background:#f4f6f9;">
 
-<div style="background:#0D5581;border-radius:12px 12px 0 0;padding:30px;text-align:center;">
-  <img src="${SITE_URL}/logo.webp" alt="iKFZ Digital Zulassung" style="width:180px;height:auto;margin-bottom:10px;" />
+<div style="background:${emailColors.primary};border-radius:12px 12px 0 0;padding:30px;text-align:center;">
+  <img src="${siteUrl}/logo.webp" alt="${company.name}" style="width:180px;height:auto;margin-bottom:10px;" />
   <h1 style="color:#fff;font-size:20px;margin:0;">Nachricht zu Ihrer Bestellung #${escapeHtml(opts.orderNumber)}</h1>
 </div>
 
@@ -92,35 +92,11 @@ function buildMessageHtml(opts: OrderMessageEmailOpts): string {
 </div>
 
 <div style="text-align:center;padding:20px;font-size:11px;color:#999;">
-  <p>iKFZ Digital Zulassung UG (haftungsbeschränkt) · Gerhard-Küchen-Str. 14 · 45141 Essen</p>
+  <p>${company.nameFull} · ${company.address}</p>
 </div>
 
 </body>
 </html>`;
-}
-
-/** Create a nodemailer transporter from env vars */
-function createTransporter() {
-  const nodemailer = require('nodemailer'); // eslint-disable-line
-
-  const smtpHost = process.env.SMTP_HOST || 'smtp.titan.email';
-  const smtpPort = parseInt(process.env.SMTP_PORT || '465', 10);
-  const smtpUser = process.env.SMTP_USER || 'info@ikfzdigitalzulassung.de';
-  const smtpPass = process.env.SMTP_PASS_B64
-    ? Buffer.from(process.env.SMTP_PASS_B64, 'base64').toString('utf-8')
-    : process.env.SMTP_PASS || '';
-
-  if (!smtpPass) {
-    throw new Error('SMTP_PASS not configured');
-  }
-
-  return nodemailer.createTransport({
-    host: smtpHost,
-    port: smtpPort,
-    secure: smtpPort === 465,
-    auth: { user: smtpUser, pass: smtpPass },
-    tls: { rejectUnauthorized: false },
-  });
 }
 
 /**
@@ -129,16 +105,13 @@ function createTransporter() {
 export async function sendOrderMessageEmail(
   opts: OrderMessageEmailOpts
 ): Promise<{ success: boolean; error?: string }> {
-  const fromEmail = process.env.EMAIL_FROM || 'info@ikfzdigitalzulassung.de';
-  const fromName = process.env.EMAIL_FROM_NAME || 'iKFZ Digital Zulassung';
-
   try {
-    const transporter = createTransporter();
+    const transporter = createEmailTransporterSync();
     const html = buildMessageHtml(opts);
 
     const mailOpts: Record<string, unknown> = {
-      from: `"${fromName}" <${fromEmail}>`,
-      replyTo: fromEmail,
+      from: emailFromField(),
+      replyTo: emailFrom,
       to: opts.to,
       subject: `Nachricht zu Ihrer Bestellung #${opts.orderNumber}`,
       html,
