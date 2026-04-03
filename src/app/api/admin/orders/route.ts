@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
   const page = parseInt(req.nextUrl.searchParams.get('page') || '1');
   const limit = parseInt(req.nextUrl.searchParams.get('limit') || '50');
 
-  const where: any = {};
+  const where: any = { deletedAt: null };
   if (status) where.status = status;
   if (search) {
     where.OR = [
