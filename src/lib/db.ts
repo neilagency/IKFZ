@@ -241,8 +241,19 @@ export async function createOrder(data: {
     include: { items: true },
   });
 
-  // Create invoice
-  const invoiceNumber = `INV-${Date.now().toString(36).toUpperCase()}`;
+  // Create invoice with sequential RE-YYYY-NNNN numbering
+  const currentYear = new Date().getFullYear();
+  const lastInvoice = await prisma.invoice.findFirst({
+    where: { invoiceNumber: { startsWith: `RE-${currentYear}` } },
+    orderBy: { invoiceNumber: 'desc' },
+    select: { invoiceNumber: true },
+  });
+  let invoiceCounter = 1;
+  if (lastInvoice?.invoiceNumber) {
+    const match = lastInvoice.invoiceNumber.match(/(\d+)$/);
+    if (match) invoiceCounter = parseInt(match[1], 10) + 1;
+  }
+  const invoiceNumber = `RE-${currentYear}-${String(invoiceCounter).padStart(4, '0')}`;
   const invoiceSubtotal = data.subtotal > 0 ? data.subtotal : data.total / 1.19;
   const invoiceTaxAmount = parseFloat((data.total - invoiceSubtotal).toFixed(2));
 

@@ -81,9 +81,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       };
     });
 
-  // Blog post routes — URLs are /{slug}/ (catch-all)
+  // Blog post routes — URLs are /insiderwissen/{slug}/
   const postRoutes: MetadataRoute.Sitemap = posts.map(post => ({
-    url: `${SITE_URL}/${post.slug}/`,
+    url: `${SITE_URL}/insiderwissen/${post.slug}/`,
     lastModified: post.updatedAt,
     changeFrequency: 'weekly' as const,
     priority: 0.7,

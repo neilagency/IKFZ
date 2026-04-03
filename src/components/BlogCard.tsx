@@ -23,7 +23,7 @@ export default function BlogCard({ post }: BlogCardProps) {
   const plainExcerpt = stripHtml(post.excerpt).slice(0, 160);
 
   return (
-    <Link href={`/${post.slug}/`} className="group block h-full">
+    <Link href={`/insiderwissen/${post.slug}/`} className="group block h-full">
       <article className="h-full rounded-2xl border border-white/[0.06] bg-dark-900/50 backdrop-blur-sm overflow-hidden transition-all duration-300 hover:border-primary/30 hover:shadow-xl hover:-translate-y-1">
         {post.featuredImage && (
           <div className="aspect-[16/10] overflow-hidden relative">

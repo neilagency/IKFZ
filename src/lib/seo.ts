@@ -50,17 +50,17 @@ export async function getPostSEO(slug: string): Promise<Metadata> {
   const post = await prisma.blogPost.findUnique({ where: { slug } });
 
   if (!post) {
-    return { title: 'Blog | iKFZ Digital Zulassung', alternates: { canonical: `${SITE_URL}/${slug}/` } };
+    return { title: 'Blog | iKFZ Digital Zulassung', alternates: { canonical: `${SITE_URL}/insiderwissen/${slug}/` } };
   }
 
   return {
     title: post.metaTitle || post.title,
     description: post.metaDescription || post.excerpt || undefined,
-    alternates: { canonical: post.canonical || `${SITE_URL}/${post.slug}/` },
+    alternates: { canonical: post.canonical || `${SITE_URL}/insiderwissen/${post.slug}/` },
     openGraph: {
       title: post.ogTitle || post.metaTitle || post.title,
       description: post.ogDescription || post.metaDescription || undefined,
-      url: post.canonical || `${SITE_URL}/${post.slug}/`,
+      url: post.canonical || `${SITE_URL}/insiderwissen/${post.slug}/`,
       siteName: 'ikfzdigitalzulassung.de',
       locale: 'de_DE',
       type: 'article',

@@ -334,7 +334,7 @@ export function PaymentMethodSelector({
                 </div>
               </label>
 
-              {/* Expanded content when selected */}
+              {/* Expanded content when selected — description only */}
               <AnimatePresence>
                 {isSelected && (
                   <motion.div
@@ -346,11 +346,6 @@ export function PaymentMethodSelector({
                   >
                     <div className="px-4 pb-4">
                       {METHOD_DESCRIPTIONS[method.id]}
-                      <BillingFields
-                        methodId={method.id}
-                        register={register}
-                        errors={errors}
-                      />
                     </div>
                   </motion.div>
                 )}
@@ -358,6 +353,19 @@ export function PaymentMethodSelector({
             </div>
           );
         })}
+
+        {/* Billing fields rendered ONCE outside the loop to prevent duplicate DOM fields.
+            AnimatePresence mode="wait" ensures old fields fully unmount before new ones mount. */}
+        <AnimatePresence mode="wait">
+          {selectedMethod && (
+            <BillingFields
+              key={selectedMethod}
+              methodId={selectedMethod}
+              register={register}
+              errors={errors}
+            />
+          )}
+        </AnimatePresence>
       </div>
       {error && (
         <p className="text-red-500 text-sm px-6 pb-4">{error}</p>

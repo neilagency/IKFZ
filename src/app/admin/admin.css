@@ -24,6 +24,15 @@
   color: #ffffff;
 }
 
+/* Protect white text inside the invoice preview header */
+.admin-light .invoice-preview-header,
+.admin-light .invoice-preview-header * {
+  color: #ffffff;
+}
+.admin-light .invoice-preview-header .opacity-70 {
+  color: rgba(255, 255, 255, 0.7);
+}
+
 .admin-light .hover\:text-white:hover {
   color: #111827;
 }

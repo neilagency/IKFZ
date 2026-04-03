@@ -225,7 +225,7 @@ export default async function KfzZulassungStadtPage() {
                 { label: 'Kostenlose eVB-Nummer', href: '/evb/', desc: 'Elektronische Versicherungsbestätigung' },
                 { label: 'KFZ-Versicherung berechnen', href: '/kfz-versicherung-berechnen/', desc: 'Günstige Tarife vergleichen' },
                 { label: 'Auto verkaufen', href: '/auto-verkaufen/', desc: 'Schnell und einfach online' },
-                { label: 'Zum Blog', href: '/blog/', desc: 'Tipps & Insiderwissen' },
+                { label: 'Zum Blog', href: '/insiderwissen/', desc: 'Tipps & Insiderwissen' },
               ].map((svc, i) => (
                 <ScrollReveal key={i} delay={i * 0.08}>
                   <Link

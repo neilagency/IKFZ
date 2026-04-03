@@ -337,7 +337,7 @@ export default async function AutoVerkaufenPage() {
               <div className="grid md:grid-cols-3 gap-8">
                 {recentPosts.map((post, i) => (
                   <ScrollReveal key={post.slug} delay={i * 0.1}>
-                    <Link href={`/blog/${post.slug}`} className="group block rounded-2xl bg-white border border-dark-100 overflow-hidden hover:shadow-card transition-all duration-300">
+                    <Link href={`/insiderwissen/${post.slug}/`} className="group block rounded-2xl bg-white border border-dark-100 overflow-hidden hover:shadow-card transition-all duration-300">
                       {post.featuredImage && (
                         <div className="aspect-[16/10] overflow-hidden">
                           <img src={post.featuredImage} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
