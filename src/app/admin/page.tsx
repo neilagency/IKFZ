@@ -808,6 +808,22 @@ function OrdersTab({ token }: { token: string }) {
     }
   }
 
+  async function deleteOrder(id: string, orderNumber: string) {
+    if (!confirm(`Bestellung #${orderNumber} wirklich löschen?`)) return;
+    try {
+      const res = await fetch(`${API}/orders/${id}`, { method: "DELETE", credentials: "include" });
+      if (res.ok) {
+        toast("Bestellung gelöscht", "success");
+        mutate();
+      } else {
+        const d = await res.json().catch(() => ({}));
+        toast(d.error || "Fehler beim Löschen", "error");
+      }
+    } catch {
+      toast("Fehler beim Löschen", "error");
+    }
+  }
+
   if (selectedOrder) {
     const o = fullOrder;
     return (
@@ -1001,9 +1017,12 @@ function OrdersTab({ token }: { token: string }) {
                   <div className="flex items-center gap-3"><span className="text-white font-medium">#{o.orderNumber}</span><Badge status={o.status} /></div>
                   <p className="text-gray-400 text-xs mt-1">{o.billingFirstName} {o.billingLastName} — {o.billingEmail}</p>
                 </div>
-                <div className="text-right ml-4">
-                  <p className="text-white font-semibold">{formatEuro(o.total)}</p>
-                  <p className="text-gray-400 text-xs">{o.paymentMethodTitle || "-"} | {formatDate(o.createdAt)}</p>
+                <div className="text-right ml-4 flex items-center gap-3">
+                  <div>
+                    <p className="text-white font-semibold">{formatEuro(o.total)}</p>
+                    <p className="text-gray-400 text-xs">{o.paymentMethodTitle || "-"} | {formatDate(o.createdAt)}</p>
+                  </div>
+                  <button onClick={(e) => { e.stopPropagation(); deleteOrder(o.id, o.orderNumber); }} className="p-2 rounded-lg hover:bg-red-500/10 text-gray-400 hover:text-red-400 transition-colors" title="Löschen"><Trash2 className="w-4 h-4" /></button>
                 </div>
               </div>
             ))}
