@@ -73,32 +73,7 @@ if (!fs.existsSync(dbFile)) {
   console.log(`[DB-SETUP] ✅ Production DB exists (${sizeMB} MB) — NOT overwriting`);
 }
 
-// 3. Apply schema updates (add indexes/constraints if missing)
-try {
-  const Database = require('better-sqlite3');
-  const db = new Database(dbFile);
-  // Add unique index on orderNumber if not exists
-  const indexes = db.prepare("PRAGMA index_list('Order')").all();
-  const hasOrderNumberIdx = indexes.some(idx => {
-    const cols = db.prepare(`PRAGMA index_info("${idx.name}")`).all();
-    return cols.some(c => c.name === 'orderNumber') && idx.unique === 1;
-  });
-  if (!hasOrderNumberIdx) {
-    try {
-      db.exec('CREATE UNIQUE INDEX IF NOT EXISTS "Order_orderNumber_key" ON "Order"("orderNumber")');
-      console.log('[DB-SETUP] ✅ Added unique index on Order.orderNumber');
-    } catch (e) {
-      console.warn('[DB-SETUP] ⚠ Could not add orderNumber index:', e.message);
-    }
-  } else {
-    console.log('[DB-SETUP] ✅ Order.orderNumber unique index already exists');
-  }
-  db.close();
-} catch (e) {
-  console.warn('[DB-SETUP] ⚠ Schema update skipped:', e.message);
-}
-
-// 4. Write DB_PATH to .env.local (build-time) AND .env (runtime)
+// 3. Write DB_PATH to .env.local (build-time) AND .env (runtime)
 // Next.js standalone runs from a DIFFERENT directory than the build.
 // .env.local is read at build time, .env is copied to the runtime dir.
 const dbPathLine = `DB_PATH=${dbFile}`;
