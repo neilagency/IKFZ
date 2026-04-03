@@ -42,5 +42,5 @@ next-env.d.ts
 
 /src/generated/prisma
 
-# backup
-backup/
+# backup (root-level only, not src/ paths)
+/backup/
