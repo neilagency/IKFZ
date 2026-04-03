@@ -64,11 +64,22 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-export const prisma = globalForPrisma.prisma ?? createPrismaClient();
+// Lazy initialization — prisma client is created on FIRST USE, not at import time.
+// This prevents module-level crashes in Next.js standalone/serverless mode.
+function getPrisma(): PrismaClient {
+  if (!globalForPrisma.prisma) {
+    globalForPrisma.prisma = createPrismaClient();
+  }
+  return globalForPrisma.prisma;
+}
 
-// Cache in all environments to prevent multiple DB connections
-globalForPrisma.prisma = prisma;
+const prisma: PrismaClient = new Proxy({} as PrismaClient, {
+  get(_, prop) {
+    return (getPrisma() as any)[prop];
+  },
+});
 
+export { prisma };
 export default prisma;
 
 // ── Helper functions ──
