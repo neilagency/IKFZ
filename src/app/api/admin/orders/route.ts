@@ -57,6 +57,9 @@ export async function PUT(req: NextRequest) {
     if (data.status) {
       updateData.status = data.status;
       if (data.status === 'completed') updateData.dateCompleted = new Date();
+      if ((data.status === 'completed' || data.status === 'processing') && !updateData.datePaid) {
+        updateData.datePaid = new Date();
+      }
     }
     if (data.customerNote !== undefined) updateData.customerNote = data.customerNote;
 

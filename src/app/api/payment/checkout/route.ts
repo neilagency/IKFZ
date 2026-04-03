@@ -340,16 +340,18 @@ export async function POST(request: NextRequest) {
     if (serverGrandTotal <= 0) {
       console.log(`[checkout] Order ${order.orderNumber} is free (coupon: ${couponCode}), skipping payment gateway`);
 
+      const freeTransactionId = `FREE-${couponCode || 'COUPON'}`;
       await Promise.all([
         prisma.order.update({
           where: { id: order.id },
-          data: { status: 'processing' },
+          data: { status: 'processing', datePaid: new Date(), transactionId: freeTransactionId },
         }),
         prisma.payment.updateMany({
           where: { orderId: order.id },
           data: {
             status: 'paid',
-            transactionId: `FREE-${couponCode || 'COUPON'}`,
+            paidAt: new Date(),
+            transactionId: freeTransactionId,
           },
         }),
       ]);
