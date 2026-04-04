@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { FileText, Zap, Clock, Euro, Shield, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { homepageContent } from '@/lib/content';
 
@@ -81,36 +82,22 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Right side - Floating feature cards (desktop only) */}
+          {/* Right side - KBA badge image (desktop only) */}
           <div className="flex-shrink-0 hidden lg:block">
-            <div className="relative w-[340px] h-[340px]">
-              {/* Central KBA badge */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="relative w-[180px] h-[180px] bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 flex items-center justify-center animate-glow">
-                  <div className="text-center">
-                    <div className="text-4xl mb-2">🦅</div>
-                    <div className="text-2xl font-black text-white tracking-wider">KBA</div>
-                    <div className="text-[9px] text-white/50 mt-1 leading-tight px-4">
-                      Registriert gemäß §14 FZV
-                    </div>
-                  </div>
+            <div className="relative w-[320px] h-[320px]">
+              <div className="absolute inset-0 bg-primary/10 rounded-full blur-[60px] pointer-events-none" />
+              <div className="relative w-full h-full flex items-center justify-center">
+                <div className="relative w-[260px] h-[260px] bg-white/[0.06] backdrop-blur-sm rounded-3xl border border-white/10 p-8 flex items-center justify-center shadow-2xl">
+                  <Image
+                    src="/uploads/2025/02/KBA-NEU-e1739626430147.png"
+                    alt="KBA – Registriert gemäß §34 FZV beim Kraftfahrt-Bundesamt"
+                    width={241}
+                    height={300}
+                    className="w-auto h-[200px] object-contain drop-shadow-[0_0_30px_rgba(0,168,90,0.15)]"
+                    priority
+                  />
                 </div>
               </div>
-
-              {/* Corner cards */}
-              {[
-                { label: 'Ab 119,70 €', pos: 'top-0 left-0' },
-                { label: '24/7 Verfügbar', pos: 'top-0 right-0' },
-                { label: 'Sofort fahren', pos: 'bottom-0 left-0' },
-                { label: 'PDF Bestätigung', pos: 'bottom-0 right-0' },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className={`absolute ${item.pos} px-4 py-2.5 bg-white/8 backdrop-blur-sm rounded-xl border border-white/10 text-white text-sm font-medium`}
-                >
-                  {item.label}
-                </div>
-              ))}
             </div>
           </div>
         </div>
