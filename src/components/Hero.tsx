@@ -84,16 +84,17 @@ export default function Hero() {
 
           {/* Right side - KBA badge image (desktop only) */}
           <div className="flex-shrink-0 hidden lg:block">
-            <div className="relative w-[320px] h-[320px]">
-              <div className="absolute inset-0 bg-primary/10 rounded-full blur-[60px] pointer-events-none" />
+            <div className="relative w-[400px] h-[400px]">
+              <div className="absolute inset-0 bg-primary/8 rounded-full blur-[80px] pointer-events-none" />
+              <div className="absolute inset-0 bg-primary/5 rounded-full blur-[120px] scale-125 pointer-events-none" />
               <div className="relative w-full h-full flex items-center justify-center">
-                <div className="relative w-[260px] h-[260px] bg-white/[0.06] backdrop-blur-sm rounded-3xl border border-white/10 p-8 flex items-center justify-center shadow-2xl">
+                <div className="relative w-[340px] h-[340px] bg-gradient-to-br from-white/[0.08] to-white/[0.03] backdrop-blur-sm rounded-[2rem] border border-white/[0.12] p-6 flex items-center justify-center shadow-[0_8px_60px_rgba(0,168,90,0.12)]">
                   <Image
                     src="/uploads/2025/02/KBA-NEU-e1739626430147.png"
                     alt="KBA – Registriert gemäß §34 FZV beim Kraftfahrt-Bundesamt"
                     width={241}
                     height={300}
-                    className="w-auto h-[200px] object-contain drop-shadow-[0_0_30px_rgba(0,168,90,0.15)]"
+                    className="w-auto h-[280px] object-contain drop-shadow-[0_4px_40px_rgba(0,168,90,0.12)]"
                     priority
                   />
                 </div>

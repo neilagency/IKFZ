@@ -15,7 +15,7 @@ export const homepageContent = {
     ],
     cta: {
       text: 'Jetzt online starten',
-      href: '/kfz-service/kfz-online-service/',
+      href: '/product/auto-online-anmelden/',
     },
   },
   intro: {
