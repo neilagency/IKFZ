@@ -63,10 +63,10 @@ export default function Hero() {
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
-                href="/kfz-services/"
+                href="/kfz-online-abmelden/"
                 className="btn-outline-white"
               >
-                Alle Services ansehen
+                Auto online abmelden
               </Link>
             </div>
 
