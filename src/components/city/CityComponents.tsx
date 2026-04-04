@@ -2,8 +2,13 @@
 
 import Link from 'next/link';
 import ScrollReveal from '@/components/ScrollReveal';
-import { ArrowRight, MapPin, Phone, Shield, FileCheck, Clock, type LucideIcon } from 'lucide-react';
+import WPContentRenderer from '@/components/WPContentRenderer';
+import { ArrowRight, MapPin, Phone, Shield, FileCheck, Clock, Globe, Zap, Headphones, CheckCircle2, type LucideIcon } from 'lucide-react';
 import { siteConfig } from '@/lib/config';
+
+const iconMap: Record<string, LucideIcon> = {
+  Shield, MapPin, FileCheck, Clock, Globe, Zap, Headphones, CheckCircle2, ArrowRight, Phone,
+};
 
 /* ═══════════════════════════════════════════════════════════
    CityHero – Dark hero with badge, H1, subtitle, CTAs
@@ -79,17 +84,19 @@ export function CityHero({
 export function CityStatsBar({
   items,
 }: {
-  items: { icon: LucideIcon; label: string; desc: string }[];
+  items: { icon: string; label: string; desc: string }[];
 }) {
   return (
     <section className="py-8 md:py-10 bg-gray-50/80 border-b border-dark-100/50">
       <div className="container-main">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-          {items.map((item, i) => (
+          {items.map((item, i) => {
+            const Icon = iconMap[item.icon] || Shield;
+            return (
             <ScrollReveal key={item.label} delay={i * 0.06}>
               <div className="flex items-start gap-3 p-4 md:p-5 rounded-2xl bg-white border border-dark-100/60 shadow-sm hover:shadow-card transition-shadow duration-300 h-full">
                 <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <item.icon className="w-5 h-5 text-primary" />
+                  <Icon className="w-5 h-5 text-primary" />
                 </div>
                 <div className="min-w-0">
                   <div className="font-bold text-dark-900 text-sm leading-tight">{item.label}</div>
@@ -97,7 +104,8 @@ export function CityStatsBar({
                 </div>
               </div>
             </ScrollReveal>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
@@ -259,7 +267,7 @@ export function CityBenefits({
 }: {
   badge?: string;
   title: string;
-  items: { icon: LucideIcon; title: string; desc: string }[];
+  items: { icon: string; title: string; desc: string }[];
 }) {
   return (
     <section className="bg-white py-16 md:py-24">
@@ -272,7 +280,7 @@ export function CityBenefits({
         </ScrollReveal>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 max-w-6xl mx-auto">
           {items.map((item, i) => {
-            const Icon = item.icon;
+            const Icon = iconMap[item.icon] || Shield;
             return (
               <ScrollReveal key={i} delay={i * 0.07}>
                 <div className="group text-center rounded-2xl bg-gray-50/80 border border-dark-100/50 p-7 md:p-8 hover:shadow-card hover:border-primary/20 transition-all duration-300 h-full">
@@ -298,12 +306,10 @@ export function CityContent({
   title,
   content,
   featuredImage,
-  ContentRenderer,
 }: {
   title: string;
   content: string;
   featuredImage?: string | null;
-  ContentRenderer: React.ComponentType<{ html: string; variant?: 'dark' | 'light'; className?: string }>;
 }) {
   return (
     <section className="py-16 md:py-24 bg-gradient-to-b from-white via-gray-50/30 to-white relative">
@@ -318,7 +324,7 @@ export function CityContent({
             </ScrollReveal>
           )}
           <ScrollReveal>
-            <ContentRenderer html={content} variant="light" />
+            <WPContentRenderer html={content} variant="light" />
           </ScrollReveal>
         </div>
       </div>

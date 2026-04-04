@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, MapPin, Shield, FileCheck, Clock, Globe, Zap, Headphones } from 'lucide-react';
+import { ArrowRight, MapPin } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
 import prisma from '@/lib/db';
 import {
@@ -60,10 +60,10 @@ export default async function KfzZulassungStadtPage() {
 
       <CityStatsBar
         items={[
-          { icon: Shield, label: 'KBA registriert', desc: 'Offiziell beim Kraftfahrt-Bundesamt' },
-          { icon: MapPin, label: `${cities.length}+ Städte`, desc: 'Regionen abgedeckt' },
-          { icon: Clock, label: '24/7 verfügbar', desc: 'Auch am Wochenende' },
-          { icon: FileCheck, label: 'Sofort-Bestätigung', desc: 'Per E-Mail erhalten' },
+          { icon: 'Shield', label: 'KBA registriert', desc: 'Offiziell beim Kraftfahrt-Bundesamt' },
+          { icon: 'MapPin', label: `${cities.length}+ Städte`, desc: 'Regionen abgedeckt' },
+          { icon: 'Clock', label: '24/7 verfügbar', desc: 'Auch am Wochenende' },
+          { icon: 'FileCheck', label: 'Sofort-Bestätigung', desc: 'Per E-Mail erhalten' },
         ]}
       />
 
@@ -115,10 +115,10 @@ export default async function KfzZulassungStadtPage() {
       <CityBenefits
         title="Warum IKFZ Digital Zulassung?"
         items={[
-          { icon: Globe, title: 'Deutschlandweit', desc: 'Ein Service für alle Städte und Landkreise in ganz Deutschland.' },
-          { icon: Zap, title: 'Schnell & Digital', desc: 'Kein Warten, kein Papierkram – alles online in wenigen Minuten.' },
-          { icon: Shield, title: 'KBA registriert', desc: 'Offiziell registrierter i-Kfz Dienstleister beim Kraftfahrt-Bundesamt.' },
-          { icon: Headphones, title: 'Persönlicher Support', desc: 'Bei Fragen helfen wir Ihnen schnell per WhatsApp oder Telefon.' },
+          { icon: 'Globe', title: 'Deutschlandweit', desc: 'Ein Service für alle Städte und Landkreise in ganz Deutschland.' },
+          { icon: 'Zap', title: 'Schnell & Digital', desc: 'Kein Warten, kein Papierkram – alles online in wenigen Minuten.' },
+          { icon: 'Shield', title: 'KBA registriert', desc: 'Offiziell registrierter i-Kfz Dienstleister beim Kraftfahrt-Bundesamt.' },
+          { icon: 'Headphones', title: 'Persönlicher Support', desc: 'Bei Fragen helfen wir Ihnen schnell per WhatsApp oder Telefon.' },
         ]}
       />
 

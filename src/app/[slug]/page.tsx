@@ -7,7 +7,7 @@ import WPContentRenderer from '@/components/WPContentRenderer';
 import ScrollReveal from '@/components/ScrollReveal';
 import Link from 'next/link';
 import Script from 'next/script';
-import { ArrowRight, MapPin, Shield, FileCheck, Clock, Phone, ChevronRight } from 'lucide-react';
+import { ArrowRight, MapPin, Phone, ChevronRight } from 'lucide-react';
 import { siteConfig } from '@/lib/config';
 import {
   CityHero, CityStatsBar, CitySteps, CityServices,
@@ -142,10 +142,10 @@ function CityLandingPage({ cityName, title, content, featuredImage }: { cityName
 
       <CityStatsBar
         items={[
-          { icon: Shield, label: 'KBA registriert', desc: 'Offiziell beim Kraftfahrt-Bundesamt' },
-          { icon: FileCheck, label: 'Sofort-Bestätigung', desc: '10 Tage gültige Bestätigung' },
-          { icon: Clock, label: '24/7 verfügbar', desc: 'Auch am Wochenende' },
-          { icon: MapPin, label: cityName, desc: 'Lokaler Service verfügbar' },
+          { icon: 'Shield', label: 'KBA registriert', desc: 'Offiziell beim Kraftfahrt-Bundesamt' },
+          { icon: 'FileCheck', label: 'Sofort-Bestätigung', desc: '10 Tage gültige Bestätigung' },
+          { icon: 'Clock', label: '24/7 verfügbar', desc: 'Auch am Wochenende' },
+          { icon: 'MapPin', label: cityName, desc: 'Lokaler Service verfügbar' },
         ]}
       />
 
@@ -163,7 +163,6 @@ function CityLandingPage({ cityName, title, content, featuredImage }: { cityName
         title={title}
         content={content}
         featuredImage={featuredImage}
-        ContentRenderer={WPContentRenderer}
       />
 
       <CityServices
