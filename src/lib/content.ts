@@ -9,7 +9,7 @@ export const homepageContent = {
     kbaText: 'KBA registriert',
     features: [
       { icon: 'FileText', label: 'PDF', desc: '10-tägige Zulassungsbestätigung sofort' },
-      { icon: 'Zap', label: 'Sofort', desc: 'Nach Freigabe direkt fahren' },
+      { icon: 'Zap', label: 'Direkt fahren', desc: 'in vielen Fällen in Minuten' },
       { icon: 'Clock', label: '24/7', desc: 'Auch Wochenende & Feiertag' },
       { icon: 'Euro', label: 'Ab 119,70 €', desc: 'Klare Kosten, keine versteckten Gebühren' },
     ],
