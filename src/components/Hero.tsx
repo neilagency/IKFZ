@@ -73,7 +73,7 @@ export default function Hero() {
 
             {/* Trust indicators */}
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-8 justify-center lg:justify-start">
-              {['KBA registriert', 'PDF-Bestätigung', '24/7 Support'].map((text) => (
+              {['Persönlicher-Support', 'PDF-Bestätigung', '24/7 Support'].map((text) => (
                 <span key={text} className="flex items-center gap-2 text-sm text-white/50">
                   <CheckCircle2 className="w-4 h-4 text-primary-400" />
                   {text}
