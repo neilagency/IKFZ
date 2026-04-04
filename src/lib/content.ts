@@ -8,7 +8,7 @@ export const homepageContent = {
     badge: 'Ohne Termin bei der Behörde',
     kbaText: 'KBA registriert',
     features: [
-      { icon: 'FileText', label: 'PDF', desc: '10-tägige Zulassungsbestätigung sofort' },
+      { icon: 'FileText', label: 'Bestätigung', desc: '10-Tage-PDF sofort' },
       { icon: 'Zap', label: 'Direkt fahren', desc: 'in vielen Fällen in Minuten' },
       { icon: 'Clock', label: '24/7', desc: 'Auch Wochenende & Feiertag' },
       { icon: 'Euro', label: 'Faire Kosten', desc: 'Keine versteckten Gebühren' },

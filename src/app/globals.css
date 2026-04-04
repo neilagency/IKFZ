@@ -11,6 +11,29 @@
   contain: strict;
 }
 
+/* Subtle dot pattern for light sections — adds depth */
+.dot-pattern {
+  background-image: radial-gradient(circle, rgba(0,168,90,0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Dark section dot pattern */
+.dot-pattern-dark {
+  background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Diagonal lines pattern — very subtle */
+.lines-pattern {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 14px,
+    rgba(0,168,90,0.02) 14px,
+    rgba(0,168,90,0.02) 15px
+  );
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -92,6 +115,61 @@
     content: '';
     @apply absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-px;
     background: linear-gradient(90deg, transparent, rgba(0, 168, 90, 0.15), transparent);
+  }
+
+  /* Section divider with gradient line */
+  .section-divider-top {
+    position: relative;
+  }
+  .section-divider-top::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 64rem;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,168,90,0.12), transparent);
+  }
+
+  /* Enhanced card with subtle gradient border */
+  .card-enhanced {
+    @apply bg-white rounded-3xl p-7 transition-all duration-300 ease-out border border-dark-100/60;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 20px rgba(0,0,0,0.06);
+  }
+  .card-enhanced:hover {
+    @apply -translate-y-1;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06), 0 12px 40px rgba(0,0,0,0.1);
+    border-color: rgba(0,168,90,0.2);
+  }
+
+  /* Dark section card */
+  .card-dark {
+    @apply rounded-3xl p-8 text-center border transition-all duration-300;
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.06);
+  }
+  .card-dark:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.12);
+  }
+
+  /* Gold accent badge */
+  .badge-gold {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider;
+    background: linear-gradient(135deg, #f9b70a, #facc15);
+    color: #16191d;
+  }
+
+  /* Section background: warm off-white */
+  .bg-warm {
+    background: linear-gradient(180deg, #fafaf8 0%, #f8f8f6 100%);
+  }
+
+  /* Section background: cool tinted */
+  .bg-cool {
+    background: linear-gradient(180deg, #f6f9f8 0%, #f4f7f6 100%);
   }
 
   /* CTA glow pulse */

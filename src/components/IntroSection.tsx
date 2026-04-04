@@ -7,10 +7,12 @@ export default function IntroSection() {
   const { intro } = homepageContent;
 
   return (
-    <section className="py-14 md:py-20 bg-gradient-to-b from-white via-white to-gray-50/80 relative">
+    <section className="py-10 md:py-16 bg-warm relative overflow-hidden">
       {/* Subtle top separator from hero */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent" />
-      <div className="container-main">
+      {/* Design layer: soft glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-primary/[0.03] rounded-full blur-[120px] pointer-events-none" />
+      <div className="container-main relative">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}

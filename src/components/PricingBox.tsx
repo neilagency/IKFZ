@@ -26,9 +26,11 @@ export default function PricingBox({
   const liveAbmeldungPrice = feed['fahrzeugabmeldung']?.price ?? abmeldungPrice;
 
   return (
-    <section className="py-14 md:py-20 bg-gradient-to-br from-gray-50/80 via-white to-primary-50/20 relative overflow-hidden" id="kosten">
+    <section className="py-10 md:py-16 relative overflow-hidden" id="kosten" style={{ background: 'linear-gradient(180deg, #f0f4f2 0%, #e8eeeb 50%, #f0f4f2 100%)' }}>
       {/* Decorative */}
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-primary/[0.03] rounded-full blur-[80px] translate-y-1/2 -translate-x-1/3" />
+      <div className="absolute inset-0 dot-pattern pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-primary/[0.04] rounded-full blur-[80px] translate-y-1/2 -translate-x-1/3" />
+      <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-gold/[0.03] rounded-full blur-[80px] -translate-y-1/3 translate-x-1/4 pointer-events-none" />
 
       <div className="container-main relative">
         <motion.div
@@ -61,7 +63,7 @@ export default function PricingBox({
           >
             <div className="absolute -inset-px bg-gradient-to-b from-primary/40 via-primary/20 to-primary/5 rounded-[1.6rem]" />
             <div className="relative bg-white rounded-3xl p-8 h-full border border-primary/10">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-primary text-white text-[11px] font-bold uppercase tracking-wider rounded-full mb-6">
+              <div className="badge-gold mb-6">
                 Beliebt
               </div>
 

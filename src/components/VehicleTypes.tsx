@@ -26,8 +26,10 @@ export default function VehicleTypes() {
   const { vehicles } = homepageContent;
 
   return (
-    <section className="py-14 md:py-20 bg-gradient-to-br from-gray-50/80 via-white to-primary-50/20 relative overflow-hidden">
-      <div className="container-main">
+    <section className="py-10 md:py-16 bg-warm relative overflow-hidden section-divider-top">
+      {/* Design layer */}
+      <div className="absolute inset-0 dot-pattern pointer-events-none" />
+      <div className="container-main relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -54,7 +56,7 @@ export default function VehicleTypes() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.06, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="group bg-white rounded-2xl p-6 text-center border border-dark-100/60 shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300"
+                className="group bg-white rounded-2xl p-6 text-center border border-dark-100/60 shadow-card hover:shadow-card-hover hover:-translate-y-1 hover:border-primary/20 transition-all duration-300"
               >
                 <div className="w-14 h-14 mx-auto mb-3 bg-primary/8 rounded-2xl flex items-center justify-center group-hover:bg-primary/15 transition-colors">
                   <Icon className="w-7 h-7 text-primary" />

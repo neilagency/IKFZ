@@ -6,9 +6,11 @@ import { homepageContent } from '@/lib/content';
 
 export default function InfoCards() {
   return (
-    <section className="py-14 md:py-20 bg-gradient-to-b from-white via-white to-gray-50/60 relative">
+    <section className="py-10 md:py-16 bg-warm relative overflow-hidden">
       {/* Separator */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-px bg-gradient-to-r from-transparent via-dark-200/30 to-transparent" />
+      {/* Design layer */}
+      <div className="absolute inset-0 lines-pattern pointer-events-none" />
       <div className="container-main">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
           {/* Vollmacht Card */}
@@ -17,7 +19,7 @@ export default function InfoCards() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="bg-white rounded-3xl p-8 border border-dark-100/60 shadow-card hover:shadow-card-hover transition-all duration-300"
+            className="bg-white rounded-3xl p-8 border border-dark-100/60 shadow-card hover:shadow-card-hover hover:border-primary/20 hover:-translate-y-1 transition-all duration-300"
           >
             <div className="w-12 h-12 bg-primary/8 rounded-2xl flex items-center justify-center mb-5">
               <FileSignature className="w-6 h-6 text-primary" />
@@ -36,7 +38,7 @@ export default function InfoCards() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="bg-white rounded-3xl p-8 border border-dark-100/60 shadow-card hover:shadow-card-hover transition-all duration-300"
+            className="bg-white rounded-3xl p-8 border border-dark-100/60 shadow-card hover:shadow-card-hover hover:border-primary/20 hover:-translate-y-1 transition-all duration-300"
           >
             <div className="w-12 h-12 bg-primary/8 rounded-2xl flex items-center justify-center mb-5">
               <Hash className="w-6 h-6 text-primary" />

@@ -10,9 +10,12 @@ export default function Steps() {
   const isInView = useInView(containerRef, { once: true, margin: '-100px' });
 
   return (
-    <section className="py-14 md:py-20 bg-gradient-to-br from-gray-50/80 via-white to-primary-50/20 relative overflow-hidden" id="so-funktioniert-es">
-
-      <div className="container-main" ref={containerRef}>
+    <section className="py-10 md:py-16 bg-cool relative overflow-hidden section-divider-top" id="so-funktioniert-es">
+      {/* Design layer: dot pattern bg */}
+      <div className="absolute inset-0 dot-pattern pointer-events-none" />
+      {/* Decorative blurred shape */}
+      <div className="absolute -top-20 -right-20 w-[400px] h-[400px] bg-primary/[0.03] rounded-full blur-[80px] pointer-events-none" />
+      <div className="container-main relative" ref={containerRef}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -38,7 +41,7 @@ export default function Steps() {
               transition={{ delay: index * 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="group relative"
             >
-              <div className="relative bg-white rounded-3xl p-7 border border-dark-100/60 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1 h-full">
+              <div className="relative bg-white rounded-3xl p-7 border border-dark-100/60 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 h-full">
                 {/* Step number badge */}
                 <div className="flex items-center gap-4 mb-5">
                   <div className="relative">

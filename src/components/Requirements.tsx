@@ -9,9 +9,10 @@ export default function Requirements() {
   const { requirements } = homepageContent;
 
   return (
-    <section className="py-14 md:py-20 bg-gradient-to-b from-gray-50/60 via-white to-white relative overflow-hidden">
+    <section className="py-10 md:py-16 bg-warm relative overflow-hidden section-divider-top">
       {/* Decorative bg */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/[0.03] rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3" />
+      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-gold/[0.02] rounded-full blur-[80px] translate-y-1/3 -translate-x-1/4 pointer-events-none" />
 
       <div className="container-main relative">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
