@@ -64,7 +64,7 @@ export default function Hero() {
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
-                href="/kfz-online-abmelden/"
+                href="/product/fahrzeugabmeldung/"
                 className="btn-outline-white"
               >
                 Auto online abmelden
