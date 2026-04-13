@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { FileText, Zap, Clock, Euro, Shield, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { homepageContent } from '@/lib/content';
 
@@ -82,25 +81,7 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Right side - KBA badge image (desktop only) */}
-          <div className="flex-shrink-0 hidden lg:block">
-            <div className="relative w-[400px] h-[400px]">
-              <div className="absolute inset-0 bg-gradient-radial from-primary/6 to-transparent rounded-full pointer-events-none" />
-              <div className="relative w-full h-full flex items-center justify-center">
-                <div className="relative w-[340px] h-[340px] bg-gradient-to-br from-white/[0.08] to-white/[0.03] rounded-[2rem] border border-white/[0.12] p-6 flex items-center justify-center shadow-[0_8px_60px_rgba(0,168,90,0.12)]">
-                  <Image
-                    src="/uploads/2025/02/KBA-NEU-e1739626430147.png"
-                    alt="KBA – Registriert gemäß §34 FZV beim Kraftfahrt-Bundesamt"
-                    width={241}
-                    height={300}
-                    sizes="241px"
-                    className="w-auto h-[280px] object-contain drop-shadow-[0_4px_40px_rgba(0,168,90,0.12)]"
-                    priority
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+
         </div>
 
         {/* Feature Cards Row */}
