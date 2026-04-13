@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { siteConfig } from '@/lib/config';
 import { Phone, MessageCircle, Mail, ArrowRight, CreditCard, Building2, CheckCircle2 } from 'lucide-react';
+import CookieSettingsButton from '@/components/CookieSettingsButton';
 
 export default function Footer() {
   return (
@@ -216,6 +217,8 @@ export default function Footer() {
             <Link href="/agb" className="text-white/30 hover:text-white/60 text-xs transition-colors">
               AGB
             </Link>
+            <span className="w-1 h-1 rounded-full bg-white/10" />
+            <CookieSettingsButton />
           </div>
         </div>
       </div>

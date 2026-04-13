@@ -7,10 +7,12 @@ import Footer from '@/components/Footer';
 import SiteShell from '@/components/SiteShell';
 import { siteConfig } from '@/lib/config';
 import { CustomerAuthProvider } from '@/components/CustomerAuthProvider';
+import { CookieConsentProvider } from '@/lib/cookie-consent';
 
 // Lazy-load non-critical layout components to reduce initial JS bundle
 const WhatsAppFloat = dynamic(() => import('@/components/WhatsAppFloat'), { ssr: false });
 const PromoBanner = dynamic(() => import('@/components/PromoBanner'), { ssr: false });
+const CookieBanner = dynamic(() => import('@/components/CookieBanner'), { ssr: false });
 
 const inter = Inter({
   subsets: ['latin'],
@@ -141,12 +143,15 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased" suppressHydrationWarning>
         <CustomerAuthProvider>
-          <SiteShell><PromoBanner /><Navbar /></SiteShell>
-          <main className="min-h-screen">{children}</main>
-          <SiteShell>
-            <Footer />
-            <WhatsAppFloat />
-          </SiteShell>
+          <CookieConsentProvider>
+            <SiteShell><PromoBanner /><Navbar /></SiteShell>
+            <main className="min-h-screen">{children}</main>
+            <SiteShell>
+              <Footer />
+              <WhatsAppFloat />
+              <CookieBanner />
+            </SiteShell>
+          </CookieConsentProvider>
         </CustomerAuthProvider>
       </body>
     </html>
