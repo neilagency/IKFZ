@@ -30,8 +30,8 @@ export function CityHero({
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-dark-950 via-dark-900 to-dark-950">
       {/* Ambient glow */}
-      <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-primary/15 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-20%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/10 blur-[100px] pointer-events-none" />
+      <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-gradient-radial from-primary/12 to-transparent pointer-events-none" />
+      <div className="absolute bottom-[-20%] left-[-10%] w-[40%] h-[40%] rounded-full bg-gradient-radial from-primary/8 to-transparent pointer-events-none" />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
 
       <div className="pt-32 pb-20 md:pt-44 md:pb-28 relative">
@@ -234,7 +234,7 @@ export function CityCTA({
 }) {
   return (
     <section className="relative bg-dark-950 py-20 md:py-24 overflow-hidden">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-primary/8 to-transparent rounded-full pointer-events-none" />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
       <div className="container-main relative z-10 text-center">
         <ScrollReveal>

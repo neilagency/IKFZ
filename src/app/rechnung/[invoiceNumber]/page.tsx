@@ -104,7 +104,7 @@ export default async function InvoicePage({ params, searchParams }: PageProps) {
     <div className="min-h-screen bg-gray-50 pb-20">
       {/* ── Header ── */}
       <div className="bg-gradient-to-br from-dark-950 via-primary-900 to-dark-950 pt-28 md:pt-32 pb-14 text-center relative overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-primary/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-gradient-radial from-primary/12 to-transparent rounded-full pointer-events-none" />
         <div className="relative z-10">
           <div className="mx-auto w-16 h-16 bg-accent/20 rounded-2xl flex items-center justify-center mb-4">
             <FileText className="w-8 h-8 text-accent" />

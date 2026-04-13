@@ -11,7 +11,7 @@ export default function Requirements() {
   return (
     <section className="py-10 md:py-16 bg-warm relative overflow-hidden section-divider-top">
       {/* Decorative bg */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/[0.03] rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-radial from-primary/[0.02] to-transparent rounded-full -translate-y-1/2 translate-x-1/3" />
       <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-gold/[0.02] rounded-full blur-[80px] translate-y-1/3 -translate-x-1/4 pointer-events-none" />
 
       <div className="container-main relative">

@@ -10,7 +10,7 @@ export default function ZahlungFehlgeschlagenPage() {
     <div className="min-h-screen bg-white">
       {/* ── Dark Hero Band ── */}
       <div className="bg-dark-950 pt-24 pb-8 md:pt-32 md:pb-12 relative overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-red-500/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-gradient-radial from-red-500/8 to-transparent rounded-full pointer-events-none" />
       </div>
 
       <div className="container-main py-16 md:py-24">

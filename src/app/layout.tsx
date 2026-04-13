@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import dynamic from 'next/dynamic';
 import { Inter } from 'next/font/google';
 import './globals.css';
@@ -17,6 +17,12 @@ const inter = Inter({
   display: 'swap',
   variable: '--font-inter',
 });
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#00a85a',
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -98,12 +104,6 @@ export default function RootLayout({
   return (
     <html lang="de" className={inter.variable} suppressHydrationWarning>
       <head>
-        {/* Preload LCP image for homepage */}
-        <link
-          rel="preload"
-          as="image"
-          href="/logo-ikfz.svg"
-        />
         {/* DNS prefetch for external resources */}
         <link rel="dns-prefetch" href="https://wa.me" />
         {/* Critical above-the-fold styles inlined for FCP */}

@@ -11,7 +11,7 @@ export default function IntroSection() {
       {/* Subtle top separator from hero */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent" />
       {/* Design layer: soft glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-primary/[0.03] rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-gradient-radial from-primary/[0.02] to-transparent rounded-full pointer-events-none" />
       <div className="container-main relative">
         <motion.div
           initial={{ opacity: 0, y: 24 }}

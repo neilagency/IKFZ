@@ -18,7 +18,7 @@ export default function Support() {
     <section className="py-10 md:py-16 bg-dark-950 relative overflow-hidden" id="support">
       {/* Design layers */}
       <div className="absolute inset-0 dot-pattern-dark pointer-events-none" />
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/[0.05] rounded-full blur-[100px] translate-x-1/3 -translate-y-1/3" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-radial from-primary/[0.04] to-transparent rounded-full translate-x-1/3 -translate-y-1/3" />
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-primary/[0.03] rounded-full blur-[80px] -translate-x-1/3 translate-y-1/3 pointer-events-none" />
       
       <div className="container-main relative">

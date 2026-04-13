@@ -223,8 +223,8 @@ function LoginScreen({ onLogin }: { onLogin: (token: string) => void }) {
       {/* Background effects */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-dark-950 via-dark-900 to-dark-950" />
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-primary/3 rounded-full blur-[100px]" />
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-radial from-primary/4 to-transparent rounded-full" />
+        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-gradient-radial from-primary/2 to-transparent rounded-full" />
         <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.3) 1px, transparent 0)', backgroundSize: '40px 40px' }} />
       </div>
 

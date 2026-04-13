@@ -33,7 +33,7 @@ export default function Navbar() {
       className={cn(
         'fixed left-0 right-0 z-50 transition-all duration-500',
         scrolled
-          ? 'bg-white/90 backdrop-blur-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05),0_8px_24px_rgba(0,0,0,0.04)] py-2'
+          ? 'bg-white/95 shadow-[0_1px_3px_rgba(0,0,0,0.05),0_8px_24px_rgba(0,0,0,0.04)] py-2'
           : 'bg-transparent py-4'
       )}
       style={{ top: 'var(--promo-banner-height, 0px)' }}

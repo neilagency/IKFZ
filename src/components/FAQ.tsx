@@ -88,7 +88,7 @@ export default function FAQ({ title, sections, items, singleSection = false }: F
   return (
     <section className="py-10 md:py-16 bg-cool relative overflow-hidden section-divider-top" id="faq">
       {/* Design layer */}
-      <div className="absolute top-0 left-1/3 w-[500px] h-[300px] bg-primary/[0.02] rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-0 left-1/3 w-[500px] h-[300px] bg-gradient-radial from-primary/[0.015] to-transparent rounded-full pointer-events-none" />
       <div className="container-main">
         {title && (
           <motion.div

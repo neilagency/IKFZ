@@ -194,8 +194,8 @@ function GenericPage({ title, content, featuredImage }: { title: string; content
     <>
       <section className="relative overflow-hidden bg-dark-950">
         <div className="pt-32 pb-16 md:pt-40 md:pb-24 relative">
-          <div className="absolute top-0 left-1/3 w-[500px] h-[500px] bg-primary/15 rounded-full blur-[120px] pointer-events-none" />
-          <div className="absolute bottom-0 right-1/3 w-[400px] h-[400px] bg-accent/10 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute top-0 left-1/3 w-[500px] h-[500px] bg-gradient-radial from-primary/12 to-transparent rounded-full pointer-events-none" />
+          <div className="absolute bottom-0 right-1/3 w-[400px] h-[400px] bg-gradient-radial from-accent/8 to-transparent rounded-full pointer-events-none" />
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
           <div className="container-main text-center relative z-10">
             <ScrollReveal>
@@ -228,8 +228,8 @@ function ServicePage({ slug, title, content, featuredImage }: { slug: string; ti
       {/* Dark Hero */}
       <section className="relative overflow-hidden bg-dark-950">
         <div className="pt-32 pb-16 md:pt-40 md:pb-20 relative">
-          <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
-          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-accent/15 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gradient-radial from-primary/15 to-transparent rounded-full pointer-events-none" />
+          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-gradient-radial from-accent/10 to-transparent rounded-full pointer-events-none" />
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
           <div className="container-main relative z-10">
             <ScrollReveal>
@@ -273,7 +273,7 @@ function ServicePage({ slug, title, content, featuredImage }: { slug: string; ti
 
       {/* CTA */}
       <section className="relative bg-dark-950 py-20 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[150px] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-primary/8 to-transparent rounded-full pointer-events-none" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
         <div className="container-main relative z-10 text-center">
           <ScrollReveal>

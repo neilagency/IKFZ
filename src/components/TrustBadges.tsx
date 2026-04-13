@@ -40,8 +40,8 @@ export default function TrustBadges() {
     <section className="py-10 md:py-16 bg-dark-950 relative overflow-hidden">
       {/* Design layers */}
       <div className="absolute inset-0 dot-pattern-dark pointer-events-none" />
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/[0.05] rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-primary/[0.03] rounded-full blur-[100px] translate-y-1/2 pointer-events-none" />
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gradient-radial from-primary/[0.04] to-transparent rounded-full -translate-y-1/2 pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-gradient-radial from-primary/[0.02] to-transparent rounded-full translate-y-1/2 pointer-events-none" />
       <div className="container-main relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

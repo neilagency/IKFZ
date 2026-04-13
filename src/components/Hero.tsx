@@ -16,12 +16,12 @@ export default function Hero() {
 
   return (
     <section className="relative min-h-[100svh] flex items-center overflow-hidden" style={{ contain: 'layout style paint' }}>
-      {/* Background layers */}
+      {/* Background — single layer, no blur for fast LCP paint */}
       <div className="absolute inset-0 bg-gradient-to-br from-dark-950 via-dark-900 to-dark-950" />
 
-      {/* Gradient accent orbs — reduced blur radius for better paint performance */}
-      <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-primary/15 blur-[40px]" />
-      <div className="absolute bottom-[-20%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/10 blur-[30px]" />
+      {/* Accent orbs — opacity gradients instead of expensive blur filters */}
+      <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-gradient-radial from-primary/12 to-transparent" />
+      <div className="absolute bottom-[-20%] left-[-10%] w-[40%] h-[40%] rounded-full bg-gradient-radial from-primary/8 to-transparent" />
 
       {/* Grid pattern */}
       <div className="absolute inset-0 opacity-[0.03] hero-grid-pattern" />
@@ -30,7 +30,7 @@ export default function Hero() {
         <div className="flex flex-col lg:flex-row items-center gap-12 py-24 md:py-28">
           {/* Text Content — rendered server-side, immediately visible for LCP */}
           <div className="flex-1 text-center lg:text-left max-w-2xl">
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-primary/10 backdrop-blur-sm rounded-full text-sm font-medium text-primary border border-primary/20 mb-8">
+            <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-primary/10 rounded-full text-sm font-medium text-primary border border-primary/20 mb-8">
               <Shield className="w-4 h-4" />
               <span>{hero.kbaText}</span>
             </div>
@@ -85,10 +85,9 @@ export default function Hero() {
           {/* Right side - KBA badge image (desktop only) */}
           <div className="flex-shrink-0 hidden lg:block">
             <div className="relative w-[400px] h-[400px]">
-              <div className="absolute inset-0 bg-primary/8 rounded-full blur-[80px] pointer-events-none" />
-              <div className="absolute inset-0 bg-primary/5 rounded-full blur-[120px] scale-125 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-radial from-primary/6 to-transparent rounded-full pointer-events-none" />
               <div className="relative w-full h-full flex items-center justify-center">
-                <div className="relative w-[340px] h-[340px] bg-gradient-to-br from-white/[0.08] to-white/[0.03] backdrop-blur-sm rounded-[2rem] border border-white/[0.12] p-6 flex items-center justify-center shadow-[0_8px_60px_rgba(0,168,90,0.12)]">
+                <div className="relative w-[340px] h-[340px] bg-gradient-to-br from-white/[0.08] to-white/[0.03] rounded-[2rem] border border-white/[0.12] p-6 flex items-center justify-center shadow-[0_8px_60px_rgba(0,168,90,0.12)]">
                   <Image
                     src="/uploads/2025/02/KBA-NEU-e1739626430147.png"
                     alt="KBA – Registriert gemäß §34 FZV beim Kraftfahrt-Bundesamt"
@@ -111,7 +110,7 @@ export default function Hero() {
             return (
               <div
                 key={feature.label}
-                className="group bg-white/[0.05] backdrop-blur-sm rounded-2xl p-5 text-center border border-white/[0.08] hover:bg-white/[0.1] hover:border-white/[0.15] hover:-translate-y-1 transition-all duration-300"
+                className="group bg-white/[0.05] rounded-2xl p-5 text-center border border-white/[0.08] hover:bg-white/[0.1] hover:border-white/[0.15] hover:-translate-y-1 transition-all duration-300"
               >
                 <div className="w-12 h-12 mx-auto mb-3 bg-primary/10 rounded-xl flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                   <Icon className="w-6 h-6 text-primary-400" />

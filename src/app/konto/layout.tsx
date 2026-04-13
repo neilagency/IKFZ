@@ -44,8 +44,8 @@ function KontoLayoutInner({ children }: { children: React.ReactNode }) {
       {/* Dark Hero Header */}
       <div className="bg-gradient-to-br from-dark-900 via-dark-950 to-dark-900 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-[120px]" />
-          <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-primary/10 rounded-full blur-[100px]" />
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-radial from-primary/15 to-transparent rounded-full" />
+          <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-gradient-radial from-primary/8 to-transparent rounded-full" />
         </div>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-32 sm:pt-36 pb-8 sm:pb-10 relative z-10">
           <nav className="flex items-center gap-2 text-sm mb-4">

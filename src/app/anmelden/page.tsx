@@ -71,9 +71,9 @@ function AnmeldenContent() {
     <div className="min-h-screen bg-gradient-to-br from-dark-950 via-dark-900 to-dark-950 relative flex items-center justify-center px-4 py-24 sm:py-28 overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-[120px]" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-primary/10 rounded-full blur-[120px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[100px]" />
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-radial from-primary/15 to-transparent rounded-full" />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-radial from-primary/8 to-transparent rounded-full" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-primary/4 to-transparent rounded-full" />
       </div>
 
       <div className="relative z-10 w-full max-w-[420px]">

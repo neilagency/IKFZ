@@ -160,7 +160,7 @@ export default async function InsiderwissenArticlePage({
             <div className="absolute inset-0 bg-gradient-to-b from-dark-950/80 via-dark-950/70 to-dark-950" />
           </div>
         )}
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-radial from-primary/8 to-transparent rounded-full pointer-events-none" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.018)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.018)_1px,transparent_1px)] bg-[size:64px_64px]" />
 
         <div className="pt-32 pb-20 md:pt-44 md:pb-28 relative z-10">

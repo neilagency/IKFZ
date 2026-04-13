@@ -251,7 +251,7 @@ export default function CheckoutPage() {
     return (
       <div className="min-h-screen bg-white">
         <div className="bg-gradient-to-b from-dark-950 via-primary-900/20 to-dark-950 pt-24 pb-16 md:pt-32 md:pb-20 relative overflow-hidden">
-          <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-primary/15 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-gradient-radial from-primary/12 to-transparent rounded-full pointer-events-none" />
         </div>
         <div className="container-main py-20 text-center">
           <div className="w-8 h-8 border-3 border-primary/30 border-t-primary rounded-full animate-spin mx-auto" />
@@ -264,8 +264,8 @@ export default function CheckoutPage() {
     <div className="min-h-screen bg-gray-50">
       {/* ── Dark Hero Band ── */}
       <div className="bg-dark-950 pt-24 pb-8 md:pt-32 md:pb-12 relative overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-primary/15 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-accent/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-gradient-radial from-primary/12 to-transparent rounded-full pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-gradient-radial from-accent/8 to-transparent rounded-full pointer-events-none" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
 
         <div className="container-main relative z-10">
