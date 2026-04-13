@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Defer rendering of below-fold sections for faster LCP */
+.below-fold {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
+}
+
 /* Hero grid pattern — avoid inline styles for better paint performance */
 .hero-grid-pattern {
   background-image:

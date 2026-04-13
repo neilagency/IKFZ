@@ -14,8 +14,10 @@ const PromoBanner = dynamic(() => import('@/components/PromoBanner'), { ssr: fal
 
 const inter = Inter({
   subsets: ['latin'],
-  display: 'swap',
+  display: 'optional',
   variable: '--font-inter',
+  preload: true,
+  adjustFontFallback: true,
 });
 
 export const viewport: Viewport = {

@@ -45,23 +45,25 @@ export default async function HomePage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
       <Hero />
-      <IntroSection />
-      <Steps />
-      <Requirements />
-      <PricingBox anmeldungMinPrice={anmeldungMinPrice} abmeldungPrice={abmeldungPrice} />
-      
-      <TrustBadges />
-      
-      <InfoCards />
-      <Support />
-      
-      <FAQ
-        title={homepageContent.faq.title}
-        items={homepageContent.faq.items}
-        singleSection
-      />
+      <div className="below-fold">
+        <IntroSection />
+        <Steps />
+        <Requirements />
+        <PricingBox anmeldungMinPrice={anmeldungMinPrice} abmeldungPrice={abmeldungPrice} />
+        
+        <TrustBadges />
+        
+        <InfoCards />
+        <Support />
+        
+        <FAQ
+          title={homepageContent.faq.title}
+          items={homepageContent.faq.items}
+          singleSection
+        />
 
-      <VehicleTypes />
+        <VehicleTypes />
+      </div>
     </>
   );
 }
