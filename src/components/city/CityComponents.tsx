@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import ScrollReveal from '@/components/ScrollReveal';
 import WPContentRenderer from '@/components/WPContentRenderer';
 import { ArrowRight, MapPin, Phone, Shield, FileCheck, Clock, Globe, Zap, Headphones, CheckCircle2, type LucideIcon } from 'lucide-react';
@@ -319,7 +320,7 @@ export function CityContent({
           {featuredImage && (
             <ScrollReveal>
               <div className="mb-12 rounded-2xl overflow-hidden border border-dark-100 shadow-sm">
-                <img src={featuredImage} alt={title} className="w-full h-auto" loading="lazy" />
+                <Image src={featuredImage} alt={title} width={896} height={504} sizes="(max-width: 768px) 100vw, 896px" className="w-full h-auto" loading="lazy" />
               </div>
             </ScrollReveal>
           )}

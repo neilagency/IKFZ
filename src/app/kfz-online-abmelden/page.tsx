@@ -37,11 +37,12 @@ export default function KfzAbmeldenPage() {
               <div className="mb-8">
                 <Image
                   src="/uploads/2025/02/KBA-NEU-e1739626430147.png"
-                  alt="KBA NEU"
+                  alt="KBA – Registriert beim Kraftfahrt-Bundesamt"
                   width={200}
                   height={80}
+                  sizes="200px"
                   className="opacity-80"
-                  unoptimized
+                  priority
                 />
               </div>
               <div className="flex flex-wrap gap-4 items-center">

@@ -86,8 +86,9 @@ export default function AutoAnmeldenPage() {
                   alt="Offiziell registrierter i-Kfz Dienstleister beim Kraftfahrt-Bundesamt (KBA)"
                   width={250}
                   height={100}
+                  sizes="250px"
                   className="opacity-90"
-                  unoptimized
+                  priority
                 />
               </div>
               <div className="flex flex-wrap gap-4 items-center">

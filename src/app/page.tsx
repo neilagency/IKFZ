@@ -1,9 +1,9 @@
 import dynamic from 'next/dynamic';
 import Hero from '@/components/Hero';
 import PricingBox from '@/components/PricingBox';
-import IntroSection from '@/components/IntroSection';
 
 // Below-fold components: code-split to keep initial JS bundle small
+const IntroSection = dynamic(() => import('@/components/IntroSection'));
 const Steps = dynamic(() => import('@/components/Steps'));
 const Requirements = dynamic(() => import('@/components/Requirements'));
 const TrustBadges = dynamic(() => import('@/components/TrustBadges'));

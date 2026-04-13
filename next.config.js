@@ -17,6 +17,20 @@ const nextConfig = {
     // AVIF disabled: sharp on Hostinger shared hosting produces corrupt AVIF files
     formats: ['image/webp'],
     minimumCacheTTL: 60 * 60 * 24 * 30,
+    // Responsive image breakpoints for srcset generation
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // Allow images from own domain (for absolute URLs in DB from WP migration)
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'ikfzdigitalzulassung.de',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.ikfzdigitalzulassung.de',
+      },
+    ],
   },
   async redirects() {
     return [
@@ -197,12 +211,12 @@ const nextConfig = {
         ],
       },
       {
-        // Uploaded files
+        // Uploaded files — long-lived cache
         source: '/uploads/:path*',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=2592000, stale-while-revalidate=86400',
+            value: 'public, max-age=31536000, immutable',
           },
         ],
       },

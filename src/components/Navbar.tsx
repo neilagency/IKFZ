@@ -46,6 +46,7 @@ export default function Navbar() {
             alt="IKFZ Digital Zulassung"
             width={180}
             height={49}
+            sizes="180px"
             className={cn(
               'transition-all duration-300',
               scrolled ? '' : 'brightness-0 invert'

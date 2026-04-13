@@ -19,6 +19,8 @@ export default function Footer() {
                 alt="IKFZ Digital Zulassung"
                 width={160}
                 height={44}
+                sizes="160px"
+                loading="lazy"
                 className="flex-shrink-0"
               />
               <div>

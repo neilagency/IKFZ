@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, Car, ShieldCheck, Banknote, Clock, CheckCircle2, Phone, MessageCircle, TrendingUp, FileText, Truck, CreditCard, ChevronDown, Home, Headphones, BadgeCheck, RefreshCw, FileX, Repeat, Download, Globe, Laptop, Building2 } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
 import { siteConfig } from '@/lib/config';
@@ -339,8 +340,8 @@ export default async function AutoVerkaufenPage() {
                   <ScrollReveal key={post.slug} delay={i * 0.1}>
                     <Link href={`/insiderwissen/${post.slug}/`} className="group block rounded-2xl bg-white border border-dark-100 overflow-hidden hover:shadow-card transition-all duration-300">
                       {post.featuredImage && (
-                        <div className="aspect-[16/10] overflow-hidden">
-                          <img src={post.featuredImage} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+                        <div className="aspect-[16/10] overflow-hidden relative">
+                          <Image src={post.featuredImage} alt={post.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                         </div>
                       )}
                       <div className="p-6">

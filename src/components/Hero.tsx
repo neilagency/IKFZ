@@ -94,6 +94,7 @@ export default function Hero() {
                     alt="KBA – Registriert gemäß §34 FZV beim Kraftfahrt-Bundesamt"
                     width={241}
                     height={300}
+                    sizes="241px"
                     className="w-auto h-[280px] object-contain drop-shadow-[0_4px_40px_rgba(0,168,90,0.12)]"
                     priority
                   />

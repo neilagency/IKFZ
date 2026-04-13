@@ -497,6 +497,7 @@ export default function ServiceForm({
                             src="/uploads/2025/01/Kennzeichen-mit-QR-Code-800x800.webp"
                             alt="Kennzeichen mit markierten Sicherheitscodes"
                             fill
+                            sizes="(max-width: 768px) 100vw, 400px"
                             className="object-contain"
                           />
                         </div>

@@ -1,13 +1,16 @@
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import WhatsAppFloat from '@/components/WhatsAppFloat';
 import SiteShell from '@/components/SiteShell';
-import PromoBanner from '@/components/PromoBanner';
 import { siteConfig } from '@/lib/config';
 import { CustomerAuthProvider } from '@/components/CustomerAuthProvider';
+
+// Lazy-load non-critical layout components to reduce initial JS bundle
+const WhatsAppFloat = dynamic(() => import('@/components/WhatsAppFloat'), { ssr: false });
+const PromoBanner = dynamic(() => import('@/components/PromoBanner'), { ssr: false });
 
 const inter = Inter({
   subsets: ['latin'],
@@ -95,6 +98,18 @@ export default function RootLayout({
   return (
     <html lang="de" className={inter.variable} suppressHydrationWarning>
       <head>
+        {/* Preload LCP image for homepage */}
+        <link
+          rel="preload"
+          as="image"
+          href="/logo-ikfz.svg"
+        />
+        {/* DNS prefetch for external resources */}
+        <link rel="dns-prefetch" href="https://wa.me" />
+        {/* Critical above-the-fold styles inlined for FCP */}
+        <style dangerouslySetInnerHTML={{ __html: `
+          .hero-grid-pattern{background-image:linear-gradient(rgba(255,255,255,0.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.1) 1px,transparent 1px);background-size:60px 60px;contain:strict}
+        `}} />
         {/* JSON-LD Organization Schema */}
         <script
           type="application/ld+json"
