@@ -10,10 +10,7 @@ import Image from 'next/image';
 import Script from 'next/script';
 import { ArrowRight, MapPin, Phone, ChevronRight } from 'lucide-react';
 import { siteConfig } from '@/lib/config';
-import {
-  CityHero, CityStatsBar, CitySteps, CityServices,
-  CityCTA, CityContent,
-} from '@/components/city/CityComponents';
+import { resolveAlias } from '@/data/cities';
 
 const SITE_URL = 'https://ikfzdigitalzulassung.de';
 
@@ -50,6 +47,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
 
+  // Old city URLs → no metadata needed (will redirect)
+  if (resolveAlias(slug)) return { title: 'Weiterleitung...' };
+
   // Check pages first
   const page = await prisma.page.findUnique({ where: { slug } });
   if (page) return getPageSEO(slug);
@@ -58,35 +58,11 @@ export async function generateMetadata({
   return { title: 'Seite nicht gefunden' };
 }
 
-function isCitySlug(slug: string): boolean {
-  const cityPatterns = ['kfz-zulassung-', 'zulassungsstelle-', 'autoanmeldung-', 'auto-anmelden-', 'kfz-zulassung-in-', 'landkreis-', 'auto-online-anmelden-oder-abmelden-', 'in-'];
-  return cityPatterns.some(p => slug.startsWith(p));
-}
-
-function extractCityName(title: string): string {
-  const patterns = [
-    /kfz[- ]zulassung[- ](?:in[- ])?(.+)/i,
-    /zulassungsstelle[- ](.+)/i,
-    /autoanmeldung[- ](.+)/i,
-    /auto[- ]anmelden[- ](?:in[- ])?(.+)/i,
-    /auto[- ]online[- ]anmelden[- ]oder[- ]abmelden[- ](?:im|in)[- ](?:landkreis|kreis|stadt)?[- ]?(.+)/i,
-    /landkreis[- ](.+)/i,
-    /^in[- ](.+)/i,
-  ];
-  for (const pattern of patterns) {
-    const match = title.match(pattern);
-    if (match) return match[1].replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()).trim();
-  }
-  return title;
-}
-
 function buildPageBreadcrumb(title: string, pageType: string | null) {
   const items: { name: string; item?: string }[] = [
     { name: 'Start', item: SITE_URL },
   ];
-  if (pageType === 'city') {
-    items.push({ name: 'KFZ Zulassung in deiner Stadt', item: `${SITE_URL}/kfz-zulassung-in-deiner-stadt/` });
-  } else if (pageType === 'service') {
+  if (pageType === 'service') {
     items.push({ name: 'KFZ Dienstleistungen', item: `${SITE_URL}/kfz-services/` });
   }
   items.push({ name: title });
@@ -105,16 +81,17 @@ function buildPageBreadcrumb(title: string, pageType: string | null) {
 export default async function DynamicPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
+  // Old city URLs → 301 redirect to new city route
+  const cityTarget = resolveAlias(slug);
+  if (cityTarget) {
+    redirect(`/kfz-zulassung-in-deiner-stadt/${cityTarget}/`);
+  }
+
   const page = await prisma.page.findUnique({ where: { slug }, include: { seo: true } });
   if (page) {
     const schemaJson = page.seo?.schemaJson;
-    const isCity = isCitySlug(slug) || page.pageType === 'city';
-    const cityName = isCity ? extractCityName(page.title) : null;
     const breadcrumb = buildPageBreadcrumb(page.title, page.pageType);
     const cleanContent = sanitizeWPContent(page.content);
-    if (isCity && cityName) {
-      return (<><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />{schemaJson && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaJson }} />}<CityLandingPage cityName={cityName} title={page.title} content={cleanContent} featuredImage={page.featuredImage} /></>);
-    }
     if (page.pageType === 'service') {
       return (<><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />{schemaJson && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaJson }} />}<ServicePage slug={slug} title={page.title} content={cleanContent} featuredImage={page.featuredImage} /></>);
     }
@@ -131,62 +108,6 @@ export default async function DynamicPage({ params }: { params: Promise<{ slug: 
 }
 
 
-// City Landing Page
-function CityLandingPage({ cityName, title, content, featuredImage }: { cityName: string; title: string; content: string; featuredImage: string | null }) {
-  return (
-    <>
-      <CityHero
-        badge={`KFZ Zulassung in ${cityName}`}
-        h1Parts={['KFZ online zulassen', `in ${cityName}`]}
-        subtitle={`Kein Besuch bei der Zulassungsstelle ${cityName} nötig. Alle Fahrzeugtypen – PKW, Motorrad, Anhänger. Offiziell beim KBA registriert.`}
-      />
-
-      <CityStatsBar
-        items={[
-          { icon: 'Shield', label: 'KBA registriert', desc: 'Offiziell beim Kraftfahrt-Bundesamt' },
-          { icon: 'FileCheck', label: 'Sofort-Bestätigung', desc: '10 Tage gültige Bestätigung' },
-          { icon: 'Clock', label: '24/7 verfügbar', desc: 'Auch am Wochenende' },
-          { icon: 'MapPin', label: cityName, desc: 'Lokaler Service verfügbar' },
-        ]}
-      />
-
-      <CitySteps
-        title={`Online-Zulassung in ${cityName}`}
-        subtitle="In nur 3 einfachen Schritten zur Zulassung – ohne Wartezeit, ohne Behördengang."
-        steps={[
-          { num: '1', title: 'Antrag online ausfüllen', desc: 'Geben Sie Ihre Fahrzeug- und Halterdaten in unser Formular ein – dauert nur wenige Minuten.' },
-          { num: '2', title: 'Dokumente hochladen', desc: 'Laden Sie Fahrzeugschein, Personalausweis und ggf. eVB-Nummer bequem hoch.' },
-          { num: '3', title: 'Bestätigung erhalten', desc: 'Nach Prüfung erhalten Sie Ihre Zulassungsbestätigung direkt per E-Mail.' },
-        ]}
-      />
-
-      <CityContent
-        title={title}
-        content={content}
-        featuredImage={featuredImage}
-      />
-
-      <CityServices
-        title={`Alle Services für ${cityName}`}
-        services={[
-          { label: 'Auto online anmelden', href: '/product/auto-online-anmelden/', desc: 'PKW-Neuzulassung oder Ummeldung' },
-          { label: 'KFZ online abmelden', href: '/product/fahrzeugabmeldung/', desc: 'Schnelle Außerbetriebsetzung' },
-          { label: 'Motorrad anmelden', href: '/motorrad-online-anmelden/', desc: 'Motorrad-Zulassung online' },
-          { label: 'eVB-Nummer anfordern', href: '/evb/', desc: 'Kostenlose Versicherungsbestätigung' },
-          { label: 'Versicherung berechnen', href: '/kfz-versicherung-berechnen/', desc: 'Günstige Tarife vergleichen' },
-          { label: 'Alle Städte anzeigen', href: '/kfz-zulassung-in-deiner-stadt/', desc: 'Alle Standorte im Überblick' },
-        ]}
-      />
-
-      <CityCTA
-        title={`Bereit für Ihre Online-Zulassung in`}
-        highlight={`${cityName}?`}
-        subtitle="Starten Sie jetzt und sparen Sie sich den Weg zur Zulassungsstelle."
-        secondaryCta={{ label: 'eVB-Nummer anfordern', href: '/evb/' }}
-      />
-    </>
-  );
-}
 
 // Generic Page
 function GenericPage({ title, content, featuredImage }: { title: string; content: string; featuredImage: string | null }) {

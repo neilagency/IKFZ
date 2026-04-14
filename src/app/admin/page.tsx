@@ -13,7 +13,7 @@ import {
   ExternalLink, Image as ImageIcon, AlertCircle, FileQuestion,
   Tag, Calendar, Mail, Lock, Copy, Send, Percent, ToggleLeft, ToggleRight,
   Upload, Menu,
-  Landmark, Apple, Car, type LucideIcon,
+  Landmark, Apple, Car, MapPin, CheckCircle, XCircle, Activity, type LucideIcon,
 } from "lucide-react";
 import { MediaLibraryTab, ImageField, MediaPicker } from "@/components/admin/MediaLibrary";
 import { ToastProvider, useToast } from "@/components/admin/Toast";
@@ -29,7 +29,7 @@ interface PageData { id: string; title: string; slug: string; content: string; e
 interface PostData { id: string; title: string; slug: string; content: string; excerpt: string; status: string; author: string | null; featuredImage: string | null; readingTime: number | null; publishedAt: string | null; scheduledAt: string | null; seo: SEOData | null; categories?: { category: { id: string; name: string; slug: string } }[]; }
 interface PaginationInfo { page: number; totalPages: number; total: number; limit: number; }
 
-type Tab = "dashboard" | "pages" | "posts" | "seo" | "products" | "orders" | "customers" | "payments" | "invoices" | "gateways" | "coupons" | "campaigns" | "settings" | "media";
+type Tab = "dashboard" | "pages" | "posts" | "seo" | "products" | "orders" | "customers" | "payments" | "invoices" | "gateways" | "coupons" | "campaigns" | "settings" | "media" | "cities";
 
 // ─── Helpers ────────────────────────────────────────────────
 function formatEuro(n: number) { return new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(n); }
@@ -618,6 +618,381 @@ function CMSListTab({ type, token }: { type: "pages" | "posts"; token: string })
           </div>
           <Pagination page={page} totalPages={totalPages} total={total} limit={20} onPageChange={setPage} />
         </>
+      )}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════
+// CITIES TAB — Coverage Dashboard + Override Editor + Health
+// ═══════════════════════════════════════════════════════════
+
+interface CityOverride { website?: string; hours?: string; notes?: string; }
+interface CoverageEntry { slug: string; name: string; state: string; matched: boolean; matchScore: number; matchType: string | null; csvCity: string | null; authorityName: string | null; phone: string | null; email: string | null; }
+interface CoverageSummary { total: number; matched: number; unmatched: number; percentage: number; }
+interface HealthIssue { slug: string; type: string; message: string; }
+interface HealthData { status: string; score: number; duration: string; summary: { totalCities: number; csvEntries: number; matched: number; unmatched: number; coveragePercent: number; withOverrides: number; lowScore: number; missingPhone: number; missingEmail: number; }; issues: HealthIssue[]; timestamp: string; }
+
+function CitiesTab({ token }: { token: string }) {
+  const { toast } = useToast();
+  const [subTab, setSubTab] = useState<"overview" | "coverage" | "overrides">("overview");
+  const [search, setSearch] = useState("");
+  const [stateFilter, setStateFilter] = useState("");
+  const [editSlug, setEditSlug] = useState<string | null>(null);
+  const [editWebsite, setEditWebsite] = useState("");
+  const [editHours, setEditHours] = useState("");
+  const [editNotes, setEditNotes] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  const { data: coverageData, error: coverageError, mutate: mutateCoverage } = useSWR(
+    `${API}/cities/coverage`, fetcher, { revalidateOnFocus: false }
+  );
+  const { data: healthData, error: healthError, mutate: mutateHealth } = useSWR<HealthData>(
+    `${API}/cities/health`, fetcher, { revalidateOnFocus: false }
+  );
+  const { data: overridesData, mutate: mutateOverrides } = useSWR(
+    `${API}/cities/overrides`, fetcher, { revalidateOnFocus: false }
+  );
+  const { data: citiesData } = useSWR(`${API}/cities`, fetcher, { revalidateOnFocus: false });
+
+  const coverage: CoverageEntry[] = coverageData?.coverage ?? [];
+  const summary: CoverageSummary = coverageData?.summary ?? { total: 0, matched: 0, unmatched: 0, percentage: 0 };
+  const overrides: Record<string, CityOverride> = overridesData?.overrides ?? {};
+
+  const states = useMemo(() => {
+    const s = new Set(coverage.map(c => c.state));
+    return Array.from(s).sort();
+  }, [coverage]);
+
+  const filtered = useMemo(() => {
+    let items = coverage;
+    if (search) {
+      const q = search.toLowerCase();
+      items = items.filter(c => c.name.toLowerCase().includes(q) || c.slug.includes(q) || (c.authorityName?.toLowerCase().includes(q)));
+    }
+    if (stateFilter) items = items.filter(c => c.state === stateFilter);
+    return items;
+  }, [coverage, search, stateFilter]);
+
+  const openOverrideEditor = (slug: string) => {
+    setEditSlug(slug);
+    const o = overrides[slug];
+    setEditWebsite(o?.website ?? "");
+    setEditHours(o?.hours ?? "");
+    setEditNotes(o?.notes ?? "");
+  };
+
+  const saveOverride = async () => {
+    if (!editSlug) return;
+    setSaving(true);
+    try {
+      const res = await fetch(`${API}/cities/overrides`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slug: editSlug, website: editWebsite, hours: editHours, notes: editNotes }),
+      });
+      if (!res.ok) { const d = await res.json(); throw new Error(d.error); }
+      toast("Override gespeichert");
+      setEditSlug(null);
+      mutateOverrides();
+    } catch (e: any) {
+      toast(e.message || "Fehler beim Speichern");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const scoreColor = (score: number) =>
+    score >= 90 ? "text-green-600" : score >= 70 ? "text-amber-600" : "text-red-600";
+  const scoreBg = (score: number) =>
+    score >= 90 ? "bg-green-50 border-green-200" : score >= 70 ? "bg-amber-50 border-amber-200" : "bg-red-50 border-red-200";
+
+  if (coverageError) return <ErrorState onRetry={() => mutateCoverage()} />;
+  if (!coverageData) return <SkeletonTable rows={6} />;
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between flex-wrap gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">Städte-Verwaltung</h2>
+          <p className="text-gray-500 text-sm mt-1">{summary.total} Städte · {summary.percentage}% CSV-Abdeckung</p>
+        </div>
+        <div className="flex gap-2">
+          <button onClick={() => { mutateCoverage(); mutateHealth(); mutateOverrides(); }} className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-gray-200 text-sm hover:bg-gray-50">
+            <RefreshCw className="w-4 h-4" /> Aktualisieren
+          </button>
+          <a href="/admin/cities" className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white text-sm hover:bg-primary/90">
+            <Plus className="w-4 h-4" /> Städte bearbeiten
+          </a>
+        </div>
+      </div>
+
+      {/* Sub-tab nav */}
+      <div className="flex gap-1 bg-gray-100 p-1 rounded-xl w-fit">
+        {([
+          { id: "overview" as const, label: "Übersicht", icon: Activity },
+          { id: "coverage" as const, label: "CSV-Abdeckung", icon: CheckCircle },
+          { id: "overrides" as const, label: "Überschreibungen", icon: Pencil },
+        ]).map(t => (
+          <button key={t.id} onClick={() => setSubTab(t.id)}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-colors ${subTab === t.id ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}>
+            <t.icon className="w-4 h-4" /> {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* ── Overview sub-tab ── */}
+      {subTab === "overview" && (
+        <div className="space-y-6">
+          {/* Stats cards */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { label: "Städte", value: summary.total, icon: MapPin, color: "text-blue-600", bg: "bg-blue-50" },
+              { label: "CSV-Match", value: `${summary.percentage}%`, icon: CheckCircle, color: "text-green-600", bg: "bg-green-50" },
+              { label: "Überschreibungen", value: Object.keys(overrides).length, icon: Pencil, color: "text-purple-600", bg: "bg-purple-50" },
+              { label: "Probleme", value: healthData?.issues?.length ?? "–", icon: AlertCircle, color: healthData?.issues?.length ? "text-amber-600" : "text-green-600", bg: healthData?.issues?.length ? "bg-amber-50" : "bg-green-50" },
+            ].map((s, i) => (
+              <div key={i} className="p-5 rounded-2xl bg-white border border-gray-200">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className={`p-2 rounded-xl ${s.bg}`}><s.icon className={`w-5 h-5 ${s.color}`} /></div>
+                  <span className="text-gray-500 text-sm">{s.label}</span>
+                </div>
+                <p className="text-2xl font-bold text-gray-900">{s.value}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Health status */}
+          {healthData && (
+            <div className={`p-6 rounded-2xl border ${healthData.status === 'healthy' ? 'bg-green-50 border-green-200' : healthData.status === 'warning' ? 'bg-amber-50 border-amber-200' : 'bg-red-50 border-red-200'}`}>
+              <div className="flex items-center gap-3 mb-3">
+                <Activity className={`w-5 h-5 ${healthData.status === 'healthy' ? 'text-green-600' : healthData.status === 'warning' ? 'text-amber-600' : 'text-red-600'}`} />
+                <h3 className="font-semibold text-gray-900">System-Gesundheit: {healthData.score}/100</h3>
+                <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${healthData.status === 'healthy' ? 'bg-green-100 text-green-700' : healthData.status === 'warning' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'}`}>
+                  {healthData.status === 'healthy' ? 'Gesund' : healthData.status === 'warning' ? 'Warnung' : 'Kritisch'}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                <div><span className="text-gray-500">CSV-Einträge:</span> <span className="font-medium text-gray-900">{healthData.summary.csvEntries}</span></div>
+                <div><span className="text-gray-500">Matched:</span> <span className="font-medium text-gray-900">{healthData.summary.matched}/{healthData.summary.totalCities}</span></div>
+                <div><span className="text-gray-500">Niedrige Scores:</span> <span className="font-medium text-gray-900">{healthData.summary.lowScore}</span></div>
+                <div><span className="text-gray-500">Fehlende Tel:</span> <span className="font-medium text-gray-900">{healthData.summary.missingPhone}</span></div>
+              </div>
+              {healthData.issues.length > 0 && (
+                <details className="mt-4">
+                  <summary className="text-sm font-medium text-gray-700 cursor-pointer">
+                    {healthData.issues.length} Problem{healthData.issues.length !== 1 ? 'e' : ''} anzeigen
+                  </summary>
+                  <div className="mt-2 space-y-1 max-h-48 overflow-y-auto">
+                    {healthData.issues.map((issue, i) => (
+                      <div key={i} className="flex items-center gap-2 text-sm">
+                        <span className={`w-2 h-2 rounded-full ${issue.type === 'no_match' ? 'bg-red-500' : issue.type === 'low_score' ? 'bg-amber-500' : 'bg-gray-400'}`} />
+                        <span className="font-medium text-gray-700">{issue.slug}</span>
+                        <span className="text-gray-500">{issue.message}</span>
+                      </div>
+                    ))}
+                  </div>
+                </details>
+              )}
+            </div>
+          )}
+
+          {/* Quick links */}
+          <div className="grid md:grid-cols-3 gap-4">
+            <a href="/admin/cities" className="p-5 rounded-2xl bg-white border border-gray-200 hover:border-primary/30 hover:shadow-sm transition-all group">
+              <MapPin className="w-6 h-6 text-primary mb-3" />
+              <h3 className="font-semibold text-gray-900 group-hover:text-primary">Städte CRUD</h3>
+              <p className="text-sm text-gray-500 mt-1">Städte hinzufügen, bearbeiten, löschen</p>
+            </a>
+            <a href="/kfz-zulassung-in-deiner-stadt" target="_blank" rel="noopener noreferrer" className="p-5 rounded-2xl bg-white border border-gray-200 hover:border-primary/30 hover:shadow-sm transition-all group">
+              <Globe className="w-6 h-6 text-primary mb-3" />
+              <h3 className="font-semibold text-gray-900 group-hover:text-primary">Hub-Seite ansehen</h3>
+              <p className="text-sm text-gray-500 mt-1">Öffentliche Städte-Übersichtsseite</p>
+            </a>
+            <button onClick={() => setSubTab("overrides")} className="p-5 rounded-2xl bg-white border border-gray-200 hover:border-primary/30 hover:shadow-sm transition-all group text-left">
+              <Pencil className="w-6 h-6 text-primary mb-3" />
+              <h3 className="font-semibold text-gray-900 group-hover:text-primary">Überschreibungen</h3>
+              <p className="text-sm text-gray-500 mt-1">Website, Öffnungszeiten, Notizen</p>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Coverage sub-tab ── */}
+      {subTab === "coverage" && (
+        <div className="space-y-4">
+          {/* Coverage bar */}
+          <div className="p-5 rounded-2xl bg-white border border-gray-200">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-gray-700">CSV-Abdeckungsrate</span>
+              <span className={`text-lg font-bold ${summary.percentage === 100 ? 'text-green-600' : 'text-amber-600'}`}>{summary.percentage}%</span>
+            </div>
+            <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
+              <div className="h-full bg-green-500 rounded-full transition-all" style={{ width: `${summary.percentage}%` }} />
+            </div>
+            <div className="flex justify-between mt-2 text-xs text-gray-400">
+              <span>{summary.matched} matched</span>
+              <span>{summary.unmatched} unmatched</span>
+            </div>
+          </div>
+
+          {/* Filters */}
+          <div className="flex flex-wrap gap-3">
+            <div className="relative flex-1 min-w-[200px]">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Stadt suchen..."
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-gray-200 text-sm" />
+            </div>
+            <select value={stateFilter} onChange={e => setStateFilter(e.target.value)}
+              className="px-4 py-2.5 rounded-xl bg-white border border-gray-200 text-sm text-gray-700">
+              <option value="">Alle Bundesländer</option>
+              {states.map(s => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </div>
+
+          {/* Cities table */}
+          <div className="rounded-2xl bg-white border border-gray-200 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-gray-400 text-xs uppercase border-b border-gray-100">
+                    <th className="text-left py-3 px-4">Stadt</th>
+                    <th className="text-left py-3 px-4">Bundesland</th>
+                    <th className="text-left py-3 px-4">Behörde</th>
+                    <th className="text-center py-3 px-4">Score</th>
+                    <th className="text-center py-3 px-4">Match</th>
+                    <th className="text-center py-3 px-4">Override</th>
+                    <th className="text-right py-3 px-4">Aktionen</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filtered.map(c => (
+                    <tr key={c.slug} className="border-t border-gray-50 hover:bg-gray-50/50">
+                      <td className="py-3 px-4">
+                        <div className="flex items-center gap-2">
+                          <MapPin className="w-3.5 h-3.5 text-gray-400" />
+                          <span className="font-medium text-gray-900">{c.name}</span>
+                        </div>
+                        <span className="text-xs text-gray-400 ml-5.5">{c.slug}</span>
+                      </td>
+                      <td className="py-3 px-4 text-gray-600">{c.state}</td>
+                      <td className="py-3 px-4 text-gray-600 text-xs">{c.authorityName || "–"}</td>
+                      <td className="py-3 px-4 text-center">
+                        <span className={`font-semibold ${scoreColor(c.matchScore)}`}>{c.matchScore || "–"}</span>
+                      </td>
+                      <td className="py-3 px-4 text-center">
+                        {c.matched
+                          ? <CheckCircle className="w-4 h-4 text-green-500 mx-auto" />
+                          : <XCircle className="w-4 h-4 text-red-400 mx-auto" />}
+                      </td>
+                      <td className="py-3 px-4 text-center">
+                        {overrides[c.slug] ? <span className="text-xs bg-purple-50 text-purple-600 px-2 py-0.5 rounded-full">Ja</span> : <span className="text-gray-300">–</span>}
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <div className="flex items-center gap-1 justify-end">
+                          <button onClick={() => { setSubTab("overrides"); openOverrideEditor(c.slug); }}
+                            className="p-1.5 rounded-lg text-gray-400 hover:text-primary hover:bg-primary/5" title="Override bearbeiten">
+                            <Pencil className="w-3.5 h-3.5" />
+                          </button>
+                          <a href={`/kfz-zulassung-in-deiner-stadt/${c.slug}`} target="_blank" rel="noopener noreferrer"
+                            className="p-1.5 rounded-lg text-gray-400 hover:text-primary hover:bg-primary/5" title="Seite ansehen">
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {filtered.length === 0 && (
+              <div className="py-12 text-center text-gray-400 text-sm">Keine Städte gefunden.</div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ── Overrides sub-tab ── */}
+      {subTab === "overrides" && (
+        <div className="space-y-4">
+          <div className="p-5 rounded-2xl bg-white border border-gray-200">
+            <h3 className="font-semibold text-gray-900 mb-1">Behörden-Überschreibungen</h3>
+            <p className="text-sm text-gray-500">Ergänzende Daten (Website, Öffnungszeiten) die nicht in der CSV enthalten sind.</p>
+          </div>
+
+          {/* Editor modal */}
+          {editSlug && (
+            <div className="p-6 rounded-2xl bg-white border-2 border-primary/20 shadow-lg">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-semibold text-gray-900">Override für: <span className="text-primary">{editSlug}</span></h3>
+                <button onClick={() => setEditSlug(null)} className="p-1 rounded-lg hover:bg-gray-100"><X className="w-4 h-4" /></button>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Website-URL</label>
+                  <input value={editWebsite} onChange={e => setEditWebsite(e.target.value)} placeholder="https://..."
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Öffnungszeiten</label>
+                  <input value={editHours} onChange={e => setEditHours(e.target.value)} placeholder="Mo-Fr 07:30-12:00"
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Notizen</label>
+                  <input value={editNotes} onChange={e => setEditNotes(e.target.value)} placeholder="Sonstige Hinweise..."
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm" />
+                </div>
+                <div className="flex gap-2 justify-end">
+                  <button onClick={() => setEditSlug(null)} className="px-4 py-2 rounded-xl border border-gray-200 text-sm hover:bg-gray-50">Abbrechen</button>
+                  <button onClick={saveOverride} disabled={saving}
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white text-sm hover:bg-primary/90 disabled:opacity-50">
+                    <Save className="w-4 h-4" /> {saving ? "Speichern..." : "Speichern"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Overrides list */}
+          <div className="rounded-2xl bg-white border border-gray-200 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-gray-400 text-xs uppercase border-b border-gray-100">
+                    <th className="text-left py-3 px-4">Stadt</th>
+                    <th className="text-left py-3 px-4">Website</th>
+                    <th className="text-left py-3 px-4">Öffnungszeiten</th>
+                    <th className="text-left py-3 px-4">Notizen</th>
+                    <th className="text-right py-3 px-4">Aktionen</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {coverage.map(c => {
+                    const o = overrides[c.slug];
+                    return (
+                      <tr key={c.slug} className={`border-t border-gray-50 hover:bg-gray-50/50 ${o ? '' : 'opacity-60'}`}>
+                        <td className="py-3 px-4 font-medium text-gray-900">{c.name}</td>
+                        <td className="py-3 px-4 text-xs">
+                          {o?.website ? <a href={o.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate block max-w-[200px]">{o.website.replace(/^https?:\/\//, '')}</a> : <span className="text-gray-300">–</span>}
+                        </td>
+                        <td className="py-3 px-4 text-gray-600 text-xs">{o?.hours || <span className="text-gray-300">–</span>}</td>
+                        <td className="py-3 px-4 text-gray-500 text-xs">{o?.notes || <span className="text-gray-300">–</span>}</td>
+                        <td className="py-3 px-4 text-right">
+                          <button onClick={() => openOverrideEditor(c.slug)}
+                            className="p-1.5 rounded-lg text-gray-400 hover:text-primary hover:bg-primary/5" title="Bearbeiten">
+                            <Pencil className="w-3.5 h-3.5" />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
@@ -2362,6 +2737,7 @@ function AdminPageInner() {
     { id: "pages", label: "Seiten", icon: FileText, section: "CMS" },
     { id: "posts", label: "Blog / Beiträge", icon: BookOpen },
     { id: "media", label: "Medien", icon: ImageIcon },
+    { id: "cities", label: "Städte", icon: MapPin },
     { id: "seo", label: "SEO", icon: Globe },
     { id: "settings", label: "Einstellungen", icon: Settings, section: "System" },
   ];
@@ -2453,6 +2829,7 @@ function AdminPageInner() {
             {tab === "coupons" && <CouponsTab token={token} />}
             {tab === "campaigns" && <EmailCampaignsTab token={token} />}
             {tab === "media" && <MediaLibraryTab token={token} />}
+            {tab === "cities" && <CitiesTab token={token} />}
             {tab === "settings" && <SettingsTab token={token} />}
           </div>
         </div>

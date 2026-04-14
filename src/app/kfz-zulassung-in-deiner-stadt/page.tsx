@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, MapPin } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
-import prisma from '@/lib/db';
+import { getCities } from '@/data/cities';
 import {
   CityHero, CityStatsBar, CitySteps, CityBenefits,
   CityServices, CityCTA,
@@ -13,41 +13,22 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: 'KFZ-Zulassung in deiner Stadt – Alle Städte & Landkreise',
   description:
-    'Finden Sie Ihren KFZ-Zulassungsservice in Ihrer Stadt. Online-Zulassung, Abmeldung & Ummeldung – deutschlandweit verfügbar in über 25 Städten und Landkreisen.',
+    'Finden Sie Ihren KFZ-Zulassungsservice in Ihrer Stadt. Online-Zulassung, Abmeldung & Ummeldung – deutschlandweit verfügbar in über 50 Städten und Landkreisen.',
   alternates: {
     canonical: 'https://ikfzdigitalzulassung.de/kfz-zulassung-in-deiner-stadt/',
   },
 };
 
-function extractCityDisplay(title: string): string {
-  const patterns = [
-    /kfz[- ]zulassung[- ](?:in[- ])?(.+)/i,
-    /zulassungsstelle[- ](.+)/i,
-    /autoanmeldung[- ](.+)/i,
-    /auto[- ]anmelden[- ](?:in[- ])?(.+)/i,
-    /auto[- ]online[- ]anmelden[- ]oder[- ]abmelden[- ](?:im|in)[- ](?:landkreis|kreis|stadt)?[- ]?(.+)/i,
-    /landkreis[- ](.+)/i,
-    /^in[- ](.+)/i,
-  ];
-  for (const pattern of patterns) {
-    const match = title.match(pattern);
-    if (match) return match[1].replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()).trim();
-  }
-  return title;
-}
-
 export default async function KfzZulassungStadtPage() {
-  const cityPages = await prisma.page.findMany({
-    where: { pageType: 'city', status: 'published' },
-    select: { slug: true, title: true },
-    orderBy: { title: 'asc' },
-  });
+  const allCities = getCities();
 
-  const cities = cityPages.map(p => ({
-    name: extractCityDisplay(p.title),
-    slug: p.slug,
-    href: `/${p.slug}/`,
-  }));
+  const cities = allCities
+    .sort((a, b) => a.name.localeCompare(b.name, 'de'))
+    .map(c => ({
+      name: c.name,
+      slug: c.slug,
+      href: `/kfz-zulassung-in-deiner-stadt/${c.slug}/`,
+    }));
 
   return (
     <>

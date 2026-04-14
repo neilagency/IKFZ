@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import prisma from '@/lib/db';
+import { getCities } from '@/data/cities';
 
 const SITE_URL = 'https://ikfzdigitalzulassung.de';
 
@@ -49,7 +50,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     'ikfzdigitalblog', // internal/unused
   ]);
 
-  // Page routes from DB (exclude noindex pages and excluded slugs)
+  // Page routes from DB (exclude noindex pages, excluded slugs, and city pages — cities come from registry)
   const pageRoutes: MetadataRoute.Sitemap = pages
     .filter(p => {
       if (excludedSlugs.has(p.slug)) return false;
@@ -69,14 +70,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       // Determine priority based on page type
       let priority = 0.7;
       if (page.pageType === 'service') priority = 0.9;
-      if (page.pageType === 'city') priority = 0.8;
       if (page.pageType === 'legal') priority = 0.5;
       if (page.pageType === 'landing') priority = 0.9;
 
       return {
         url,
         lastModified: page.updatedAt,
-        changeFrequency: page.pageType === 'city' ? 'weekly' as const : 'monthly' as const,
+        changeFrequency: 'monthly' as const,
         priority,
       };
     });
@@ -105,9 +105,36 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.9,
   }));
 
-  return [...staticRoutes, ...pageRoutes, ...productRoutes, ...blogRoute, ...postRoutes];
+  // City pages from registry (NO database)
+  const cityRoutes: MetadataRoute.Sitemap = getCities().map(city => ({
+    url: `${SITE_URL}/kfz-zulassung-in-deiner-stadt/${city.slug}/`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }));
+
+  // City hub page
+  const cityHubRoute: MetadataRoute.Sitemap = [{
+    url: `${SITE_URL}/kfz-zulassung-in-deiner-stadt/`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.9,
+  }];
+
+  return [...staticRoutes, ...pageRoutes, ...productRoutes, ...blogRoute, ...postRoutes, ...cityHubRoute, ...cityRoutes];
   } catch (e) {
+    // Even if DB fails, city pages still work (no DB dependency)
+    const cityRoutes: MetadataRoute.Sitemap = getCities().map(city => ({
+      url: `${SITE_URL}/kfz-zulassung-in-deiner-stadt/${city.slug}/`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    }));
     console.warn('[sitemap] DB not available:', (e as Error).message);
-    return [{ url: `${SITE_URL}/`, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 }];
+    return [
+      { url: `${SITE_URL}/`, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 1.0 },
+      { url: `${SITE_URL}/kfz-zulassung-in-deiner-stadt/`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.9 },
+      ...cityRoutes,
+    ];
   }
 }
