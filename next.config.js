@@ -11,7 +11,12 @@ const nextConfig = {
       '@prisma/adapter-better-sqlite3',
     ],
     // Database is persistent on disk — not bundled into build
-    outputFileTracingIncludes: {},
+    outputFileTracingIncludes: {
+      '/kfz-zulassung-in-deiner-stadt/[slug]': ['./src/data/**/*'],
+      '/kfz-zulassung-in-deiner-stadt': ['./src/data/**/*'],
+      '/api/admin/cities': ['./src/data/**/*'],
+      '/sitemap.xml': ['./src/data/**/*'],
+    },
   },
   images: {
     // AVIF disabled: sharp on Hostinger shared hosting produces corrupt AVIF files

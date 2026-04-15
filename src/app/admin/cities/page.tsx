@@ -79,6 +79,9 @@ export default function AdminCitiesPage() {
     if (isAdding) setFormSlug(slugify(val));
   };
 
+  // Track last saved slug for live link
+  const [lastSavedSlug, setLastSavedSlug] = useState('');
+
   const handleSave = async () => {
     setError('');
     setSuccess('');
@@ -93,7 +96,8 @@ export default function AdminCitiesPage() {
         });
         const data = await res.json();
         if (!res.ok) { setError(data.error); return; }
-        setSuccess(`"${formName}" hinzugefügt.`);
+        setLastSavedSlug(formSlug);
+        setSuccess(`"${formName}" hinzugefügt — Seite ist in wenigen Sekunden live.`);
       } else if (editingCity) {
         const res = await fetch('/api/admin/cities', {
           method: 'PUT',
@@ -108,7 +112,8 @@ export default function AdminCitiesPage() {
         });
         const data = await res.json();
         if (!res.ok) { setError(data.error); return; }
-        setSuccess(`"${formName}" aktualisiert.`);
+        setLastSavedSlug(formSlug);
+        setSuccess(`"${formName}" aktualisiert — Änderungen werden in Kürze sichtbar.`);
       }
 
       closeForm();
@@ -173,8 +178,15 @@ export default function AdminCitiesPage() {
         )}
         {success && (
           <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm flex items-center justify-between">
-            {success}
-            <button onClick={() => setSuccess('')}><X className="w-4 h-4" /></button>
+            <span>
+              {success}
+              {lastSavedSlug && (
+                <a href={`/kfz-zulassung-in-deiner-stadt/${lastSavedSlug}/`} target="_blank" rel="noopener noreferrer" className="ml-2 inline-flex items-center gap-1 font-medium text-green-800 underline hover:text-green-900">
+                  Seite ansehen <ExternalLink className="w-3 h-3" />
+                </a>
+              )}
+            </span>
+            <button onClick={() => { setSuccess(''); setLastSavedSlug(''); }}><X className="w-4 h-4" /></button>
           </div>
         )}
 

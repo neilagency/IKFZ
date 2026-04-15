@@ -1,7 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import fs from 'fs';
 import path from 'path';
-import { invalidateCitiesCache } from '@/data/cities';
+import { invalidateCitiesCache, invalidateAuthorityCache } from '@/data/cities';
+
+function revalidateCityPaths(slug: string): void {
+  try {
+    revalidatePath(`/kfz-zulassung-in-deiner-stadt/${slug}`);
+    revalidatePath('/kfz-zulassung-in-deiner-stadt');
+    revalidatePath('/sitemap.xml');
+  } catch (e) {
+    console.warn('[cities] Revalidation:', e);
+  }
+}
 
 // ── Helpers ──────────────────────────────────────────────────────
 
@@ -29,6 +40,7 @@ function writeCities(cities: CityEntry[]): void {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(filePath, JSON.stringify(cities, null, 2), 'utf-8');
   invalidateCitiesCache();
+  invalidateAuthorityCache();
 }
 
 function slugify(name: string): string {
@@ -87,6 +99,7 @@ export async function POST(request: NextRequest) {
     cities.push(newCity);
     cities.sort((a, b) => a.name.localeCompare(b.name, 'de'));
     writeCities(cities);
+    revalidateCityPaths(slug);
 
     return NextResponse.json({ city: newCity, message: 'Stadt erfolgreich hinzugefügt.' }, { status: 201 });
   } catch (e) {
@@ -131,6 +144,8 @@ export async function PUT(request: NextRequest) {
 
     cities.sort((a, b) => a.name.localeCompare(b.name, 'de'));
     writeCities(cities);
+    if (slug !== originalSlug) revalidateCityPaths(originalSlug);
+    revalidateCityPaths(slug);
 
     return NextResponse.json({ city: cities.find(c => c.slug === slug), message: 'Stadt aktualisiert.' });
   } catch (e) {
@@ -157,6 +172,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     writeCities(filtered);
+    revalidateCityPaths(slug);
 
     return NextResponse.json({ message: `Stadt "${slug}" gelöscht.`, remaining: filtered.length });
   } catch (e) {

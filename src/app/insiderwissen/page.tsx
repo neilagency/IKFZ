@@ -102,8 +102,8 @@ export default async function InsiderwissenPage({
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-b from-dark via-primary-900 to-dark">
         <div className="pt-32 pb-16 md:pt-40 md:pb-20 relative">
-          <div className="absolute top-0 left-1/3 w-[500px] h-[500px] bg-gradient-radial from-primary/12 to-transparent rounded-full pointer-events-none" />
-          <div className="absolute bottom-0 right-1/3 w-[400px] h-[400px] bg-gradient-radial from-accent/8 to-transparent rounded-full pointer-events-none" />
+          <div className="absolute top-0 left-1/3 w-[500px] h-[500px] bg-gradient-radial from-primary/12 to-transparent rounded-full blur-[80px] pointer-events-none" />
+          <div className="absolute bottom-0 right-1/3 w-[400px] h-[400px] bg-gradient-radial from-accent/8 to-transparent rounded-full blur-[80px] pointer-events-none" />
           <div className="container-main text-center relative z-10">
             <div className="flex items-center justify-center gap-2 text-primary text-sm font-semibold uppercase tracking-wider mb-4">
               <BookOpen className="w-4 h-4" /> Insiderwissen

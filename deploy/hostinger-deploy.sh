@@ -109,7 +109,9 @@ cp -r "$STATIC_DIR" "$STANDALONE_DIR/.next/static"
 echo "  Copying public/ → standalone/public..."
 rm -rf "$STANDALONE_DIR/public"
 cp -r "$PUBLIC_DIR" "$STANDALONE_DIR/public"
-
+echo "  Copying src/data/ → standalone/src/data/ (CSV + JSON for ISR)..."
+mkdir -p "$STANDALONE_DIR/src/data"
+cp -r "$PROJECT_ROOT/src/data/"*.csv "$PROJECT_ROOT/src/data/"*.json "$STANDALONE_DIR/src/data/"
 # Database is persistent on server — DO NOT include in deploy package
 # On first deploy, seed DB manually: scp prisma/dev.db server:/path/to/data/production.db
 mkdir -p "$STANDALONE_DIR/prisma"
@@ -135,7 +137,7 @@ rsync -az --delete --checksum \
     --exclude='.env' \
     --exclude='prisma/*.db' \
     --exclude='prisma/*.db-journal' \
-    --exclude='data/' \
+    --exclude='/data/' \
     --exclude='public/uploads/documents/' \
     --exclude='public/uploads/order-documents/' \
     -e "ssh -o StrictHostKeyChecking=no -p $SSH_PORT" \

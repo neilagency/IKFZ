@@ -1,8 +1,22 @@
 import { MetadataRoute } from 'next';
 import prisma from '@/lib/db';
 import { getCities } from '@/data/cities';
+import fs from 'fs';
+import path from 'path';
 
 const SITE_URL = 'https://ikfzdigitalzulassung.de';
+
+// Get stable lastModified for city pages based on cities.json file mtime
+function getCitiesLastModified(): Date {
+  try {
+    const citiesPath = process.env.CITIES_DATA_PATH
+      || path.join(process.cwd(), 'src', 'data', 'cities.json');
+    const stat = fs.statSync(citiesPath);
+    return stat.mtime;
+  } catch {
+    return new Date('2026-04-01');
+  }
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
@@ -106,9 +120,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   // City pages from registry (NO database)
+  const citiesLastModified = getCitiesLastModified();
   const cityRoutes: MetadataRoute.Sitemap = getCities().map(city => ({
     url: `${SITE_URL}/kfz-zulassung-in-deiner-stadt/${city.slug}/`,
-    lastModified: new Date(),
+    lastModified: citiesLastModified,
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }));
@@ -116,7 +131,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // City hub page
   const cityHubRoute: MetadataRoute.Sitemap = [{
     url: `${SITE_URL}/kfz-zulassung-in-deiner-stadt/`,
-    lastModified: new Date(),
+    lastModified: citiesLastModified,
     changeFrequency: 'weekly',
     priority: 0.9,
   }];
@@ -124,16 +139,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [...staticRoutes, ...pageRoutes, ...productRoutes, ...blogRoute, ...postRoutes, ...cityHubRoute, ...cityRoutes];
   } catch (e) {
     // Even if DB fails, city pages still work (no DB dependency)
+    const fallbackCitiesLastModified = getCitiesLastModified();
     const cityRoutes: MetadataRoute.Sitemap = getCities().map(city => ({
       url: `${SITE_URL}/kfz-zulassung-in-deiner-stadt/${city.slug}/`,
-      lastModified: new Date(),
+      lastModified: fallbackCitiesLastModified,
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     }));
     console.warn('[sitemap] DB not available:', (e as Error).message);
     return [
       { url: `${SITE_URL}/`, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 1.0 },
-      { url: `${SITE_URL}/kfz-zulassung-in-deiner-stadt/`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.9 },
+      { url: `${SITE_URL}/kfz-zulassung-in-deiner-stadt/`, lastModified: fallbackCitiesLastModified, changeFrequency: 'weekly' as const, priority: 0.9 },
       ...cityRoutes,
     ];
   }

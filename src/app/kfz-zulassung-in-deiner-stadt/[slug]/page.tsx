@@ -77,13 +77,13 @@ export default async function CityPage({
     notFound();
   }
 
-  // Schema.org JSON-LD
+  // Schema.org JSON-LD — only include schemas that exist (FAQ is conditional)
   const schemas = [
     pageData.schema.breadcrumb,
     pageData.schema.service,
     pageData.schema.localBusiness,
     pageData.schema.faq,
-  ];
+  ].filter(Boolean);
 
   return (
     <>

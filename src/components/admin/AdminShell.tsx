@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import {
   LayoutDashboard, ShoppingCart, Package, Users, CreditCard, Receipt,
   Wallet, FileText, BookOpen, Globe, Settings, ExternalLink, LogOut,
-  ImageIcon, Percent, Mail, Menu, X,
+  ImageIcon, Percent, Mail, Menu, X, MapPin,
 } from 'lucide-react';
 
 const API = '/api/admin';
@@ -24,6 +24,7 @@ const TABS: ReadonlyArray<{ id: string; label: string; icon: typeof LayoutDashbo
   { id: 'posts', label: 'Blog / Beiträge', icon: BookOpen, href: '/admin?tab=posts' },
   { id: 'media', label: 'Medien', icon: ImageIcon, href: '/admin?tab=media' },
   { id: 'seo', label: 'SEO', icon: Globe, href: '/admin?tab=seo' },
+  { id: 'cities', label: 'Städte', icon: MapPin, href: '/admin?tab=cities' },
   { id: 'settings', label: 'Einstellungen', icon: Settings, section: 'System', href: '/admin?tab=settings' },
 ];
 

@@ -34,7 +34,7 @@ export interface CitySection {
 export interface CitySchema {
   service: object;
   localBusiness: object;
-  faq: object;
+  faq: object | null;
   breadcrumb: object;
 }
 
@@ -710,8 +710,9 @@ export function buildCityPage(citySlug: string): CityPageContent | null {
   const metaTitle = buildMetaTitle(city, metaSeed);
   const metaDescription = buildMetaDescription(city, authority, metaSeed);
 
-  // Schema.org data
-  const schema = buildSchema(city, authority, nearbyCities);
+  // Schema.org data — FAQ schema only when FAQ section is actually rendered
+  const hasFaqSection = sections.some(s => s.type === 'faq');
+  const schema = buildSchema(city, authority, nearbyCities, hasFaqSection);
 
   return {
     title: `KFZ-Zulassung in ${city.name} – Online & Ohne Wartezeit`,
@@ -929,7 +930,7 @@ function buildMetaDescription(city: CityEntry, authority: AuthorityData | undefi
 
 const SITE_URL = 'https://ikfzdigitalzulassung.de';
 
-function buildSchema(city: CityEntry, authority: AuthorityData | undefined, nearbyCities: CityEntry[]): CitySchema {
+function buildSchema(city: CityEntry, authority: AuthorityData | undefined, nearbyCities: CityEntry[], hasFaqSection: boolean): CitySchema {
   const service = {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -999,21 +1000,24 @@ function buildSchema(city: CityEntry, authority: AuthorityData | undefined, near
     priceRange: '€€',
   };
 
-  // FAQ schema pulled from the first available FAQ set
-  const faqSeed = hashSeed(`${city.slug}-faq`);
-  const faqTpl = seededPick(FAQ_TEMPLATES, faqSeed);
-  const faq = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqTpl.map(f => ({
-      '@type': 'Question',
-      name: f.q.replace(/\{city\}/g, city.name).replace(/\{authorityName\}/g, authority?.name || `Kfz-Zulassungsstelle ${city.name}`).replace(/\{state\}/g, city.state).replace(/\{region\}/g, city.region),
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: f.a.replace(/\{city\}/g, city.name).replace(/\{authorityName\}/g, authority?.name || `Kfz-Zulassungsstelle ${city.name}`).replace(/\{state\}/g, city.state).replace(/\{region\}/g, city.region),
-      },
-    })),
-  };
+  // FAQ schema — only when FAQ section is actually visible on the page (Google compliance)
+  let faq: object | null = null;
+  if (hasFaqSection) {
+    const faqSeed = hashSeed(`${city.slug}-faq`);
+    const faqTpl = seededPick(FAQ_TEMPLATES, faqSeed);
+    faq = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqTpl.map(f => ({
+        '@type': 'Question',
+        name: f.q.replace(/\{city\}/g, city.name).replace(/\{authorityName\}/g, authority?.name || `Kfz-Zulassungsstelle ${city.name}`).replace(/\{state\}/g, city.state).replace(/\{region\}/g, city.region),
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: f.a.replace(/\{city\}/g, city.name).replace(/\{authorityName\}/g, authority?.name || `Kfz-Zulassungsstelle ${city.name}`).replace(/\{state\}/g, city.state).replace(/\{region\}/g, city.region),
+        },
+      })),
+    };
+  }
 
   const breadcrumb = {
     '@context': 'https://schema.org',

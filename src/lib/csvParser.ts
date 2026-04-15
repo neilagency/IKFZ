@@ -54,6 +54,8 @@ const BUNDESLAND_MAP: Record<string, string> = {
 // ── CSV Parsing ──────────────────────────────────────────────────
 
 let _csvCache: CSVAuthority[] | null = null;
+let _csvCacheTimestamp = 0;
+const CSV_CACHE_TTL = 300_000; // 5 minutes
 
 function getCSVPath(): string {
   return path.join(process.cwd(), 'src', 'data', 'av1_2026_04_csv.csv');
@@ -80,7 +82,8 @@ function parseCSVLine(line: string): string[] {
 }
 
 export function parseCSV(): CSVAuthority[] {
-  if (_csvCache) return _csvCache;
+  const now = Date.now();
+  if (_csvCache && (now - _csvCacheTimestamp) < CSV_CACHE_TTL) return _csvCache;
 
   const csvPath = getCSVPath();
   const raw = fs.readFileSync(csvPath, 'utf-8');
@@ -111,11 +114,13 @@ export function parseCSV(): CSVAuthority[] {
   }
 
   _csvCache = entries;
+  _csvCacheTimestamp = Date.now();
   return entries;
 }
 
 export function invalidateCSVCache(): void {
   _csvCache = null;
+  _csvCacheTimestamp = 0;
 }
 
 // ── German Text Normalization ────────────────────────────────────

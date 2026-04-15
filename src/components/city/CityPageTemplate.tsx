@@ -1,5 +1,6 @@
 'use client';
 
+import { Component, type ReactNode } from 'react';
 import { CityHero, CityStatsBar, CitySteps, CityBenefits, CityServices, CityCTA } from './CityComponents';
 import AuthorityCard from './AuthorityCard';
 import NearbyCities from './NearbyCities';
@@ -8,6 +9,32 @@ import CityDocuments from './CityDocuments';
 import CityIntro from './CityIntro';
 import CityLocal from './CityLocal';
 import type { CitySection } from '@/lib/cityContentEngine';
+
+// ── Error Boundary ───────────────────────────────────────────────
+// Catches render errors per section so one broken section doesn't crash the page.
+
+interface SectionErrorBoundaryState {
+  hasError: boolean;
+}
+
+class SectionErrorBoundary extends Component<{ children: ReactNode }, SectionErrorBoundaryState> {
+  state: SectionErrorBoundaryState = { hasError: false };
+
+  static getDerivedStateFromError(): SectionErrorBoundaryState {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error) {
+    console.error('[CitySection] Render error:', error.message);
+  }
+
+  render() {
+    if (this.state.hasError) return null;
+    return this.props.children;
+  }
+}
+
+// ── Template ─────────────────────────────────────────────────────
 
 interface CityPageTemplateProps {
   sections: CitySection[];
@@ -18,7 +45,9 @@ export default function CityPageTemplate({ sections, cityName }: CityPageTemplat
   return (
     <>
       {sections.map((section, i) => (
-        <SectionRenderer key={`${section.type}-${i}`} section={section} cityName={cityName} />
+        <SectionErrorBoundary key={`${section.type}-${i}`}>
+          <SectionRenderer section={section} cityName={cityName} />
+        </SectionErrorBoundary>
       ))}
     </>
   );

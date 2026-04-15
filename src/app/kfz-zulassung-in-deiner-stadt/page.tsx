@@ -1,19 +1,17 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import { ArrowRight, MapPin } from 'lucide-react';
-import ScrollReveal from '@/components/ScrollReveal';
 import { getCities } from '@/data/cities';
 import {
   CityHero, CityStatsBar, CitySteps, CityBenefits,
   CityServices, CityCTA,
 } from '@/components/city/CityComponents';
+import CityGrid from '@/components/city/CityGrid';
 
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: 'KFZ-Zulassung in deiner Stadt – Alle Städte & Landkreise',
   description:
-    'Finden Sie Ihren KFZ-Zulassungsservice in Ihrer Stadt. Online-Zulassung, Abmeldung & Ummeldung – deutschlandweit verfügbar in über 50 Städten und Landkreisen.',
+    'Finden Sie Ihren KFZ-Zulassungsservice in Ihrer Stadt. Online-Zulassung, Abmeldung & Ummeldung – deutschlandweit verfügbar in über 700 Städten und Landkreisen.',
   alternates: {
     canonical: 'https://ikfzdigitalzulassung.de/kfz-zulassung-in-deiner-stadt/',
   },
@@ -48,40 +46,7 @@ export default async function KfzZulassungStadtPage() {
         ]}
       />
 
-      {/* ── City Grid ── */}
-      <section className="bg-white py-16 md:py-24">
-        <div className="container-main">
-          <ScrollReveal>
-            <div className="text-center mb-12 md:mb-16">
-              <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">Alle Standorte</span>
-              <h2 className="text-2xl md:text-4xl font-extrabold text-dark-900 mb-4">Wählen Sie Ihre Stadt</h2>
-              <p className="text-dark-400 text-lg max-w-2xl mx-auto">
-                Klicken Sie auf Ihre Stadt oder Region, um alle Details zu Ihrem lokalen Online-Zulassungsservice zu erfahren.
-              </p>
-            </div>
-          </ScrollReveal>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-            {cities.map((city, i) => (
-              <ScrollReveal key={city.slug} delay={Math.min(i * 0.03, 0.6)}>
-                <Link
-                  href={city.href}
-                  className="group relative flex items-center gap-4 p-4 md:p-5 rounded-2xl bg-gray-50/80 border border-dark-100/50 hover:shadow-card hover:border-primary/30 hover:-translate-y-0.5 transition-all duration-300"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-primary/8 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/15 transition-colors">
-                    <MapPin className="w-5 h-5 text-primary" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-bold text-dark-900 group-hover:text-primary transition-colors truncate">{city.name}</div>
-                    <div className="text-xs text-dark-400">Online-Zulassung verfügbar</div>
-                  </div>
-                  <ArrowRight className="w-4 h-4 text-dark-300 group-hover:text-primary group-hover:translate-x-0.5 transition-all flex-shrink-0" />
-                </Link>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
+      <CityGrid cities={cities} />
 
       <CitySteps
         title="In 3 Schritten zur Online-Zulassung"
