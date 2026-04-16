@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { getProductBySlug } from '@/lib/db';
 import ServiceForm from './ServiceForm';
 
@@ -92,6 +93,37 @@ export default async function Page() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+
+      {/* ── Dark Hero ── */}
+      <section className="relative overflow-hidden bg-dark-950">
+        <div className="pt-32 pb-14 md:pt-40 md:pb-16 relative">
+          <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-gradient-radial from-primary/15 to-transparent rounded-full pointer-events-none" />
+          <div className="absolute bottom-0 left-1/3 w-[400px] h-[400px] bg-gradient-radial from-accent/10 to-transparent rounded-full pointer-events-none" />
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
+          <div className="container-main relative z-10 text-center">
+            <h1 className="text-2xl md:text-4xl lg:text-5xl font-extrabold text-white mb-4 leading-tight">
+              Jetzt Formular ausfüllen –<br className="hidden sm:block" />
+              <span className="text-primary">in 2 Minuten offiziell abgemeldet</span>
+            </h1>
+            <p className="text-base md:text-lg text-white/60 max-w-2xl mx-auto mb-6">
+              Schnell, sicher und bequem von zu Hause aus – ohne Wartezeit bei der Behörde.
+            </p>
+            <div className="flex justify-center">
+              <Image
+                src="/uploads/2025/02/KBA-NEU-e1739626430147.png"
+                alt="KBA – Registriert beim Kraftfahrt-Bundesamt"
+                width={180}
+                height={72}
+                sizes="180px"
+                className="opacity-80"
+                priority
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Form ── */}
       <ServiceForm
         basePrice={basePrice}
         reservierungPrice={reservierungPrice}

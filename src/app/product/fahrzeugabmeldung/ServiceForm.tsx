@@ -367,25 +367,11 @@ export default function ServiceForm({
 
   // ── Render ──
   return (
-    <div className="min-h-screen bg-gray-50 px-3 pt-24 pb-6 md:px-5 md:pt-32 md:pb-10 lg:px-6">
-      <div className="mx-auto max-w-[1100px]">
+    <div className="bg-gray-50 px-3 pb-10 md:px-5 md:pb-16 lg:px-6">
+      <div className="mx-auto max-w-[800px] -mt-8 relative z-10">
         <div className="overflow-hidden rounded-2xl md:rounded-3xl border border-dark-100/60 bg-white shadow-card">
           <div className="p-4 md:p-6 lg:p-8">
             <div ref={stepTopRef} />
-
-            {/* ── Header ── */}
-            <div className="mb-6">
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                <Shield className="h-3.5 w-3.5" />
-                Digitaler Abmeldeservice
-              </div>
-              <h1 className="mt-3 text-xl font-black text-dark-900 sm:text-2xl md:text-3xl">
-                Fahrzeug online abmelden
-              </h1>
-              <p className="mt-1.5 text-sm text-dark-500">
-                Einfach, sicher und Schritt für Schritt.
-              </p>
-            </div>
 
             {/* ── Step Indicator ── */}
             <div className="mb-6 overflow-hidden rounded-xl border border-dark-100 bg-gray-50 p-3 md:p-4">
