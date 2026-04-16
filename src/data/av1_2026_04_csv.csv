@@ -1,0 +1,709 @@
+code,stadt,bundesland,behoerde_name,plz,ort,strasse,telefon,email
+05334-,Aachen,NW,StädteRegion Aachen,52146,Würselen,Carlo-Schmid-Str. 4,0241-5198-6500,info-stva@staedteregion-aachen.de
+08136-,Aalen,BW,LK Ostalbkreis,73430,Aalen,Stuttgarter Str. 41,07361-503-1435,zulassungsstelle@ostalbkreis.de
+08317-e1,Achern,BW,LRA Ortenaukreis Nebenstelle,77855,Achern,Illenauer Allee 57,0781-805-1225,zulassungsbehoerde@ortenaukreis.de
+05554-e1,Ahaus,NW,LK Borken Nebenstelle,48683,Ahaus,Bahnhofstr. 93,02861 681 1320,zulassungsstelle@kreis-borken.de
+09771-,Aichach/Friedberg,BY,LRA Aichach-Friedberg,86551,Aichach,Münchener Str. 9,08251-92-222,birgit.lorenz@lra-aic-fdb.bayern.de
+08417-e1,Albstadt,BW,LRA Zollernalbkreis Nebenstelle,72458,Albstadt/Ebingen,Unter dem Malesfelsen 23,07431-8000-1524,zula.albstadt@zollernalbkreis.de
+03254-e1,Alfeld,NI,LK Hildesheim Nebenstelle,31061,Alfeld (Leine),Ständehausstr. 1,05181-704-222,infozulassungsstelle@landkreishildesheim.de
+06535-e1,Alsfeld,HE,LK Vogelsbergkreis Nebenstelle,36304,Alsfeld,Hersfelderstr. 57,06631-792-720,zulassung@vogelsbergkreis.de
+16077-,Altenburg,TH,LRA Altenburger Land,04600,Altenburg,Martin-Lutherstr. 1a,03447-586-602,kfz.zulassung@altenburgerland.de
+01058-e1,Altenholz,SH,LK Rendsburg-Eckernförde Nebenstelle,24161,Altenholz,Teichkoppel 72,0431-320979-23,zulassungsbehoerde@kreis-rd.de
+07132-,Altenkirchen,RP,LK Altenkirchen,57610,Altenkirchen,Rathausstr. 12,02681-81-0,zulassungsstelle@kreis-ak.de
+09171-,Altötting,BY,LRA Altötting,84503,Altötting,Bahnhofstr. 38,08671-502-520,kfz-zulassungsbehoerde@lra-aoe.bayern.de
+09671-e1,Alzenau,BY,LRA Aschaffenburg Nebenstelle,63755,Alzenau,Siemensstr. 2,06021-394-800,zulassungsstelle-alz@lra-ab.bayern.de
+07331-,Alzey-Worms,RP,LK Alzey-Worms,55232,Alzey,An der Hexenbleiche 34,06731-408-7009,zulassung@alzey-worms.de
+09361-,Amberg,BY,Stadt Amberg,92224,Amberg (Opf),Pfalzgrafenring 3,09621-10-1375,kfz@amberg.de
+09371-,Amberg-Sulzbach,BY,LRA Amberg-Sulzbach,92224,Amberg i.d.Opf.,Beethovenstr. 7,09621-39-850,Zulassung@amberg-sulzbach.de
+07137-e1,Andernach,RP,Stadt Andernach,56626,Andernach,Am Stadtgraben 29,02632-9221-55,zulassungsstelle@andernach.de
+13075-,Anklam,MV,LK Vorpommern-Greifswald,17389,Anklam,Friedländer Landstraße 21 d,03834-8760-3690,kfz@kreis-vg.de
+14521-,Annaberg-Buchholz,SN,LK Erzgebirgskreis,09456,Annaberg-Buchholz,Paulus-Jenisius-Str.24,03733-831-5394,zulassungsbehoerde@kreis-erz.de
+09571-,Ansbach(Land),BY,LRA Ansbach,91522,Ansbach,Crailsheimstr. 1,0981-468-3450,zulassung@lra-an.bayern.de
+09561-,Ansbach(Stadt),BY,Stadt Ansbach,91522,Ansbach,Karlsplatz 7,0981-51-0,zulassung@ansbach.de
+16071-,Apolda,TH,LRA Weimarer Land,99510,Apolda,Bahnhofstr. 28,03644-540-728,post.kfz-zulassung@weimarerland.de
+05958-e1,Arnsberg,NW,Hochsauerlandkreis Nebenstelle,59821,Arnsberg,Eichholzstr. 9,02931-940,kfz-zulassung-ar@hochsauerlandkreis.de
+16070-,Arnstadt,TH,LRA Ilm-Kreis,99310,Arnstadt,Ritterstraße 14,03628-738-810,vka@ilm-kreis.de
+16065-e1,Artern,TH,LRA Kyffhäuserkreis Nebenstelle,06556,Artern,Straße der Jugend 8,03466-741-930,artern@kyffhaeuser.de
+09671-,Aschaffenburg(Land),BY,LRA Aschaffenburg,63814,Mainaschaff,Am Glockenturm 6,06021-394-6300,zulassungsbehoerde@lra-ab.bayern.de
+09661-,Aschaffenburg(Stadt),BY,Stadt Aschaffenburg,63739,Aschaffenburg,Dalbergstr. 15,06021-330-555,buergerservice@aschaffenburg.de
+03454-e1,Aschendorf,NI,LK Emsland Nebenstelle,26871,Aschendorf,Grosse Str. 32,04962-501-3124,zulassung@emsland.de
+15089-e1,Aschersleben,ST,LK Salzlandkreis Nebenstelle,06449,Aschersleben,Ermslebener Str. 77,03471-684-2002,kfz-zulassung@kreis-slk.de
+14521-e1,Aue-Bad Schlema,SN,LRA Erzgebirgskreis Nebenstelle,08280,Aue,Wettinerstr. 64,03771-277-5395,zulassungsbehoerde@kreis-erz.de
+09761-e1,Augsburg-Haunstetten,BY,Stadt Augsburg Nebenstelle,86179,Augsburg-Haunstetten,Tattenbachstr. 11,0821-324-9999,kfzzulassung@augsburg.bayern.de
+09761-e2,Augsburg-Lechhausen,BY,Stadt Augsburg Nebenstelle,86167,Augsburg-Lechhausen,Neuburger Str. 20,0821-324-9999,kfzzulassung@augsburg.bayern.de
+09761-,Augsburg-Zentrale,BY,Stadt Augsburg,86152,Augsburg,An der Blauen Kappe 18,0821-324-9999,kfzzulassung@augsburg.bayern.de
+03452-,Aurich,NI,LK Aurich,26603,Aurich,Fischteichweg 7-13,04941-16-3671,rz@landkreis-aurich.de
+08119-e1,Backnang,BW,LRA Rems-Murr-Kreis Nebenstelle,71522,Backnang,Erbstetter Str. 58,07191-895-4048,kfz-zulassung@rems-murr-kreis.de
+09187-e1,Bad Aibling,BY,LRA Rosenheim Nebenstelle,83043,Bad Aibling,Krankenhausstr. 5,08061-3701-0,kfz.badaibling@lra-ro.bayern.de
+06635-e1,Bad Arolsen,HE,LK Waldeck-Frankenberg Nebenstelle,34454,Bad Arolsen,Große Allee 24,05691-801-260,zulassungsbehoerde@bad-arolsen.de
+05970-e1,Bad Berleburg,NW,LK Siegen-Wittgenstein Nebenstelle,57319,Bad Berleburg,Am Breitenbach 1,02751-9263-204,g.schneider@siegen-wittgenstein.de
+09672-e1,Bad Brückenau,BY,LRA Bad Kissingen Nebenstelle,97769,Bad Brückenau,Sinnaustr. 14,0971-801-8200,zulassung@kg.de
+13072-e1,Bad Doberan,MV,LK Rostock Nebenstelle,18209,Bad Doberan,Am Waldrand 3,03843-75565-500,info-kfz@lkros.de
+07332-,Bad Dürkheim,RP,LK Bad Dürkheim,67098,Bad Dürkheim,Philipp-Fauth-Str. 11,06322-961-3301,zulassungsstelle@kreis-bad-duerkheim.de
+07141-,Bad Ems,RP,LK Rhein-Lahn-Kreis,56130,Bad Ems,Insel Silberau 1,02603 972-121,referat35@rhein-lahn.rlp.de
+03358-,Bad Fallingbostel,NI,LK Heidekreis,29683,Bad Fallingbostel,Vogteistr. 19,05162-970-500,Dienstleistungsbuero@heidekreis.de
+06632-,Bad Hersfeld,HE,LK Hersfeld-Rotenburg,36251,Bad Hersfeld,An der Haune 8,06621-87-3430,zulassungsstelle@hef-rof.de
+06632-e1,Bad Hersfeld,HE,LK Hersfeld-Rotenburg Nebenstelle,36251,Bad Hersfeld,Friedloser Str. 12,06621-87-0,buergerservice@hef-rof.de
+06434-,Bad Homburg v.d.H,HE,LK Hochtaunuskreis,61352,Bad Homburg v. d. Höhe,Ludwig-Erhard-Anlage 1-5,06172-999-0,bis@hochtaunuskreis.de
+09672-,Bad Kissingen,BY,LRA Bad Kissingen,97688,Bad Kissingen,Münchner Straße 5,0971-801-7200,zulassung@kg.de
+09673-e1,Bad Königshofen,BY,LRA Rhön-Grabfeld Nebenstelle,97631,Bad Königshofen i.Gr.,Marktplatz 2,09761-395-818,kfz@rhoen-grabfeld.de
+09372-e1,Bad Kötzting,BY,LRA Cham Nebenstelle,93444,Bad Kötzting,Herrenstr. 5,09941-904910,zulkoez@lra.landkreis-cham.de
+07133-,Bad Kreuznach(Kreis),RP,LK Bad Kreuznach,55543,Bad Kreuznach,Industriestr. 36,0671-803-0,post@kreis-badkreuznach.de
+07133-1,Bad Kreuznach(Stadt),RP,Stadt Bad Kreuznach,55543,Bad Kreuznach,Kornmarkt 5,0671-800-294,ordnungsamt@bad-kreuznach.de
+12062-,Bad Liebenwerda,BB,LK Elbe-Elster,04924,Bad Liebenwerda,Riesaer Str. 17,035341-97-7622,stva@lkee.de
+08128-e1,Bad Mergentheim,BW,LRA Main-Tauber-Kreis Nebenstelle,97980,Bad Mergentheim,Wachbacher Str. 52,07931-4827-6271,zulassungsstelle.mgh@main-tauber-kreis.de
+07131-,Bad Neuenahr-Ahrweiler,RP,LK Ahrweiler,53474,Bad Neuenahr-Ahrweiler,Wilhelmstr. 24-30,02641-975-340,vl-kfz@kreis-ahrweiler.de
+09673-,Bad Neustadt/Saale,BY,LRA Rhön-Grabfeld,97616,Bad Neustadt a.d.Saale,Siemensstr. 10,09771-94-650,kfz@rhoen-grabfeld.de
+01062-,Bad Oldesloe,SH,LK Stormarn,23843,Bad Oldesloe,Rögen 36-38,04531-890210,zulassungsbehoerde@kreis-stormarn.de
+09172-,Bad Reichenhall,BY,LRA Berchtesgadener Land,83435,Bad Reichenhall,Salzburger Str. 64,08651-773-377,kfz@lra-bgl.de
+08337-e1,Bad Säckingen,BW,LRA Waldshut Nebenstelle,79713,Bad Säckingen,Am Buchrain 5,07751-86-2357,strassenverkehrsamt@landkreis-waldshut.de
+05766-e1,Bad Salzuflen,NW,LK Lippe Nebenstelle,32107,Bad Salzuflen,Louis-Ueckermann-Weg 2,05231-62-1800,stva@kreis-lippe.de
+16063-,Bad Salzungen,TH,LRA Wartburgkreis,36433,Bad Salzungen,Erzberger Allee 14,03695-61-6106,strassenverkehr@wartburgkreis.de
+08437-e1,Bad Saulgau,BW,LRA Sigmaringen Nebenstelle,88348,Bad Saulgau,Kaiserstr. 58,07581-4809-400,kfz-zulassung@lrasig.de
+06439-,Bad Schwalbach,HE,LK Rheingau-Taunus-Kreis,65307,Bad Schwalbach,Heimbacher Str. 7,06124-510-348,zulassung@rheingau-taunus.de
+01060-,Bad Segeberg,SH,LK Segeberg,23795,Bad Segeberg,Waldemar-von-Mohl-Straße 2,04551-951-9415,zulassung@segeberg.de
+09173-,Bad Tölz-Wolfratshausen,BY,LRA Bad Tölz-Wolfratshausen,83646,Bad Tölz,Prof.-Max-Lange-Platz 1,08041-505-253,zulassungsbehoerde@lra-toelz.de
+08436-e1,Bad Waldsee,BW,LRA Ravensburg Nebenstelle,88339,Bad Waldsee,Robert-Koch-Straße 52,0751 85-1414,buergerbuero@rv.de
+06635-e2,Bad Wildungen,HE,LK Waldeck-Frankenberg Nebenstelle,34537,Bad Wildungen,An den Ziegeleien 14,05621-961505,Kfz-Zulassungsbehoerde@bad-wildungen.de
+09575-e1,Bad Windsheim,BY,LRA Neustadt a.d.Aisch Nebenstelle,91438,Bad Windsheim,Konrad-Adenauer-Str. 1,09161-92-3350,kfz-zulassung@lra-nea.bayern.de
+03158-e1,Baddeckenstedt,NI,LK Wolfenbüttel Nebenstelle,38271,Baddeckenstedt,Heerer Str. 28,05345-498-64,-
+08211-,Baden-Baden,BW,Stadt Baden-Baden,76532,Baden-Baden,Briegelackerstr. 21,07221-93-1837,kfzzulassung@baden-baden.de
+08417-,Balingen,BW,LRA Zollernalbkreis,72336,Balingen,Richard-Strauß Str. 5,07433-92-1510,zula.balingen@zollernalbkreis.de
+09471-,Bamberg(Land),BY,LRA Bamberg,96052,Bamberg,Ludwigstr. 23,0951-85-333,poststelle@lra-ba.bayern.de
+09461-,Bamberg(Stadt),BY,Stadt Bamberg,96050,Bamberg,Moosstr. 65,0951-87-2220,zulassungsstelle@stadt.bamberg.de
+05766-e2,Barntrup,NW,LK Lippe Nebenstelle,32683,Barntrup,Alverdisser Str. 28,05231 62-1800,stva@kreis-lippe.de
+06635-e3,Battenberg,HE,LK Waldeck-Frankenberg Nebenstelle,35088,Battenberg,Hauptstr. 58,06452-934430,p.hallenberger@battenberg-eder.de
+06633-e1,Baunatal,HE,LK Kassel Nebenstelle,34225,Baunatal,Harzweg 15,0561-115,Kfz-zulassung-baunatal@kassel.de
+14625-e1,Bautzen,SN,LK Bautzen Nebenstelle,02625,Bautzen,Tzschirnerstr. 14a,03591-5251-36210,kfz-zulassung@lra-bautzen.de
+09472-,Bayreuth,BY,LRA Bayreuth,95448,Bayreuth,Markgrafenallee 5,0921-728-0,kfz-zulassungsstelle@lra-bt.bayern.de
+09462-,Bayreuth(Stadt),BY,Stadt Bayreuth,95445,Bayreuth,Dr.-Franz-Str. 4,0921-25-1417,zulassungsbehoerde@stadt.bayreuth.de
+05570-e1,Beckum,NW,LK Warendorf Nebenstelle,59269,Beckum,Auf dem Tigge 21a,02581-9362-0,zulassungsbehoerde@kreis-warendorf.de
+09176-e1,Beilngries,BY,LRA Eichstätt Nebenstelle,92339,Beilngries,Hauptstr. 24,08421 70-4004,zulassung@lra-ei.bayern.de
+03456-,Bentheim,NI,LK Grafschaft Bentheim,48529,Nordhorn,Van-Delden-Str. 1-7,05921-96-1142,zulassungsstelle@grafschaft.de
+13073-e1,Bergen,MV,LK Vorpommern-Rügen Nebenstelle,18528,Bergen auf Rügen,Störtebeckerstr. 30,03831-357-1000,FD45@lk-vr.de
+05362-,Bergheim,NW,LK Rhein-Erft-Kreis,50126,Bergheim,Willy-Brandt-Platz 1,02271-83-0,zulassung@rhein-erft-kreis.de
+05378-,Bergisch-Gladbach,NW,LK Rheinisch-Bergischer-Kreis,51469,Bergisch-Gladbach,Am Rübezahlwald 7,02202-132099,zulassung@rbk-online.de
+06431-,Bergstraße,HE,LK Bergstraße,64646,Heppenheim,Benzstr. 1,06252-150,kfz.zulassung@kreis-bergstrasse.de
+11000-e1,Berlin-Hohenschönhausen,BE,Landesamt für Bürger-und Ordnungsangelegenheiten Nebenstelle,13055,Berlin,Ferdinand-Schultze-Str. 55,030-90269-3300,post.kfz-zulassung@labo.berlin.de
+11000-,Berlin-Tempelhof,BE,Landesamt für Bürger- und Ordnungsangelegenheiten,10965,Berlin,Jüterboger Str. 3,030-90269-3300,post.kfz-zulassung@labo.berlin.de
+15089-,Bernburg (Saale),ST,LK Salzlandkreis,06400,Bernburg (Saale),Kalistraße 11,03471-684-2000,kfz-zulassung@kreis-slk.de
+07231-e1,Bernkastel-Kues,RP,LK Bernkastel-Wittlich Nebenstelle,54470,Bernkastel-Kues,Gestade 18,06531-54-250,zulassungsbehoerde@bernkastel-wittlich.de
+08118-e1,Besigheim,BW,LRA Ludwigsburg Nebenstelle,74354,Besigheim,Kronenstraße 1,07141-144-2068,KFZ.FAHRERLAUBNIS.BESIGHEIM@landkreis-ludwigsburg.de
+08426-,Biberach,BW,LK Biberach,88400,Biberach,Rollinstr. 9,07351-52-0,zulassungsbehoerde@biberach.de
+06534-e1,Biedenkopf,HE,LK Marburg-Biedenkopf Nebenstelle,35203,Biedenkopf,Kiesackerstr. 12,06461-79-3245,kfz-zulassung@marburg-biedenkopf.de
+05711-,Bielefeld,NW,Stadt Bielefeld,33602,Bielefeld,Paulusstr. 8,0521-51-0,kfz.zulassungsbehoerde@bielefeld.de
+07134-,Birkenfeld,RP,LK Birkenfeld,55765,Birkenfeld,Feckwailerhaide 15,06782-153-40,kfz-zulassung@landkreis-birkenfeld.de
+07232-,Bitburg-Prüm,RP,LK Eifelkreis Bitburg-Prüm,54634,Bitburg,Triererstr. 1,06561-15-1501,zulassungsstelle@bitburg-pruem.de
+15082-e1,Bitterfeld,ST,LK Anhalt-Bitterfeld Nebenstelle,06749,Bitterfeld-Wolfen,Röhrenstr. 33,03493-341-363,zulassung@anhalt-bitterfeld.de
+08115-,Böblingen,BW,LRA Böblingen,71034,Böblingen,Parkstr. 16,07031-663-1425,zulassung@lrabb.de
+05554-e2,Bocholt,NW,LK Borken Nebenstelle,46395,Bocholt,Kaiser-Wilhelm-Str. 52-53,02861 681 1330,zulassungsstelle@kreis-borken.de
+05911-,Bochum,NW,Stadt Bochum,44777,Bochum,Bulksmühle 17,0234-910-8282,zulassungen@bochum.de
+08435-,Bodenseekreis,BW,LRA Bodenseekreis,88045,Friedrichshafen,Glärnischstr. 1-3,07541-204-0,kfz.zulassung@bodenseekreis.de
+13076-e1,Boizenburg,MV,LK Ludwigslust-Parchim Nebenstelle,19258,Boizenburg,Kirchenplatz 6,03871-115,Buergerservice@kreis-lup.de
+05314-,Bonn,NW,Stadt Bonn,53103,Bonn,Berliner Platz 2,0228-77-2735,kfz-zulassung@bonn.de
+90069-,Bonn (THW),NW,Beschaffungsamt des Bundesministerium des Innern,53119,Bonn,Brühler Str. 3,022899-610-2815,poststelle@bescha.bund.de
+08136-e1,Bopfingen,BW,LRA Ostalbkreis Nebenstelle,73341,Bopfingen,Nördlinger Str. 7,07362-9222-20,zulassungsstelle@ostalbkreis.de
+07140-e1,Boppard,RP,LK Rhein-Hunsrück-Kreis Nebenstelle,56154,Boppard,Heerstr. 189-191,06742-3305,zulassung@rheinhunsrueck.de
+05554-,Borken,NW,LK Borken,46325,Borken,Burloer Str. 93,02861-82-2059,zulassungsstelle@kreis-borken.de
+14729-,Borna,SN,LK Leipzig,04552,Borna,Stauffenbergstr. 4,03433-241-2055,zulassung@lk-l.de
+05512-,Bottrop,NW,Stadt Bottrop,46236,Bottrop,Händelstr. 9,02041-7041-31,kfz-zulassungsstelle@bottrop.de
+03461-,Brake,NI,LK Wesermarsch,26919,Brake,Poggenburger Str. 15,04401-927-224,zulassung@wesermarsch.de
+03459-e1,Bramsche,NI,LK Osnabrück Nebenstelle,49565,Bramsche,Hasestr. 11,05461-83-189,info@stadt-bramsche.de
+12051-,Brandenburg,BB,Stadt Brandenburg an der Havel,14770,Brandenburg a.d.Havel,Friedrich-Franz-Str. 19,03381-58-3250,zulassungsbehoerde@stadt-brandenburg.de
+12072-1,Brandenburg Polizei,BB,Zentraldienst der Polizei des Landes Brandenburg,15806,Zossen OT Waldstadt,Am Baruther Tor 20,033702-91-0,olaf.gliese@polizei.brandenburg.de
+03101-,Braunschweig,NI,Stadt Braunschweig,38112,Braunschweig,Porschestr. 5,0531-470-7500,zulassungsstelle@braunschweig.de
+04011-e1,Bremen-Nord,HB,Stadt Bremen-Nord Nebenstelle,28757,Bremen,Gerhard-Rohlfs-Straße 62,0421-361-88668,bscnord@buergeramt.bremen.de
+04011-,Bremen-Stadt,HB,Stadt Bremen,28207,Bremen,Stresemannstr. 48,0421-361-88668,zentralekfz-zulassungsbehoerde@buergeramt.bremen.de
+04012-,Bremerhaven,HB,Stadt Bremerhaven-Nord,27576,Bremerhaven,Hinrich-Schmalfeldt-Str. 30,0471-590-3470,buergerbuero-nord@magistrat.bremerhaven.de
+03357-e1,Bremervörde,NI,LK Rotenburg (Wümme) Nebenstelle,27432,Bremervörde,Amtsallee 7,04761-983-4404,zulassungsbehoerde-bremervoerde@lk-row.de
+08215-e1,Bretten,BW,LRA Karlsruhe Nebenstelle,75015,Bretten,Am Seedamm 8/1,07252-86389,kfz.zulassung@landratsamt-karlsruhe.de
+05958-e2,Brilon,NW,Hochsauerlandkreis Nebenstelle,59929,Brilon,Am Rothaarsteig 1,02961-940,kfz-zulassung-bri@hochsauerlandkreis.de
+08215-e2,Bruchsal,BW,LRA Karlsruhe Nebenstelle,76646,Bruchsal,Orbinstr. 24,07251-783-113,kfz.zulassung@landratsamt-karlsruhe.de
+08225-e1,Buchen,BW,LRA Neckar-Odenwald-Kreis Nebenstelle,74722,Buchen,Henry-Dunant-Str. 6,06281-5212-1351,strassenverkehrsbehoerde@neckar-odenwald-kreis.de
+06440-e1,Büdingen,HE,LK Wetteraukreis Nebenstelle,63654,Büdingen,Eberhard-Bauner-Allee 16,06042-884-144,info@wetteraukreis.de
+08216-e1,Bühl,BW,LRA Rastatt Nebenstelle,77815,Bühl,Im Hasengarten 1,07223-9814-3260,amt32-kfz@landkreis-rastatt.de
+06413-1,Bundesfinanzdir.Südwest,HE,Generalzolldirektion,63069,Offenbach a.Main,Friedrichsring 35,0228 303-16474,kfz-zulassung@zoll.bund.de
+15086-,Burg,ST,LK Jerichower Land,39288,Burg,Bahnhofstraße 9,03921-949-3695,FB-Ordnung@lkjl.de
+03359-e1,Buxtehude,NI,LK Stade Nebenstelle,21614,Buxtehude,Ostmoorweg 3,04161-7152-0,strassenverkehrsamt@landkreis-stade.de
+08235-,Calw,BW,LRA Calw,75365,Calw,Vogteistr. 42 - 46,07051-160 805,14.info@kreis-calw.de
+03351-,Celle,NI,LK Celle,29221,Celle,Speicherstr.2,05141-916-1515,zulassungsstelle@lkcelle.de
+09372-,Cham,BY,LRA Cham,93413,Cham,Rachelstr. 6,09971-78-242,zulassungsstelle@lra.landkreis-cham.de
+14511-,Chemnitz,SN,Stadt Chemnitz,09111,Chemnitz,Düsseldorfer Platz 1,0371-488-8343,kfzzulassungsbehoerde@stadt-chemnitz.de
+03453-,Cloppenburg,NI,LK Cloppenburg,49661,Cloppenburg,Eschstr. 29,04471-15-101,zulassung@lkclp.de
+09473-,Coburg(Land),BY,Zweckverband Zulassungsstelle Coburg,96450,Coburg,Wilhelm-Ruß-Str. 5,09561-514-9550,zulassung@zulassungsstelle-coburg.bayern.de
+09473-1,Coburg(Stadt),BY,Zweckverband Zulassungsstelle Coburg,96450,Coburg,Wilhelm-Ruß-Str. 5,09561-514-9550,zulassung@zulassungsstelle-coburg.bayern.de
+07135-,Cochem-Zell,RP,LK Cochem-Zell,56812,Cochem,Endertplatz 2,02671-61105,zulassungsbehoerde@cochem-zell.de
+12052-,Cottbus,BB,Stadt Cottbus,03044,Cottbus,Karl-Marx-Str. 69,0355-612-4751,kfz-zulassung@cottbus.de
+08127-e1,Crailsheim,BW,LRA Schwäbisch Hall Nebenstelle,74564,Crailsheim,In den Kistenwiesen 2,07951-492-9996,zulassungsstelle@lrasha.de
+03352-,Cuxhaven,NI,LK Cuxhaven,27474,Cuxhaven,Vincent-Lübeck-Str. 2,04721-662277,zulassung@landkreis-cuxhaven.de
+09174-,Dachau,BY,LRA Dachau,85221,Dachau,Rudolf-Diesel-Str. 20,08131-74-300,Zulassung@lra-dah.bayern.de
+12061-,Dahme-Spreewald,BB,LK Dahme-Spreewald,15711,Königs Wusterhausen,Fontaneplatz 10c,03375-262-660,strassenverkehrsamt@dahme-spreewald.de
+06432-,Darmstadt,HE,LK Darmstadt-Dieburg,64389,Darmstadt,Jägertorstr. 207,06071-881-0,kfz-zulassung@ladadi.de
+06411-,Darmstadt,HE,Stadt Darmstadt,64285,Darmstadt,Rüdesheimer Str. 119 / Gebäude,06151-132246,zulassung-stadt@darmstadt.de
+06432-e1,Darmstadt-Dieburg,HE,LK Darmstadt-Dieburg Nebenstelle,64807,Pfungstadt,Borngasse 17,06071-881-2465,kfz-zulassung@ladadi.de
+07233-,Daun,RP,LK Vulkaneifel,54550,Daun,Mainzer Str. 25,06592-933-0,kfz-zulassung@vulkaneifel.de
+09271-,Deggendorf,BY,LRA Deggendorf,94469,Deggendorf,Herrenstr. 18,0991-3100-0,zulassungsstelle@lra-deg.bayern.de
+14730-e1,Delitzsch,SN,LRA Nordsachsen Nebenstelle,04509,Delitzsch,Richard-Wagner-Str. 7 A,034202-988-5143,christian.noack@lra-nordsachsen.de
+03401-,Delmenhorst,NI,Stadt Delmenhorst,27749,Delmenhorst,Am Stadtwall / City Center,04221-99-2280,zulassungsbehoerde@delmenhorst.de
+13071-e1,Demmin,MV,LK Mecklenburgische Seenplatte Nebenstelle,17109,Demmin,Adolf-Pompe-Str. 12-15,0395-57087-4700,buergerbuero-dm@lk-seenplatte.de
+15001-,Dessau-Roßlau,ST,Stadt Dessau-Roßlau,06844,Dessau-Roßlau,Ferd.-von-Schill-Str. 8,0340-204-1339,kfz-zulassungsstelle@dessau-rosslau.de
+05766-,Detmold,NW,LK Lippe,32756,Detmold,Felix-Fechenbach-Str. 5,05231-62-1800,stva@kreis-lippe.de
+06432-e2,Dieburg,HE,LK Darmstadt-Dieburg Nebenstelle,64807,Dieburg,Frankfurter Str. 115,06071-881-2470,kfz-zulassung@ladadi.de
+03251-,Diepholz,NI,LK Diepholz,49356,Diepholz,Niedersachsenstr. 2,05441-976-3333,zulassung@diepholz.de
+06438-,Dietzenbach,HE,LK Offenbach,63128,Dietzenbach,Werner-Hilpert-Str. 1,06074-8180-0,zulassungsbehoerde@kreis-offenbach.de
+06532-e1,Dietzhölztal,HE,Gem. Dietzhölztal,35716,Dietzhölztal,Hauptstraße 92,02774-807-18,buergerservice@dietzhoelztal.de
+07141-e1,Diez,RP,LK Rhein-Lahn-Kreis Nebenstelle,65582,Diez,Wilhelmstr. 42a,06432-9261-17,kvbadems@rhein-lahn.rlp.de
+09773-,Dillingen a.d. Donau,BY,LRA Dillingen a.d. Donau,89407,Dillingen a.d.Donau,Große Allee 25,09071-51-122,poststelle@landratsamt.dillingen.de
+09279-,Dingolfing-Landau,BY,LRA Dingolfing-Landau,84130,Dingolfing,Obere Stadt 1,08731-87-400,info@landkreis-dingolfing-landau.de
+09571-e1,Dinkelsbühl,BY,LRA Ansbach Nebenstelle,91550,Dinkelsbühl,Luitpoldstr. 5a,09851-851,zulassung@lra-an.bayern.de
+01051-,Dithmarschen,SH,LK Dithmarschen,25746,Heide,Stettiner Str. 30,0481-97-0,fd-strassenverkehr@dithmarschen.de
+14522-e1,Döbeln,SN,LK Mittelsachsen Nebenstelle,04720,Döbeln,Straße des Friedens 9a,03731-7996633,kfz.zulassung@landkreis-mittelsachsen.de
+08326-e1,Donaueschingen,BW,LRA Schwarzwald-Baar-Kreis Nebenstelle,78166,Donaueschingen,Humboldtstr. 11,07721-913-5005,zulassungsstelle@lrasbk.de
+09779-,Donauwörth,BY,LRA Donau-Ries,86609,Donauwörth,Pflegstr. 2,0906-74 1222,zulassungsbehoerde@lra-donau-ries.de
+05162-e1,Dormagen,NW,LK Rhein-Kreis Neuss Nebenstelle,41540,Dormagen,Kieler Str. 26,02131-928-9090,strassenverkehrsamt@rhein-kreis-neuss.de
+05913-,Dortmund,NW,Stadt Dortmund,44137,Dortmund,Südwall 2-4,0231-50-13332,buergerdienste@stadtdo.de
+14612-,Dresden (Stadt),SN,Stadt Dresden,01239,Dresden,Hauboldstr. 7,0351-488-8008,kfz-zulassung@dresden.de
+07338-e1,Dudenhofen,RP,LK Rhein-Pfalz-Kreis Nebenstelle,67373,Dudenhofen,Konrad-Adenauer-Platz 6,0621-5909-610,kfz-zulassung@kv-rpk.de
+03159-e1,Duderstadt,NI,LK Göttingen Nebenstelle,37115,Duderstadt,Bostalstr. 9,05527-997-290,zulassungsbehoerde@landkreisgoettingen.de
+05112-,Duisburg,NW,Stadt Duisburg,47167,Duisburg- Neumühl,Theodor-Heuss-Straße 80,0203 -283 4848,zulassung@stadt-duisburg.de
+05558-,Dülmen,NW,LK Coesfeld,48249,Dülmen,Kreuzweg 27,02594-9436-3632,kfz.zulassung@kreis-coesfeld.de
+05358-,Düren,NW,LK Düren,52351,Düren,Kölner Landstr. 271,02421-221030900,sva@kreis-dueren.de
+05111-,Düsseldorf,NW,Stadt Düsseldorf,40233,Düsseldorf,Höherweg 101,0211-89-90144,zulassungsstelle@duesseldorf.de
+09674-e1,Ebern,BY,LRA Haßberge Nebenstelle,96106,Ebern,Rittergasse 3,09531-941-169,zulassung.ebern@lra-has.bayern.de
+09175-,Ebersberg,BY,LRA Ebersberg,85560,Ebersberg,Kolpingstr. 1,08092-823-341,zulassung@lra-ebe.bayern.de
+12060-,Eberswalde,BB,LK Barnim,16225,Eberswalde,Am Markt 1,03334-214-1466,kfz-fe@kvbarnim.de
+01058-e2,Eckernförde,SH,LK Rendsburg-Eckernförde Nebenstelle,24340,Eckernförde,Rendsburger Str. 109,04351-6667-60,zulassungsbehoerde@kreis-rd.de
+08425-e1,Ehingen,BW,LK Alb-Donau-Kreis Nebenstelle,89584,Ehingen,Hauptstr. 41,07391-779-2412,zulassungsstelle.ehingen@alb-donau-kreis.de
+16061-,Eichsfeld,TH,LK Eichsfeld,37308,Heilbad Heiligenstadt,Friedensplatz 8,03606-650-3621,zulassungsstelle@kreis-eic.de
+09176-,Eichstätt,BY,LRA Eichstätt Hauptstelle,85072,Eichstätt,Gundekarstraße 3,08421-70-4003,zulassung@lra-ei.bayern.de
+03155-e1,Einbeck,NI,LK Northeim Nebenstelle,37574,Einbeck,Hullerser Str. 19,05551-708-8234,zulassungsbehoerde@landkreis-northeim.de
+16063-e1,Eisenach,TH,LRA Wartburgkreis Nebenstelle,99817,Eisenach,Ernst-Thälmann-Str. 74,03695-61-6152,strassenverkehr@wartburgkreis.de
+07333-e1,Eisenberg,RP,LK Donnersbergkreis Nebenstelle,67304,Eisenberg,Hauptstr. 86,06351-407-401,info@eisenberg.de
+16074-,Eisenberg,TH,LRA Saale-Holzland-Kreis,07607,Eisenberg,Claußstraße 3,036691-70-0,ordnung@lrashk.thueringen.de
+08136-e2,Ellwangen,BW,LRA Ostalbkreis Nebenstelle,73479,Ellwangen (Jagst),Sebastiansgraben 34,07961-567-3251,zulassungsstelle@ostalbkreis.de
+01053-,Elmenhorst,SH,LK Herzogtum Lauenburg,21493,Elmenhorst OT Lanken,Kesselflickerstr. 2,04151-8673-0,strassenverkehr@kreis-rz.de
+03402-,Emden,NI,Stadt Emden,26721,Emden,Frickensteinplatz 2,04921-87-0,433@emden.de
+08316-,Emmendingen,BW,LRA Emmendingen,79312,Emmendingen,Schwarzwaldstr. 4,07641-451-9500,zulassungsstelle@landkreis-emmendingen.de
+06437-,Erbach,HE,LK Odenwaldkreis,64711,Erbach,Michelstädter Str. 12,06062-6014-5600,kfz-zulassungsbehoerde@odenwaldkreis.de
+09177-,Erding,BY,LRA Erding,85435,Erding,Alois-Schießl-Platz 2,08122-58-0,zulassung@lra-ed.bayern.de
+16051-,Erfurt(Stadt),TH,Stadt Erfurt,99084,Erfurt,Bürgermeister-Wagner-Str. 1,0361-655-7854,buergeramt@erfurt.de
+09562-,Erlangen,BY,Stadt Erlangen,91052,Erlangen,Rathausplatz 1,09131-86-1616,kfz-zulasssung@stadt.erlangen.de
+09572-,Erlangen-Höchstadt,BY,LRA Erlangen-Höchstadt,91052,Erlangen,Nägelsbachstr. 1,09131-803-2614,zulassung@erlangen-hoechstadt.de
+09374-e1,Eschenbach i.d. OPf.,BY,LRA Neustadt a.d.Waldnaab Nebenstelle,92676,Eschenbach i.d.Opf.,Karlsplatz 29,09645-914-162,verkehrswesenesb@lra-new.bayern.de
+06636-,Eschwege,HE,LK Werra-Meißner-Kreis,37269,Eschwege,Bahnhofstr. 15,05651-302-3500,zulassungsstelle@werra-meissner-kreis.de
+05113-,Essen,NW,Stadt Essen,45143,Essen,Altendorfer Str. 101,0201-88-33999,kfz@einwohneramt.essen.de
+08116-,Esslingen a. N.,BW,LK Esslingen,73728,Esslingen a.Neckar,Pulverwiesen 11,0711 3902-48330,strassenverkehrsamt@lra-es.de
+08215-e3,Ettlingen,BW,LRA Karlsruhe Nebenstelle,76275,Ettlingen,Am Lindscharren 4-6,07243-7252-93,kfz.zulassung@landratsamt-karlsruhe.de
+05366-,Euskirchen,NW,LK Euskirchen,53879,Euskirchen,Jülicher Ring 32,02251-15-280,sva@kreis-euskirchen.de
+01055-,Eutin,SH,LK Ostholstein,23701,Eutin,Bürgermeister-Steenbock-Str.20,04521-788-800,kfz-zulassung@kreis-oh.de
+09180-,Farchant,BY,LRA Garmisch-Partenkirchen,82490,Farchant,Partenkirchner Str. 52,08821-751-356,zulassung@lra-gap.bayern.de
+09571-e2,Feuchtwangen,BY,LRA Ansbach Nebenstelle,91555,Feuchtwangen,Jahnstr. 6,09852-9946,zulassung@lra-an.bayern.de
+12062-e1,Finsterwalde,BB,LK Elbe-Elster Nebenstelle,03238,Finsterwalde,Kirchhainer Str. 38a,03531-502-6715,stva@lkee.de
+01059-e1,Flensburg,SH,LK Schleswig-Flensburg Nebenstelle,24941,Flensburg,Gutenbergstr. 23,0461-8115-0,zulassungfl@schleswig-flensburg.de
+01001-,Flensburg,SH,Stadt Flensburg,24941,Flensburg,Gutenbergstr. 23,0461-8115-0,zulassungfl@schleswig-flensburg.de
+09474-,Forchheim,BY,LRA Forchheim,91301,Forchheim,Am Streckerplatz 3,09191-86-3230,poststelle@lra-fo.bayern.de
+06635-e4,Frankenberg,HE,LK Waldeck-Frankenberg Nebenstelle,35055,Frankenberg (Eder),Bahnhofstr. 8-12,06451-743-611,verkehr@landkreis-waldeck-frankenberg.de
+07311-,Frankenthal,RP,Stadt Frankenthal,67227,Frankenthal (Pfalz),Hammstraße 20,06233-89-331,zulassung@frankenthal.de
+06412-,Frankfurt am Main,HE,Stadt Frankfurt am Main,60486,Frankfurt am Main,Am Römerhof 19,069-212-42750,kfz-zulassung@stadt-frankfurt.de
+12053-,Frankfurt(Oder),BB,Stadt Frankfurt (Oder),15234,Frankfurt (Oder),Göpelstr. 38,0335-552-313-0,kfz-zulassungsbehoerde@frankfurt-oder.de
+14522-,Freiberg,SN,LK Mittelsachsen,09599,Freiberg,Frauensteiner Straße 43,03731-799-3642,kfz.zulassung@landkreis-mittelsachsen.de
+08315-,Freiburg,BW,LRA Breisgau-Hochschwarzwald,79104,Freiburg (Breisgau),Stadtstr. 2,07612187-6313,kfzzulassung@lkbh.de
+08311-,Freiburg i.Br.,BW,Stadt Freiburg,79106,Freiburg (Breisgau),Fehrenbachallee 12,0761-201-5660,bs-kfz@stadt.freiburg.de
+09178-,Freising,BY,LRA Freising,85356,Freising,Landshuter Str.,08161-600 333 50,info-zulassung@lra-fs.bayern.de
+14628-e1,Freital,SN,LK Sächsische Schweiz-Osterzgebirge Nebenstelle,01705,Freital,Hüttenstr. 14,0351-648-5301,kfz-zulassung@landratsamt-pirna.de
+08237-,Freudenstadt,BW,LK Freudenstadt,72250,Freudenstadt,Herrenfelder Str. 14,07441-920-1777,kfz-zulassung@kreis-fds.de
+09272-,Freyung-Grafenau,BY,LRA Freyung-Grafenau,94078,Freyung,Grafenauer Str. 44,08551-57-0,zulassung@landkreis-frg.de
+06440-,Friedberg,HE,LK Wetteraukreis,61169,Friedberg,Europaplatz,06031-83-2166,zulassung@wetteraukreis.de
+09771-e1,Friedberg,BY,LRA Aichach-Friedberg Nebenstelle,86316,Friedberg,Ludwigstr. 39,08251-92-451,zulassungsbehoerde.friedberg@lra-aic-fdb.bayern.de
+06634-e1,Fritzlar,HE,LK Schwalm-Eder-Kreis Nebenstelle,34560,Fritzlar,Brautäcker 3,05622-930-470,stadt@fritzlar.de
+06631-,Fulda,HE,LK Fulda,36043,Fulda,Kreuzbergstr. 42 b,0661-6006-1100,zulassungsbehoerde@landkreis-fulda.de
+03459-e2,Fürstenau,NI,LK Osnabrück Nebenstelle,49584,Fürstenau,Schloßplatz 1,05901-9320-21,buergerbuero@fuerstenau.de
+09179-,Fürstenfeldbruck,BY,LRA Fürstenfeldbruck,82256,Fürstenfeldbruck,Münchner Straße 32,08141-519-799,kfz-zulassung@lra-ffb.bayern.de
+09573-,Fürth(Land),BY,LRA Fürth,90513,Zirndorf,Im Pinderpark 2,0911-9773-1344,kfz-zulassung@lra-fue.bayern.de
+09563-,Fürth(Stadt),BY,Stadt Fürth,90763,Fürth,Schwabacher Str. 170,0911-974-2276,zulassungsbehoerde@fuerth.de
+09777-e1,Füssen,BY,LRA Ostallgäu Nebenstelle,87629,Füssen,Herzogstr. 3,08362-93874-0,buergerservice@lra-oal.bayern.de
+08216-e2,Gaggenau,BW,LRA Rastatt Nebenstelle,76571,Gaggenau,Hauptstr. 71,07222-381-3220,amt32-kfz@landkreis-rastatt.de
+08117-e1,Geislingen/Steige,BW,LRA Göppingen Nebenstelle,73312,Geislingen,Schillerstr. 2,07331-304-301,zulassung@lkgp.de
+05154-e1,Geldern,NW,LK Kleve Nebenstelle,47608,Geldern,Boeckelter Weg 2,02821-85-521,strassenverkehr@kreis-kleve.de
+05513-,Gelsenkirchen,NW,Stadt Gelsenkirchen,45879,Gelsenkirchen,Wildenbruchstr. 10,0209-169-9595,fahrzeugzulassungen@gelsenkirchen.de
+03459-e3,Georgsmarienhütte,NI,LK Osnabrück Nebenstelle,49124,Georgsmarienhütte,Oeseder Str. 79,05401-850-330,zulassungsstelle@lkos.de
+16052-,Gera,TH,Stadt Gera,07548,Gera,Wiesestr. 125,0365-838-2450,kfz-zulassung@gera.de
+08118-e2,Gerlingen,BW,LRA Ludwigsburg Nebenstelle,70839,Gerlingen,Schillerstr. 63,07141-144-2069,KFZ.GERLINGEN@landkreis-ludwigsburg.de
+07334-,Germersheim,RP,LK Germersheim,76726,Germersheim,17er Straße 1,07274-53-329,fb42-kfz@kreis-germersheim.de
+09772-,Gersthofen,BY,LRA Augsburg,86368,Gersthofen,Tiefenbacherstr. 8,0821-3102-3335,kfz-zulassung@lra-a.bayern.de
+06531-,Gießen,HE,LK Gießen,35398,Gießen,Bachweg 9,0641-9390-3574,zulassung@lkgi.de
+03151-,Gifhorn,NI,LK Gifhorn,38518,Gifhorn,Schlossplatz 1,05371-82-370,verkehrsamt@gifhorn.de
+14524-,Glauchau,SN,LK Zwickau,08371,Glauchau,Scherbergplatz 4,0375-4402-0,kfz@landkreis-zwickau.de
+08117-,Göppingen,BW,LRA Göppingen,73033,Göppingen,Lorcher Str. 6,07161-202-5262,zulassung@lkgp.de
+14626-,Görlitz,SN,LK Görlitz,02826,Görlitz,Bahnhofstr. 24,03581-663-5240,zulassungsbehoerde@kreis-gr.de
+03153-,Goslar,NI,LK Goslar,38644,Goslar,Stapelner Str. 8,05321-376-991,zulassung@landkreis-goslar.de
+16067-,Gotha,TH,LRA Gotha,99867,Gotha,18.-März-Str. 50,03621-214-593,stva@kreis-gth.de
+03159-1,Göttingen (Stadt),NI,Stadt Göttingen,37083,Göttingen,Hiroshimaplatz 1-4,0551-400-0,zulassungsbehoerde@goettingen.de
+03159-e2,Göttingen(Land),NI,LK Göttingen Nebenstelle,37083,Göttingen,Reinhäuser Landstr. 4,0551-525-214,zulassungsbehoerde@landkreisgoettingen.de
+09272-e1,Grafenau,BY,LRA Freyung-Grafenau Nebenstelle,94481,Grafenau,Rathausgasse 1,08551-57 0,zulassung@landkreis-frg.de
+15091-e1,Gräfenhainichen,ST,LK Wittenberg Nebenstelle,06773,Gräfenhainichen,Karl-Liebknecht-Str. 12,03491-479-500,strassenverkehrsamt@landkreis.wittenberg.de
+09184-,Grasbrunn-Neukeferloh,BY,LRA München,85630,Grasbrunn-Neukeferloh,Bretonischer Ring 1,089-6221-3000,kfz-zulassung@lra-m.bayern.de
+13075-2,Greifswald,MV,Hansestadt Greifswald,17489,Greifswald,Markt 15,03834-85364-121,verkehrsabteilung@greifswald.de
+16076-,Greiz,TH,LK Greiz,07570,Weida,Am Schafberge 5,036603-255-20,ordnungsamt@landkreis-greiz.de
+05162-e2,Grevenbroich,NW,LK Rhein-Kreis Neuss Nebenstelle,41515,Grevenbroich,Lindenstr. 10,02181-601-9090,strassenverkehrsamt@rhein-kreis-neuss.de
+13074-,Grevesmühlen,MV,LK Nordwestmecklenburg,23936,Grevesmühlen,Langer Steinschlag 4,03841-3040-3616,kfz-zulassung@nordwestmecklenburg.de
+14729-e1,Grimma,SN,LK Leipzig Nebenstelle,04668,Grimma,Karl-Marx-Str. 22,03433-241 2056,zulassung@lk-l.de
+13073-,Grimmen,MV,LK Vorpommern-Rügen,18507,Grimmen,Bahnhofstr. 12/13,03831-357-1000,FD45@lk-vr.de
+06433-,Groß-Gerau,HE,LK Groß-Gerau,64521,Groß-Gerau,Wilhelm-Seipp-Str. 4,06152-989 789,zulgg@kreisgg.de
+06432-e3,Groß-Umstadt,HE,LK Darmstadt-Dieburg Nebenstelle,64823,Groß-Umstadt,Saint-Péray-Str. 11,06078-781-350,kfz-zulassung@ladadi.de
+07332-e1,Grünstadt,RP,LK Bad Dürkheim Nebenstelle,67269,Grünstadt,Industriestr. 11,06322-961-3300,info@kreis-bad-duerkheim.de
+05374-,Gummersbach,NW,LK Oberbergischer Kreis,51645,Gummersbach,Kölner Str. 235,02261-88-3633,amt36@obk.de
+09774-,Günzburg,BY,LRA Günzburg,89312,Günzburg,Dillinger Straße 21,08221-95-0,info@lra-gz.bayern.de
+09577-e1,Gunzenhausen,BY,LRA Weißenburg-Gunzenhausen Nebenstelle,91710,Gunzenhausen,Sonnenstr. 37b,09831-3673,zulassung.lra@lra-wug.bayern.de
+13072-,Güstrow,MV,LK Rostock,18273,Güstrow,Am Wall 3-5,03843-75565-500,Info-kfz@lkros.de
+05754-,Gütersloh,NW,LK Gütersloh,33334,Gütersloh,Herzebrocker Str. 140,05241-85-1200,abt22@kreis-guetersloh.de
+07143-e1,Hachenburg,RP,LK Westerwaldkreis Nebenstelle,57627,Hachenburg,Gartenstr. 11,02662-801-0,info@hachenburg-vg.de
+05914-,Hagen,NW,Stadt Hagen,58119,Hagen,Freiheitstr. 3,02331-207-3008,ordnungsamt@stadt-hagen.de
+13076-e2,Hagenow,MV,LK Ludwigslust-Parchim Nebenstelle,19230,Hagenow,Lange Str. 28-32,03871-115,Buergerservice@kreis-lup.de
+15085-,Halberstadt,ST,LK Harz,38820,Halberstadt,Friedrich-Ebert-Str. 42,03941-5970-4288,zulassung@kreis-hz.de
+15083-,Haldensleben,ST,LK Börde,39340,Haldensleben,Bornsche Straße 2,03904-7240-3650,strassenverkehr@landkreis-boerde.de
+15002-,Halle,ST,Stadt Halle (Saale),06122,Halle (Saale),Am Stadion 6,0345-221-1387,zulassungsbehoerde@halle.de
+02000-,Hamburg,HH,Landesbetrieb Verkehr (LBV) Nebenstelle,22525,Hamburg,Schnackenburgallee 43,040-42858 3200,kfz-zulassung@lbv.hamburg.de
+02000-e1,Hamburg-Bergedorf,HH,Landesbetrieb Verkehr (LBV) Nebenstelle,21033,Hamburg,Bergedorfer Str. 74,040-42858-0,kfz-zulassung@lbv.hamburg.de
+02000-e2,Hamburg-Harburg,HH,Landesbetrieb Verkehr (LBV) Nebenstelle,21079,Hamburg,Schellerdamm 5-7,040-42858-0,kfz-zulassung@lbv.hamburg.de
+02000-e3,Hamburg-Mitte,HH,Landesbetrieb Verkehr (LBV) Nebenstelle,20537,Hamburg,Ausschläger Weg 100,040-42858-0,kfz-zulassung@lbv.hamburg.de
+02000-e4,Hamburg-Nord,HH,Landesbetrieb Verkehr (LBV) Nebenstelle,22419,Hamburg,Langenhorner Chaussee 491,040-42858-0,kfz-zulassung@lbv.hamburg.de
+03252-,Hameln-Pyrmont,NI,LK Hameln-Pyrmont,31789,Hameln,Fluthamelstr. 15,05151-903-2220,zulassung@hameln-pyrmont.de
+05915-,Hamm,NW,Stadt Hamm Bürgeramt Bockum-Hövel,59075,Hamm,Teichweg 1,02381-17-9699,ba-bockum-hoevel@stadt.hamm.de
+09672-e2,Hammelburg,BY,LRA Bad Kissingen Nebenstelle,97762,Hammelburg,Friedhofstr. 13,0971-801-9200,zulassung@kg.de
+06435-e1,Hanau,HE,LRA Main-Kinzig-Kreis Nebenstelle,63452,Hanau,Dörnigheimer Str. 1,06181-292-22637,zulassung@mkk.de
+06415-,Hanau,HE,Stadt Hanau,63450,Hanau,Amt Markt 14 - 18,06181 295 8135,Buergerservice@hanau.de
+03241-1,Hannover,NI,Stadt Hannover,30169,Hannover,Am Schützenplatz 1,0511-168-44539,kfz-zulassungsbehoerde@hannover-stadt.de
+03241-,Hannover,NI,Region Hannover,30169,Hannover,Hildesheimer Str. 20,0511-616-17444,teamkfz@region-hannover.de
+03159-e3,Hannover-Münden,NI,LK Göttingen Nebenstelle,34346,Hann.Münden,Adalbert-Stifter-Str. 27,05541-8008,schaefer.j@landkreisgoettingen.de
+03359-e2,Harsefeld,NI,LK Stade Nebenstelle,21698,Harsefeld,Herrenstr. 25,04164-887-0,strassenverkehrsamt@landkreis-stade.de
+09674-,Haßfurt,BY,LRA Haßberge,97437,Haßfurt,Am Ziegelbrunn 36,09521-27-132,zulassung@lra-has.bayern.de
+07332-e2,Haßloch,RP,LK Bad Dürkheim Nebenstelle,67454,Haßloch,Langgasse 64,06322-961-3300,info@kreis-bad-duerkheim.de
+09275-e1,Hauzenberg,BY,LRA Passau Nebenstelle,94051,Hauzenberg,Bahnhofstr. 18,08586-979576,kfz-zulassung@lra-pa.bayern.de
+12063-,Havelland,BB,LK Havelland,14712,Rathenow,Platz der Freiheit 1,03385-551-4606,kfz-zulassung@havelland.de
+08417-e2,Hechingen,BW,LRA Zollernalbkreis Nebenstelle,72379,Hechingen,Heiligkreuzstr. 10,07471-93091285,zulassungsstelle@zollernalbkreis.de
+08221-,Heidelberg,BW,Stadt Heidelberg,69124,Heidelberg,Pleikartsförster Str. 116,06221-584-3700,kfz-zulassungen@heidelberg.de
+08135-,Heidenheim (Brenz),BW,LRA Heidenheim,89518,Heidenheim (Brenz),Felsenstr. 36,07321-321-0,kfz-zulassungsbehoerde@landkreis-heidenheim.de
+08125-,Heilbronn(Land),BW,LRA Heilbronn,74072,Heilbronn,Lerchenstr. 40,07131-994 559,kfz-zulassung@landratsamt-heilbronn.de
+08121-,Heilbronn(Stadt),BW,Stadt Heilbronn,74072,Heilbronn,Lerchenstr. 40,07131-563-636,kfz-zulassung@heilbronn.de
+05370-,Heinsberg,NW,LK Heinsberg,52525,Heinsberg,Valkenburger Str. 45,02452-13-3611,kfz-zulassung@kreis-heinsberg.de
+03154-,Helmstedt,NI,LK Helmstedt,38350,Helmstedt,Südstr. 10,05351-121-1000,kfz-zulassung@landkreis-helmstedt.de
+06532-e2,Herborn-Burg,HE,LK Lahn-Dill-Kreis Nebenstelle,35745,Herborn-Burg,Junostr. 1f,06441-407-2501,kfz-zulassung@lahn-dill-kreis.de
+05758-,Herford,NW,Kreis Herford,32278,Kirchlengern,Elsestr. 225,05223-988-3,zulassungsstelle@kreis-herford.de
+07211-e1,Hermeskeil,RP,Stadt Trier Nebenstelle,54411,Hermeskeil,Langer Markt 17,06503-809-110,kfz-zulassung@trier.de
+05916-,Herne,NW,Stadt Herne,44625,Herne,Südstr. 8,02323-16-2580,strassenverkehrsamt@herne.de
+08115-e1,Herrenberg,BW,LRA Böblingen Nebenstelle,71083,Herrenberg,Berliner Str. 1,07032-9276-10,zulassung@lrabb.de
+07338-e2,Heßheim,RP,LK Rhein-Pfalz-Kreis Nebenstelle,67258,Heßheim,Hauptstr. 14,06233-7707-0,info@vghessheim.de
+16069-,Hildburghausen,TH,LRA Hildburghausen,98646,Hildburghausen,Wiesenstr. 18,03685-445-0,kfz-zulassung@lrahbn.thueringen.de
+03254-,Hildesheim,NI,LK Hildesheim,31135,Hildesheim,Bavenstedter Str. 50,05121-309-0,zulassungsstelle@landkreishildesheim.de
+09572-e1,Höchstadt a. d. Aisch,BY,LRA Erlangen-Höchstadt Nebenstelle,91315,Höchstadt a.d.Aisch,Schlossberg 10,09193-20-503,zulassung@erlangen-hoechstadt.de
+06633-e2,Hofgeismar,HE,LK Kassel Nebenstelle,34369,Hofgeismar,Garnisonstr. 6,0561-115,Kfz-zulassung-hofgeismar@kassel.de
+09674-e2,Hofheim,BY,LRA Haßberge Nebenstelle,97461,Hofheim (Ufr),Obere Sennigstr. 4,09523-7829,zulassung.hofheim@lra-has.bayern.de
+06436-,Hofheim am Taunus,HE,LK Main-Taunus-Kreis,65719,Hofheim am Taunus,In den Nassen 2,06192-205-0,strassenverkehrsamt@mtk.org
+09475-,Hof(Land),BY,LRA Hof,95032,Hof,Schaumbergstr. 14,09281-57-0,zulassung@lra-ho.bayern.de
+09464-,Hof(Stadt),BY,Stadt Hof,95032,Hof,Erlhofer Str. 75,09281-815-0,verkehrsaufsicht@hof.bayern.de
+01058-e3,Hohenwestedt,SH,LK Rendsburg-Eckernförde Nebenstelle,24594,Hohenwestedt,Am Markt 17,04871 36-5312,zulassungsbehoerde@kreis-rd.de
+03255-,Holzminden,NI,LK Holzminden,37603,Holzminden,Rehwiese 35,05531-707-572,zulassung@landkreis-holzminden.de
+06634-,Homberg/Efze,HE,LK Schwalm-Eder-Kreis,34576,Homberg/Efze,Hans-Scholl-Str. 1,05681-775-389,kfz-zulassungsbehoerde@schwalm-eder-kreis.de
+10045-,Homburg,SL,LK Saarpfalz-Kreis,66424,Homburg,Am Forum 1,06841-104-7190,zulassung@saarpfalz-kreis.de
+08237-e1,Horb a.N.,BW,LRA Freudenstadt Nebenstelle,72160,Horb am Neckar,Ihlinger Str. 79,07451-907-1750,kfz-zulassung@kreis-fds.de
+05762-,Höxter,NW,LK Höxter,37671,Höxter,Moltkestr. 12,05271-965-1401,zulassung@kreis-hoexter.de
+14625-e2,Hoyerswerda,SN,LK Bautzen Nebenstelle,02977,Hoyerswerda,Dillinger Str. 1,03571-4741-36241,kfz-zulassung@lra-bautzen.de
+05374-e1,Hückeswagen,NW,LK Oberbergischer Kreis Nebenstelle,42499,Hückeswagen,Bahnhofstr. 14,02192-6263,info36a@obk.de
+06631-e1,Hünfeld,HE,LK Fulda Nebenstelle,36088,Hünfeld,Am Anger 4,06652-181-15,zulassung-huenfeld@landkreis-fulda.de
+05362-e1,Hürth,NW,LK Rhein-Erft-Kreis Nebenstelle,50354,Hürth,Hürth Park B100,02271-83-0,zulassung@rhein-erft-kreis.de
+01054-,Husum,SH,LK Nordfriesland,25813,Husum,Marktstr. 6,04841-67-275,zulassung@nordfriesland.de
+07134-1,Idar-Oberstein,RP,Stadt Idar-Oberstein,55743,Idar-Oberstein,Georg-Maus-Str. 1,0678164159,kfzzulassung@idar-oberstein.de
+06439-e1,Idstein,HE,LK Rheingau-Taunus-Kreis Nebenstelle,65510,Idstein,Black- und Decker Str. 28,06126 2270-9238,zulassung@rheingau-taunus.de
+09775-e1,Illertissen,BY,LRA Neu-Ulm Nebenstelle,89257,Illertissen,Ulmer Str. 20,07303-9644-0,zulassungsstelle@lra.neu-ulm.de
+09161-,Ingolstadt,BY,Stadt Ingolstadt,85055,Ingolstadt,Wiechertstr. 1,0841-305-1790,Zulassungsstelle@ingolstadt.bayern.de
+05962-e1,Iserlohn,NW,Märkischer Kreis Nebenstelle,58640,Iserlohn,Griesenbraucker Str. 6,02371-966-8611,buergerbuero-is@maerkischer-kreis.de
+16053-,Jena,TH,Stadt Jena,07743,Jena,Engelplatz 1,03641-49-3800,kfz@jena.de
+15091-e2,Jessen,ST,LK Wittenberg Nebenstelle,06917,Jessen,Markt 17-19,03491-479-600,strassenverkehrsamt@landkreis.wittenberg.de
+03455-,Jever,NI,LK Friesland,26441,Jever,Am Bullhamm 13,04461-919-8787,zulassungsstelle@friesland.de
+05358-e1,Jülich,NW,LK Düren Nebenstelle,52428,Jülich,Düsseldorfer Str. 6,02421-221030900,sva@kreis-dueren.de
+07233-e1,Jünkerath,RP,LK Vulkaneifel Nebenstelle,54584,Jünkerath,Rathausplatz 1,06597-16-134,kfz-zulassung@vulkaneifel.de
+07335-,Kaiserslautern,RP,LK Kaiserslautern,67657,Kaiserslautern,Lauterstr. 8,0631-7105-0,zulassungsbehoerde@kaiserslautern-kreis.de
+07335-e1,Kaiserslautern(Land),RP,LK Kaiserslautern Nebenstelle,66849,Landstuhl,Bruchwiesenstr. 31,0631-7105-368,info@kaiserslautern-kreis.de
+07312-,Kaiserslautern(Stadt),RP,Stadt Kaiserslautern,67663,Kaiserslautern,Merkurstr. 45,0631-365-2927,kraftfahrzeugwesen.kaiserslautern@poststelle.rlp.de
+14625-,Kamenz,SN,LRA Bautzen,01917,Kamenz,Macherstr. 55,03591 5251 36290,kfz-zulassung@lra-bautzen.de
+07334-e1,Kandel,RP,LK Germersheim Nebenstelle,76870,Kandel,Gartenstr. 8,07275-960-146,kreisverwaltung@kreis-germersheim.de
+06440-e2,Karben,HE,LK Wetteraukreis Nebenstelle,61184,Karben,Sauerbornstr. 12-14,06039-931-451,-
+08215-,Karlsruhe(Land),BW,LRA Karlsruhe,76133,Karlsruhe,Kriegsstr. 100,0721-936-78770,kfz.zulassung@landratsamt-karlsruhe.de
+08212-,Karlsruhe(Stadt),BW,Stadt Karlsruhe,76135,Karlsruhe,Steinhäuserstr. 22,0721-133-3383,zulassungsstelle@oa.karlsruhe.de
+09677-,Karlstadt,BY,LRA Main-Spessart,97753,Karlstadt,Marktplatz 8,09353-793-1433,Info@Lramsp.de
+06633-,Kassel,HE,LK Kassel,34123,Kassel,Ölmühlenweg 4,0561-115,Kfz-zulassung@kassel.de
+06611-,Kassel(Stadt),HE,Stadt Kassel,34123,Kassel,Ölmühlenweg 4,0561-787-787,Kfz-zulassung@kassel.de
+09762-,Kaufbeuren,BY,Stadt Kaufbeuren,87600,Kaufbeuren,Am Graben 3,08341-437-320,zulassungsbehoerde@kaufbeuren.de
+08317-e2,Kehl,BW,LRA Ortenaukreis Nebenstelle,77694,Kehl,Herderstr. 1,07851-9487-5200,zulassungsbehoerde@ortenaukreis.de
+09273-,Kelheim,BY,LRA Kelheim,93309,Kelheim,Donaupark 12,09441-207-0,zulassungsstelle@lra-keh.bayern.de
+09377-e1,Kemnath,BY,LRA Tirschenreuth Nebenstelle,95478,Kemnath,Stadtplatz 38,09642-70733,strassenverkehrsbehoerde@lra-tir.bayern.de
+05166-e1,Kempen,NW,LK Viersen Nebenstelle,47906,Kempen,Heinrich-Horten-Str. 4b,02152-2052-0,zulassungsstelle@kreis-viersen.de
+09763-,Kempten (Allgäu) Stadt,BY,Stadt Kempten,87435,Kempten (Allgäu),Bahnhofstr. 80,0831-2525-3400,buergerservice-zulassung@kempten.de
+09780-e1,Kempten (LRA),BY,LRA Oberallgäu Nebenstelle,87435,Kempten,Bahnhofstr. 80,0831-2525-3400,buergerservice-zulassung@kempten.de
+01002-,Kiel,SH,Stadt Kiel,24113,Kiel,Saarbrückenstr. 147,0431-901-2037,kfz-zulassung@kiel.de
+07132-e1,Kirchen,RP,LK Altenkirchen Nebenstelle,57548,Kirchen-Sieg,Lindenstr. 1,02741-688-810,vg-kirchen@kirchen-sieg.de
+07333-,Kirchheimbolanden,RP,LK Donnersbergkreis,67292,Kirchheimbolanden,Uhlandstr. 2,06352-710-230,zulassungsstelle@donnersberg.de
+05512-e1,Kirchhellen,NW,Stadt Bottrop Nebenstelle,46244,Bottrop-Kirchhellen,Kirchhellener Ring 84-86,02045-9629-11,buergerbuero-kirchhellen@bottrop.de
+07133-e1,Kirn,RP,LK Bad Kreuznach Nebenstelle,55606,Kirn,Bahnhofstr. 27,0671-803-1350,post@kreis-badkreuznach.de
+09675-,Kitzingen,BY,LRA Kitzingen,97318,Kitzingen,Kaiserstr. 4,09321-928-4310,kfz@kitzingen.de
+05154-,Kleve,NW,LK Kleve,47533,Kleve,Fleischhauerstr. 10,02821-85-521,strassenverkehr@kreis-kleve.de
+07111-,Koblenz,RP,Stadt Koblenz,56073,Koblenz,Blücherstr. 40,0261-129-4420,zulassungsbehoerde@stadt.koblenz.de
+05315-,Köln,NW,Stadt Köln,51105,Köln,Max-Glomsda-Str. 4,0221-221-26635,kfz-zulassung@stadt-koeln.de
+08335-,Konstanz,BW,LK Konstanz,78467,Konstanz,Max-Stromeyer-Str. 47,07531-800-1955,zulassungsstellekonstanz@lrakn.de
+06635-,Korbach,HE,LK Waldeck-Frankenberg,34497,Korbach,Südring 2,05631-954-128,verkehr@landkreis-waldeck-frankenberg.de
+15082-,Köthen,ST,LK Anhalt-Bitterfeld,06366,Köthen (Anhalt),Am Flugplatz 1,03496-60 1947,zulassung@anhalt-bitterfeld.de
+05114-,Krefeld,NW,Stadt Krefeld,47800,Krefeld,Elbestr. 7,02151-86463200,kfz-zulassung@krefeld.de
+09476-,Kronach,BY,LRA Kronach,96317,Kronach,Güterstr. 18,09261-678-0,poststelle@lra-kc.bayern.de
+09774-e1,Krumbach,BY,LRA Günzburg Nebenstelle,86370,Krumbach,Robert-Steiger-Str. 5,08282-889444,info@lra-gz.bayern.de
+09477-,Kulmbach,BY,LRA Kulmbach,95326,Kulmbach,Konrad-Adenauer-Str. 5,09221-707-0,zulassung@Landkreis-Kulmbach.de
+08126-,Künzelsau,BW,LRA Hohenlohekreis,74653,Künzelsau,Allee 17,07940 18 500,KFZPOST@Hohenlohekreis.de
+07336-,Kusel,RP,LK Kusel,66869,Kusel,Trierer Str. 49-51,06381-424 0,kfz-stelle@kv-kus.de
+07141-1,Lahnstein,RP,Stadt Lahnstein,56112,Lahnstein,Westallee 5,-,servicecenter@lahnstein.de
+07141-e2,Lahnstein a. Rh.,RP,LK Rhein-Lahn-Kreis Nebenstelle,56112,Lahnstein,Westallee 5-7,02621-914-700,servicecenter@lahnstein.de
+08317-e3,Lahr,BW,LRA Ortenaukreis Nebenstelle,77933,Lahr,Raiffeisenstr. 9,07821-92373-30,zulassungsbehoerde@ortenaukreis.de
+07332-e3,Lambrecht,RP,LK Bad Dürkheim Nebenstelle,67466,Lambrecht,Sommerbergstr. 3,06322-961-330,info@kreis-bad-duerkheim.de
+07313-,Landau,RP,Stadt Landau,76829,Landau,An der Kreuzmühle 2,06341-940 309,kfz.zulassung@suedliche-weinstrasse.de
+09279-e1,Landau a.d. Isar,BY,LRA Dingolfing-Landau Nebenstelle,94405,Landau a.d.Isar,Viehmarktstr. 3,09951-2922,zulassungsstelle@landkreis-dingolfing-landau.de
+07337-,Landau i. d. Pfalz,RP,LK Südliche Weinstraße,76829,Landau,An der Kreuzmühle 2,06341-940-309,info@suedliche-weinstrasse.de
+09181-,Landsberg am Lech,BY,LRA Landsberg am Lech,86899,Landsberg am Lech,Von-Kühlmann-Str. 15,08191-129-1336,zulassungsstelle@lra-ll.bayern.de
+09274-,Landshut(Land),BY,LRA Landshut,84051,Essenbach,Josef-Neumeier-Allee 1,08703-9073-3411,zulassung@landkreis-landshut.de
+09261-,Landshut(Stadt),BY,Stadt Landshut,84030,Landshut,Alte Regensburger Str. 11,0871-88-2545,kfz-zulassungsstelle@landshut.de
+06438-e1,Langen,HE,LK Offenbach Nebenstelle,63225,Langen,Südliche Ringstr. 80,06103-203-770,buergerbuero@langen.de
+08425-e2,Langenau,BW,LK Alb-Donau-Kreis Nebenstelle,89129,Langenau,Kuftenstr. 19,07345-9640-761,zulassungsstelle.langenau@alb-donau-kreis.de
+05158-e1,Langenfeld,NW,LK Mettmann Nebenstelle,40764,Langenfeld,Konrad-Adenauer-Platz 1,02173-98865-0,sva.langenfeld@kreis-mettmann.de
+09574-,Lauf an der Pegnitz,BY,LRA Nürnberger Land,91207,Lauf a.d.Pegnitz,Waldluststr. 1,09123-950-6348,zulassung@nuernberger-land.de
+06535-,Lauterbach,HE,LK Vogelsbergkreis,36341,Lauterbach,Bahnhofstr. 79,06641-977-971,zulassung@vogelsbergkreis.de
+03457-,Leer,NI,LK Leer,26789,Leer,Deichstr. 26,0491-926-1410,kfz@lkleer.de
+14713-,Leipzig(Stadt),SN,Stadt Leipzig,04317,Leipzig,Prager Str. 136,0341-123-8464,zulassung@leipzig.de
+05966-e1,Lennestadt,NW,LK Olpe Nebenstelle,57368,Lennestadt,Thomas-Morus-Platz 1,02723-608-474,kfz-zulassung@kreis-Olpe.de
+09176-e2,Lenting,BY,LRA Eichstätt Nebenstelle,85101,Lenting,Bahnhofstraße 16,08421-70-4001,zulassung@lra-ei.bayern.de
+08115-e2,Leonberg,BW,LRA Böblingen Nebenstelle,71229,Leonberg,Rutesheimer Str. 50/8,07152-3001 3,zulassung@lrabb.de
+08436-e2,Leutkirch,BW,LRA Ravensburg Nebenstelle,88299,Leutkirch im Allgäu,Wangener Str. 70,075185-1414,buergerbuero@rv.de
+05316-,Leverkusen,NW,Stadt Leverkusen,51379,Leverkusen,Haus-Vorster-Str. 8,0214-406-36413,zulassung@stadt.leverkusen.de
+09478-,Lichtenfels,BY,LRA Lichtenfels,96215,Lichtenfels,Kronacher Str. 28-30,09571-18-9010,zulassungsstelle@lra-lif.bayern.de
+06533-,Limburg-Weilburg,HE,LK Limburg-Weilburg,65549,Limburg,Westerwaldstr. 111,06431-296-716,zulassung@limburg-weilburg.de
+09776-,Lindau,BY,LRA Lindau,88131,Lindau,Heuriedweg 38,08382-961-340,zulassungsstelle@lra-li.bayern.de
+03454-e2,Lingen,NI,LK Emsland Nebenstelle,49808,Lingen,Am Wall Süd 21,05931-84-3304,landkreis@emsland.de
+05111-1,Linnich,NW,LZDP NRW,52441,Linnich,Rurallee 20,0203-4175-33480,ZenZuPol.LZPD@polizei.nrw.de
+06435-,Linsengericht,HE,LRA Main-Kinzig-Kreis,63589,Linsengericht,Im Niederfeld,06051-85-14240,zulassung@mkk.de
+05974-e1,Lippstadt,NW,LK Soest Nebenstelle,59558,Lippstadt,Mastholter Str. 230b,02921-30-3610,zulassungen-lippstadt@kreis-soest.de
+09677-e1,Lohr am Main,BY,LRA Main-Spessart Nebenstelle,97816,Lohr a. Main,Schloßplatz 1,09353-793-2100,zulassungsstelle@lramsp.de
+08336-,Lörrach,BW,LRA Lörrach,79539,Lörrach,Brombacher Str. 93,07621-410-3460,kfzzulassung@loerrach-landkreis.de
+05770-e1,Lübbecke,NW,LK Minden Lübbecke Nebenstelle,32312,Lübbecke,Westerbachstraße 31,0571 80715840,zulassung@minden-luebbecke.de
+12061-e1,Lübben,BB,LK Dahme-Spreewald Nebenstelle,15907,Lübben,Weinbergstr. 1,03546-2019-11,strassenverkehrsamt@dahme-spreewald.de
+01003-,Lübeck,SH,Stadt Lübeck,23566,Lübeck,Meesenring 7,0451-122-3330,kfz-zulassungsbehoerde@luebeck.de
+03354-,Lüchow-Dannenberg,NI,LK Lüchow-Dannenberg,29439,Lüchow,Königsberger Str. 10,05841-120-709,info@luechow-dannenberg.de
+12072-,Luckenwalde,BB,LK Teltow-Fläming,14943,Luckenwalde,Louis-Pasteur-Str. 5,03377-305-851,strassenverkehrsamt@teltow-flaeming.de
+05962-e2,Lüdenscheid,NW,Märkischer Kreis Nebenstelle,58509,Lüdenscheid,Heedfelder Str. 45,02351-966-60,buergerbuero-ld@maerkischer-kreis.de
+05558-e1,Lüdinghausen,NW,LK Coesfeld Nebenstelle,59348,Lüdinghausen,Selmer Straße 75,02591-9183-3630,kfz.zulassung@kreis-coesfeld.de
+08118-,Ludwigsburg,BW,LRA Ludwigsburg,71638,Ludwigsburg,Hindenburgstr. 40,07141-144-2066,kfz.zulassung@landkreis-ludwigsburg.de
+07338-,Ludwigshafen,RP,LK Rhein-Pfalz-Kreis,67063,Ludwigshafen,Europaplatz 5,0621-5909-6081,zulassung@rheinpfalzkreis.de
+07314-,Ludwigshafen(Stadt),RP,Stadt Ludwigshafen,67065,Ludwigshafen am Rhein,Achtmorgenstr. 9,0621-504-2421,kfz-zulassung@ludwigshafen.de
+13076-,Ludwigslust,MV,LK Ludwigslust-Parchim,19288,Ludwigslust,Garnisonsstr. 1,03871-115,Buergerservice@kreis-lup.de
+03355-,Lüneburg,NI,LK Lüneburg,21335,Lüneburg,Am Springintgut 3,04131-26-1239,zulassung@landkreis-lueneburg.de
+05978-e1,Lünen,NW,LK Unna Nebenstelle,44532,Lünen,Viktoriastr. 5,02306-100-350,zulassungsstelle@kreis-unna.de
+15003-,Magdeburg,ST,Stadt Magdeburg,39114,Magdeburg,Tessenowstr. 15,0391-540-4404,strassenverkehrsabteilung@magdeburg.de
+09273-e1,Mainburg,BY,LRA Kelheim Nebenstelle,84048,Mainburg,Regensburger Str. 1,08751-865-121,pia.heinrich@lra-keh.bayern.de
+07315-,Mainz,RP,Stadt Mainz,55129,Mainz,Elly-Beinhorn-Str. 16,06131-12-2424,Zulassungsstelle@stadt.mainz.de
+07339-,Mainz-Bingen,RP,LK Mainz-Bingen,55411,Bingen am Rhein,Alfred-Nobel-Str. 2a,06721-9171-0,kfz@mainz-bingen.de
+08222-,Mannheim,BW,Stadt Mannheim,68163,Mannheim,Gerd-Dehof-Platz 1,0621-293-6850,buergerservice@mannheim.de
+06534-,Marburg-Biedenkopf,HE,LK Marburg-Biedenkopf,35043,Marburg-Cappel,Im Lichtenholz 60,06421-405-0,kfz-zulassung@marburg-biedenkopf.de
+14521-e2,Marienberg,SN,LRA Erzgebirgskreis Nebenstelle,09496,Marienberg,Schillerlinde 6,03735-601-5397,zulassungsbehoerde@kreis-erz.de
+09677-e2,Marktheidenfeld,BY,LRA Main-Spessart Nebenstelle,97828,Marktheidenfeld,Petzoltstr. 21,09353-793-3102,verkehrsbehoerde@lramsp.de
+09777-,Marktoberdorf,BY,LRA Ostallgäu,87616,Marktoberdorf,Schwabenstr. 11,08342-911-444,buergerservice@lra-oal.bayern.de
+05562-e1,Marl,NW,LK Recklinghausen Nebenstelle,45770,Marl,Stettiner Str. 10,02361-53-7012,strassenverkehrsamt@kreis-re.de
+07137-e2,Mayen,RP,LK Mayen-Koblenz Nebenstelle,56727,Mayen,Auf der Eich 40,02651-8003-60,kfzzulassungmayen@kvmyk.de
+07137-,Mayen-Koblenz,RP,LK Mayen-Koblenz,56068,Koblenz,Bahnhofstr. 9,0261-108-310,kfzzulassungkoblenz@kvmyk.de
+05382-e1,Meckenheim,NW,LK Rhein-Sieg-Kreis Nebenstelle,53340,Meckenheim,Kalkofenstr. 2,02225-9409-5030,kfz-zulassung@rhein-sieg-kreis.de
+05162-e3,Meerbusch,NW,LK Rhein-Kreis Neuss Nebenstelle,40667,Meerbusch (Büderich),Dorfstr. 20,02132-916-370,strassenverkehrsamt@rhein-kreis-neuss.de
+16066-,Meiningen,TH,LRA Schmalkalden-Meiningen,98617,Meiningen,Charlottenstraße 5a,03693-485 7100,zulassung@lra-sm.de
+14627-,Meißen,SN,LK Meißen,01662,Meißen,Brauhausstr. 21,03521-725-1502,kreisverkehrsamt@kreis-meissen.de
+03459-e4,Melle,NI,LK Osnabrück Nebenstelle,49324,Melle,Schürenkamp 16,05422-965-0,zulassungsstelle@stadt-melle.de
+09673-e2,Mellrichstadt,BY,LRA Rhön-Grabfeld Nebenstelle,97638,Mellrichstadt,Hauptstr. 4,09776-466,kfz@rhoen-grabfeld.de
+06634-e2,Melsungen,HE,LK Schwalm-Eder-Kreis Nebenstelle,34212,Melsungen,Sandstr. 13,05661-708-205,zulassungsstelle@melsungen.de
+09764-,Memmingen,BY,Stadt Memmingen,87700,Memmingen,St.-Ulrich-Platz 1,08331-850310,zulassung@memmingen.bayern.de
+09778-e1,Memmingen,BY,LRA Unterallgäu Nebenstelle,87700,Memmingen,Herrenstr. 15,08331-8203-0,kfz@lra-mn.bayern.de
+03454-e3,Meppen,NI,LK Emsland,49716,Meppen,Ordeniederung 1,05931-44-0,landkreis@emsland.de
+15088-,Merseburg,ST,LK Saalekreis,06217,Merseburg,Weißenfelser Str. 46a-c,03461-40-1801,strassenverkehrsamt@saalekreis.de
+10042-,Merzig-Wadern,SL,LK Merzig-Wadern,66663,Merzig,Bahnhofstr. 44,06861-80-300,zulassung@merzig-wadern.de
+05958-e3,Meschede,NW,Hochsauerlandkreis,59872,Meschede,Steinstr. 27,0291-94-0,kfz-zulassung-ar@hochsauerlandkreis.de
+05158-,Mettmann,NW,LK Mettmann,40822,Mettmann,Düsseldorfer Str. 26,02104-99-0,sva-stabsstelle@kreis-mettmann.de
+09182-,Miesbach,BY,LRA Miesbach,83714,Miesbach,Rosenheimer Str. 4,08025-704-3120,zulassung@lra-mb.bayern.de
+09676-,Miltenberg,BY,LRA Miltenberg,63897,Miltenberg,Brückenstr. 2,09371-501-153,zulassung@lra-mil.bayern.de
+09778-,Mindelheim,BY,LRA Unterallgäu,87719,Mindelheim,Bad Wörishofer Str. 33,08261-995-0,kfz@lra-mn.bayern.de
+05770-,Minden-Lübbecke,NW,LK Minden-Lübbecke,32423,Minden,Portastr. 21,0571-807-0,strassenverkehrsamt@minden-luebbecke.de
+14522-e2,Mittweida,SN,LK Mittelsachsen Nebenstelle,09648,Mittweida,Am Landratsamt 3,03727-950-6674,kfz.zulassung@landkreis-mittelsachsen.de
+05170-e1,Moers,NW,LK Wesel Nebenstelle,47441,Moers,Mühlenstr. 15,02841-202-1234,zs@kreis-wesel.de
+05116-,Mönchengladbach,NW,Stadt Mönchengladbach,41065,Mönchengladbach,Rheinstr. 70,02161-686-4510,zulassungsbehoerde@moenchengladbach.de
+07143-,Montabaur,RP,LK Westerwaldkreis,56410,Montabaur,Peter-Altmeier-Platz 1,02602-124-330,zulassungsstelle@westerwaldkreis.de
+09178-1,Moosburg a. d. Isar,BY,Stadt Moosburg a.d. Isar,85368,Moosburg a.d.Isar,Sudetenlandstr. 14,08761-684-23,zulassung@moosburg.de
+07231-e2,Morbach,RP,LK Bernkastel-Wittlich Nebenstelle,54497,Morbach,Bahnhofstr. 19,06533-71-203,zulassungsbehoerde@bernkastel-wittlich.de
+08236-e1,Mühlacker,BW,LRA Enzkreis Nebenstelle,75417,Mühlacker,Vetterstr. 21,07041-9583-10,zulassungsbehoerde@enzkreis.de
+09183-,Mühldorf a.Inn,BY,LRA Mühldorf a.Inn,84453,Mühldorf a.Inn,Nordtangente 10b,08631-699-606,zulassung@lra-mue.de
+16064-,Mühlhausen,TH,LRA Unstrut-Hainich-Kreis,99974,Mühlhausen,Lindenhof 1,03601-801627,kfz@uh-kreis.de
+06438-e2,Mühlheim am Main,HE,LK Offenbach Nebenstelle,63165,Mühlheim a.Main,Friedensstr. 20,06108-601-950,zulassungsstelle@stadt-muehlheim.de
+05117-,Mülheim a.d. Ruhr,NW,Stadt Mülheim a.d.Ruhr,45468,Mülheim a.d.Ruhr,Löhstr. 22-26,0208-455-0,buergeramt@muelheim-ruhr.de
+08315-e1,Müllheim,BW,LRA Breisgau-Hochschwarzwald Nebenstelle,79379,Müllheim,Bismarckstr. 3,0761 2187-6313,kfzzulassung@lkbh.de
+09162-,München(Stadt),BY,Stadt München,80686,München,Eichstätter Str. 2,089-233-96090,zulassung.kvr@muenchen.de
+08415-e1,Münsingen,BW,LRA Reutlingen Nebenstelle,72525,Münsingen,Schloßhof 1,07381-9397-7421,kfz-zulassung@kreis-reutlingen.de
+05515-,Münster,NW,Stadt Münster,48157,Münster,Rudolf-Diesel-Str. 5-7,0251-492-3511,kfz-zulassung@stadt-muenster.de
+07141-e3,Nastätten,RP,LK Rhein-Lahn-Kreis Nebenstelle,56355,Nastätten,Pestalozzistr. 2,06772-962-145,kvbadems@rhein-lahn.rlp.de
+15084-,Naumburg,ST,LK Burgenlandkreis,06618,Naumburg (Saale),Schönburger Str. 41,03445-73-1515,strassenverkehrsamt@blk.de
+08225-,Neckar Odenwaldkreis,BW,LRA Neckar-Odenwald-Kreis,74821,Mosbach,Neckarelzerstr. 7,06261-8413-31,strassenverkehrsbehoerde@neckar-odenwald-kreis.de
+13071-3,Neubrandenburg,MV,Stadt Neubrandenburg,17033,Neubrandenburg,Friedrich-Engels-Ring 53,0395-555-1224,kfz@neubrandenburg.de
+13071-1,Neubrandenburg,MV,LK Mecklenburgische Seenplatte,17033,Neubrandenburg,Friedrich-Engels-Ring 53,0395-57087-3417,zulassung@lk-seenplatte.de
+09185-,Neuburg-Schrobenhausen,BY,LRA Neuburg-Schrobenhausen,86633,Neuburg a.d.Donau,Platz der Deutschen Einheit 1,08431-57-0,zulassungsstelle@lra-nd.bayern.de
+09373-,Neumarkt,BY,LRA Neumarkt i.d.Opf.,92318,Neumarkt i.d.Opf.,Nürnberger Str. 1,09181-470-470,kfzmitteilungen@landkreis-neumarkt.bayern.de
+01004-,Neumünster,SH,Stadt Neumünster,24534,Neumünster,Plöner Str. 27,04321-942-2460,zulassungsstelle@neumuenster.de
+10043-,Neunkirchen,SL,LK Neunkirchen,66538,Neunkirchen,Saarbrücker Str. 1,06824-906-7011,kfz@landkreis-neunkirchen.de
+12068-,Neuruppin,BB,LK Ostprignitz-Ruppin,16816,Neuruppin,Heinrich-Rau-Str. 27-30,03391-688-3631,kfz@opr.de
+05162-,Neuss,NW,LK Rhein-Kreis Neuss,41460,Neuss,Oberstr. 91,02131-928-9090,strassenverkehrsamt@rhein-kreis-neuss.de
+09374-,Neustadt a. d. Waldnaab,BY,LRA Neustadt a.d.Waldnaab,92660,Neustadt a.d. Waldnaab,Stadtplatz 38,09602-7933-11,verkehrswesen@lra-new.bayern.de
+07316-,Neustadt a. d. Weinstr.,RP,Stadt Neustadt a.d. Weinstraße,67433,Neustadt a.d.Weinstraße,Hindenburgstr. 9a,06321-855-420,kfz-zulassung@neustadt.eu
+09575-,Neustadt a.d.Aisch,BY,LRA Neustadt a.d.Aisch,91413,Neustadt a.d.Aisch,Konrad-Adenauer Str. 1,09161-92-3311,verkehrswesen@kreis-nea.de
+13071-e2,Neustrelitz,MV,LK Mecklenburgische Seenplatte Nebenstelle,17235,Neustrelitz,Woldegker Chaussee 35,0395-57087-3700,buergerbuero-ntz@lk-seenplatte.de
+09775-,Neu-Ulm,BY,LRA Neu-Ulm,89231,Neu-Ulm,Kantstr. 8,0731-7040-0,zulassungsstelle@lra.neu-ulm.de
+07138-,Neuwied(Land),RP,LK Neuwied,56564,Neuwied,Wilhelm-Leuschner-Str. 9,02631-803-245,zulassung@kreis-neuwied.de
+07138-1,Neuwied(Stadt),RP,Stadt Neuwied,56564,Neuwied,Engerser Landstr. 17,02631-802-777,buergerbuero@neuwied.de
+06440-e3,Nidda,HE,LK Wetteraukreis Nebenstelle,63667,Nidda,Wilhelm-Eckhardt-Platz,06043-8006-121,kfz@nidda.de
+01054-e1,Niebüll,SH,LK Nordfriesland Nebenstelle,25899,Niebüll,Gather Landstr. 75,04661-903-1168,info@nordfriesland.de
+03256-,Nienburg,NI,LK Nienburg a.d.Weser,31582,Nienburg a.d.Weser,Kräher Weg 60,05021-967-700,kfz@kreis-ni.de
+03452-e1,Norden,NI,LK Aurich Nebenstelle,26506,Norden,Stellmacher Str. 23,04941-16-3630,ingrid.evers@landkreis-aurich.de
+01060-e1,Norderstedt,SH,LK Segeberg Nebenstelle,22844,Norderstedt,Oststr. 20,04551-951-8600,norderstedt-zulassung@segeberg.de
+16062-,Nordhausen,TH,LRA Nordhausen,99734,Nordhausen,Behringstraße 3,03631-911-9119,bsz-info@lrandh.thueringen.de
+09779-e1,Nördlingen,BY,LRA Donau-Ries Nebenstelle,86720,Nördlingen,Bürgermeister-Reiger-Straße 5,0906-74-6821,zulassungsbehoerde@lra-donau-ries.de
+03155-,Northeim,NI,LK Northeim,37154,Northeim,von-Menzel-Str. 7,05551-708-81529,zulassungsbehoerde@landkreis-northeim.de
+09564-,Nürnberg,BY,Stadt Nürnberg,90489,Nürnberg,Rathenauplatz 18,0911-231-0,oa1@stadt.nuernberg.de
+09564-e1,Nürnberg - Ost,BY,Stadt Nürnberg-Ost Nebenstelle,90475,Nürnberg,Fischbacher Hauptstr. 121,0911-231-3924,bao@stadt.nuernberg.de
+09564-e2,Nürnberg - Süd,BY,Stadt Nürnberg-Süd Nebenstelle,90455,Nürnberg,Hans-Traut-Str. 8,0911-231-3687,bas-zulassung@stadt.nuernberg.de
+05119-,Oberhausen,NW,Stadt Oberhausen,46145,Oberhausen,Bahnhofstr. 66,0208-825-9007,zulassungsstelle@oberhausen.de
+06432-e4,Ober-Ramstadt,HE,LK Darmstadt-Dieburg Nebenstelle,64372,Ober-Ramstadt,Darmstädter Str. 66-68,06154-702-83,kfz-zulassung@ladadi.de
+12066-,Oberspreewald-Lausitz,BB,LK Oberspreewald-Lausitz,03205,Calau,Cottbusser Str. 26,03541-870-3200,kfz-zulassung@osl-online.de
+09376-e1,Oberviechtach,BY,LRA Schwandorf Nebenstelle,92526,Oberviechtach,Bezirksamtstr. 5,09671-2783,zulassung@lra-sad.bayern.de
+09679-e1,Ochsenfurt,BY,LRA Würzburg Nebenstelle,97199,Ochsenfurt,Kellereistr. 8,0931-902-204,-
+12067-,Oder-Spree,BB,LK Oder-Spree,15517,Fürstenwalde,Hegelstr. 23 A,03361-599-3050,strassenverkehrsamt@landkreis-oder-spree.de
+06413-,Offenbach(Stadt),HE,Stadt Offenbach a. Main,63065,Offenbach a.Main,Berliner Str. 100,069-8065-4222,buergerbuero@offenbach.de
+08317-,Offenburg,BW,LRA Ortenaukreis,77652,Offenburg,Badstr. 20,0781-805-1225,zulassungsbehoerde@ortenaukreis.de
+03403-,Oldenburg(Stadt),NI,Stadt Oldenburg,26121,Oldenburg (Oldb),Stiller Weg 10,0441-235-2758,buergerbuero-nord@stadt-oldenburg.de
+05966-,Olpe,NW,LK Olpe,57462,Olpe,Westfälische Str. 75,02761-81-485,kfzsachbearbeitung@kreis-olpe.de
+07339-e1,Oppenheim,RP,LK Mainz-Bingen Nebenstelle,55276,Oppenheim,Sant-Ambrogio-Ring 11,06133-9403-5261,kfz@mainz-bingen.de
+12065-,Oranienburg,BB,LK Oberhavel,16515,Oranienburg,Adolf-Dechert-Str. 1,03301-601-5900,Zulassung@oberhavel.de
+14730-e2,Oschatz,SN,LRA Nordsachsen Nebenstelle,04758,Oschatz,Friedrich-Naumann-Promenade 9,03435-984-0,ralf.thiele@lra-nordsachsen.de
+03459-,Osnabrück(Kreis),NI,LK Osnabrück,49082,Osnabrück,Am Schölerberg 1,0541-501-20 000,zulassungsstelle@lkos.de
+03404-,Osnabrück(Stadt),NI,Stadt Osnabrück,49074,Osnabrück,Natruper-Tor-Wall 2,0541-323-333-2,Kfz-zulassung@osnabrueck.de
+03356-,Osterholz-Scharmbeck,NI,LK Osterholz,27711,Osterholz-Scharmbeck,Osterholzer Str. 23,04791-930-2001,zulassungsstelle@landkreis-osterholz.de
+03159-e4,Osterode am Harz,NI,LK Göttingen,37520,Osterode am Harz,Bergstr. 10,05522-960-4361,zulassungsbehoerde@landkreisgoettingen.de
+05774-,Paderborn,NW,LK Paderborn,33102,Paderborn,An der Talle 7,05251-308-3699,strassenverkehrsamt@kreis-paderborn.de
+13076-e3,Parchim,MV,LK Ludwigslust-Parchim Nebenstelle,19370,Parchim,Putlitzer Str. 25,03871-115,Buergerservice@kreis-lup.de
+09373-e1,Parseberg,BY,LRA Neumarkt i.d. Opf. Nebenstelle,92331,Parsberg,Alte-Seer-Str. 2,09492-900030,kfzmitteilungen@landkreis-neumarkt.bayern.de
+13075-e1,Pasewalk,MV,LK Vorpommern-Greifswald Nebenstelle,17309,Pasewalk,An der Kürassierkaserne 9,03834-8760-3690,kfz@kreis-vg.de
+09275-,Passau(Land),BY,LRA Passau,94121,Salzweg,Passauer Str. 39,0851-397-700,kfz-zulassung@lra-pa.bayern.de
+09262-,Passau(Stadt),BY,Stadt Passau,94036,Passau,Vornholzstr. 40,0851-396-100,kfz-zulassungsbehoerde@passau.bayern.de
+03157-,Peine,NI,LK Peine,31226,Peine,Werner-Nordmeyer-Str. 17,05171-401-5050,strassenverkehr@landkreis-peine.de
+12070-,Perleberg,BB,LK Prignitz,19348,Perleberg,Berliner Str. 49,03876-713-483,zulassungen@lkprignitz.de
+12070-e1,Perleberg,BB,Stadt Pritzwalk Nebenstelle,16928,Pritzwalk,Marktstraße 39,-,-
+09186-,Pfaffenhofen a. d. Ilm,BY,LRA Pfaffenhofen a.d. Ilm,85276,Pfaffenhofen a.d.Ilm,Pettenkofer Str. 5,08441-275040,zulassung@lra-paf.bayern.de
+09277-,Pfarrkirchen,BY,LRA Rottal-Inn,84347,Pfarrkirchen,Industriestr. 18,08561-20-800,zulassungsbehoerde@lra-pan.bayern.de
+08236-,Pforzheim,BW,LK Enzkreis,75177,Pforzheim,Güterstraße 30,07231-308-9856,zulassungsbehoerde@enzkreis.de
+08231-,Pforzheim Stadt,BW,Stadt Pforzheim,75172,Pforzheim,Am Mühlkanal 8,07231-393-100,zulassungsbehoerde@stadt-pforzheim.de
+08437-e2,Pfullendorf,BW,LRA Sigmaringen Nebenstelle,88630,Pfullendorf,Kirchplatz 1,07552-251-150,kfz-zulassung@lrasig.de
+01056-,Pinneberg,SH,LK Pinneberg,25337,Elmshorn,Kurt-Wagener-Str. 11,04121-4502-0,info.strassenverkehr@kreis-pinneberg.de
+07340-,Pirmasens,RP,LK Südwestpfalz,66953,Pirmasens,Unterer Sommerwaldweg 40-42,06331-809-266,kv@lksuedwestpfalz.de
+07317-,Pirmasens(Stadt),RP,Stadt Pirmasens,66954,Pirmasens,Adam-Müller-Str. 69,06331-84-2317,strassenverkehr@pirmasens.de
+14628-,Pirna,SN,LK Sächsische Schweiz-Osterzgebirge,01796,Pirna,Schloßhof 2-4,03501-515-4234,kfz-zulassung@landratsamt-pirna.de
+14523-,Plauen,SN,LRA Vogtlandkreis,08527,Plauen,Reichenbacher Str. 34,03741-300-2777,zulassung@vogtlandkreis.de
+01057-,Plön,SH,LK Plön,24306,Plön,Hamburger Str. 17/18,04522-743-900,zulassung@kreis-ploen.de
+09275-e2,Pocking,BY,LRA Passau Nebenstelle,94060,Pocking,Simbacher Str. 16,08531-2484-74,kfz-zulassung@lra-pa.bayern.de
+16075-e1,Pößneck,TH,LRA Saale-Orla-Kreis Nebenstelle,07381,Pößneck,Wohlfarthstr. 3-5,03663-488-0,kfz-zulassung@lrasok.thueringen.de
+12054-,Potsdam,BB,Stadt Potsdam,14469,Potsdam,Friedrich-Ebert-Str. 79-81,0331-289-1110,zulassungsstelle@rathaus.potsdam.de
+12069-,Potsdam-Mittelmark,BB,LK Potsdam-Mittelmark,14806,Bad Belzig,Niemöller Str. 1,03327-739-118,fb2@potsdam-mittelmark.de
+12073-,Prenzlau,BB,LK Uckermark,17291,Prenzlau,Karl-Marx-Str. 1,03984-70-1536,ordnungsamt@uckermark.de
+07232-e1,Prüm,RP,LK Eifelkreis Nebenstelle,54595,Prüm,Teichstr. 16,06551-957518-19,zulassungsstelle@bitburg-pruem.de
+08216-,Rastatt,BW,LRA Rastatt,76437,Rastatt,Untere Wiesen 6,07222-381-3220,amt32-kfz@landkreis-rastatt.de
+08436-,Ravensburg,BW,LK Ravensburg,88212,Ravensburg,Friedenstr. 6,0751-85-1414,buergerbuero@rv.de
+05562-,Recklinghausen,NW,LK Recklinghausen,45657,Recklinghausen,Kurt-Schumacher-Allee 1,02361-530,strassenverkehrsamt@kreis-re.de
+09276-,Regen,BY,LRA Regen,94209,Regen,Poschetsrieder Str. 16,09921-601-0,kfzzulassung@lra-reg.bayern.de
+09375-,Regensburg(Land),BY,LRA Regensburg,93059,Regensburg,Altmühlstr. 3,0941-4009-390,zulassungsstelle@lra-r.bayern.de
+09362-,Regensburg(Stadt),BY,Stadt Regensburg,93053,Regensburg,Johann-Hösl-Str. 11,0941-507-1381,zulassung-stadt@regensburg.de
+05120-,Remscheid,NW,Stadt Remscheid,42853,Remscheid,Elberfelder Str. 36,02191-16-00,zulassungsbehoerde@remscheid.de
+01058-,Rendsburg-Eckernförde,SH,LK Rendsburg-Eckernförde,24768,Rendsburg,Kaiserstr. 8,04331-202-644,zulassungsbehoerde@kreis-rd.de
+08415-,Reutlingen,BW,LK Reutlingen,72764,Reutlingen,Bismarckstr. 47,07121-480-2036,kfz-zulassung@kreis-reutlingen.de
+05566-e1,Rheine,NW,LK Steinfurt Nebenstelle,48429,Rheine,Bayernstr. 58,05971-80-8250,kfz.zulassung@kreis-steinfurt.de
+08336-e1,Rheinfelden,BW,LRA Lörrach Nebenstelle,79618,Rheinfelden,Karl-Fürstenberg-Str. 17,07621-410-3491,kfzzulassung@loerrach-landkreis.de
+13073-e2,Ribnitz-Damgarten,MV,LK Vorpommern-Rügen Nebenstelle,18311,Ribnitz-Damgarten,Damgartener-Chaussee 40,03831-357-1000,FD45@lk-vr.de
+08426-e1,Riedlingen,BW,LRA Biberach Nebenstelle,88499,Riedlingen,Krankenhausweg 3,07351-526888,zulassungsbehoerde@biberach.de
+14627-e1,Riesa,SN,LK Meißen Nebenstelle,01589,Riesa,Heinrich-Heine-Str. 1,03525-5175-1541,kreisverkehrsamt@kreis-meissen.de
+07333-e2,Rockenhausen,RP,LK Donnersbergkreis Nebenstelle,67806,Rockenhausen,Bezirksamtsstr. 7,06361-451-263,kontakt@rockenhausen.de
+09372-e2,Roding,BY,LRA Cham Nebenstelle,93426,Roding,Landgerichtstr. 13,09461-910620,zulrod@lra.landkreis-cham.de
+09187-,Rosenheim(Land),BY,LRA Rosenheim,83026,Rosenheim,Äußere Oberaustraße 4,08031-392-5353,kfz.rosenheim@lra-ro.bayern.de
+09163-,Rosenheim(Stadt),BY,Stadt Rosenheim,83024,Rosenheim,Westerndorfer Str. 88,08031-365-1333,kfz@rosenheim.de
+13003-,Rostock,MV,Stadt Rostock,18059,Rostock,Charles-Darwin-Ring 6,0381-381-3145,stadtamt-verkehrsabteilung@rostock.de
+06632-e2,Rotenburg a.d. Fulda,HE,LK Hersfeld-Rotenburg Nebenstelle,36199,Rotenburg a.d.Fulda,Lindenstr. 1,06623-817-0,bsb-rof@hef-rof.de
+09571-e3,Rotenburg ob der Tauber,BY,LRA Ansbach Nebenstelle,91541,Rotenburg ob der Tauber,Bezoldweg 31b,09861-2081,zulassung@lra-an.bayern.de
+03357-,Rotenburg(Wümme),NI,LK Rotenburg (Wümme),27356,Rotenburg (Wümme),Hopfengarten 2,04261-983 2407,zulassungsbehoerde@lk-row.de
+09576-,Roth,BY,LRA Roth,91154,Roth,Westring 36,09171-81-1568,zulassung@lra-rh.bayern.de
+09274-e1,Rottenburg a.d. Laaber,BY,LRA Landshut Nebenstelle,84056,Rottenburg a.d.Laaber,Georg-Pöschl-Str. 25,0871-408-5866,zulassung@landkreis-landshut.de
+08325-,Rottweil,BW,LK Rottweil,78628,Rottweil,Königsberger Straße 12,0741-244-460,kfz@landkreis-rottweil.de
+06439-e2,Rüdesheim a.Rhein,HE,LK Rheingau-Taunus-Kreis Nebenstelle,65385,Rüdesheim am Rhein,Geisenheimer Str. 77-79,06722-407-9112,zulassung@rheingau-taunus.de
+06433-e1,Rüsselsheim,HE,LK Groß-Gerau Nebenstelle,65428,Rüsselsheim,Hans-Sachs-Str. 96,06142-9105-0,zulrhm@kreisgg.de
+16073-,Saalfeld-Rudolstadt,TH,LRA Saalfeld-Rudolstadt,07318,Saalfeld,Schloßstr. 24,03671-823-192,zulassung@kreis-slf.de
+10041-e1,Saarbrücken - Mitte,SL,Stadt Saarbrücken City Nebenstelle,66111,Saarbrücken,Gerberstr. 4,0681-905-2011,buergeramt@saarbruecken.de
+10041-e2,Saarbrücken OT Burbach,SL,Stadt Saarbrücken OT Burbach Nebenstelle,66115,Saarbrücken,Burbacher Markt 20,0681-905-4747,buergeramt@saarbruecken.de
+10041-,Saarbrücken OT Halberg,SL,Stadt Saarbrücken OT Halberg,66130,Saarbrücken,Kurt-Schumacher-Str. 19,0681-905-0,zulassung@saarbruecken.de
+10041-e3,Saarbrücken-Dudweiler,SL,Stadt Saarbrücken OT Dudweiler Nebenstelle,66125,Saarbrücken,Am Markt 1,0681-905-0,buergeramt@saarbruecken.de
+07211-e2,Saarburg,RP,Stadt Trier Nebenstelle,54439,Saarburg,Graf-Siegfried-Str. 32,06581-81-291,kfz-zulassung@trier.de
+10044-,Saarlouis,SL,LRA Saarlouis,66740,Saarlouis,Kaiser-Wilhelm Str. 3,06831-444-299,amt36@kreis-saarlouis.de
+03102-,Salzgitter,NI,Stadt Salzgitter,38229,Salzgitter,Hans-Birnbaum-Straße 30,05341-839-3922,strassenverkehrsangelegenheiten@stadt.salzgitter.de
+15081-,Salzwedel,ST,LK Altmarkkreis Salzwedel,29410,Salzwedel,Karl-Marx-Str. 32,03901-840-0,info-kfz@altmarkkreis.de
+15087-,Sangerhausen,ST,LK Mansfeld-Südharz,06526,Sangerhausen,Rudolf-Breitscheid-Str. 20/22,03464-535-0,stva@lkmsh.de
+09575-e2,Scheinfeld,BY,LRA Neustadt a.d.Aisch Nebenstelle,91443,Scheinfeld,Hauptstr. 3,09161-92-3360,kfz-zulassung@lra-nea.bayern.de
+05366-e1,Schleiden,NW,LK Euskirchen Nebenstelle,53937,Schleiden,Blankenheimer Str. 2-4,0225115830,sva@kreis-euskirchen.de
+16075-,Schleiz,TH,LRA Saale-Orla-Kreis,07907,Schleiz,Oschitzer Str. 4,03663-488-0,kfz-zulassung@lrasok.thueringen.de
+01059-,Schleswig-Flensburg,SH,LK Schleswig-Flensburg,24837,Schleswig,St. Jürgener Str. 49,04621-87-318,kfz-zulassung@schleswig-flensburg.de
+06435-e2,Schlüchtern,HE,LRA Main-Kinzig-Kreis Nebenstelle,36381,Schlüchtern,Am Elmacker 2,06181-292-22607,zulassung@mkk.de
+16066-e1,Schmalkalden,TH,LRA Schmalkalden-Meiningen Nebenstelle,98574,Schmalkalden,Sandgasse,03683-682329,zulassung@lra-sm.de
+09190-e1,Schongau,BY,LRA Weilheim-Schongau Nebenstelle,86952,Schongau,Münzstraße 33,08861-211-3301,a.maier@lra-wm.bayern.de
+08336-e2,Schopfheim,BW,LRA Lörrach Nebenstelle,79650,Schopfheim,Hebelstr. 18,07621-410-3481,kfzzulassung@loerrach-landkreis.de
+08119-e2,Schorndorf,BW,LRA Rems-Murr-Kreis Nebenstelle,73614,Schorndorf,Karlstraße 3,07181-93889-5046,kfz-zulassung@rems-murr-kreis.de
+09185-e1,Schrobenhausen,BY,LRA Neuburg-Schrobenhausen Nebenstelle,86529,Schrobenhausen,Regensburger Str. 5,08252-707,poststelle@lra-nd.bayern.de
+09565-,Schwabach,BY,Stadt Schwabach,91126,Schwabach,Nördliche Ringstraße 2 a-c,09122-860-120,zulassungsstelle@schwabach.bayern.de
+08136-e3,Schwäbisch Gmünd,BW,LRA Ostalbkreis Nebenstelle,73525,Schwäbisch Gmünd,Oberbettringer Str. 166,07171-324-310,zulassungsstelle@ostalbkreis.de
+08127-,Schwäbisch Hall,BW,LRA Schwäbisch Hall,74523,Schwäbisch Hall,Karl-Kurz-Straße 44,0791-755-8855,zulassungsstelle@LRASHA.de
+09772-e1,Schwabmünchen,BY,LRA Augsburg Nebenstelle,86830,Schwabmünchen,Fuggerstr. 10,0821-3102-3334,kfz-zulassung@lra-a.bayern.de
+06634-e3,Schwalmstadt,HE,LK Schwalm-Eder-Kreis Nebenstelle,34613,Schwalmstadt,Am Nordbahnhof 2,06691-207-187,zulassung@schwalm-eder-kreis.de
+09376-,Schwandorf i.Bay.,BY,LRA Schwandorf,92421,Schwandorf,Wackersdorfer Str. 80,09431-471130,zulassung@lra-sad.bayern.de
+09678-,Schweinfurt(Land),BY,LRA Schweinfurt,97421,Schweinfurt,Schrammstr. 1,09721-55-255,zulassung@lra-sw.bayern.de
+09662-,Schweinfurt(Stadt),BY,Stadt Schweinfurt,97424,Schweinfurt,Sennfelder Bahnhof 2,09721-51-3516,kfz-zulassung@schweinfurt.de
+05954-,Schwelm,NW,LK Ennepe-Ruhr-Kreis,58332,Schwelm,Hattinger Str. 2a,02336-44410,verwaltung@en-kreis.de
+13004-,Schwerin,MV,Stadt Schwerin,19061,Schwerin,Heinrich-Hertz-Ring 2,03871-115,buergerservice@kreis-lup.de
+14628-e2,Sebnitz,SN,LK Sächsische Schweiz-Osterzgebirge Nebenstelle,01855,Sebnitz,Kirchstr. 5,035971-841-67,buergerbuero.sebnitz@landratsamt-pirna.de
+06438-e3,Seligenstadt,HE,LK Offenbach Nebenstelle,63500,Seligenstadt,Frankfurter Str. 100,06182-87-306,buergeramt@seligenstadt.de
+05382-,Siegburg,NW,LK Rhein-Sieg-Kreis,53721,Siegburg,Kaiser-Wilhelm-Platz 1,02241-13-3939,kfz-zulassung@rhein-sieg-kreis.de
+05970-,Siegen,NW,LK Siegen-Wittgenstein,57074,Siegen,St. Johann-Str. 23,0271-333-1040,zulassung@siegen-wittgenstein.de
+08437-,Sigmaringen,BW,LRA Sigmaringen,72488,Sigmaringen,Leopoldstr. 4,07571-102-5440,kfz-zulassung@lrasig.de
+07140-,Simmern,RP,LK Rhein-Hunsrück-Kreis,55469,Simmern,Ludwigstr. 3-5,06761-82-351,zulassung@rheinhunsrueck.de
+08335-e1,Singen,BW,LRA Konstanz Nebenstelle,78224,Singen,Laubwaldstr. 4,07531-800-2720,strassenverkehrsamt@lrakn.de
+08226-e1,Sinsheim,BW,LRA Rhein-Neckar-Kreis Nebenstelle,74889,Sinsheim,Muthstr. 4,06221-522-5514,infopoint.zulassung@rhein-neckar-kreis.de
+05974-,Soest,NW,LK Soest,59494,Soest,Senator-Schwartz-Ring 21 - 23,02921-30-2794,zulassungen-soest@kreis-soest.de
+05122-,Solingen,NW,Stadt Solingen,42657,Solingen,Gasstr. 22,0212-290-3677,kfz-zulassungsbehoerde@solingen.de
+03358-e1,Soltau,NI,LK Heidekreis Nebenstelle,29614,Soltau,Harburger Str. 2,05191-970-700,dienstleistungsbuero@heidekreis.de
+16068-,Sömmerda,TH,LRA Sömmerda,99610,Sömmerda,Wielandstr. 4,03634-354-701,kfz-zulassung@lra-soemmerda.de
+16065-,Sondershausen,TH,LRA Kyffhäuserkreis,99706,Sondershausen,Markt 8,03632-741-420,kfz@kyffhaeuser.de
+16072-,Sonneberg,TH,LRA Sonneberg,96515,Sonneberg,Bahnhofstr. 66,03675-871-238,kfz.zulassung@lkson.de
+09780-,Sonthofen,BY,LRA Oberallgäu,87527,Sonthofen,Oberallgäuer Platz 2,08321-612-3001,zulassung-sonthofen@lra-oa.bayern.de
+07318-,Speyer,RP,Stadt Speyer,67346,Speyer,Industriestr. 23,06232-14-1334,buergerbuero@stadt-speyer.de
+12071-,Spree-Neiße,BB,LK Spree-Neiße,03149,Forst (Lausitz),Heinrich-Heine-Str. 1,03562-986-13-201,ordnungsamt@lkspn.de
+10045-1,St. Ingbert,SL,Stadt St. Ingbert,66386,St. Ingbert,Am Markt 12,06894-13-160,zulassungsstelle@st-ingbert.de
+10046-,St. Wendel,SL,LK St. Wendel,66606,St. Wendel,Tritschlerstr. 5,06851-801-2828,zulassungsbehoerde@lkwnd.de
+03359-,Stade,NI,LK Stade,21680,Stade,Harburger Str. 193,04141-12-3650,strassenverkehrsamt@landkreis-stade.de
+03257-,Stadthagen,NI,LK Schaumburg,31655,Stadthagen,Jahnstr. 20,05721-703-1700,zulassung@schaumburg.de
+09188-,Starnberg,BY,LRA Starnberg,82319,Starnberg,Strandbadstr. 2,08151-148-77148,buergerservice@lra-starnberg.de
+01061-,Steinburg,SH,LK Steinburg,25524,Itzehoe,Adenauerallee 8,04821-69-500,zulassungsbehoerde@steinburg.de
+05566-,Steinfurt,NW,LK Steinfurt,48565,Steinfurt,Tecklenburger Str. 10,02551-69-2049,kfz.zulassung@kreis-steinfurt.de
+15090-,Stendal,ST,LK Stendal,39576,Stendal,Hospitalstr. 1-2,03931-607826,strassenverkehrsamt@landkreis-stendal.de
+08335-e2,Stockach,BW,LRA Konstanz Nebenstelle,78333,Stockach,Adenauerstr. 4,07531-800-2833,strassenverkehrsamt@lrakn.de
+14521-e3,Stollberg,SN,LRA Erzgebirgskreis Nebenstelle,09366,Stollberg,Uhlmannstr. 1-3,037296-591-5396,zulassungsbehoerde@kreis-erz.de
+13073-e3,Stralsund,MV,LK Vorpommern-Rügen Nebenstelle,18437,Stralsund,Carl-Heydemann-Ring 67,03831-357-1000,zulassungsbehoerde@lk-vr.de
+13073-2,Stralsund (Stadt),MV,Stadt Stralsund,18408,Stralsund,Schillstr. 5-7,03831-253-738,zulassungsbehoerde@stralsund.de
+09263-,Straubing,BY,Stadt Straubing,94315,Straubing,Am Hagen 65,09421-944-66232,zulassung@straubing.bayern.de
+09278-,Straubing-Bogen,BY,LRA Straubing-Bogen,94315,Straubing-Bogen,Leutnerstr. 15,09421-973-0,kfz-zulassung@lra-sr.bayern.de
+12064-,Strausberg,BB,LK Märkisch-Oderland,15344,Strausberg,Am Biotop12,03346-850-8182,zulassung_empfang@landkreismol.de
+08111-,Stuttgart,BW,Stadt Stuttgart,70469,Stuttgart,Krailenshaldenstr. 32,0711-216-98200,kfz-zulassungsstelle@stuttgart.de
+08111-e1,Stuttgart PTLS Pol.,BW,Präsidium Technik Logistik Service der Polizei,70372,Stuttgart,Nauheimer Str. 99-101,0711-2302-4141,stuttgart.ptls.abt4.ref41@polizei.bwl.de
+16054-,Suhl,TH,Stadt Suhl,98527,Suhl,Friedrich-König-Str. 42,03681-74-2779,buergeramt@stadtsuhl.de
+08128-,Tauberbischofsheim,BW,LRA Main-Tauber-Kreis,97941,Tauberbischofsheim,Gartenstr. 1,09341-82-5866,zulassungsstelle@main-tauber-kreis.de
+05566-e2,Tecklenburg,NW,LK Steinfurt Nebenstelle,49545,Tecklenburg,Landrat-Schultz-Str. 1,05482-70-3759,kfz.zulassung@kreis-steinfurt.de
+08435-e1,Tettnang,BW,LRA Bodenseekreis Nebenstelle,88069,Tettnang,Schützenstr. 5,07541-204-6300,kfz.zulassung@bodenseekreis.de
+09377-,Tirschenreuth,BY,LRA Tirschenreuth,95643,Tirschenreuth,Johannisstr. 6,09631-88-0,strassenverkehrsbehoerde@lra-tir.bayern.de
+08315-e2,Titisee-Neustadt,BW,LRA Breisgau-Hochschwarzwald Nebenstelle,79821,Titisee-Neustadt,Goethe Str. 7,0761-2187-6354,kfzzulassung@lkbh.de
+14730-,Torgau,SN,LRA Nordsachsen,04860,Torgau,Südring 17,03421-758-5160,kfz-zulassung@lra-nordsachsen.de
+09189-,Traunstein,BY,LRA Traunstein,83278,Traunstein,Kotzinger Str. 6,0861-58-515,kfz-zulassung@traunstein.bayern
+07211-,Trier,RP,Stadt Trier,54292,Trier,Thyrsusstr. 17-19,0651-718-0,kfz-zulassung@trier.de
+08416-,Tübingen,BW,LK Tübingen,72072,Tübingen,Wilhelm-Keil-Str. 50,07071-207-4361,zulassungsstelle@kreis-tuebingen.de
+08327-,Tuttlingen,BW,LRA Tuttlingen,78532,Tuttlingen,Bahnhofstr. 100,07461-926-5100,kfz-zulassung@landkreis-tuttlingen.de
+08435-e2,Überlingen,BW,LRA Bodenseekreis Nebenstelle,88662,Überlingen,Rengoldshauser Str. 11,07541-204-6500,kfz.zulassung@bodenseekreis.de
+03360-,Uelzen,NI,LK Uelzen,29525,Uelzen,Albrecht-Thaer-Straße 101,0581-82-176,info@landkreis-uelzen.de
+09575-e3,Uffenheim,BY,LRA Neustadt a.d.Aisch Nebenstelle,97215,Uffenheim,Rothenburger Str. 34,09161-92-3370,kfz-zulassung@lra-nea.bayern.de
+08421-,Ulm,BW,Stadt Ulm,89077,Ulm,Schillerstr. 30,0731-185-1444,info@zulassung-ulm.de
+08425-,Ulm-Land,BW,LRA Alb-Donau-Kreis,89077,Ulm,Schillerstr. 30,0731-185-1444,info@zulassung-ulm.de
+05978-,Unna,NW,LK Unna,59425,Unna,Friedrich-Ebert-Str. 17,02303-27-2037,zulassungsstelle@kreis-unna.de
+06434-e1,Usingen,HE,LK Hochtaunuskreis Nebenstelle,61250,Usingen,Hattsteiner Allee 33,06081-2031,kfz.zulassung@hochtaunuskreis.de
+03155-e2,Uslar,NI,LK Northeim Nebenstelle,37170,Uslar,Gerhart-Hauptmann-Str. 10,05551-708-8363,zulassungsbehoerde@landkreis-northeim.de
+08118-e3,Vaihingen,BW,LRA Ludwigsburg Nebenstelle,71665,Vaihingen / Enz,Franckstr. 20,07141-144-2067,kfz.fahrerlaubnis.vaihingen@landkreis-ludwigsburg.de
+03455-e1,Varel,NI,LK Friesland Nebenstelle,26316,Varel,Karl-Nieraad-Str. 1,04451-953 402,zulassungsstelle@friesland.de
+03460-,Vechta,NI,LK Vechta,49377,Vechta,Ravensberger Str. 20,04441-898-1791,kfz@landkreis-vechta.de
+03361-,Verden,NI,LK Verden,27283,Verden (Aller),Lindhooper Str. 67,04231-15-245,zulassungsstelle@landkreis-verden.de
+09276-e1,Viechtach,BY,LRA Regen Nebenstelle,94234,Viechtach,Mönchshofstr. 31,09942-8631,kfzzulassung@lra-reg.bayern.de
+05166-,Viersen,NW,LK Viersen,41747,Viersen,Rathausmarkt 3,02162-39-1566,zulassungsstelle@kreis-viersen.de
+08326-,Villingen-Schwenningen,BW,LK Schwarzwald-Baar-Kreis,78048,Villingen-Schwenningen,Am Hoptbühl 2,07721-913-7400,zulassungsstelle@lrasbk.de
+09274-e2,Vilsbiburg,BY,LRA Landshut Nebenstelle,84137,Vilsbiburg,Ohmstr. 2b,0871-408-5895,zulassung@landkreis-landshut.de
+09275-e3,Vilshofen,BY,LRA Passau Nebenstelle,94474,Vilshofen,Kapuzinerstr. 21,08541-6800,kfz-zulassung@lra-pa.bayern.de
+09374-e2,Vohenstrauß,BY,LRA Neustadt a.d.Waldnaab Nebenstelle,92648,Vohenstrauß,Wernberger Str. 12,09651-3202,verkehrswesenvoh@lra-new.bayern.de
+10041-1,Völklingen,SL,Stadt Völklingen,66333,Völklingen,Rathausplatz 1,06898-13-0,buergerbuero@voelklingen.de
+10042-e1,Wadern,SL,LK Merzig-Wadern Nebenstelle,66687,Wadern,Oberstraße,06871-507-237,zulassung@merzig-wadern.de
+08119-,Waiblingen,BW,LRA Rems-Murr-Kreis,71328,Waiblingen,Alter Postplatz 10,07151-501-1249,kfz-zulassung@rems-murr-kreis.de
+05374-e2,Waldbröl,NW,LK Oberbergischer Kreis Nebenstelle,51545,Waldbröl,Gerdesstr. 5,02291-925-721,amt36@obk.de
+09183-e1,Waldkraiburg,BY,LRA Mühldorf a.Inn Nebenstelle,84478,Waldkraiburg a.Inn,Kepplitzerstr. 21,08631-699-622,zulassung@lra-mue.de
+09372-e3,Waldmünchen,BY,LRA Cham Nebenstelle,93449,Waldmünchen,Gartenstr. 25,09972-613,christian.stelzer@lra.landkreis-cham.de
+08337-,Waldshut,BW,LK Waldshut,79761,Waldshut-Tiengen,Kaiserstr. 110,07751-86-2333,strassenverkehrsamt@landkreis-waldshut.de
+03459-e5,Wallenhorst,NI,LK Osnabrück Nebenstelle,49134,Wallenhorst,Rathausallee 1,05407-888-326,zulassungsstelle@lkos.de
+08436-e3,Wangen,BW,LRA Ravensburg Nebenstelle,88239,Wangen i.Allgäu,Liebigstr. 1,075185-1414,buergerbuero@rv.de
+05762-e1,Warburg,NW,LK Höxter Nebenstelle,34414,Warburg,Bahnhofstr. 26,05271-965-1401,zulassung@kreis-hoexter.de
+13071-e3,Waren,MV,LK Mecklenburgische Seenplatte Nebenstelle,17192,Waren (Müritz),Zum Amtsbrink 2,0395-57087-2700,buergerbuero-wrn@lk-seenplatte.de
+05570-,Warendorf,NW,LK Warendorf,48231,Warendorf,Waldenburger Str. 2,02581-53-3609,zulassungsstelle@kreis-warendorf.de
+09187-e2,Wasserburg a. Inn,BY,LRA Rosenheim Nebenstelle,83512,Wasserburg a. Inn,Staudhamer Feld 7a,08071-9227-0,kfz.wasserburg@lra-ro.bayern.de
+09363-,Weiden,BY,Stadt Weiden,92637,Weiden,Dr.-Pfleger-Str. 15,0961-81-3600,poststelle@wen.bayern.de
+06533-e1,Weilburg,HE,LK Limburg-Weilburg Nebenstelle,35781,Weilburg,Limburger Str. 8-10,-,zulassung@limburg-weilburg.de
+09190-,Weilheim,BY,LRA Weilheim-Schongau,82362,Weilheim,Stainhartstr. 7,0881-681-1406,zulassungsbehoerde@lra-wm.bayern.de
+16055-,Weimar,TH,Stadt Weimar,99423,Weimar,Schwanseestr. 17,03643-762-762,buergerbuero@stadtweimar.de
+08226-e2,Weinheim,BW,LRA Rhein-Neckar-Kreis Nebenstelle,69469,Weinheim,Röntgenstr. 2,06201-9483-6025,infopoint.zulassung@rhein-neckar-kreis.de
+09577-,Weißenburg,BY,LK Weißenburg-Gunzenhausen,91781,Weißenburg,Bahnhofstr. 2,09141-902-121,zulassung@landkreis-wug.de
+06432-e5,Weiterstadt,HE,LK Darmstadt-Dieburg Nebenstelle,64331,Weiterstadt,Gutenbergstr. 5,06150-400-2350,kfz-zulassung@ladadi.de
+14524-e1,Werdau,SN,LK Zwickau Nebenstelle,08412,Werdau,Königswalder Str. 18,0375-4402-0,kfz@landkreis-zwickau.de
+05378-e1,Wermelskirchen,NW,LK Rheinisch-Bergischer-Kreis Nebenstelle,42929,Wermelskirchen,Viktoriastr. 5,02196-4028,zulassung@rbk-online.de
+15085-e1,Wernigerode,ST,LK Harz Nebenstelle,38855,Wernigerode,Dornbergsweg 39a,03941-5970-2706,zulassung@kreis-hz.de
+08128-e2,Wertheim,BW,LRA Main-Tauber-Kreis Nebenstelle,97977,Wertheim-Bestenheid,Roter Sand 2,09342-93543-7031,zulassungsstelle.wertheim@main-tauber-kreis.de
+09773-e1,Wertingen,BY,LRA Dillingen a. d. Donau Nebenstelle,86637,Wertingen,Schulstr. 10,08272-5729,poststelle@landratsamt.dillingen.de
+05170-,Wesel,NW,LK Wesel,46483,Wesel,Reeser Landstr. 31,0281-207-4455,zs@kreis-wesel.de
+07143-e2,Westerburg,RP,LK Westerwaldkreis Nebenstelle,56457,Westerburg,Neumarkt 1,02663-291-0,kfz-zulassungsstelle@vg-westerburg.de
+03451-,Westerstede,NI,LK Ammerland,26655,Westerstede,Ammerlandallee 12,04488-56-8000,zulassung@ammerland.de
+06532-,Wetzlar,HE,LK Lahn-Dill-Kreis,35576,Wetzlar,Baumeisterweg 3,06441-407-2501,kfz-zulassung@lahn-dill-kreis.de
+06414-e1,Wiesbaden (Polizei),HE,Hessisches Polizeipräsidium für Technik,65197,Wiesbaden,Willy-Brandt-Allee 20,0611-8801-2423,zulassung.hpt@polizei.hessen.de
+06414-,Wiesbaden-Schierstein,HE,Stadt Wiesbaden,65201,Wiesbaden-Schierstein,Stielstr. 3,0611-31-8342,zulassungsbehoerde@wiesbaden.de
+08226-,Wiesloch,BW,LRA Rhein-Neckar-Kreis,69168,Wiesloch,Adelsförsterpfad 7,06221-522 4106,infopoint.zulassung@rhein-neckar-kreis.de
+03458-,Wildeshausen,NI,LK Oldenburg,27793,Wildeshausen,Delmenhorster Str. 6,04431-85-698,zulassung@oldenburg-kreis.de
+03405-,Wilhelmshaven,NI,Stadt Wilhelmshaven,26382,Wilhelmshaven,Rathausplatz 10,04421-16-0,info@stadt.wilhelmshaven.de
+03353-,Winsen,NI,LK Harburg,21423,Winsen / Luhe,Schloßplatz 6,04171-693-800,kfz-buergerservice@lkharburg.de
+13074-e1,Wismar,MV,LK Nordwestmecklenburg Nebenstelle,23970,Wismar,Rostocker Str. 76,03841-304036616,kfz-zulassung@nordwestmecklenburg.de
+13074-1,Wismar (Stadt),MV,Stadt Wismar,23966,Wismar,Scheuerstr. 2,03841-251-3290,verkehrsangelegenheiten@wismar.de
+05954-e1,Witten,NW,LK Ennepe-Ruhr-Kreis Nebenstelle,58456,Witten-Herbede,Wittener Str. 100,02302-202-4200,verwaltung@en-kreis.de
+15091-,Wittenberg,ST,LK Wittenberg,06886,Lutherstadt Wittenberg,Breitscheidstr. 4,03491 806-1770,kfz-zulassung@landkreis-wittenberg.de
+07231-,Wittlich,RP,LK Bernkastel-Wittlich,54516,Bernkastel-Wittlich,Kurfürstenstr.16,06571-14-1021,zulassungsbehoerde@bernkastel-wittlich.de
+03462-,Wittmund,NI,LK Wittmund,26409,Wittmund,Am Markt 9,04462-86-1225,zulassungsstelle@lk.wittmund.de
+06636-e1,Witzenhausen,HE,LK Werra-Meißner-Kreis Nebenstelle,37213,Witzenhausen,Nordbahnhofsweg 1,05651-302-53501,zulassungsstelle@werra-meissner-kreis.de
+08317-e4,Wolfach,BW,LRA Ortenaukreis Nebenstelle,77709,Wolfach,Hauptstr. 40,07834-988-3117,zulassungsbehoerde@ortenaukreis.de
+03158-,Wolfenbüttel,NI,LK Wolfenbüttel,38304,Wolfenbüttel,Halchtersche Str. 26,05331-84-587,strassenverkehrsamt@lk-wf.de
+06633-e3,Wolfhagen,HE,LK Kassel Nebenstelle,34466,Wolfhagen,Ritterstr. 1,0561-115,Kfz-zulassung-wolfhagen@kassel.de
+09173-e1,Wolfratshausen,BY,LRA Bad Tölz-Wolfratshausen Nebenstelle,82515,Wolfratshausen,Geltinger Str. 27,08171-43430,zulassungsbehoerdewor@lra-toelz.de
+03103-,Wolfsburg,NI,Stadt Wolfsburg,38440,Wolfsburg,Porschestr. 49,05361-28-1234,info-buergerdienste@stadt.wolfsburg.de
+16061-e1,Worbis,TH,LK Eichsfeld Nebenstelle,37339,Worbis,Friedensplatz 1,036074-650-3624,zulassungsstelle@kreis-eic.de
+07319-,Worms,RP,Stadt Worms,67547,Worms,Folzstr. 5,06241-853-3737,sicherheitundordnung@worms.de
+09479-,Wunsiedel,BY,LRA Wunsiedel,95632,Wunsiedel,Jean-Paul-Str. 9,09232-80-212,verkehr@landkreis-wunsiedel.de
+05124-,Wuppertal,NW,Stadt Wuppertal,42103,Wuppertal,Döppersberg 41,0202-563-0,strassenverkehrsamt@stadt.wuppertal.de
+09679-,Würzburg(Land),BY,LRA Würzburg,97074,Würzburg,Zeppelinstr. 15,0931-8003-5000,info-zulassungsbehoerde@lra-wue.bayern.de
+09663-,Würzburg(Stadt),BY,Stadt Würzburg,97070,Würzburg,Rückermainstr. 2,0931-37-2000,kfzzulassung@stadt.wuerzburg.de
+07135-e1,Zell,RP,LK Cochem-Zell Nebenstelle,56856,Zell (Mosel),Corray 1,06542-701-32,g.schilken@vg-zell.de
+15082-e2,Zerbst,ST,LK Anhalt-Bitterfeld Nebenstelle,39261,Zerbst/Anhalt,Coswiger Str. 4,03923-7407-2723,zulassung@anhalt-bitterfeld.de
+03357-e2,Zeven,NI,LK Rotenburg (Wümme) Nebenstelle,27404,Zeven,Nelkenweg 70,04281-983-6130,zulassungsbehoerde-zeven@lk-row.de
+12072-e1,Zossen,BB,LK Teltow-Fläming,15806,Zossen,Louis-Pasteur-Str. 5,03377-305-851,strassenverkehrsamt@teltow-flaeming.de
+07340-e1,Zweibrücken,RP,LK Südwestpfalz Nebenstelle,66482,Zweibrücken,Maxstr. 1,06332-871340,kfz.zulassung@zweibruecken.de
+07320-,Zweibrücken,RP,Stadt Zweibrücken,66482,Zweibrücken,Maxstr. 1,06332-871-338,kfz.zulassung@zweibruecken.de
+07317-e1,Zweibrücken,RP,Stadt Pirmasens Nebenstelle,66482,Zweibrücken,Maxstr.1,06332-871340,kfz.zulassung@zweibruecken.de
+14524-e2,Zwickau,SN,LK Zwickau Nebenstelle,08056,Zwickau,Werdauer Str. 62,0375-402-0,kfz@landkreis-zwickau.de
+08222-1,Mannheim Friedrichsfeld,BW,Stadt Mannheim Bürgerdienst,68229,Mannheim,Vogesenstr. 65,0621-471-22850,fahrerlaubnisbehoerde@mannheim.de
+08222-2,Mannheim Waldhof,BW,Stadt Mannheim Bürgerdienst,68305,Mannheim,Alte Frankfurter Str. 23,0621-293-76005,fahrerlaubnisbehoerde@mannheim.de
+08222-3,Mannheim Seckenheim,BW,Stadt Mannheim Bürgerdienst,68239,Mannheim,Seckenheimer Hauptstr. 68,0621-293-6566,fahrerlaubnisbehoerde@mannheim.de
+08222-4,Mannheim Feudenheim,BW,Stadt Mannheim Bürgerdienst,68259,Mannheim,Hauptstr. 52,0621-293-8200,fahrerlaubnisbehoerde@mannheim.de
+08222-5,Mannheim City,BW,Stadt Mannheim,68159,Mannheim,K 7,0621-293-8522,fahrerlaubnisbehoerde@mannheim.de
+08222-6,Mannheim Neckarstadt-West,BW,Stadt Mannheim Bürgerdienst,68307,Mannheim,Gartenfelderstr. 42-46,0621-293-293-5580,fahrerlaubnisbehoerde@mannheim.de

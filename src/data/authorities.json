@@ -1,0 +1,452 @@
+{
+  "berlin": {
+    "name": "Kfz-Zulassungsbehörde Berlin",
+    "street": "Jüterboger Str. 3",
+    "zip": "10965",
+    "city": "Berlin",
+    "phone": "030 9024-0",
+    "website": "https://www.berlin.de/labo/mobilitaet/kfz-zulassung/",
+    "hours": "Mo–Fr 8:00–15:00"
+  },
+  "hamburg": {
+    "name": "Kfz-Zulassungsstelle Hamburg",
+    "street": "Ausschläger Weg 34",
+    "zip": "20537",
+    "city": "Hamburg",
+    "phone": "040 42828-0",
+    "website": "https://www.hamburg.de/",
+    "hours": "Mo–Fr 7:30–15:00"
+  },
+  "muenchen": {
+    "name": "Kfz-Zulassungsstelle München",
+    "street": "Eichstätter Str. 2",
+    "zip": "80686",
+    "city": "München",
+    "phone": "089 233-96090",
+    "website": "https://www.muenchen.de/rathaus/Stadtverwaltung/Kreisverwaltungsreferat.html",
+    "hours": "Mo–Fr 7:30–12:00, Di 14:00–18:00"
+  },
+  "koeln": {
+    "name": "Kfz-Zulassungsstelle Köln",
+    "street": "Max-Glomsda-Str. 4",
+    "zip": "51105",
+    "city": "Köln",
+    "phone": "0221 221-0",
+    "website": "https://www.stadt-koeln.de/",
+    "hours": "Mo–Fr 7:30–12:00, Do 13:30–17:30"
+  },
+  "frankfurt": {
+    "name": "Kfz-Zulassungsstelle Frankfurt am Main",
+    "street": "Gutleutstr. 191",
+    "zip": "60327",
+    "city": "Frankfurt am Main",
+    "phone": "069 212-40000",
+    "website": "https://www.frankfurt.de/",
+    "hours": "Mo–Fr 7:30–12:30"
+  },
+  "stuttgart": {
+    "name": "Kfz-Zulassungsstelle Stuttgart",
+    "street": "Krailenshaldenstr. 32",
+    "zip": "70469",
+    "city": "Stuttgart",
+    "phone": "0711 216-98992",
+    "website": "https://www.stuttgart.de/",
+    "hours": "Mo–Fr 7:30–15:30"
+  },
+  "duesseldorf": {
+    "name": "Kfz-Zulassungsstelle Düsseldorf",
+    "street": "Höherweg 101",
+    "zip": "40233",
+    "city": "Düsseldorf",
+    "phone": "0211 89-94000",
+    "website": "https://www.duesseldorf.de/",
+    "hours": "Mo–Fr 7:30–12:00, Do 13:30–17:30"
+  },
+  "leipzig": {
+    "name": "Kfz-Zulassungsstelle Leipzig",
+    "street": "Prager Str. 130",
+    "zip": "04317",
+    "city": "Leipzig",
+    "phone": "0341 123-0",
+    "website": "https://www.leipzig.de/",
+    "hours": "Mo, Mi, Fr 8:00–12:00, Di 8:00–18:00, Do 8:00–16:00"
+  },
+  "dortmund": {
+    "name": "Kfz-Zulassungsstelle Dortmund",
+    "street": "Königswall 25–27",
+    "zip": "44137",
+    "city": "Dortmund",
+    "phone": "0231 50-0",
+    "website": "https://www.dortmund.de/",
+    "hours": "Mo–Fr 7:30–12:00, Do 14:00–16:00"
+  },
+  "essen": {
+    "name": "Kfz-Zulassungsstelle Essen",
+    "street": "Schederhofstr. 45",
+    "zip": "45145",
+    "city": "Essen",
+    "phone": "0201 88-33333",
+    "website": "https://www.essen.de/",
+    "hours": "Mo–Fr 7:30–12:30"
+  },
+  "bremen": {
+    "name": "Kfz-Zulassungsstelle Bremen",
+    "street": "Stresemannstr. 48",
+    "zip": "28207",
+    "city": "Bremen",
+    "phone": "0421 361-0",
+    "website": "https://www.bremen.de/",
+    "hours": "Mo–Fr 8:00–13:00, Do 14:00–17:00"
+  },
+  "dresden": {
+    "name": "Kfz-Zulassungsstelle Dresden",
+    "street": "Theaterstr. 11",
+    "zip": "01067",
+    "city": "Dresden",
+    "phone": "0351 488-0",
+    "website": "https://www.dresden.de/",
+    "hours": "Mo, Mi, Fr 8:00–12:00, Di, Do 8:00–18:00"
+  },
+  "hannover": {
+    "name": "Kfz-Zulassungsstelle Hannover",
+    "street": "Am Schützenplatz 1",
+    "zip": "30169",
+    "city": "Hannover",
+    "phone": "0511 168-0",
+    "website": "https://www.hannover.de/",
+    "hours": "Mo–Fr 7:30–12:00"
+  },
+  "nuernberg": {
+    "name": "Kfz-Zulassungsstelle Nürnberg",
+    "street": "Rothenburger Str. 5",
+    "zip": "90443",
+    "city": "Nürnberg",
+    "phone": "0911 231-0",
+    "website": "https://www.nuernberg.de/",
+    "hours": "Mo–Fr 8:00–12:00, Di 14:00–17:00"
+  },
+  "duisburg": {
+    "name": "Kfz-Zulassungsstelle Duisburg",
+    "street": "Schifferstr. 190",
+    "zip": "47059",
+    "city": "Duisburg",
+    "phone": "0203 283-0",
+    "website": "https://www.duisburg.de/",
+    "hours": "Mo–Fr 7:30–12:30"
+  },
+  "bochum": {
+    "name": "Kfz-Zulassungsstelle Bochum",
+    "street": "Universitätsstr. 47",
+    "zip": "44789",
+    "city": "Bochum",
+    "phone": "0234 910-0",
+    "website": "https://www.bochum.de/",
+    "hours": "Mo–Fr 7:30–12:00"
+  },
+  "wuppertal": {
+    "name": "Kfz-Zulassungsstelle Wuppertal",
+    "street": "Müngstener Str. 10",
+    "zip": "42285",
+    "city": "Wuppertal",
+    "phone": "0202 563-0",
+    "website": "https://www.wuppertal.de/",
+    "hours": "Mo–Fr 7:30–12:00, Di 14:00–16:00"
+  },
+  "bielefeld": {
+    "name": "Kfz-Zulassungsstelle Bielefeld",
+    "street": "Jöllenbecker Str. 232",
+    "zip": "33613",
+    "city": "Bielefeld",
+    "phone": "0521 51-0",
+    "website": "https://www.bielefeld.de/",
+    "hours": "Mo–Fr 7:30–12:00, Do 14:00–17:00"
+  },
+  "bonn": {
+    "name": "Kfz-Zulassungsstelle Bonn",
+    "street": "Nassestr. 11",
+    "zip": "53113",
+    "city": "Bonn",
+    "phone": "0228 77-0",
+    "website": "https://www.bonn.de/",
+    "hours": "Mo–Fr 7:30–12:00"
+  },
+  "muenster": {
+    "name": "Kfz-Zulassungsstelle Münster",
+    "street": "Albersloher Weg 33",
+    "zip": "48155",
+    "city": "Münster",
+    "phone": "0251 492-0",
+    "website": "https://www.stadt-muenster.de/",
+    "hours": "Mo–Fr 7:30–12:30"
+  },
+  "mannheim": {
+    "name": "Kfz-Zulassungsstelle Mannheim",
+    "street": "Windeckstr. 1",
+    "zip": "68163",
+    "city": "Mannheim",
+    "phone": "0621 293-0",
+    "website": "https://www.mannheim.de/",
+    "hours": "Mo–Fr 7:30–12:00"
+  },
+  "karlsruhe": {
+    "name": "Kfz-Zulassungsstelle Karlsruhe",
+    "street": "Steinhäuserstr. 22",
+    "zip": "76135",
+    "city": "Karlsruhe",
+    "phone": "0721 133-0",
+    "website": "https://www.karlsruhe.de/",
+    "hours": "Mo–Fr 7:30–12:00, Mi 14:00–17:30"
+  },
+  "augsburg": {
+    "name": "Kfz-Zulassungsstelle Augsburg",
+    "street": "Prinzregentenplatz 4",
+    "zip": "86150",
+    "city": "Augsburg",
+    "phone": "0821 324-0",
+    "website": "https://www.augsburg.de/",
+    "hours": "Mo–Fr 7:30–12:30"
+  },
+  "wiesbaden": {
+    "name": "Kfz-Zulassungsstelle Wiesbaden",
+    "street": "Stielstr. 5",
+    "zip": "65201",
+    "city": "Wiesbaden",
+    "phone": "0611 31-0",
+    "website": "https://www.wiesbaden.de/",
+    "hours": "Mo–Fr 7:30–12:00, Do 14:00–17:30"
+  },
+  "aachen": {
+    "name": "Kfz-Zulassungsstelle Aachen",
+    "street": "Zollernstr. 10",
+    "zip": "52070",
+    "city": "Aachen",
+    "phone": "0241 432-0",
+    "website": "https://www.aachen.de/",
+    "hours": "Mo–Fr 7:30–12:30"
+  },
+  "braunschweig": {
+    "name": "Kfz-Zulassungsstelle Braunschweig",
+    "street": "Bohlweg 38",
+    "zip": "38100",
+    "city": "Braunschweig",
+    "phone": "0531 470-0",
+    "website": "https://www.braunschweig.de/",
+    "hours": "Mo–Fr 8:00–12:00"
+  },
+  "kiel": {
+    "name": "Kfz-Zulassungsstelle Kiel",
+    "street": "Saarbrückenstr. 167",
+    "zip": "24114",
+    "city": "Kiel",
+    "phone": "0431 901-0",
+    "website": "https://www.kiel.de/",
+    "hours": "Mo–Fr 7:30–12:00"
+  },
+  "chemnitz": {
+    "name": "Kfz-Zulassungsstelle Chemnitz",
+    "street": "Bahnhofstr. 53",
+    "zip": "09111",
+    "city": "Chemnitz",
+    "phone": "0371 488-0",
+    "website": "https://www.chemnitz.de/",
+    "hours": "Mo, Mi, Fr 8:00–12:00, Di 8:00–18:00"
+  },
+  "halle": {
+    "name": "Kfz-Zulassungsstelle Halle (Saale)",
+    "street": "Hansering 15",
+    "zip": "06108",
+    "city": "Halle (Saale)",
+    "phone": "0345 221-0",
+    "website": "https://www.halle.de/",
+    "hours": "Mo–Fr 8:00–12:00, Di 14:00–18:00"
+  },
+  "magdeburg": {
+    "name": "Kfz-Zulassungsstelle Magdeburg",
+    "street": "Alter Markt 6",
+    "zip": "39104",
+    "city": "Magdeburg",
+    "phone": "0391 540-0",
+    "website": "https://www.magdeburg.de/",
+    "hours": "Mo–Fr 8:00–12:00, Di 14:00–17:00"
+  },
+  "freiburg": {
+    "name": "Kfz-Zulassungsstelle Freiburg",
+    "street": "Habsburgerstr. 111",
+    "zip": "79104",
+    "city": "Freiburg im Breisgau",
+    "phone": "0761 201-0",
+    "website": "https://www.freiburg.de/",
+    "hours": "Mo–Fr 7:30–12:00"
+  },
+  "krefeld": {
+    "name": "Kfz-Zulassungsstelle Krefeld",
+    "street": "Girmesgath 120",
+    "zip": "47803",
+    "city": "Krefeld",
+    "phone": "02151 86-0",
+    "website": "https://www.krefeld.de/",
+    "hours": "Mo–Fr 7:30–12:30"
+  },
+  "mainz": {
+    "name": "Kfz-Zulassungsstelle Mainz",
+    "street": "Mombacher Str. 21–23",
+    "zip": "55122",
+    "city": "Mainz",
+    "phone": "06131 12-0",
+    "website": "https://www.mainz.de/",
+    "hours": "Mo–Fr 7:30–12:00, Di 14:00–16:00"
+  },
+  "luebeck": {
+    "name": "Kfz-Zulassungsstelle Lübeck",
+    "street": "Kronsforder Allee 2–6",
+    "zip": "23560",
+    "city": "Lübeck",
+    "phone": "0451 122-0",
+    "website": "https://www.luebeck.de/",
+    "hours": "Mo–Fr 8:00–12:00"
+  },
+  "erfurt": {
+    "name": "Kfz-Zulassungsstelle Erfurt",
+    "street": "Fischmarkt 1",
+    "zip": "99084",
+    "city": "Erfurt",
+    "phone": "0361 655-0",
+    "website": "https://www.erfurt.de/",
+    "hours": "Mo–Fr 8:00–12:00, Di 14:00–18:00"
+  },
+  "rostock": {
+    "name": "Kfz-Zulassungsstelle Rostock",
+    "street": "Neuer Markt 1",
+    "zip": "18055",
+    "city": "Rostock",
+    "phone": "0381 381-0",
+    "website": "https://www.rostock.de/",
+    "hours": "Mo–Fr 8:00–12:00"
+  },
+  "kassel": {
+    "name": "Kfz-Zulassungsstelle Kassel",
+    "street": "Obere Königsstr. 8",
+    "zip": "34117",
+    "city": "Kassel",
+    "phone": "0561 787-0",
+    "website": "https://www.kassel.de/",
+    "hours": "Mo–Fr 7:30–12:30"
+  },
+  "potsdam": {
+    "name": "Kfz-Zulassungsstelle Potsdam",
+    "street": "Friedrich-Ebert-Str. 79–81",
+    "zip": "14469",
+    "city": "Potsdam",
+    "phone": "0331 289-0",
+    "website": "https://www.potsdam.de/",
+    "hours": "Mo, Mi, Fr 8:00–12:00, Di 8:00–18:00, Do 8:00–16:00"
+  },
+  "saarbruecken": {
+    "name": "Kfz-Zulassungsstelle Saarbrücken",
+    "street": "Franz-Josef-Röder-Str. 21",
+    "zip": "66119",
+    "city": "Saarbrücken",
+    "phone": "0681 905-0",
+    "website": "https://www.saarbruecken.de/",
+    "hours": "Mo–Fr 8:00–12:00"
+  },
+  "oldenburg": {
+    "name": "Kfz-Zulassungsstelle Oldenburg",
+    "street": "Pferdemarkt 14",
+    "zip": "26121",
+    "city": "Oldenburg",
+    "phone": "0441 235-0",
+    "website": "https://www.oldenburg.de/",
+    "hours": "Mo–Fr 7:30–12:00"
+  },
+  "osnabrueck": {
+    "name": "Kfz-Zulassungsstelle Osnabrück",
+    "street": "Natruper-Tor-Wall 5",
+    "zip": "49076",
+    "city": "Osnabrück",
+    "phone": "0541 323-0",
+    "website": "https://www.osnabrueck.de/",
+    "hours": "Mo–Fr 7:30–12:00"
+  },
+  "heidelberg": {
+    "name": "Kfz-Zulassungsstelle Heidelberg",
+    "street": "Kurfürstenanlage 38–40",
+    "zip": "69115",
+    "city": "Heidelberg",
+    "phone": "06221 58-0",
+    "website": "https://www.heidelberg.de/",
+    "hours": "Mo–Fr 7:30–12:00"
+  },
+  "darmstadt": {
+    "name": "Kfz-Zulassungsstelle Darmstadt",
+    "street": "Grafenstr. 30",
+    "zip": "64283",
+    "city": "Darmstadt",
+    "phone": "06151 13-0",
+    "website": "https://www.darmstadt.de/",
+    "hours": "Mo–Fr 7:30–12:00"
+  },
+  "regensburg": {
+    "name": "Kfz-Zulassungsstelle Regensburg",
+    "street": "D.-Martin-Luther-Str. 3",
+    "zip": "93047",
+    "city": "Regensburg",
+    "phone": "0941 507-0",
+    "website": "https://www.regensburg.de/",
+    "hours": "Mo–Fr 7:30–12:00"
+  },
+  "wuerzburg": {
+    "name": "Kfz-Zulassungsstelle Würzburg",
+    "street": "Zeppelinstr. 15",
+    "zip": "97074",
+    "city": "Würzburg",
+    "phone": "0931 37-0",
+    "website": "https://www.wuerzburg.de/",
+    "hours": "Mo–Fr 7:30–12:00"
+  },
+  "wolfsburg": {
+    "name": "Kfz-Zulassungsstelle Wolfsburg",
+    "street": "Porschestr. 49",
+    "zip": "38440",
+    "city": "Wolfsburg",
+    "phone": "05361 28-0",
+    "website": "https://www.wolfsburg.de/",
+    "hours": "Mo–Fr 8:00–12:00"
+  },
+  "goettingen": {
+    "name": "Kfz-Zulassungsstelle Göttingen",
+    "street": "Hiroshimaplatz 1–4",
+    "zip": "37083",
+    "city": "Göttingen",
+    "phone": "0551 400-0",
+    "website": "https://www.goettingen.de/",
+    "hours": "Mo–Fr 8:00–12:00"
+  },
+  "ulm": {
+    "name": "Kfz-Zulassungsstelle Ulm",
+    "street": "Olgastr. 66",
+    "zip": "89073",
+    "city": "Ulm",
+    "phone": "0731 161-0",
+    "website": "https://www.ulm.de/",
+    "hours": "Mo–Fr 7:30–12:30"
+  },
+  "heilbronn": {
+    "name": "Kfz-Zulassungsstelle Heilbronn",
+    "street": "Marktplatz 7",
+    "zip": "74072",
+    "city": "Heilbronn",
+    "phone": "07131 56-0",
+    "website": "https://www.heilbronn.de/",
+    "hours": "Mo–Fr 7:30–12:00"
+  },
+  "recklinghausen": {
+    "name": "Kfz-Zulassungsstelle Recklinghausen",
+    "street": "Kurt-Schumacher-Allee 1",
+    "zip": "45657",
+    "city": "Recklinghausen",
+    "phone": "02361 50-0",
+    "website": "https://www.recklinghausen.de/",
+    "hours": "Mo–Fr 7:30–12:00"
+  }
+}

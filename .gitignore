@@ -31,7 +31,7 @@ yarn-error.log*
 # database (production DB must NOT be in git)
 prisma/*.db
 prisma/*.db-journal
-data/
+/data/
 
 # vercel (no longer used)
 .vercel

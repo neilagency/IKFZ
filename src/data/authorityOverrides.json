@@ -1,0 +1,43 @@
+{
+  "_comment": "Manual overrides for authority data not available in CSV. Keys are city slugs.",
+  "berlin": {
+    "website": "https://www.berlin.de/labo/mobilitaet/kfz-zulassung/",
+    "hours": "Mo-Fr 07:30-14:30"
+  },
+  "hamburg": {
+    "website": "https://www.hamburg.de/fahrzeugzulassung/",
+    "hours": "Mo-Fr 07:00-16:00"
+  },
+  "muenchen": {
+    "website": "https://stadt.muenchen.de/service/info/kfz-zulassung/",
+    "hours": "Mo-Fr 07:30-12:00, Di 14:00-18:00"
+  },
+  "koeln": {
+    "website": "https://www.stadt-koeln.de/service/produkte/kfz-zulassung/",
+    "hours": "Mo-Fr 07:30-12:00"
+  },
+  "frankfurt": {
+    "website": "https://frankfurt.de/service-und-rathaus/verwaltung/aemter-und-institutionen/buergeramt-statistik-und-wahlen/kfz-zulassung",
+    "hours": "Mo-Fr 07:30-12:30"
+  },
+  "stuttgart": {
+    "website": "https://www.stuttgart.de/vv/verwaltungsservice/kfz-zulassung.php",
+    "hours": "Mo-Fr 07:00-12:00, Mi 13:30-15:30"
+  },
+  "duesseldorf": {
+    "website": "https://www.duesseldorf.de/kfz-zulassung",
+    "hours": "Mo-Fr 07:30-12:00"
+  },
+  "leipzig": {
+    "website": "https://www.leipzig.de/buergerservice-und-verwaltung/aemter-und-behoerdengaenge/kfz-zulassung/",
+    "hours": "Mo-Fr 08:00-12:00, Di 13:00-18:00"
+  },
+  "dortmund": {
+    "website": "https://www.dortmund.de/de/rathaus_und_buergerservice/buergerdienste/kfz-zulassung/",
+    "hours": "Mo-Fr 07:30-12:00"
+  },
+  "essen": {
+    "website": "https://www.essen.de/rathaus/aemter/ordner_32/kfz_zulassung.de.html",
+    "hours": "Mo-Fr 07:30-12:30"
+  }
+}
