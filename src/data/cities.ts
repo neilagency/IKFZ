@@ -182,6 +182,7 @@ export { CITY_ALIASES };
 
 const _authorityCache = new Map<string, { data: AuthorityData | null; timestamp: number }>();
 const AUTHORITY_CACHE_TTL = 300_000; // 5 minutes
+const AUTHORITY_CACHE_MAX = 200; // Max entries to prevent unbounded growth
 
 export function invalidateAuthorityCache(): void {
   _authorityCache.clear();
@@ -277,6 +278,16 @@ export function getAuthority(citySlug: string): AuthorityData | undefined {
   const cached = _authorityCache.get(citySlug);
   if (cached && (now - cached.timestamp) < AUTHORITY_CACHE_TTL) {
     return cached.data ?? undefined;
+  }
+
+  // Evict oldest entries if cache exceeds max size
+  if (_authorityCache.size >= AUTHORITY_CACHE_MAX) {
+    let oldestKey = '';
+    let oldestTs = Infinity;
+    _authorityCache.forEach((v, k) => {
+      if (v.timestamp < oldestTs) { oldestTs = v.timestamp; oldestKey = k; }
+    });
+    if (oldestKey) _authorityCache.delete(oldestKey);
   }
 
   const city = getCityBySlug(citySlug);

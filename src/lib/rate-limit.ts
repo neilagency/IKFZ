@@ -1,6 +1,7 @@
 /**
  * Simple in-memory rate limiter.
  * NOT distributed — suitable for single-process deployments.
+ * Max 10,000 entries to prevent unbounded memory growth.
  */
 
 import { NextRequest } from 'next/server';
@@ -10,15 +11,18 @@ interface RateLimitEntry {
   resetAt: number;
 }
 
+const MAX_ENTRIES = 10_000;
 const store = new Map<string, RateLimitEntry>();
 
 // Clean up expired entries every 5 minutes
-setInterval(() => {
+const _cleanupTimer = setInterval(() => {
   const now = Date.now();
   store.forEach((entry, key) => {
     if (entry.resetAt < now) store.delete(key);
   });
 }, 5 * 60 * 1000);
+// Allow process to exit without waiting for this timer
+if (_cleanupTimer.unref) _cleanupTimer.unref();
 
 export function rateLimit(
   key: string,
@@ -28,6 +32,11 @@ export function rateLimit(
   const entry = store.get(key);
 
   if (!entry || entry.resetAt < now) {
+    // Evict if at capacity
+    if (store.size >= MAX_ENTRIES) {
+      const firstKey = store.keys().next().value;
+      if (firstKey) store.delete(firstKey);
+    }
     store.set(key, { count: 1, resetAt: now + config.windowMs });
     return { success: true, reset: config.windowMs };
   }

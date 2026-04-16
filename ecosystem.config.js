@@ -29,13 +29,22 @@ module.exports = {
       max_restarts: 10,
       restart_delay: 5000,
       watch: false,
-      max_memory_restart: '512M',
+      // Memory limit: restart process if RSS exceeds 400MB
+      // Prevents one app from consuming all shared server memory
+      max_memory_restart: '400M',
       error_file: '/var/log/pm2/ikfz-error.log',
       out_file: '/var/log/pm2/ikfz-out.log',
       log_date_format: 'YYYY-MM-DD HH:mm:ss Z',
       merge_logs: true,
-      instances: 2,
-      exec_mode: 'cluster',
+      // Single instance to avoid cache/rate-limit isolation issues
+      // on shared hosting with limited resources
+      instances: 1,
+      exec_mode: 'fork',
+      // Graceful shutdown: allow 5s for in-flight requests
+      kill_timeout: 5000,
+      listen_timeout: 10000,
+      // Exponential backoff on restarts
+      exp_backoff_restart_delay: 100,
     },
   ],
 };

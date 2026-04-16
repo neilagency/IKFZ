@@ -30,14 +30,17 @@ if [ -z "$CRON_SECRET" ] || [ "$CRON_SECRET" = "<CHANGE_ME_GENERATE_WITH: openss
 fi
 
 SITE="https://ikfzdigitalzulassung.de"
+APP_DIR="/home/${USER}/domains/ikfzdigitalzulassung.de/nodejs"
 
 # ── Define cron entries ───────────────────────────────────────────
 # 1. Publish scheduled posts — every 5 minutes
 # 2. Send scheduled email campaigns — every 5 minutes
+# 3. Server cleanup — every 8 hours (safe: logs, temp files, stale cache)
 CRON_ENTRIES=$(cat <<EOF
 # ── ikfzdigitalzulassung.de cron jobs ─────────────────────────────
 */5 * * * * curl -s -H "Authorization: Bearer $CRON_SECRET" "$SITE/api/cron/publish-scheduled" > /dev/null 2>&1
 */5 * * * * curl -s -H "Authorization: Bearer $CRON_SECRET" "$SITE/api/cron/send-scheduled" > /dev/null 2>&1
+0 */8 * * * bash $APP_DIR/scripts/server-cleanup.sh --execute --quiet 2>/dev/null
 EOF
 )
 
