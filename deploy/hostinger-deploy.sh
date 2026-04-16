@@ -33,8 +33,8 @@ STANDALONE_DIR="$PROJECT_ROOT/.next/standalone"
 STATIC_DIR="$PROJECT_ROOT/.next/static"
 PUBLIC_DIR="$PROJECT_ROOT/public"
 
-# SSH command shortcut
-SSH_CMD="ssh -o StrictHostKeyChecking=no -i $HOME/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST"
+# SSH command shortcut (-t forces TTY — Hostinger requires it)
+SSH_CMD="ssh -t -o StrictHostKeyChecking=no -i $HOME/.ssh/id_ed25519 -p $SSH_PORT $SSH_USER@$SSH_HOST"
 
 # Colors
 RED='\033[0;31m'
@@ -140,7 +140,7 @@ rsync -az --delete --checksum \
     --exclude='/data/' \
     --exclude='public/uploads/documents/' \
     --exclude='public/uploads/order-documents/' \
-    -e "ssh -o StrictHostKeyChecking=no -p $SSH_PORT" \
+    -e "ssh -o StrictHostKeyChecking=no -i $HOME/.ssh/id_ed25519 -p $SSH_PORT" \
     "$STANDALONE_DIR/" \
     "$SSH_USER@$SSH_HOST:$REMOTE_APP_DIR/"
 
