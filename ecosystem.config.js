@@ -16,24 +16,24 @@ module.exports = {
   apps: [
     {
       name: 'ikfz-app',
-      script: '.next/standalone/server.js',
-      cwd: '/var/www/ikfzdigitalzulassung.de',
+      script: 'server.js',
+      cwd: '/home/u104276643/domains/ikfzdigitalzulassung.de/nodejs',
       env_file: '.env',
       env: {
         NODE_ENV: 'production',
         PORT: 3000,
         HOSTNAME: '0.0.0.0',
-        DB_PATH: '/var/www/ikfzdigitalzulassung.de/data/production.db',
+        DB_PATH: '/home/u104276643/data/production.db',
       },
       autorestart: true,
       max_restarts: 10,
       restart_delay: 5000,
       watch: false,
-      // Memory limit: restart process if RSS exceeds 400MB
+      // Memory limit: restart process if RSS exceeds 300MB
       // Prevents one app from consuming all shared server memory
-      max_memory_restart: '400M',
-      error_file: '/var/log/pm2/ikfz-error.log',
-      out_file: '/var/log/pm2/ikfz-out.log',
+      max_memory_restart: '300M',
+      error_file: '/home/u104276643/logs/ikfz-error.log',
+      out_file: '/home/u104276643/logs/ikfz-out.log',
       log_date_format: 'YYYY-MM-DD HH:mm:ss Z',
       merge_logs: true,
       // Single instance to avoid cache/rate-limit isolation issues

@@ -6,6 +6,9 @@ const nextConfig = {
   poweredByHeader: false,
   experimental: {
     instrumentationHook: true,
+    // Disable in-memory ISR cache — use disk cache only
+    // Drastically reduces RSS on shared hosting
+    isrMemoryCacheSize: 0,
     serverComponentsExternalPackages: [
       'better-sqlite3',
       '@prisma/adapter-better-sqlite3',

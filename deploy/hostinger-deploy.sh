@@ -213,6 +213,18 @@ cd "\$REMOTE_APP_DIR"
 PATH="\$NODE_BIN:\$PATH" \$NPM install --os=linux --cpu=x64 sharp --no-save 2>&1 | grep -E 'added|changed|error|warn' | head -5 || true
 echo "  ✅ sharp linux-x64 binary installed"
 
+# ── Production Mode Enforcement ──────────────────────────────────
+# Ensure NODE_ENV=production is always set and next dev is NEVER used
+if [ -f "\$REMOTE_APP_DIR/.env" ]; then
+    # Force NODE_ENV=production in .env
+    if grep -q '^NODE_ENV=' "\$REMOTE_APP_DIR/.env"; then
+        sed -i 's/^NODE_ENV=.*/NODE_ENV=production/' "\$REMOTE_APP_DIR/.env"
+    else
+        echo "NODE_ENV=production" >> "\$REMOTE_APP_DIR/.env"
+    fi
+fi
+echo "  ✅ NODE_ENV=production enforced"
+
 # Ensure tmp/ exists (Passenger restarts via this dir)
 mkdir -p "\$REMOTE_APP_DIR/tmp"
 

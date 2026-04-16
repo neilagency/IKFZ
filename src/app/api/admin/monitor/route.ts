@@ -20,12 +20,18 @@ export async function GET() {
     external: `${Math.round(mem.external / 1024 / 1024)} MB`,
   };
 
-  // 2. Memory warning
+  // 2. Memory warning (300MB = PM2 restart threshold on shared hosting)
   const rssMB = Math.round(mem.rss / 1024 / 1024);
-  report.memoryWarning = rssMB > 400 ? `⚠️ High memory: ${rssMB}MB (limit ~512MB)` : null;
+  report.memoryWarning = rssMB > 300 ? `⚠️ High memory: ${rssMB}MB (PM2 limit: 300MB)` : null;
 
   // 3. Uptime
   report.uptime = `${Math.round(process.uptime() / 60)} minutes`;
+
+  // 3b. Environment safety check
+  report.nodeEnv = process.env.NODE_ENV;
+  if (process.env.NODE_ENV !== 'production') {
+    report.envWarning = `🚨 NOT running in production mode! NODE_ENV=${process.env.NODE_ENV}`;
+  }
 
   // 4. Disk usage (safe for shared hosting)
   try {
