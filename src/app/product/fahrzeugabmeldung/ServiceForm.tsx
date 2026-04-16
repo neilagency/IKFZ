@@ -475,7 +475,7 @@ export default function ServiceForm({
                         <h3 className="mb-4 text-base font-bold text-dark-900">
                           Fahrzeugtyp wählen
                         </h3>
-                        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                        <div className="grid grid-cols-3 gap-2 sm:grid-cols-6 sm:gap-3">
                           {VEHICLE_TYPES.map((item) => {
                             const Icon = item.icon;
                             const active = watchFahrzeugTyp === item.value;
@@ -483,7 +483,7 @@ export default function ServiceForm({
                               <label
                                 key={item.value}
                                 className={cn(
-                                  'cursor-pointer rounded-2xl border p-4 transition-all',
+                                  'cursor-pointer rounded-xl border p-3 transition-all',
                                   active
                                     ? 'border-primary bg-primary/10'
                                     : 'border-dark-200 bg-gray-50 hover:border-dark-300'
@@ -495,10 +495,10 @@ export default function ServiceForm({
                                   value={item.value}
                                   {...register('fahrzeugTyp')}
                                 />
-                                <div className="flex flex-col items-center justify-center gap-3 text-center">
+                                <div className="flex flex-col items-center justify-center gap-1.5 text-center">
                                   <div
                                     className={cn(
-                                      'rounded-2xl p-3',
+                                      'rounded-xl p-2',
                                       active
                                         ? 'bg-primary/15'
                                         : 'bg-gray-100'
@@ -506,7 +506,7 @@ export default function ServiceForm({
                                   >
                                     <Icon
                                       className={cn(
-                                        'h-7 w-7',
+                                        'h-5 w-5',
                                         active
                                           ? 'text-primary'
                                           : 'text-dark-400'
@@ -515,7 +515,7 @@ export default function ServiceForm({
                                   </div>
                                   <span
                                     className={cn(
-                                      'text-sm font-bold',
+                                      'text-xs font-bold',
                                       active ? 'text-dark-900' : 'text-dark-600'
                                     )}
                                   >
@@ -533,10 +533,6 @@ export default function ServiceForm({
                         <div className="space-y-5">
                           {/* Kennzeichen */}
                           <div>
-                            <label className="mb-2 block text-sm font-semibold text-dark-800">
-                              Kennzeichen eintragen{' '}
-                              <span className="text-red-400">*</span>
-                            </label>
                             <KennzeichenInput
                               value={watch('kennzeichen') || ''}
                               onChange={(v) =>
