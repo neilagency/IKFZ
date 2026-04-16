@@ -114,10 +114,10 @@ function MediaHelpCard({
   imageAlt: string;
 }) {
   return (
-    <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03]">
-      <div className="border-b border-white/10 px-5 py-4">
-        <p className="flex items-center gap-2 text-sm font-semibold text-white">
-          <HelpCircle className="h-4 w-4 text-emerald-400" />
+    <div className="overflow-hidden rounded-3xl border border-dark-100 bg-white shadow-sm">
+      <div className="border-b border-dark-100 px-5 py-4">
+        <p className="flex items-center gap-2 text-sm font-semibold text-dark-900">
+          <HelpCircle className="h-4 w-4 text-primary" />
           {title}
         </p>
       </div>
@@ -126,12 +126,12 @@ function MediaHelpCard({
           href={videoUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="mb-4 inline-flex items-center gap-2 rounded-2xl bg-emerald-500/10 px-4 py-3 text-sm font-bold text-emerald-400 hover:bg-emerald-500/15"
+          className="mb-4 inline-flex items-center gap-2 rounded-2xl bg-primary/10 px-4 py-3 text-sm font-bold text-primary hover:bg-primary/15"
         >
           <PlayCircle className="h-4 w-4" />
           Video-Anleitung ansehen
         </a>
-        <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-white/10 bg-white">
+        <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-dark-200 bg-white">
           <Image
             src={imageUrl}
             alt={imageAlt}
@@ -157,14 +157,14 @@ function FormErrorBanner({
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
-      className="mb-4 flex items-center gap-3 rounded-2xl border border-red-400/30 bg-red-500/10 px-4 py-3"
+      className="mb-4 flex items-center gap-3 rounded-2xl border border-red-200 bg-red-50 px-4 py-3"
     >
-      <AlertCircle className="h-5 w-5 shrink-0 text-red-400" />
-      <p className="flex-1 text-sm font-medium text-red-200">{message}</p>
+      <AlertCircle className="h-5 w-5 shrink-0 text-red-500" />
+      <p className="flex-1 text-sm font-medium text-red-700">{message}</p>
       <button
         type="button"
         onClick={onDismiss}
-        className="text-red-300 hover:text-white"
+        className="text-red-400 hover:text-red-600"
       >
         ✕
       </button>
@@ -359,36 +359,36 @@ export default function ServiceForm({
   // ── Helper: input field class ──
   const inputClass = (fieldName: keyof FormData) =>
     cn(
-      'w-full rounded-2xl border bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-zinc-500',
+      'w-full rounded-2xl border bg-white px-4 py-3 text-dark-800 outline-none transition placeholder:text-dark-400',
       errors[fieldName]
         ? 'border-red-400 focus:border-red-400'
-        : 'border-white/10 focus:border-emerald-400'
+        : 'border-dark-200 focus:border-primary focus:ring-2 focus:ring-primary/20'
     );
 
   // ── Render ──
   return (
-    <div className="min-h-screen bg-[#050816] px-3 pt-24 pb-6 md:px-5 md:pt-32 md:pb-10 lg:px-6">
+    <div className="min-h-screen bg-gray-50 px-3 pt-24 pb-6 md:px-5 md:pt-32 md:pb-10 lg:px-6">
       <div className="mx-auto max-w-[1100px]">
-        <div className="overflow-hidden rounded-2xl md:rounded-3xl border border-white/10 bg-[radial-gradient(circle_at_top,rgba(16,185,129,0.10),transparent_26%),linear-gradient(180deg,#0A1020_0%,#060B16_100%)] shadow-[0_25px_80px_rgba(0,0,0,0.45)]">
+        <div className="overflow-hidden rounded-2xl md:rounded-3xl border border-dark-100/60 bg-white shadow-card">
           <div className="p-4 md:p-6 lg:p-8">
             <div ref={stepTopRef} />
 
             {/* ── Header ── */}
             <div className="mb-6">
-              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
                 <Shield className="h-3.5 w-3.5" />
                 Digitaler Abmeldeservice
               </div>
-              <h1 className="mt-3 text-xl font-black text-white sm:text-2xl md:text-3xl">
+              <h1 className="mt-3 text-xl font-black text-dark-900 sm:text-2xl md:text-3xl">
                 Fahrzeug online abmelden
               </h1>
-              <p className="mt-1.5 text-sm text-zinc-400">
+              <p className="mt-1.5 text-sm text-dark-500">
                 Einfach, sicher und Schritt für Schritt.
               </p>
             </div>
 
             {/* ── Step Indicator ── */}
-            <div className="mb-6 overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] p-3 md:p-4">
+            <div className="mb-6 overflow-hidden rounded-xl border border-dark-100 bg-gray-50 p-3 md:p-4">
               <div className="flex items-center justify-between gap-1.5 overflow-x-auto">
                 {STEPS.map((step, i) => {
                   const isCompleted = currentStep > step.id;
@@ -403,10 +403,10 @@ export default function ServiceForm({
                           className={cn(
                             'flex h-8 w-8 items-center justify-center rounded-full border text-xs font-bold transition-all sm:h-9 sm:w-9 md:h-10 md:w-10',
                             isCompleted
-                              ? 'border-emerald-400 bg-emerald-500 text-white'
+                              ? 'border-primary bg-primary text-white'
                               : isActive
-                              ? 'border-emerald-400 bg-emerald-500/10 text-emerald-400 shadow-[0_0_0_6px_rgba(16,185,129,0.12)]'
-                              : 'border-white/10 bg-white/[0.04] text-zinc-500'
+                              ? 'border-primary bg-primary/10 text-primary shadow-[0_0_0_6px_rgba(0,168,90,0.12)]'
+                              : 'border-dark-200 bg-gray-50 text-dark-400'
                           )}
                         >
                           {isCompleted ? (
@@ -419,22 +419,22 @@ export default function ServiceForm({
                           className={cn(
                             'mt-1.5 hidden text-[10px] font-medium sm:block md:text-xs',
                             isActive
-                              ? 'text-emerald-400'
+                              ? 'text-primary'
                               : isCompleted
-                              ? 'text-zinc-200'
-                              : 'text-zinc-500'
+                              ? 'text-dark-700'
+                              : 'text-dark-400'
                           )}
                         >
                           {step.label}
                         </span>
                       </div>
                       {i < STEPS.length - 1 && (
-                        <div className="mx-1 h-px flex-1 bg-white/10 sm:mx-2 md:mx-3">
+                        <div className="mx-1 h-px flex-1 bg-dark-100 sm:mx-2 md:mx-3">
                           <div
                             className={cn(
                               'h-px transition-all duration-300',
                               isCompleted
-                                ? 'w-full bg-emerald-400'
+                                ? 'w-full bg-primary'
                                 : 'w-0 bg-transparent'
                             )}
                           />
@@ -473,20 +473,20 @@ export default function ServiceForm({
                   {currentStep === 1 && (
                     <div className="space-y-6">
                       <div>
-                        <div className="text-sm font-semibold text-emerald-400">
+                        <div className="text-sm font-semibold text-primary">
                           Schritt 1 von 4
                         </div>
-                        <h2 className="mt-1 text-2xl font-black text-white">
+                        <h2 className="mt-1 text-2xl font-black text-dark-900">
                           Fahrzeugdaten
                         </h2>
-                        <p className="mt-1 text-sm text-zinc-400">
+                        <p className="mt-1 text-sm text-dark-500">
                           (Pflichtangaben)
                         </p>
                       </div>
 
                       {/* Vehicle type selector */}
-                      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5">
-                        <h3 className="mb-4 text-base font-bold text-white">
+                      <div className="rounded-3xl border border-dark-100 bg-white p-5">
+                        <h3 className="mb-4 text-base font-bold text-dark-900">
                           Fahrzeugtyp wählen
                         </h3>
                         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -499,8 +499,8 @@ export default function ServiceForm({
                                 className={cn(
                                   'cursor-pointer rounded-2xl border p-4 transition-all',
                                   active
-                                    ? 'border-emerald-400 bg-emerald-500/10'
-                                    : 'border-white/10 bg-white/[0.02] hover:border-white/20'
+                                    ? 'border-primary bg-primary/10'
+                                    : 'border-dark-200 bg-gray-50 hover:border-dark-300'
                                 )}
                               >
                                 <input
@@ -514,23 +514,23 @@ export default function ServiceForm({
                                     className={cn(
                                       'rounded-2xl p-3',
                                       active
-                                        ? 'bg-emerald-500/15'
-                                        : 'bg-white/[0.04]'
+                                        ? 'bg-primary/15'
+                                        : 'bg-gray-100'
                                     )}
                                   >
                                     <Icon
                                       className={cn(
                                         'h-7 w-7',
                                         active
-                                          ? 'text-emerald-400'
-                                          : 'text-zinc-400'
+                                          ? 'text-primary'
+                                          : 'text-dark-400'
                                       )}
                                     />
                                   </div>
                                   <span
                                     className={cn(
                                       'text-sm font-bold',
-                                      active ? 'text-white' : 'text-zinc-300'
+                                      active ? 'text-dark-900' : 'text-dark-600'
                                     )}
                                   >
                                     {item.label}
@@ -543,11 +543,11 @@ export default function ServiceForm({
                       </div>
 
                       {/* Kennzeichen + FIN */}
-                      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5">
+                      <div className="rounded-3xl border border-dark-100 bg-white p-5">
                         <div className="space-y-5">
                           {/* Kennzeichen */}
                           <div>
-                            <label className="mb-2 block text-sm font-semibold text-white">
+                            <label className="mb-2 block text-sm font-semibold text-dark-800">
                               Kennzeichen eintragen{' '}
                               <span className="text-red-400">*</span>
                             </label>
@@ -564,7 +564,7 @@ export default function ServiceForm({
                               }
                               error={errors.kennzeichen?.message}
                             />
-                            <p className="mt-2 text-xs text-zinc-400">
+                            <p className="mt-2 text-xs text-dark-500">
                               Bei E-, H- oder Saisonkennzeichen bitte nur das
                               normale Kennzeichen eintragen.
                             </p>
@@ -572,7 +572,7 @@ export default function ServiceForm({
 
                           {/* FIN */}
                           <div>
-                            <label className="mb-2 block text-sm font-semibold text-white">
+                            <label className="mb-2 block text-sm font-semibold text-dark-800">
                               FIN (Fahrzeug-Identifizierungsnummer){' '}
                               <span className="text-red-400">*</span>
                             </label>
@@ -593,7 +593,7 @@ export default function ServiceForm({
                                 {errors.fin.message}
                               </p>
                             )}
-                            <p className="mt-2 text-xs text-zinc-400">
+                            <p className="mt-2 text-xs text-dark-500">
                               Die FIN finden Sie im Fahrzeugschein (Feld E) oder
                               auf dem Typenschild.
                             </p>
@@ -614,23 +614,23 @@ export default function ServiceForm({
                   {currentStep === 2 && (
                     <div className="space-y-6">
                       <div>
-                        <div className="text-sm font-semibold text-emerald-400">
+                        <div className="text-sm font-semibold text-primary">
                           Schritt 2 von 4
                         </div>
-                        <h2 className="mt-1 text-2xl font-black text-white">
+                        <h2 className="mt-1 text-2xl font-black text-dark-900">
                           Fahrzeugschein-Code
                         </h2>
-                        <p className="mt-1 text-sm text-zinc-400">
+                        <p className="mt-1 text-sm text-dark-500">
                           (Sicherheitscode eingeben)
                         </p>
                       </div>
 
                       {/* Info box */}
-                      <div className="rounded-3xl border border-amber-400/20 bg-amber-500/10 p-5">
-                        <div className="text-sm font-semibold text-amber-100">
+                      <div className="rounded-3xl border border-amber-200 bg-amber-50 p-5">
+                        <div className="text-sm font-semibold text-amber-900">
                           Sicherheitscode vom Fahrzeugschein
                         </div>
-                        <p className="mt-2 text-sm leading-6 text-amber-50">
+                        <p className="mt-2 text-sm leading-6 text-amber-800">
                           Den Sicherheitscode finden Sie oben rechts auf der
                           Vorderseite Ihres Fahrzeugscheins
                           (Zulassungsbescheinigung Teil I). Bitte achten Sie auf
@@ -639,10 +639,10 @@ export default function ServiceForm({
                       </div>
 
                       {/* Fields */}
-                      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 space-y-5">
+                      <div className="rounded-3xl border border-dark-100 bg-white p-5 space-y-5">
                         {/* Sicherheitscode */}
                         <div>
-                          <label className="mb-2 block text-sm font-semibold text-white">
+                          <label className="mb-2 block text-sm font-semibold text-dark-800">
                             Sicherheitscode (7 Zeichen){' '}
                             <span className="text-red-400">*</span>
                           </label>
@@ -661,14 +661,14 @@ export default function ServiceForm({
                               {errors.sicherheitscode.message}
                             </p>
                           )}
-                          <p className="mt-2 text-xs text-zinc-400">
+                          <p className="mt-2 text-xs text-dark-500">
                             Bitte Groß- und Kleinschreibung genau übernehmen.
                           </p>
                         </div>
 
                         {/* Stadt / Kreis */}
                         <div>
-                          <label className="mb-2 block text-sm font-semibold text-white">
+                          <label className="mb-2 block text-sm font-semibold text-dark-800">
                             Zulassende Stadt / Kreis{' '}
                             <span className="text-red-400">*</span>
                           </label>
@@ -687,17 +687,17 @@ export default function ServiceForm({
                       </div>
 
                       {/* Collapsible help */}
-                      <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03]">
+                      <div className="overflow-hidden rounded-3xl border border-dark-100 bg-white">
                         <button
                           type="button"
                           onClick={() => setShowCodeHelp((v) => !v)}
-                          className="flex w-full items-center justify-between border-b border-white/10 px-5 py-4 text-left"
+                          className="flex w-full items-center justify-between border-b border-dark-100 px-5 py-4 text-left"
                         >
-                          <span className="flex items-center gap-2 text-sm font-semibold text-white">
-                            <HelpCircle className="h-4 w-4 text-emerald-400" />
+                          <span className="flex items-center gap-2 text-sm font-semibold text-dark-900">
+                            <HelpCircle className="h-4 w-4 text-primary" />
                             Anleitung zum Freilegen des Codes
                           </span>
-                          <span className="text-xs font-semibold text-emerald-400">
+                          <span className="text-xs font-semibold text-primary">
                             {showCodeHelp ? 'Ausblenden' : 'Anzeigen'}
                           </span>
                         </button>
@@ -707,12 +707,12 @@ export default function ServiceForm({
                               href={SCHEIN_VIDEO_URL}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="mb-4 inline-flex items-center gap-2 rounded-2xl bg-emerald-500/10 px-4 py-3 text-sm font-bold text-emerald-400 hover:bg-emerald-500/15"
+                              className="mb-4 inline-flex items-center gap-2 rounded-2xl bg-primary/10 px-4 py-3 text-sm font-bold text-primary hover:bg-primary/15"
                             >
                               <PlayCircle className="h-4 w-4" />
                               Video-Anleitung ansehen
                             </a>
-                            <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-white/10 bg-white">
+                            <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-dark-200 bg-white">
                               <Image
                                 src={TEIL1_RUECKSEITE_IMAGE}
                                 alt="Sicherheitscode auf dem Fahrzeugschein"
@@ -731,23 +731,23 @@ export default function ServiceForm({
                   {currentStep === 3 && (
                     <div className="space-y-6">
                       <div>
-                        <div className="text-sm font-semibold text-emerald-400">
+                        <div className="text-sm font-semibold text-primary">
                           Schritt 3 von 4
                         </div>
-                        <h2 className="mt-1 text-2xl font-black text-white">
+                        <h2 className="mt-1 text-2xl font-black text-dark-900">
                           Kennzeichen-Codes
                         </h2>
-                        <p className="mt-1 text-sm text-zinc-400">
+                        <p className="mt-1 text-sm text-dark-500">
                           (Plakettencodes)
                         </p>
                       </div>
 
                       {/* Info box */}
-                      <div className="rounded-3xl border border-amber-400/20 bg-amber-500/10 p-5">
-                        <div className="text-sm font-semibold text-amber-100">
+                      <div className="rounded-3xl border border-amber-200 bg-amber-50 p-5">
+                        <div className="text-sm font-semibold text-amber-900">
                           3-stelliger Code vom Kennzeichen
                         </div>
-                        <p className="mt-2 text-sm leading-6 text-amber-50">
+                        <p className="mt-2 text-sm leading-6 text-amber-800">
                           Den Code finden Sie unter der Plakette auf Ihrem
                           Kennzeichen. Kratzen Sie vorsichtig die Plakette ab,
                           um den 3-stelligen Code freizulegen.
@@ -755,11 +755,11 @@ export default function ServiceForm({
                       </div>
 
                       {/* Code inputs */}
-                      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5">
+                      <div className="rounded-3xl border border-dark-100 bg-white p-5">
                         <div className="grid gap-4 md:grid-cols-2">
                           {!onePlateVehicle && (
                             <div>
-                              <label className="mb-2 block text-sm font-semibold text-white">
+                              <label className="mb-2 block text-sm font-semibold text-dark-800">
                                 Code vorne (3 Zeichen){' '}
                                 <span className="text-red-400">*</span>
                               </label>
@@ -778,7 +778,7 @@ export default function ServiceForm({
                             </div>
                           )}
                           <div>
-                            <label className="mb-2 block text-sm font-semibold text-white">
+                            <label className="mb-2 block text-sm font-semibold text-dark-800">
                               {onePlateVehicle
                                 ? 'Code vom Kennzeichen (3 Zeichen)'
                                 : 'Code hinten (3 Zeichen)'}{' '}
@@ -801,17 +801,17 @@ export default function ServiceForm({
                       </div>
 
                       {/* Collapsible help */}
-                      <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03]">
+                      <div className="overflow-hidden rounded-3xl border border-dark-100 bg-white">
                         <button
                           type="button"
                           onClick={() => setShowKennzeichenHelp((v) => !v)}
-                          className="flex w-full items-center justify-between border-b border-white/10 px-5 py-4 text-left"
+                          className="flex w-full items-center justify-between border-b border-dark-100 px-5 py-4 text-left"
                         >
-                          <span className="flex items-center gap-2 text-sm font-semibold text-white">
-                            <HelpCircle className="h-4 w-4 text-emerald-400" />
+                          <span className="flex items-center gap-2 text-sm font-semibold text-dark-900">
+                            <HelpCircle className="h-4 w-4 text-primary" />
                             Anleitung zum Entfernen der Plakette
                           </span>
-                          <span className="text-xs font-semibold text-emerald-400">
+                          <span className="text-xs font-semibold text-primary">
                             {showKennzeichenHelp ? 'Ausblenden' : 'Anzeigen'}
                           </span>
                         </button>
@@ -821,12 +821,12 @@ export default function ServiceForm({
                               href={KENNZEICHEN_VIDEO_URL}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="mb-4 inline-flex items-center gap-2 rounded-2xl bg-emerald-500/10 px-4 py-3 text-sm font-bold text-emerald-400 hover:bg-emerald-500/15"
+                              className="mb-4 inline-flex items-center gap-2 rounded-2xl bg-primary/10 px-4 py-3 text-sm font-bold text-primary hover:bg-primary/15"
                             >
                               <PlayCircle className="h-4 w-4" />
                               Video-Anleitung ansehen
                             </a>
-                            <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-white/10 bg-white">
+                            <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-dark-200 bg-white">
                               <Image
                                 src={KENNZEICHEN_CODE_IMAGE}
                                 alt="Kennzeichen Sicherheitscode freilegen"
@@ -845,20 +845,20 @@ export default function ServiceForm({
                   {currentStep === 4 && (
                     <div className="space-y-6">
                       <div>
-                        <div className="text-sm font-semibold text-emerald-400">
+                        <div className="text-sm font-semibold text-primary">
                           Schritt 4 von 4
                         </div>
-                        <h2 className="mt-1 text-2xl font-black text-white">
+                        <h2 className="mt-1 text-2xl font-black text-dark-900">
                           Kennzeichenreservierung
                         </h2>
-                        <p className="mt-1 text-sm text-zinc-400">
+                        <p className="mt-1 text-sm text-dark-500">
                           (Optional)
                         </p>
                       </div>
 
                       {/* Reservation options */}
-                      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5">
-                        <label className="mb-4 block text-sm font-semibold text-white">
+                      <div className="rounded-3xl border border-dark-100 bg-white p-5">
+                        <label className="mb-4 block text-sm font-semibold text-dark-800">
                           Kennzeichen reservieren?
                         </label>
 
@@ -868,8 +868,8 @@ export default function ServiceForm({
                             className={cn(
                               'flex cursor-pointer items-start justify-between rounded-2xl border p-4 transition-all',
                               watchReservierung === 'keine'
-                                ? 'border-emerald-400 bg-emerald-500/10'
-                                : 'border-white/10 bg-white/[0.02] hover:border-white/20'
+                                ? 'border-primary bg-primary/10'
+                                : 'border-dark-200 bg-gray-50 hover:border-dark-300'
                             )}
                           >
                             <div className="flex items-start gap-3">
@@ -877,19 +877,19 @@ export default function ServiceForm({
                                 type="radio"
                                 value="keine"
                                 {...register('reservierung')}
-                                className="mt-1 accent-emerald-500"
+                                className="mt-1 accent-[#00a85a]"
                               />
                               <div>
-                                <span className="text-sm font-semibold text-white">
+                                <span className="text-sm font-semibold text-dark-900">
                                   Nein, ich möchte nicht reservieren
                                 </span>
-                                <p className="mt-1 text-xs text-zinc-400">
+                                <p className="mt-1 text-xs text-dark-500">
                                   Das Kennzeichen wird nach der Abmeldung
                                   freigegeben.
                                 </p>
                               </div>
                             </div>
-                            <span className="shrink-0 rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-zinc-300">
+                            <span className="shrink-0 rounded-full bg-dark-100 px-3 py-1 text-xs font-bold text-dark-600">
                               Kostenlos
                             </span>
                           </label>
@@ -899,8 +899,8 @@ export default function ServiceForm({
                             className={cn(
                               'flex cursor-pointer items-start justify-between rounded-2xl border p-4 transition-all',
                               watchReservierung === 'einJahr'
-                                ? 'border-emerald-400 bg-emerald-500/10'
-                                : 'border-white/10 bg-white/[0.02] hover:border-white/20'
+                                ? 'border-primary bg-primary/10'
+                                : 'border-dark-200 bg-gray-50 hover:border-dark-300'
                             )}
                           >
                             <div className="flex items-start gap-3">
@@ -908,21 +908,21 @@ export default function ServiceForm({
                                 type="radio"
                                 value="einJahr"
                                 {...register('reservierung')}
-                                className="mt-1 accent-emerald-500"
+                                className="mt-1 accent-[#00a85a]"
                               />
                               <div>
-                                <span className="text-sm font-semibold text-white">
+                                <span className="text-sm font-semibold text-dark-900">
                                   Ja, ich möchte mein Kennzeichen für 1 Jahr
                                   reservieren
                                 </span>
-                                <p className="mt-1 text-xs text-zinc-400">
+                                <p className="mt-1 text-xs text-dark-500">
                                   Das Kennzeichen bleibt für 12 Monate reserviert
                                   und kann bei einer Neuanmeldung wiederverwendet
                                   werden.
                                 </p>
                               </div>
                             </div>
-                            <span className="shrink-0 rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-bold text-emerald-400">
+                            <span className="shrink-0 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
                               +{formatPrice(reservierungPrice)}
                             </span>
                           </label>
@@ -930,32 +930,32 @@ export default function ServiceForm({
                       </div>
 
                       {/* Price breakdown */}
-                      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5">
+                      <div className="rounded-3xl border border-dark-100 bg-white p-5">
                         <div className="space-y-3">
                           <div className="flex items-center justify-between text-sm">
-                            <span className="text-zinc-300">
+                            <span className="text-dark-600">
                               Fahrzeugabmeldung
                             </span>
-                            <span className="font-medium text-white">
+                            <span className="font-medium text-dark-900">
                               {formatPrice(basePrice)}
                             </span>
                           </div>
                           {watchReservierung === 'einJahr' && (
                             <div className="flex items-center justify-between text-sm">
-                              <span className="text-zinc-300">
+                              <span className="text-dark-600">
                                 Kennzeichenreservierung
                               </span>
-                              <span className="font-medium text-white">
+                              <span className="font-medium text-dark-900">
                                 {formatPrice(reservierungPrice)}
                               </span>
                             </div>
                           )}
-                          <div className="border-t border-white/10 pt-3">
+                          <div className="border-t border-dark-100 pt-3">
                             <div className="flex items-center justify-between">
-                              <span className="text-lg font-bold text-white">
+                              <span className="text-lg font-bold text-dark-900">
                                 Gesamtpreis
                               </span>
-                              <span className="text-3xl font-black text-emerald-400">
+                              <span className="text-3xl font-black text-primary">
                                 {formatPrice(totalPrice)}
                               </span>
                             </div>
@@ -964,15 +964,15 @@ export default function ServiceForm({
                       </div>
 
                       {/* Contact help */}
-                      <div className="rounded-3xl border border-emerald-400/20 bg-emerald-500/10 p-5">
-                        <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-emerald-100">
+                      <div className="rounded-3xl border border-primary/20 bg-primary/5 p-5">
+                        <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-dark-800">
                           <CheckCircle2 className="h-4 w-4" />
                           Wenn Sie Fragen haben
                         </div>
                         <div className="flex flex-col gap-3 sm:flex-row">
                           <a
                             href={settingsPhoneLink}
-                            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white px-4 py-3 text-sm font-bold text-[#0b1120] hover:opacity-90"
+                            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-dark-200 bg-white px-4 py-3 text-sm font-bold text-dark-900 hover:bg-gray-50"
                           >
                             <Phone className="h-4 w-4" />
                             {settingsPhone}
@@ -981,14 +981,14 @@ export default function ServiceForm({
                             href={settingsWhatsApp}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-500 px-4 py-3 text-sm font-bold text-white hover:bg-emerald-400"
+                            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-bold text-white hover:bg-primary/90"
                           >
                             <MessageCircle className="h-4 w-4" />
                             WhatsApp Support
                           </a>
                           <a
                             href={`mailto:${settingsEmail}`}
-                            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm font-bold text-white hover:bg-white/[0.10]"
+                            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-dark-200 bg-gray-50 px-4 py-3 text-sm font-bold text-dark-800 hover:bg-gray-100"
                           >
                             <Mail className="h-4 w-4" />
                             E-Mail schreiben
@@ -1001,18 +1001,18 @@ export default function ServiceForm({
               </AnimatePresence>
 
               {/* ── Trust Badges + Navigation ── */}
-              <div className="mt-8 border-t border-white/10 pt-6">
-                <div className="mb-6 flex flex-wrap items-center justify-center gap-6 text-xs text-zinc-500">
+              <div className="mt-8 border-t border-dark-100 pt-6">
+                <div className="mb-6 flex flex-wrap items-center justify-center gap-6 text-xs text-dark-400">
                   <div className="flex items-center gap-2">
-                    <Shield className="h-4 w-4 text-emerald-400" />
+                    <Shield className="h-4 w-4 text-primary" />
                     SSL verschlüsselt
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                    <CheckCircle2 className="h-4 w-4 text-primary" />
                     Sichere Zahlung
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                    <CheckCircle2 className="h-4 w-4 text-primary" />
                     Sichere Abwicklung
                   </div>
                 </div>
@@ -1022,7 +1022,7 @@ export default function ServiceForm({
                     <button
                       type="button"
                       onClick={prevStep}
-                      className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-bold text-white transition hover:bg-white/[0.08]"
+                      className="inline-flex items-center gap-2 rounded-2xl border border-dark-200 bg-white px-5 py-3 text-sm font-bold text-dark-800 transition hover:bg-gray-50"
                     >
                       <ArrowLeft className="h-4 w-4" />
                       Zurück
@@ -1035,7 +1035,7 @@ export default function ServiceForm({
                     <button
                       type="button"
                       onClick={nextStep}
-                      className="inline-flex items-center gap-2 rounded-2xl bg-emerald-500 px-6 py-3 text-sm font-black text-white transition hover:bg-emerald-400"
+                      className="inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-black text-white transition hover:bg-primary/90"
                     >
                       Weiter
                       <ArrowRight className="h-4 w-4" />
@@ -1047,8 +1047,8 @@ export default function ServiceForm({
                       className={cn(
                         'inline-flex items-center gap-2 rounded-2xl px-6 py-3 text-sm font-black text-white transition',
                         step4Visited
-                          ? 'bg-emerald-500 hover:bg-emerald-400'
-                          : 'bg-zinc-600 cursor-not-allowed'
+                          ? 'bg-primary hover:bg-primary/90'
+                          : 'bg-dark-200 cursor-not-allowed'
                       )}
                     >
                       Zur Kasse
