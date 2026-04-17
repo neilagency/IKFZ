@@ -167,8 +167,8 @@ export function OrderSummary({
       <div className="rounded-2xl bg-white border border-dark-100 shadow-lg overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-dark-900 to-dark-800 px-6 py-4">
-          <h2 className="text-lg font-bold text-white flex items-center gap-2">
-            🛡️ Ihre Bestellung
+          <h2 className="text-lg font-bold text-white">
+            Ihre Bestellung
           </h2>
         </div>
 
@@ -353,8 +353,8 @@ export function OrderSummary({
 
       {/* Guarantee */}
       <div className="rounded-xl bg-green-50/50 border border-green-100 p-4">
-        <p className="text-sm font-semibold text-dark-700 flex items-center gap-2 mb-1">
-          🛡️ Faire und transparente Prüfung
+        <p className="text-sm font-semibold text-dark-700 mb-1">
+          Faire und transparente Prüfung
         </p>
         <p className="text-xs text-dark-500">
           Sollte es bei der Bearbeitung Probleme geben, werden Sie umgehend informiert und erhalten Ihr Geld zurück.

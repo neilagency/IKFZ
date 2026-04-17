@@ -243,6 +243,45 @@ function BillingFields({
             </div>
             <div>
               <label className="block text-sm font-semibold text-dark-700 mb-1.5">
+                Straße und Hausnr.
+              </label>
+              <input
+                type="text"
+                {...register('address')}
+                placeholder="Musterstraße 1"
+                className={fieldClass('address')}
+              />
+              {errorMsg('address')}
+            </div>
+            <div className="grid grid-cols-5 gap-3">
+              <div className="col-span-2">
+                <label className="block text-sm font-semibold text-dark-700 mb-1.5">
+                  PLZ
+                </label>
+                <input
+                  type="text"
+                  {...register('postcode')}
+                  placeholder="45141"
+                  maxLength={5}
+                  className={fieldClass('postcode')}
+                />
+                {errorMsg('postcode')}
+              </div>
+              <div className="col-span-3">
+                <label className="block text-sm font-semibold text-dark-700 mb-1.5">
+                  Stadt
+                </label>
+                <input
+                  type="text"
+                  {...register('city')}
+                  placeholder="Essen"
+                  className={fieldClass('city')}
+                />
+                {errorMsg('city')}
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-dark-700 mb-1.5">
                 Telefon <span className="text-red-500">*</span>
               </label>
               <input
@@ -286,8 +325,8 @@ export function PaymentMethodSelector({
     <div className="rounded-2xl bg-white border border-dark-100 shadow-lg overflow-hidden">
       {/* Header */}
       <div className="bg-gradient-to-r from-primary to-primary/90 px-6 py-4">
-        <h2 className="text-lg font-bold text-white flex items-center gap-2">
-          💳 Zahlungsmethode
+        <h2 className="text-lg font-bold text-white">
+          Zahlungsmethode
         </h2>
         <p className="text-sm text-white/70 mt-0.5">
           Alle Zahlungen sind SSL-verschlüsselt

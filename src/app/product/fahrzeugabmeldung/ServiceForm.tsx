@@ -27,13 +27,13 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import KennzeichenInput from '@/components/KennzeichenInput';
+
 
 // ── External Media ──────────────────────────────────────────────
 const SCHEIN_VIDEO_URL = 'https://www.youtube.com/watch?v=u38keaF1QKU';
 const KENNZEICHEN_VIDEO_URL = 'https://www.youtube.com/watch?v=3nsdJSvKAtE';
 const TEIL1_VORDERSEITE_IMAGE =
-  'https://ikfzdigitalzulassung.de/uploads/2025/01/32128159-zulassungsbescheinigung-teil-1-fahrzeugschein-2hkTzK1Qt8fe.jpg';
+  'https://ikfzdigitalzulassung.de/uploads/2024/11/WhatsApp-Image-2024-01-06-at-3.21.48-PM.jpeg';
 const TEIL1_RUECKSEITE_IMAGE =
   'https://ikfzdigitalzulassung.de/uploads/2024/11/WhatsApp-Image-2024-01-06-at-3.21.48-PM-2.jpeg';
 const KENNZEICHEN_CODE_IMAGE =
@@ -533,19 +533,27 @@ export default function ServiceForm({
                         <div className="space-y-5">
                           {/* Kennzeichen */}
                           <div>
-                            <KennzeichenInput
+                            <label className="mb-2 block text-sm font-semibold text-dark-800">
+                              Kennzeichen <span className="text-red-400">*</span>
+                            </label>
+                            <input
+                              type="text"
                               value={watch('kennzeichen') || ''}
-                              onChange={(v) =>
+                              onChange={(e) =>
                                 setValue(
                                   'kennzeichen',
-                                  (v || '').toUpperCase(),
+                                  e.target.value.toUpperCase(),
                                   {
                                     shouldValidate: !!errors.kennzeichen,
                                   }
                                 )
                               }
-                              error={errors.kennzeichen?.message}
+                              placeholder="z.B. B-AB 1234"
+                              className={inputClass('kennzeichen')}
                             />
+                            {errors.kennzeichen && (
+                              <p className="mt-1 text-sm text-red-500">{errors.kennzeichen.message}</p>
+                            )}
                             <p className="mt-2 text-xs text-dark-500">
                               Bei E-, H- oder Saisonkennzeichen bitte nur das
                               normale Kennzeichen eintragen.

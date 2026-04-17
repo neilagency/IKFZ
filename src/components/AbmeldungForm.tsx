@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { usePriceFeed } from '@/hooks/usePriceFeed';
-import KennzeichenInput from '@/components/KennzeichenInput';
+
 
 // ── Zod Schema for Abmeldung ──
 const abmeldungSchema = z.object({
@@ -234,11 +234,22 @@ export default function ServiceForm({
                 </div>
 
                 <div className="rounded-2xl bg-white border border-dark-100 shadow-sm p-6 space-y-5">
-                  <KennzeichenInput
+                  <label className="block text-sm font-semibold text-dark-800 mb-2">
+                    Kennzeichen <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
                     value={watch('kennzeichen') || ''}
-                    onChange={(v) => setValue('kennzeichen', v, { shouldValidate: !!errors.kennzeichen })}
-                    error={errors.kennzeichen?.message}
+                    onChange={(e) => setValue('kennzeichen', e.target.value.toUpperCase(), { shouldValidate: !!errors.kennzeichen })}
+                    placeholder="z.B. B-AB 1234"
+                    className={cn(
+                      'input-field uppercase',
+                      errors.kennzeichen && 'border-red-400 focus:ring-red-400 focus:border-red-400'
+                    )}
                   />
+                  {errors.kennzeichen && (
+                    <p className="text-red-500 text-sm mt-1">{errors.kennzeichen.message}</p>
+                  )}
 
                   <div>
                     <label className="block text-sm font-semibold text-dark-800 mb-2">

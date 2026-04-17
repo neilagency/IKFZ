@@ -1,67 +1,43 @@
 # Deployment Guide — ikfzdigitalzulassung.de
 
-## Prerequisites
-- Node.js 20+ on the server
-- SSH access to Hostinger
-- Domain pointed to server IP
+## Platform
+Hostinger Shared Hosting + LiteSpeed Passenger (Node.js 20)
 
-## Quick Deployment
+## Deploy Commands
 
-### Option 1: Hostinger Shared Hosting (Passenger)
 ```bash
-bash deploy/hostinger-deploy.sh
+bash deploy/deploy.sh             # Full build + deploy
+bash deploy/deploy.sh --quick     # Skip build, upload + restart only
+bash deploy/deploy.sh --setup     # First-time: install cron jobs on server
 ```
 
-### Option 2: VPS with PM2
-```bash
-bash deploy/deploy.sh
-```
+## How It Works
 
-### Option 3: Quick Deploy (skip build)
-```bash
-bash deploy/hostinger-deploy.sh --quick
-```
+1. **Build** locally on macOS (`npx prisma generate` + `npm run build`)
+2. **Cross-compile** — downloads prebuilt `better-sqlite3` Linux binary from GitHub
+3. **Upload** via `rsync --delete` to `/home/u104276643/domains/ikfzdigitalzulassung.de/nodejs/`
+4. **Server setup** — copies `.env`, symlinks DB, installs `sharp` for Linux, enforces `NODE_ENV=production`
+5. **Restart** — `touch tmp/restart.txt` triggers Passenger reload
+6. **Health check** — curls the site to verify HTTP 200
 
-## Initial Setup
+## First-Time Setup
 
 ### 1. Server Environment File
-Create the env file on server:
 ```bash
-ssh -p 65002 <USER>@<SERVER_IP>
+ssh -p 65002 u104276643@88.223.85.114
 mkdir -p ~/env
 nano ~/env/ikfzdigitalzulassung.env
 ```
-Paste contents from `.env.production` (on Desktop) and fill in real values.
 
 ### 2. Generate Secrets
 ```bash
-# JWT Secret
-openssl rand -base64 48
-
-# Cron Secret
-openssl rand -base64 32
-
-# SMTP Password (base64)
-echo -n 'your-password' | base64
+openssl rand -base64 48   # JWT_SECRET
+openssl rand -base64 32   # CRON_SECRET
 ```
 
-### 3. Setup Cron Jobs (on server)
+### 3. Setup Cron Jobs
 ```bash
-bash deploy/setup-cron.sh
-```
-
-### 4. NGINX (VPS only)
-```bash
-sudo cp deploy/nginx/ikfzdigitalzulassung.de.conf /etc/nginx/sites-available/
-sudo ln -s /etc/nginx/sites-available/ikfzdigitalzulassung.de /etc/nginx/sites-enabled/
-sudo certbot --nginx -d ikfzdigitalzulassung.de -d www.ikfzdigitalzulassung.de
-sudo nginx -t && sudo systemctl reload nginx
-```
-
-## Build Process
-```bash
-npx prisma generate    # Generate Prisma client
-npm run build          # Build Next.js (standalone output)
+bash deploy/deploy.sh --setup
 ```
 
 ## Environment Variables
@@ -81,19 +57,12 @@ npm run build          # Build Next.js (standalone output)
 | `SMTP_PASS` | ✅ | Email password |
 | `SITE_URL` | ✅ | https://ikfzdigitalzulassung.de |
 | `NEXT_PUBLIC_SITE_URL` | ✅ | Public site URL |
-| `EMAIL_FROM` | ⬜ | Sender email |
-| `EMAIL_FROM_NAME` | ⬜ | Sender display name |
-| `CONTACT_PHONE` | ⬜ | Support phone |
-| `CONTACT_EMAIL` | ⬜ | Support email |
 
 ## Monitoring
 ```bash
-# View server logs
-ssh -p 65002 <USER>@<SERVER_IP> 'tail -f ~/domains/ikfzdigitalzulassung.de/nodejs/console.log'
+# View logs
+ssh -p 65002 u104276643@88.223.85.114 'tail -f ~/domains/ikfzdigitalzulassung.de/nodejs/console.log'
 
 # Force restart
-ssh -p 65002 <USER>@<SERVER_IP> 'touch ~/domains/ikfzdigitalzulassung.de/nodejs/tmp/restart.txt'
-
-# PM2 logs (VPS)
-pm2 logs ikfz-app
+ssh -p 65002 u104276643@88.223.85.114 'touch ~/domains/ikfzdigitalzulassung.de/nodejs/tmp/restart.txt'
 ```
